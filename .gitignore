@@ -14,3 +14,12 @@ tools/Runtime Condenser/Input.txt
 tools/Runtime Condenser/Output.txt
 tools/MapDaemon/logs/*.txt
 .vscode/*
+
+# ignore config, but not subdirs
+config/*
+!config/*/
+
+# auto-generated tag files
+tags
+tgmc.code-workspace
+ru-tgmc.code-workspace
