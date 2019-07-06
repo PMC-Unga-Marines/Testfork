@@ -1366,4 +1366,5 @@
 #include "interface\menu.dm"
 #include "interface\stylesheet.dm"
 #include "interface\skin.dmf"
+#include "RU-TGMC\code\__HELPERS\text.dm"
 // END_INCLUDE
