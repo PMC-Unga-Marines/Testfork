@@ -15,9 +15,9 @@
 		return
 
 	if(!check_rights(R_ADMIN, FALSE))
-		msg = trim(copytext(sanitize(msg), 1, MAX_MESSAGE_LEN))
+		msg = trim(copytext(sanitize(sanitize_ru(msg)), 1, MAX_MESSAGE_LEN))
 	else
-		msg = noscript(msg)
+		msg = noscript(sanitize_ru(msg))
 
 	if(!msg)
 		return
@@ -121,9 +121,9 @@
 		return
 
 	if(!admin)
-		msg = trim(copytext(sanitize(msg), 1, MAX_MESSAGE_LEN))
+		msg = trim(copytext(sanitize(sanitize_ru(msg)), 1, MAX_MESSAGE_LEN))
 	else
-		msg = noscript(msg)
+		msg = noscript(sanitize_ru(msg))
 
 	if(!msg)
 		return
