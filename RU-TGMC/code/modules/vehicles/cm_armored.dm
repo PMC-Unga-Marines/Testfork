@@ -238,7 +238,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 //The basic vehicle code that moves the tank, with movement delay implemented
 /obj/vehicle/multitile/root/cm_armored/relaymove(var/mob/user, var/direction)
 	if(world.time < next_move) return
-	if(hardpoints[HDPT_TREADS] && hardpoints[HDPT_TREADS].health > 0)	//OD doesn't affect moving without treads anymore
+	if(hardpoints[HDPT_TREADS] && hardpoints[HDPT_TREADS].obj_integrity > 0)	//OD doesn't affect moving without treads anymore
 		next_move = world.time + src.speed
 	else
 		next_move = world.time + move_delay
@@ -250,7 +250,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 /obj/vehicle/multitile/root/cm_armored/try_rotate(var/deg, var/mob/user, var/force = 0)
 	if(world.time < next_move && !force) return
 
-	if(hardpoints[HDPT_TREADS] && hardpoints[HDPT_TREADS].health > 0)	//same goes for turning
+	if(hardpoints[HDPT_TREADS] && hardpoints[HDPT_TREADS].obj_integrity > 0)	//same goes for turning
 		next_move = world.time + src.speed * (force ? 2 : 3) //3 for a 3 point turn, idk
 	else
 		next_move = world.time + move_delay * (force ? 2 : 3)
@@ -399,25 +399,25 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 	var tank_health = 0
 
 	if (HP1)
-		if(HP1.health > 0)
-			tank_health += HP1.health
-		divider += abs(HP1.maxhealth)
+		if(HP1.obj_integrity > 0)
+			tank_health += HP1.obj_integrity
+		divider += abs(HP1.max_integrity)
 	if (HP2)
-		if(HP2.health > 0)
-			tank_health += HP2.health
-		divider += abs(HP2.maxhealth)
+		if(HP2.obj_integrity > 0)
+			tank_health += HP2.obj_integrity
+		divider += abs(HP2.max_integrity)
 	if (HP3)
-		if(HP3.health > 0)
-			tank_health += HP3.health
-		divider += abs(HP3.maxhealth)
+		if(HP3.obj_integrity > 0)
+			tank_health += HP3.obj_integrity
+		divider += abs(HP3.max_integrity)
 	if (HP4)
-		if(HP4.health > 0)
-			tank_health += HP4.health
-		divider += abs(HP4.maxhealth)
+		if(HP4.obj_integrity > 0)
+			tank_health += HP4.obj_integrity
+		divider += abs(HP4.max_integrity)
 	if (HP5)
-		if(HP5.health > 0)
-			tank_health += HP5.health
-		divider += abs(HP5.maxhealth)
+		if(HP5.obj_integrity > 0)
+			tank_health += HP5.obj_integrity
+		divider += abs(HP5.max_integrity)
 
 	if(divider == 0)
 		tank_health = round(tank_health * 100 / (divider + 1))
@@ -432,7 +432,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 	to_chat(usr, "<span class='warning'>Overall vehicle integrity: [tank_health] percent.</span>")
 	to_chat(usr, "<span class='warning'>M75 Smoke Deploy System: [smoke_ammo_current / 2] uses left.</span><br>")
 
-	if(HP5 == null || HP5.health <= 0)
+	if(HP5 == null || HP5.obj_integrity <= 0)
 		to_chat(usr, "<span class='danger'>Primary weapon: Unavailable.</span>")
 	else
 		to_chat(usr, "<span class='notice'>Primary weapon: [HP5.name].</span>")
@@ -448,7 +448,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 		if(empty)
 			to_chat(usr, "<span class='danger'>Ammunition depleted.</span>")
 
-	if(HP4 == null || HP4.health <= 0)
+	if(HP4 == null || HP4.obj_integrity <= 0)
 		to_chat(usr, "<span class='danger'>Secondary weapon: Unavailable.</span>")
 	else
 		to_chat(usr, "<br><span class='notice'>Secondary weapon: [HP4.name].</span>")
@@ -489,7 +489,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 		to_chat(usr, "<span class='warning'>Primary weapon is not installed.</span>")
 		return
 
-	if(HP.health < 0)
+	if(HP.obj_integrity < 0)
 		to_chat(usr, "<span class='danger'>Warning! [HP.name] sustained critical damage and is not operatable!</span>")
 		return
 
@@ -548,7 +548,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 		for(var/slot in hardpoints)
 			var/obj/item/hardpoint/tank/HP = hardpoints[slot]
 			if(!HP) continue
-			if(HP.health <= 0) continue
+			if(HP.obj_integrity <= 0) continue
 			if(!HP.is_activatable) continue
 			slots += slot
 	return slots
@@ -590,7 +590,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 
 	if(!HP) return 0
 
-	if(HP.health <= 0) return 1
+	if(HP.obj_integrity <= 0) return 1
 
 //Normal examine() but tells the player what is installed and if it's broken
 /obj/vehicle/multitile/root/cm_armored/examine(var/mob/user)
@@ -601,29 +601,29 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 			to_chat(user, "There is nothing installed on the [i] hardpoint slot.")
 		else
 			if(isxeno(user))
-				if(HP.health <= 0)
+				if(HP.obj_integrity <= 0)
 					to_chat(user, "There is a broken module installed on [i] hardpoint slot.")
-				if(HP.health > 0 && (HP.health < (HP.maxhealth / 3)))
+				if(HP.obj_integrity > 0 && (HP.obj_integrity < (HP.max_integrity / 3)))
 					to_chat(user, "There is a heavily damaged module installed on [i] hardpoint slot.")
-				if((HP.health > (HP.maxhealth / 3)) && (HP.health < (HP.maxhealth * (2/3))))
+				if((HP.obj_integrity > (HP.max_integrity / 3)) && (HP.obj_integrity < (HP.max_integrity * (2/3))))
 					to_chat(user, "There is a damaged module installed on [i] hardpoint slot.")			//removed modules' names for aliens.
-				if((HP.health > (HP.maxhealth * (2/3))) && (HP.health < HP.maxhealth))
+				if((HP.obj_integrity > (HP.max_integrity * (2/3))) && (HP.obj_integrity < HP.max_integrity))
 					to_chat(user, "There is a lightly damaged module installed on [i] hardpoint slot.")
-				if(HP.health == HP.maxhealth)
+				if(HP.obj_integrity == HP.max_integrity)
 					to_chat(user, "There is a non-damaged module installed on [i] hardpoint slot.")
 			else
-				if(HP.health <= 0)
+				if(HP.obj_integrity <= 0)
 					to_chat(user, "There is a broken [HP] installed on [i] hardpoint slot.")
-				if(HP.health > 0 && (HP.health < (HP.maxhealth / 3)))
+				if(HP.obj_integrity > 0 && (HP.obj_integrity < (HP.max_integrity / 3)))
 					to_chat(user, "There is a heavily damaged [HP] installed on [i] hardpoint slot.")
-				if((HP.health > (HP.maxhealth / 3)) && (HP.health < (HP.maxhealth * (2/3))))
+				if((HP.obj_integrity > (HP.max_integrity / 3)) && (HP.obj_integrity < (HP.max_integrity * (2/3))))
 					to_chat(user, "There is a damaged [HP] installed on [i] hardpoint slot.")			//removed skills check, because any baldie PFC can tell if module is unscratched or will fall apart from touching it
-				if((HP.health > (HP.maxhealth * (2/3))) && (HP.health < HP.maxhealth))
+				if((HP.obj_integrity > (HP.max_integrity * (2/3))) && (HP.obj_integrity < HP.max_integrity))
 					to_chat(user, "There is a lightly damaged [HP] installed on [i] hardpoint slot.")
-				if(HP.health == HP.maxhealth)
+				if(HP.obj_integrity == HP.max_integrity)
 					to_chat(user, "There is a non-damaged [HP] installed on [i] hardpoint slot.")
 			//else
-			//	to_chat(user, "There is a [HP.health <= 0 ? "broken" : "working"] [HP] installed on the [i] hardpoint slot.")
+			//	to_chat(user, "There is a [HP.obj_integrity <= 0 ? "broken" : "working"] [HP] installed on the [i] hardpoint slot.")
 
 
 //Special armored vic healthcheck that mainly updates the hardpoint states
@@ -634,7 +634,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 	for(i in hardpoints)
 		var/obj/item/hardpoint/tank/H = hardpoints[i]
 		if(!H) continue
-		if(H.health <= 0)
+		if(H.obj_integrity <= 0)
 			H.remove_buff()
 			if(H.slot != HDPT_TREADS) damaged_hps |= H.slot //Not treads since their broken module overlay is the same as the broken hardpoint overlay
 		else remove_person = 0 //if something exists but isnt broken
@@ -667,7 +667,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 	for(i in hardpoints)
 		var/obj/item/hardpoint/tank/H = hardpoints[i]
 
-		if(i == HDPT_TREADS && (!H || H.health <= 0)) //Treads not installed or broken
+		if(i == HDPT_TREADS && (!H || H.obj_integrity <= 0)) //Treads not installed or broken
 			var/image/I = image(icon, icon_state = "damaged_hardpt_[i]")
 			overlays += I
 			continue
@@ -1149,12 +1149,12 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 		for(var/obj/item/clothing/mask/facehugger/FG in get_turf(src))
 			FG.Die()
 		for(var/obj/effect/xenomorph/spray/SR in get_turf(src))
-			if(istype(CA.hardpoints[HDPT_TREADS], /obj/item/hardpoint/tank/treads/standard) && CA.hardpoints[HDPT_TREADS].health > 0)
-				CA.hardpoints[HDPT_TREADS].health -= 10
+			if(istype(CA.hardpoints[HDPT_TREADS], /obj/item/hardpoint/tank/treads/standard) && CA.hardpoints[HDPT_TREADS].obj_integrity > 0)
+				CA.hardpoints[HDPT_TREADS].obj_integrity -= 10
 				healthcheck()
 			else
-				if(istype(CA.hardpoints[HDPT_TREADS], /obj/item/hardpoint/tank/treads/heavy) && CA.hardpoints[HDPT_TREADS].health > 0)
-					CA.hardpoints[HDPT_TREADS].health -= 5
+				if(istype(CA.hardpoints[HDPT_TREADS], /obj/item/hardpoint/tank/treads/heavy) && CA.hardpoints[HDPT_TREADS].obj_integrity > 0)
+					CA.hardpoints[HDPT_TREADS].obj_integrity -= 5
 					healthcheck()
 
 /obj/vehicle/multitile/hitbox/cm_armored/Uncrossed(var/atom/movable/A)
@@ -1204,7 +1204,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 	for(i in hardpoints)
 		var/obj/item/hardpoint/tank/HP = hardpoints[i]
 		if(!istype(HP)) continue
-		HP.health -= damage * dmg_distribs[i] * get_dmg_multi(type)
+		HP.obj_integrity -= damage * dmg_distribs[i] * get_dmg_multi(type)
 
 	if(istype(attacker, /mob))
 		var/mob/M = attacker
@@ -1619,7 +1619,7 @@ var/list/TANK_HARDPOINT_OFFSETS = list(
 	src.vehicle_weight -= old.hp_weight
 	src.vehicle_class_update()
 
-	//if(old.health <= 0)
+	//if(old.obj_integrity <= 0)
 	//	cdel(old)
 
 	hardpoints[old.slot] = null

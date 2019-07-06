@@ -27,25 +27,25 @@
 	var tank_health = 0
 
 	if (HP1)
-		if(HP1.health > 0)
-			tank_health += HP1.health
-		divider += abs(HP1.maxhealth)
+		if(HP1.obj_integrity > 0)
+			tank_health += HP1.obj_integrity
+		divider += abs(HP1.max_integrity)
 	if (HP2)
-		if(HP2.health > 0)
-			tank_health += HP2.health
-		divider += abs(HP2.maxhealth)
+		if(HP2.obj_integrity > 0)
+			tank_health += HP2.obj_integrity
+		divider += abs(HP2.max_integrity)
 	if (HP3)
-		if(HP3.health > 0)
-			tank_health += HP3.health
-		divider += abs(HP3.maxhealth)
+		if(HP3.obj_integrity > 0)
+			tank_health += HP3.obj_integrity
+		divider += abs(HP3.max_integrity)
 	if (HP4)
-		if(HP4.health > 0)
-			tank_health += HP4.health
-		divider += abs(HP4.maxhealth)
+		if(HP4.obj_integrity > 0)
+			tank_health += HP4.obj_integrity
+		divider += abs(HP4.max_integrity)
 	if (HP5)
-		if(HP5.health > 0)
-			tank_health += HP5.health
-		divider += abs(HP5.maxhealth)
+		if(HP5.obj_integrity > 0)
+			tank_health += HP5.obj_integrity
+		divider += abs(HP5.max_integrity)
 
 	if(divider == 0)
 		tank_health = round(tank_health * 100 / (divider + 1))
@@ -60,7 +60,7 @@
 						)
 
 	if(HP3 && HP3.is_activatable)
-		data += list("support_h" = HP3.health)
+		data += list("support_h" = HP3.obj_integrity)
 		data += list("support_n" = HP3.name)
 	else
 		data += list("support_h" = null)
@@ -68,7 +68,7 @@
 
 	//secondary
 	if(HP4)
-		data += list("secd_gun_name" = HP4.name, "secd_gun_hp" = HP4.health)
+		data += list("secd_gun_name" = HP4.name, "secd_gun_hp" = HP4.obj_integrity)
 		var/timer = (HP4.next_use - world.time)/10
 		var/reload_time = cooldowns["secondary"]/10
 		if(reload_time < 6)
@@ -106,7 +106,7 @@
 
 	//primary
 	if(HP5)
-		data += list("main_gun_name" = HP5.name, "main_gun_hp" = HP5.health)
+		data += list("main_gun_name" = HP5.name, "main_gun_hp" = HP5.obj_integrity)
 		var/timer = (HP5.next_use - world.time)/10
 		var/reload_time = cooldowns["primary"]/10
 		if(reload_time < 6)

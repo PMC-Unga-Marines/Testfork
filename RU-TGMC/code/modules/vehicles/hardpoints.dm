@@ -7,8 +7,8 @@ All of the hardpoints, for the tank and APC
 	icon = 'icons/obj/hardpoint_modules.dmi'
 	icon_state = "tires" //Placeholder
 
-	var/maxhealth = 0
-	var/health = 0
+	max_integrity = 0
+	obj_integrity = 0
 	w_class = 15
 
 	//If we use ammo, put it here
@@ -130,7 +130,7 @@ All of the hardpoints, for the tank and APC
 	else if(new_dir in list(EAST, WEST))
 		icon_suffix = "EW"
 
-	if(health <= 0)
+	if(obj_integrity <= 0)
 		icon_state_suffix = "1"
 
 	return image(icon = "[disp_icon]_[icon_suffix]", icon_state = "[disp_icon_state]_[icon_state_suffix]", pixel_x = x_offset, pixel_y = y_offset)
@@ -264,7 +264,7 @@ All of the hardpoints, for the tank and APC
 /obj/item/hardpoint/tank/examine(var/mob/user)
 	..()
 	if((user.mind && user.mind.cm_skills && user.mind.cm_skills.engineer >= SKILL_ENGINEER_ENGI) || isobserver(user))
-		var/cond = round(health * 100 / maxhealth)
+		var/cond = round(obj_integrity * 100 / max_integrity)
 		if (cond > 0)
 			to_chat(user, "Integrity: [cond]%.")
 		else
@@ -280,8 +280,8 @@ All of the hardpoints, for the tank and APC
 	name = "M5 LTB Cannon"
 	desc = "A primary 86mm cannon for tank."
 
-	maxhealth = 500
-	health = 500
+	max_integrity = 500
+	obj_integrity = 500
 	point_cost = 100
 	hp_weight = 2
 	icon_state = "ltb_cannon"
@@ -309,7 +309,7 @@ All of the hardpoints, for the tank and APC
 			var/CD = round(next_use - world.time) / 10
 			to_chat(usr, "<span class='warning'>[src] will be ready to fire in [CD] seconds.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -342,8 +342,8 @@ All of the hardpoints, for the tank and APC
 	name = "M21 Autocannon"
 	desc = "A primary light autocannon for tank. Designed for light scout tank. Shoots 30mm light HE rounds. Fire rate was reduced with adding IFF support."
 
-	maxhealth = 400
-	health = 400
+	max_integrity = 400
+	obj_integrity = 400
 	point_cost = 100
 	hp_weight = 1
 
@@ -369,7 +369,7 @@ All of the hardpoints, for the tank and APC
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>This module is not ready to be used yet.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -402,8 +402,8 @@ All of the hardpoints, for the tank and APC
 	name = "M74 LTAA-AP Minigun"
 	desc = "It's a minigun, what is not clear? Just go pew-pew-pew."
 
-	maxhealth = 350
-	health = 350
+	max_integrity = 350
+	obj_integrity = 350
 	point_cost = 100
 	hp_weight = 3
 
@@ -444,7 +444,7 @@ All of the hardpoints, for the tank and APC
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>This module is not ready to be used yet.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -569,8 +569,8 @@ All of the hardpoints, for the tank and APC
 	name = "M7 \"Dragon\" Flamethrower Unit"
 	desc = "A secondary weapon for tank. Don't let it fool you, it's not your ordinary flamer, this thing literally shoots fireballs. No kidding."
 
-	maxhealth = 300
-	health = 300
+	max_integrity = 300
+	obj_integrity = 300
 	point_cost = 100
 	hp_weight = 2
 
@@ -595,7 +595,7 @@ All of the hardpoints, for the tank and APC
 			var/CD = round(next_use - world.time) / 10
 			to_chat(usr, "<span class='warning'>[src] will be ready to fire in [CD] seconds.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -629,8 +629,8 @@ All of the hardpoints, for the tank and APC
 	name = "M8-3 TOW Launcher"
 	desc = "A secondary weapon for tank that shoots powerful AP rockets. Deals heavy damage, but only on direct hits."
 
-	maxhealth = 500
-	health = 500
+	max_integrity = 500
+	obj_integrity = 500
 	point_cost = 100
 	hp_weight = 2
 
@@ -655,7 +655,7 @@ All of the hardpoints, for the tank and APC
 			var/CD = round(next_use - world.time) / 10
 			to_chat(usr, "<span class='warning'>[src] will be ready to fire in [CD] seconds.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -688,8 +688,8 @@ All of the hardpoints, for the tank and APC
 	name = "M56 \"Cupola\""
 	desc = "A secondary weapon for tank. Refitted M56 has higher accuracy and rate of fire. Compatible with IFF system."
 
-	maxhealth = 350
-	health = 350
+	max_integrity = 350
+	obj_integrity = 350
 	point_cost = 100
 	hp_weight = 2
 	var/burst_amount = 3
@@ -715,7 +715,7 @@ All of the hardpoints, for the tank and APC
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>This module is not ready to be used yet.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -756,8 +756,8 @@ All of the hardpoints, for the tank and APC
 	name = "M92 Grenade Launcher"
 	desc = "A secondary weapon for tank that shoots HEDP grenades further than you see. No, seriously, that's how it works."
 
-	maxhealth = 500
-	health = 500
+	max_integrity = 500
+	obj_integrity = 500
 	point_cost = 100
 	hp_weight = 2
 
@@ -781,7 +781,7 @@ All of the hardpoints, for the tank and APC
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>[src] is not ready to fire yet.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -961,8 +961,8 @@ All of the hardpoints, for the tank and APC
 	name = "M75 Smoke Deploy System"
 	desc = "Launches smoke forward to obscure vision."
 
-	maxhealth = 300
-	health = 300
+	max_integrity = 300
+	obj_integrity = 300
 	point_cost = 0
 	hp_weight = 1
 
@@ -987,7 +987,7 @@ All of the hardpoints, for the tank and APC
 			var/CD = round(next_use - world.time) / 10
 			to_chat(usr, "<span class='warning'>[src] will be ready to fire in [CD] seconds.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -1019,7 +1019,7 @@ All of the hardpoints, for the tank and APC
 			icon_suffix = "EW"
 
 		var /obj/item/ammo_magazine/tank/tank_slauncher/A = clips[cur_ammo_type][2]
-		if(health <= 0) icon_state_suffix = "1"
+		if(obj_integrity <= 0) icon_state_suffix = "1"
 		else if(A.current_rounds <= 0) icon_state_suffix = "2"
 
 		return image(icon = "[disp_icon]_[icon_suffix]", icon_state = "[disp_icon_state]_[icon_state_suffix]", pixel_x = x_offset, pixel_y = y_offset)
@@ -1028,8 +1028,8 @@ All of the hardpoints, for the tank and APC
 	name = "M40 Integrated Weapons Sensor Array"
 	desc = "Improves the accuracy and fire rate of all installed weapons. Actually more useful than you may think."
 
-	maxhealth = 250
-	health = 250
+	max_integrity = 250
+	obj_integrity = 250
 	point_cost = 100
 	hp_weight = 1
 
@@ -1060,8 +1060,8 @@ All of the hardpoints, for the tank and APC
 	name = "M103 Overdrive Enhancer"
 	desc = "Pimp your ride. Increases the movement and turn speed of the vehicle it's attached to."
 
-	maxhealth = 250
-	health = 250
+	max_integrity = 250
+	obj_integrity = 250
 	point_cost = 100
 	hp_weight = 1
 
@@ -1080,8 +1080,8 @@ All of the hardpoints, for the tank and APC
 	name = "M6 Artillery Module"
 	desc = "A bunch of enhanced optics and targeting computers. Greatly increases range of view of a gunner. Also adds structures visibility even in complete darkness."
 
-	maxhealth = 250
-	health = 250
+	max_integrity = 250
+	obj_integrity = 250
 	point_cost = 100
 	is_activatable = 1
 	var/is_active = 0
@@ -1171,8 +1171,8 @@ All of the hardpoints, for the tank and APC
 	name = "M65-B Armor"
 	desc = "Standard tank armor. Middle ground in everything, from damage resistance to weight."
 
-	maxhealth = 800
-	health = 800
+	max_integrity = 800
+	obj_integrity = 800
 	point_cost = 100
 	hp_weight = 7
 
@@ -1199,8 +1199,8 @@ All of the hardpoints, for the tank and APC
 	name = "M70 \"Caustic\" Armor"
 	desc = "Special set of tank armor. Purpose: reduce vehicle parts degradation in hostile surroundings on planets with unstable and highly corrosive atmosphere."
 
-	maxhealth = 700
-	health = 700
+	max_integrity = 700
+	obj_integrity = 700
 	point_cost = 100
 	hp_weight = 5
 
@@ -1225,8 +1225,8 @@ All of the hardpoints, for the tank and APC
 	name = "M66-LC Armor"
 	desc = "Light armor, designed for recon type of tank loadouts. Offers less protection in exchange for better maneuverability. After initial tests resistance to blunt damage was increased due to drivers driving into walls."
 
-	maxhealth = 600
-	health = 600
+	max_integrity = 600
+	obj_integrity = 600
 
 	point_cost = 100
 	hp_weight = 3
@@ -1254,8 +1254,8 @@ All of the hardpoints, for the tank and APC
 	name = "M90 \"Paladin\" Armor"
 	desc = "Heavy armor for heavy tank. Converts your tank into what an essentially is a slowly moving bunker. High resistance to almost all types of damage."
 
-	maxhealth = 1000
-	health = 1000
+	max_integrity = 1000
+	obj_integrity = 1000
 	point_cost = 100
 	hp_weight = 10
 
@@ -1282,8 +1282,8 @@ All of the hardpoints, for the tank and APC
 	name = "M37 \"Snowplow\" Armor"
 	desc = "Special set of tank armor, equipped with multipurpose front \"snowplow\". Designed to remove snow and demine minefields. As a result armor has high explosion damage resistance in front, while offering low protection from other types of damage."
 
-	maxhealth = 700
-	health = 700
+	max_integrity = 700
+	obj_integrity = 700
 	point_cost = 100
 	hp_weight = 4
 
@@ -1325,8 +1325,8 @@ All of the hardpoints, for the tank and APC
 	point_cost = 0
 	color = "#c2b678"
 
-	maxhealth = 900
-	health = 900
+	max_integrity = 900
+	obj_integrity = 900
 
 	apply_buff()
 		owner.dmg_multipliers["acid"] = 0.8
@@ -1347,8 +1347,8 @@ All of the hardpoints, for the tank and APC
 	name = "M2 Tank Treads"
 	desc = "Standard tank treads. Suprisingly, greatly improves vehicle moving speed."
 
-	maxhealth = 500
-	health = 500
+	max_integrity = 500
+	obj_integrity = 500
 	point_cost = 25
 	hp_weight = 1
 
@@ -1365,8 +1365,8 @@ All of the hardpoints, for the tank and APC
 	name = "M2-R Tank Treads"
 	desc = "Heavily reinforced tank treads. Three times heavier but can endure more damage. Has special protective layer akin to M70 armor."
 
-	maxhealth = 750
-	health = 750
+	max_integrity = 750
+	obj_integrity = 750
 	point_cost = 25
 	hp_weight = 3
 
@@ -1395,8 +1395,8 @@ All of the hardpoints, for the tank and APC
 	if(WT.get_fuel() < 8)
 		to_chat(user, "<span class='warning'>You don't have enough fuel in your [WT].</span>")
 		return
-	var/q_health = round(src.maxhealth * 0.25)
-	if(health >= q_health)
+	var/q_health = round(src.max_integrity * 0.25)
+	if(obj_integrity >= q_health)
 		to_chat(user, "<span class='warning'>You can't repair treads more than that in the field.</span>")
 		return
 	user.visible_message("<span class='notice'>[user] starts field repair on the [src].</span>", "<span class='notice'>You start field repair on the [src].</span>")
@@ -1410,7 +1410,7 @@ All of the hardpoints, for the tank and APC
 	WT.remove_fuel(8, user)
 	user.visible_message("<span class='notice'>[user] finishes repairing the [src].</span>", "<span class='notice'>You repair the [src] as best as you can in field conditions.</span>")
 
-	src.health = q_health //We repaired it to 25%, good job
+	src.obj_integrity = q_health //We repaired it to 25%, good job
 
 	. = ..()
 
@@ -1427,8 +1427,8 @@ All of the hardpoints, for the tank and APC
 	point_cost = 0
 	color = "#c2b678"
 
-	maxhealth = 650
-	health = 650
+	max_integrity = 650
+	obj_integrity = 650
 
 /////////////////
 // TREAD SLOTS // END
@@ -1786,7 +1786,7 @@ All of the hardpoints, for the tank and APC
 	else if(new_dir in list(EAST, WEST))
 		icon_suffix = "EW"
 
-	if(health <= 0)
+	if(obj_integrity <= 0)
 		icon_state_suffix = "1"
 
 	return image(icon = "[disp_icon]_[icon_suffix]", icon_state = "[disp_icon_state]_[icon_state_suffix]", pixel_x = x_offset, pixel_y = y_offset)
@@ -1828,7 +1828,7 @@ All of the hardpoints, for the tank and APC
 /obj/item/hardpoint/apc/examine(var/mob/user)
 	..()
 	if(!istype(src, /obj/item/hardpoint/apc/wheels) && (user.mind && user.mind.cm_skills && user.mind.cm_skills.engineer >= SKILL_ENGINEER_ENGI) || isobserver(user))
-		var/cond = round(health * 100 / maxhealth)
+		var/cond = round(obj_integrity * 100 / max_integrity)
 		if (cond > 0)
 			to_chat(user, "Integrity: [cond]%.")
 		else
@@ -1837,7 +1837,7 @@ All of the hardpoints, for the tank and APC
 /obj/item/hardpoint/apc/wheels/examine(var/mob/user)
 	..()
 	if((user.mind && user.mind.cm_skills) || isobserver(user))
-		var/cond = round(health * 100 / maxhealth)
+		var/cond = round(obj_integrity * 100 / max_integrity)
 		if (cond > 0)
 			to_chat(user, "Integrity: [cond]%.")
 		else
@@ -1853,8 +1853,8 @@ All of the hardpoints, for the tank and APC
 	name = "M78 Dual Cannon"
 	desc = "A primary 45mm dual cannon for APC."
 
-	maxhealth = 500
-	health = 500
+	max_integrity = 500
+	obj_integrity = 500
 	point_cost = 100
 
 	icon_state = "dual_cannon"
@@ -1875,7 +1875,7 @@ All of the hardpoints, for the tank and APC
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>[src] is not ready to fire yet.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -1936,8 +1936,8 @@ All of the hardpoints, for the tank and APC
 	name = "M26 Frontal Cannon"
 	desc = "A secondary frontal cannon for APC."
 
-	maxhealth = 300
-	health = 300
+	max_integrity = 300
+	obj_integrity = 300
 	point_cost = 100
 
 	icon_state = "front_cannon"
@@ -1958,7 +1958,7 @@ All of the hardpoints, for the tank and APC
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>[src] is not ready to fire yet.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -2038,8 +2038,8 @@ All of the hardpoints, for the tank and APC
 	name = "M9 Flare Launcher System"
 	desc = "Launches flares forward light up the area."
 
-	maxhealth = 300
-	health = 300
+	max_integrity = 300
+	obj_integrity = 300
 	point_cost = 100
 
 	icon_state = "flare_launcher"
@@ -2060,7 +2060,7 @@ All of the hardpoints, for the tank and APC
 			var/CD = round(next_use - world.time) / 10
 			to_chat(usr, "<span class='warning'>[src] will be ready to fire in [CD] seconds.</span>")
 			return 0
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
 			return 0
 		return 1
@@ -2117,7 +2117,7 @@ All of the hardpoints, for the tank and APC
 			icon_suffix = "EW"
 
 		var /obj/item/ammo_magazine/apc/flare_launcher/A = clips[1]
-		if(health <= 0)
+		if(obj_integrity <= 0)
 			icon_state_suffix = "1"
 		else
 			if(clips[1] == null || A.current_rounds <= 0)
@@ -2192,8 +2192,8 @@ All of the hardpoints, for the tank and APC
 	name = "M3 APC Wheels Kit"
 	desc = "Standard armored APC wheels. Suprisingly, greatly improves vehicle moving speed."
 
-	maxhealth = 500
-	health = 500
+	max_integrity = 500
+	obj_integrity = 500
 	point_cost = 25
 
 	icon_state = "wheels"
@@ -2219,8 +2219,8 @@ All of the hardpoints, for the tank and APC
 	if(!iswrench(O))
 		to_chat(user, "<span class='warning'>That's the wrong tool. Use a wrench.</span>")
 		return
-	var/q_health = round(src.maxhealth * 0.25)
-	if(health >= q_health)
+	var/q_health = round(src.max_integrity * 0.25)
+	if(obj_integrity >= q_health)
 		to_chat(user, "<span class='warning'>You can't repair [src] more than that in the field.</span>")
 		return
 	user.visible_message("<span class='notice'>[user] starts field repair on the [src].</span>", "<span class='notice'>You start field repair on the [src].</span>")
@@ -2233,7 +2233,7 @@ All of the hardpoints, for the tank and APC
 		return
 	user.visible_message("<span class='notice'>[user] finishes repairing the [src].</span>", "<span class='notice'>You repair the [src] as best as you can in field conditions.</span>")
 
-	src.health = q_health //We repaired it to 25%, good job
+	src.obj_integrity = q_health //We repaired it to 25%, good job
 
 	. = ..()
 //////////////////

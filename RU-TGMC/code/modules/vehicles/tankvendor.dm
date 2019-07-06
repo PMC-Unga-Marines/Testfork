@@ -328,10 +328,10 @@
 		dat += "<h4>No module detected. Please, put module into receiver.</h4>"
 	else
 		var/health_per
-		var/health = HP.health
-		if(HP.health < 0)
+		var/health = HP.obj_integrity
+		if(HP.obj_integrity < 0)
 			health = 0
-		health_per = round(health * 100 / HP.maxhealth)//calculate health in %
+		health_per = round(health * 100 / HP.max_integrity)//calculate health in %
 
 		dat += "<h3>Module inserted:</h3>"
 		dat += "<h4>[HP.name]</h4>"
@@ -371,8 +371,8 @@
 
 	for(var/i=0;i<5;i++)
 		sleep(timer/5)
-		HP.health += round((100 - health_per)/5)
-	HP.health = HP.maxhealth
+		HP.obj_integrity += round((100 - health_per)/5)
+	HP.obj_integrity = HP.max_integrity
 	busy = FALSE
 	playsound(src, pick('sound/machines/hydraulics_1.ogg', 'sound/machines/hydraulics_2.ogg'), 40, 1)
 	sleep(10)

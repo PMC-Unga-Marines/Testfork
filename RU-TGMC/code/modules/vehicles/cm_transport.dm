@@ -207,24 +207,24 @@ var/list/apc_dmg_distributions = list(
 	var divider = 0
 	var apc_health = 0
 	//if(HP1 != null && HP2 != null && HP3 != null && HP4 != null && HP5 != null))
-	//	apc_health = round((HP1.health + HP2.health + HP3.health + HP4.health + HP5.health) * 100 / (HP1.maxhealth + HP2.maxhealth + HP3.maxhealth + HP4.maxhealth + HP5.maxhealth))
+	//	apc_health = round((HP1.obj_integrity + HP2.obj_integrity + HP3.obj_integrity + HP4.obj_integrity + HP5.obj_integrity) * 100 / (HP1.max_integrity + HP2.max_integrity + HP3.max_integrity + HP4.max_integrity + HP5.max_integrity))
 	//First version of formula. Doesn't work if any of modules is absent or took too much damage (admin magic)
 	if (HP1)
-		if(HP1.health > 0)
-			apc_health += HP1.health
-		divider += abs(HP1.maxhealth)
+		if(HP1.obj_integrity > 0)
+			apc_health += HP1.obj_integrity
+		divider += abs(HP1.max_integrity)
 	if (HP2)
-		if(HP2.health > 0)
-			apc_health += HP2.health
-		divider += abs(HP2.maxhealth)
+		if(HP2.obj_integrity > 0)
+			apc_health += HP2.obj_integrity
+		divider += abs(HP2.max_integrity)
 	if (HP3)
-		if(HP3.health > 0)
-			apc_health += HP3.health
-		divider += abs(HP3.maxhealth)
+		if(HP3.obj_integrity > 0)
+			apc_health += HP3.obj_integrity
+		divider += abs(HP3.max_integrity)
 	if (HP4)
-		if(HP4.health > 0)
-			apc_health += HP4.health
-		divider += abs(HP4.maxhealth)
+		if(HP4.obj_integrity > 0)
+			apc_health += HP4.obj_integrity
+		divider += abs(HP4.max_integrity)
 
 	if(divider == 0)
 		apc_health = round(apc_health * 100 / (divider + 1))
@@ -238,14 +238,14 @@ var/list/apc_dmg_distributions = list(
 	to_chat(usr, "<span class='warning'>Vehicle Status:</span><br>")
 	to_chat(usr, "<span class='warning'>Overall vehicle integrity: [apc_health] percent.</span>")
 
-	if(HP4 == null || HP4.health <= 0)
+	if(HP4 == null || HP4.obj_integrity <= 0)
 		to_chat(usr, "<span class='warning'>Primary weapon: Unavailable.</span>")
 	else
 		if(HP4.clips.len <= 0)
 			to_chat(usr, "<span class='warning'>Primary weapon: [HP4.name]. Ammo: 0/0. 0/0 spare magazines available.</span>")
 		else
 			to_chat(usr, "<span class='warning'>Primary weapon: [HP4.name]. Ammo: [HP4.clips[1].current_rounds]/[HP4.clips[1].max_rounds]. [HP4.clips.len - 1]/[HP4.max_clips - 1] spare magazines available.</span>")
-	if(HP3 == null || HP3.health <= 0)
+	if(HP3 == null || HP3.obj_integrity <= 0)
 		to_chat(usr, "<span class='warning'>Secondary weapon: Unavailable.</span>")
 	else
 		if(HP3.clips.len <= 0)
@@ -297,7 +297,7 @@ var/list/apc_dmg_distributions = list(
 		for(var/slot in hardpoints)
 			var/obj/item/hardpoint/apc/HP = hardpoints[slot]
 			if(!HP) continue
-			if(HP.health <= 0) continue
+			if(HP.obj_integrity <= 0) continue
 			if(!HP.is_activatable) continue
 			slots += slot
 	return slots
@@ -339,7 +339,7 @@ var/list/apc_dmg_distributions = list(
 
 	if(!HP) return 0
 
-	if(HP.health <= 0) return 1
+	if(HP.obj_integrity <= 0) return 1
 
 //Normal examine() but tells the player what is installed and if it's broken
 /obj/vehicle/multitile/root/cm_transport/examine(var/mob/user)
@@ -350,29 +350,29 @@ var/list/apc_dmg_distributions = list(
 			to_chat(user, "There is nothing installed on the [i] hardpoint slot.")
 		else
 			if(isxeno(user))
-				if(HP.health <= 0)
+				if(HP.obj_integrity <= 0)
 					to_chat(user, "There is a broken module installed on [i] hardpoint slot.")
-				if(HP.health > 0 && (HP.health < (HP.maxhealth / 3)))
+				if(HP.obj_integrity > 0 && (HP.obj_integrity < (HP.max_integrity / 3)))
 					to_chat(user, "There is a heavily damaged module installed on [i] hardpoint slot.")
-				if((HP.health > (HP.maxhealth / 3)) && (HP.health < (HP.maxhealth * (2/3))))
+				if((HP.obj_integrity > (HP.max_integrity / 3)) && (HP.obj_integrity < (HP.max_integrity * (2/3))))
 					to_chat(user, "There is a damaged module installed on [i] hardpoint slot.")			//removed modules' names for aliens.
-				if((HP.health > (HP.maxhealth * (2/3))) && (HP.health < HP.maxhealth))
+				if((HP.obj_integrity > (HP.max_integrity * (2/3))) && (HP.obj_integrity < HP.max_integrity))
 					to_chat(user, "There is a lightly damaged module installed on [i] hardpoint slot.")
-				if(HP.health == HP.maxhealth)
+				if(HP.obj_integrity == HP.max_integrity)
 					to_chat(user, "There is a non-damaged module installed on [i] hardpoint slot.")
 			else
-				if(HP.health <= 0)
+				if(HP.obj_integrity <= 0)
 					to_chat(user, "There is a broken [HP] installed on [i] hardpoint slot.")
-				if(HP.health > 0 && (HP.health < (HP.maxhealth / 3)))
+				if(HP.obj_integrity > 0 && (HP.obj_integrity < (HP.max_integrity / 3)))
 					to_chat(user, "There is a heavily damaged [HP] installed on [i] hardpoint slot.")
-				if((HP.health > (HP.maxhealth / 3)) && (HP.health < (HP.maxhealth * (2/3))))
+				if((HP.obj_integrity > (HP.max_integrity / 3)) && (HP.obj_integrity < (HP.max_integrity * (2/3))))
 					to_chat(user, "There is a damaged [HP] installed on [i] hardpoint slot.")			//removed skills check, because any baldie PFC can tell if module is unscratched or will fall apart from touching it
-				if((HP.health > (HP.maxhealth * (2/3))) && (HP.health < HP.maxhealth))
+				if((HP.obj_integrity > (HP.max_integrity * (2/3))) && (HP.obj_integrity < HP.max_integrity))
 					to_chat(user, "There is a lightly damaged [HP] installed on [i] hardpoint slot.")
-				if(HP.health == HP.maxhealth)
+				if(HP.obj_integrity == HP.max_integrity)
 					to_chat(user, "There is a non-damaged [HP] installed on [i] hardpoint slot.")
 			//else
-			//	to_chat(user, "There is a [HP.health <= 0 ? "broken" : "working"] [HP] installed on the [i] hardpoint slot.")
+			//	to_chat(user, "There is a [HP.obj_integrity <= 0 ? "broken" : "working"] [HP] installed on the [i] hardpoint slot.")
 
 //Special armored vic healthcheck that mainly updates the hardpoint states
 /obj/vehicle/multitile/root/cm_transport/healthcheck()
@@ -382,7 +382,7 @@ var/list/apc_dmg_distributions = list(
 	for(i in hardpoints)
 		var/obj/item/hardpoint/apc/H = hardpoints[i]
 		if(!H) continue
-		if(H.health <= 0)
+		if(H.obj_integrity <= 0)
 			H.remove_buff()
 			if(H.slot != HDPT_WHEELS) damaged_hps |= H.slot //Not treads since their broken module overlay is the same as the broken hardpoint overlay
 		else remove_person = 0 //if something exists but isnt broken
@@ -418,7 +418,7 @@ var/list/apc_dmg_distributions = list(
 	for(i in hardpoints)
 		var/obj/item/hardpoint/apc/H = hardpoints[i]
 
-		if(i == HDPT_WHEELS && (!H || H.health <= 0)) //Treads not installed or broken
+		if(i == HDPT_WHEELS && (!H || H.obj_integrity <= 0)) //Treads not installed or broken
 			var/image/I = image(icon, icon_state = "damaged_hardpt_[i]")
 			overlays += I
 			continue
@@ -824,8 +824,8 @@ var/list/apc_dmg_distributions = list(
 	for(var/obj/item/clothing/mask/facehugger/FG in get_turf(src))
 		FG.Die()
 	for(var/obj/effect/xenomorph/spray/SR in get_turf(src))
-		if(istype(CA.hardpoints[HDPT_WHEELS], /obj/item/hardpoint/apc/wheels) && CA.hardpoints[HDPT_WHEELS].health > 0)
-			CA.hardpoints[HDPT_WHEELS].health -= 10
+		if(istype(CA.hardpoints[HDPT_WHEELS], /obj/item/hardpoint/apc/wheels) && CA.hardpoints[HDPT_WHEELS].obj_integrity > 0)
+			CA.hardpoints[HDPT_WHEELS].obj_integrity -= 10
 			healthcheck()
 
 	. = ..()
@@ -890,7 +890,7 @@ var/list/apc_dmg_distributions = list(
 	for(i in hardpoints)
 		var/obj/item/hardpoint/apc/HP = hardpoints[i]
 		if(!istype(HP)) continue
-		HP.health -= damage * dmg_distribs[i] * get_dmg_multi(type)
+		HP.obj_integrity -= damage * dmg_distribs[i] * get_dmg_multi(type)
 
 	if(istype(attacker, /mob))
 		var/mob/M = attacker
@@ -1217,7 +1217,7 @@ var/list/apc_dmg_distributions = list(
 	user.visible_message("<span class='notice'>[user] installs \the [HP] on [src].</span>", "<span class='notice'>You install \the [HP] on [src].</span>")
 
 	user.temporarilyRemoveItemFromInventory(HP, 0)
-	if(HP.health > 0)
+	if(HP.obj_integrity > 0)
 		fix_special_module()
 
 
@@ -1260,7 +1260,7 @@ var/list/apc_dmg_distributions = list(
 		user.visible_message("<span class='warning'>[user] stops removing \the [old] on [src].</span>", "<span class='warning'>You stop removing \the [old] on [src].</span>")
 		return
 
-	if((old == hardpoints[HDPT_PRIMARY] || old == hardpoints[HDPT_SECDGUN]) && old.health > 0)
+	if((old == hardpoints[HDPT_PRIMARY] || old == hardpoints[HDPT_SECDGUN]) && old.obj_integrity > 0)
 		if(old.clips.len > 0)
 			var i
 			var/obj/item/ammo_magazine/A
@@ -1297,7 +1297,7 @@ var/list/apc_dmg_distributions = list(
 		old.loc = entrance.loc
 	old.remove_buff()
 
-	//if(old.health <= 0)
+	//if(old.obj_integrity <= 0)
 	//	cdel(old)
 
 	hardpoints[old.slot] = null
