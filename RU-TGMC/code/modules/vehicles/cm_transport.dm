@@ -86,7 +86,7 @@ var/list/apc_dmg_distributions = list(
 
 	. = ..()
 
-/obj/vehicle/multitile/root/cm_transport/proc/handle_xeno_entrance(mob/living/carbon/Xenomorph/X)
+/obj/vehicle/multitile/root/cm_transport/proc/handle_xeno_entrance(mob/living/carbon/xenomorph/X)
 	return
 
 //What to do if all ofthe installed modules have been broken
