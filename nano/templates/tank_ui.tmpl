@@ -1,0 +1,287 @@
+
+<!--
+Title: Tank UI
+Used In File(s): code\modules\vehicles\vehicle_ui
+-->
+<div">
+	<h2><span class="white">Main systems:</span></h2>
+</div>
+<div>
+	{{if data.integrity > 80}}
+		<h3><div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; color: green">
+		Overall vehicle integrity: {{:data.integrity}}%
+		</div></h3>
+	{{else data.integrity > 50}}
+		<h3><div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; color: yellow">
+		Overall vehicle integrity: {{:data.integrity}}%
+		</div></h3>
+	{{else data.integrity > 25}}
+		<h3><div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; color: orange">
+		Overall vehicle integrity: {{:data.integrity}}%
+		</div></h3>
+	{{else}}
+		<h3><div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; color: red">
+		WARNING! STRUCTURAL FAILURE! ABANDON VEHICLE!<br>
+		Overall vehicle integrity: {{:data.integrity}}%
+		</div></h3>
+	{{/if}}
+</div>
+
+<div>
+	{{if data.smoke_ammo > 0}}
+		<h3><div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; color: green">
+		<span class="black">{{:helper.link('Deploy smokes', null, {'smoke' : '1'}, null)}}</span><br><br>
+		Smoke Deploy System: {{:data.smoke_ammo}} uses left.
+		</div></h3>
+
+	{{else}}
+		<h3><div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; color: red">
+		Smoke Deploy System: {{:data.smoke_ammo}} uses left.
+		</div></h3>
+	{{/if}}
+</div>
+
+<div>
+	<h2><span class="white">Weaponry:</span></h2>
+</div>
+
+{{if data.main_gun_name}}
+	{{if data.main_gun_hp > -100}}
+		{{if data.user_gunner}}
+			<div>
+				<h3><span class="white">Primary weapon:</h3></span>
+				<div style="float: left; clear: both ; margin-bottom: 5px;">
+					{{:helper.link(data.main_gun_name, null, {'weapon' : '5'}, data.main_gun_sel ? 'disabled' : null)}}
+					{{if data.cd_main_full > 3}}
+						{{if data.cd_main_left > 1}}
+							{{:helper.displayBar(data.cd_main_left, 0, data.cd_main_full, 'average')}}<br><br>
+						{{/if}}
+					{{/if}}
+				</div>
+				<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both; width: 100%">
+					Ammunition:
+					<div style="padding-top: 5px ; margin-bottom: 5px">
+						{{if data.main_gun_ammo_1 > 0}}
+							{{:helper.link('Select Ammo', null, {'ammo' : '1'}, data.main_gun_ammo_type_cur_1 ? 'disabled' : null)}}{{:helper.link('Unload Magazine', null, {'unload' : '1'}, null)}}{{:data.main_gun_ammo_type_1}}:{{:data.main_gun_ammo_1}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 5px ; margin-bottom: 5px">
+						{{if data.main_gun_ammo_2 > 0}}
+							{{:helper.link('Select Ammo', null, {'ammo' : '2'}, data.main_gun_ammo_type_cur_2 ? 'disabled' : null)}}{{:helper.link('Unload Magazine', null, {'unload' : '2'}, null)}}{{:data.main_gun_ammo_type_2}}:{{:data.main_gun_ammo_2}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 5px ; margin-bottom: 5px">
+						{{if data.main_gun_ammo_3 > 0}}
+							{{:helper.link('Select Ammo', null, {'ammo' : '3'}, data.main_gun_ammo_type_cur_3 ? 'disabled' : null)}}{{:helper.link('Unload Magazine', null, {'unload' : '3'}, null)}}{{:data.main_gun_ammo_type_3}}:{{:data.main_gun_ammo_3}}
+						{{/if}}
+					</div>
+				</div>				
+			</div>
+		{{else}}
+			<div>
+				<h3><span class="white">Primary weapon:</h3></span>
+				<div style="float: left; clear: both">
+					{{:data.main_gun_name}}
+					{{if data.cd_main_full > 3}}
+						{{if data.cd_main_left > 1}}
+							{{:helper.displayBar(data.cd_main_left, 0, data.cd_main_full, 'average')}}<br><br>
+						{{/if}}
+					{{/if}}
+				</div>
+				<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both">
+					Ammunition:
+					<div style="padding-top: 5px">
+						{{if data.main_gun_ammo_1 > 0}}
+							{{:data.main_gun_ammo_type_1}}:{{:data.main_gun_ammo_1}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 6px">
+						{{if data.main_gun_ammo_2 > 0}}
+							{{:data.main_gun_ammo_type_2}}:{{:data.main_gun_ammo_2}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 5px">
+						{{if data.main_gun_ammo_3 > 0}}
+							{{:data.main_gun_ammo_type_3}}:{{:data.main_gun_ammo_3}}
+						{{/if}}
+					</div>
+				</div>				
+			</div>
+		{{/if}}
+	{{else}}
+		<div style="color: white; font-weight: bold">
+			<h3><span class="white">Primary weapon:</h3></span>
+			<div style="float: left">
+				<h4><span class="red">WARNING! MODULE RECEIVED CRITICAL DAMAGE!</span></h4><br>
+				{{:data.main_gun_name}}
+				| Ammo: <span class="red">##ERROR!##</span>
+			</div>
+		</div>
+	{{/if}}
+{{else}}
+	<div style="color: white; font-weight: bold">
+		<h3><span class="white">Primary weapon:</h3></span>
+			<div style="float: left; color: white;">
+				<span class="orange">##MODULE NOT DETECTED!##</span>
+				| Ammo: <span class="orange">##ERROR!##</span>
+			</div>
+	</div>
+{{/if}}
+
+{{if data.secd_gun_name}}
+	{{if data.secd_gun_hp > -100}}
+		{{if data.user_gunner}}
+			<div>
+				<h3><span class="white">Secondary weapon:</h3></span>
+				<div style="float: left; clear: both ; margin-bottom: 5px; vertical-align: middle;">
+					{{:helper.link(data.secd_gun_name, null, {'weapon' : '5'}, data.secd_gun_sel ? 'disabled' : null)}}
+					{{if data.cd_secd_full > 3}}
+						{{if data.cd_secd_left > 1}}
+							{{:helper.displayBar(data.cd_secd_left, 0, data.cd_secd_full, 'average')}}<br><br>
+						{{/if}}
+					{{/if}}
+				</div>
+				<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both; width: 100%">
+					Ammunition:
+					<div style="padding-top: 5px ; margin-bottom: 5px">
+						{{if data.secd_gun_ammo_1 > 0}}
+							{{:helper.link('Select Ammo', null, {'ammo' : '1'}, data.secd_gun_ammo_type_cur_1 ? 'disabled' : null)}}{{:helper.link('Unload Magazine', null, {'unload' : '1'}, null)}}{{:data.secd_gun_ammo_type_1}}:{{:data.secd_gun_ammo_1}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 5px ; margin-bottom: 5px">
+						{{if data.secd_gun_ammo_2 > 0}}
+							{{:helper.link('Select Ammo', null, {'ammo' : '2'}, data.secd_gun_ammo_type_cur_2 ? 'disabled' : null)}}{{:helper.link('Unload Magazine', null, {'unload' : '2'}, null)}}{{:data.secd_gun_ammo_type_2}}:{{:data.secd_gun_ammo_2}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 5px ; margin-bottom: 5px">
+						{{if data.secd_gun_ammo_3 > 0}}
+							{{:helper.link('Select Ammo', null, {'ammo' : '3'}, data.secd_gun_ammo_type_cur_3 ? 'disabled' : null)}}{{:helper.link('Unload Magazine', null, {'unload' : '3'}, null)}}{{:data.secd_gun_ammo_type_3}}:{{:data.secd_gun_ammo_3}}
+						{{/if}}
+					</div>
+				</div>				
+			</div>
+		{{else}}
+			<div>
+				<h3><span class="white">Secondary weapon:</h3></span>
+				<div style="float: left; clear: both; width: 100%">
+					{{:data.secd_gun_name}}
+					{{if data.cd_secd_full > 3}}
+						{{if data.cd_secd_left > 1}}
+							{{:helper.displayBar(data.cd_secd_left, 0, data.cd_secd_full, 'average')}}<br><br>
+						{{/if}}
+					{{/if}}
+				</div>
+				<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both; width: 100%">
+					Ammunition:
+					<div style="padding-top: 5px">
+						{{if data.secd_gun_ammo_1 > 0}}
+							{{:data.secd_gun_ammo_type_1}}:{{:data.secd_gun_ammo_1}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 6px">
+						{{if data.secd_gun_ammo_2 > 0}}
+							{{:data.secd_gun_ammo_type_2}}:{{:data.secd_gun_ammo_2}}
+						{{/if}}
+					</div>
+					<div style="padding-top: 5px">
+						{{if data.secd_gun_ammo_3 > 0}}
+							{{:data.secd_gun_ammo_type_3}}:{{:data.secd_gun_ammo_3}}
+						{{/if}}
+					</div>
+				</div>				
+			</div>
+		{{/if}}
+	{{else}}
+		<div style="color: white; font-weight: bold">
+			<h3><span class="white">Secondary weapon:</h3></span>
+			<div style="float: left">
+				<h4><span class="red">WARNING! MODULE RECEIVED CRITICAL DAMAGE!</span></h4><br>
+				{{:data.secd_gun_name}}
+				| Ammo: <span class="red">##ERROR!##</span>
+			</div>
+		</div>
+	{{/if}}
+{{else}}
+	<div style="color: white; font-weight: bold">
+		<h3><span class="white">Secondary weapon:</h3></span>
+			<div style="float: left; color: white;">
+				<span class="orange">##MODULE NOT DETECTED!##</span>
+				| Ammo: <span class="orange">##ERROR!##</span>
+			</div>
+	</div>
+{{/if}}
+
+{{if data.user_gunner}}
+	{{if data.support_n}}
+		<div style="color: white; font-weight: bold; float: left; clear: both; width: 100%">
+			{{:data.support_n}}
+			<div style="padding-top: 5px">
+				{{if data.support_h > 0}}
+					{{:helper.link('Toggle Visor', null, {'weapon' : '3'}, null)}}
+				{{else}}
+					<span class="red">CRITICAL ERROR! SYSTEM IS NOT RESPONDING!</span>		
+				{{/if}}
+			</div>
+		</div>
+	{{/if}}
+{{/if}}
+
+<div itemLabel>
+	<h2><span class="white">Second Armor Crewman:</span></h2>
+</div>
+{{if data.second_AC}}
+	<div style="color: white; font-weight: bold; float: left; clear: both">
+		{{if data.user_gunner}}
+			<div>
+				Driver: <span class="green">{{:data.second_AC}}</span>
+			</div>
+			{{if data.second_AC_uncon}}
+				<div>
+					Status: <span class="red">UNCONCIOUS</span>
+				</div>
+				<div>
+					{{:helper.link('Push driver outside', null, {'crew' : '1'}, null)}}
+				</div>
+			{{else}}
+				<div>
+					{{:helper.link('Swap seats request', null, {'crew' : '3'}, null)}}
+				</div>
+			{{/if}}
+		{{else}}
+			<div>
+				Gunner: <span class="green">{{:data.second_AC}}</span>
+			</div>
+			{{if data.second_AC_uncon}}
+				<div>
+					Status: <span class="red">UNCONCIOUS</span>
+				</div>
+				<div>
+					{{:helper.link('Push gunner outside', null, {'crew' : '2'}, null)}}
+				</div>
+			{{else}}
+				<div>
+					{{:helper.link('Swap seats request', null, {'crew' : '4'}, null)}}
+				</div>
+			{{/if}}
+		{{/if}}
+	</div>
+{{else}}
+	<div style="color: white; font-weight: bold; float: left; clear: both">
+		{{if data.user_gunner}}
+			<div>
+				Driver: <span class="orange">UNOCCUPIED</span>
+			</div>
+			<div>
+				{{:helper.link('Change seat', null, {'crew' : '5'}, null)}}
+			</div>
+		{{else}}
+			<div>
+				Gunner: <span class="orange">UNOCCUPIED</span>
+			</div>
+			<div>
+				{{:helper.link('Change seat', null, {'crew' : '6'}, null)}}
+			</div>
+		{{/if}}
+	</div>
+{{/if}}
+

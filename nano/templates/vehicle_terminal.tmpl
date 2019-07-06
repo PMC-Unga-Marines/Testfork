@@ -1,0 +1,89 @@
+
+<!--
+Title: Vehicle Terminal UI
+Used In File(s): code\modules\vehicles\elevator_garage.dm
+-->
+
+<div itemLabel>
+	<h2>This console is used for ordering vehicles from ASRS.</h2>
+</div>
+
+<div style="font-weight: bold ; float: left ; clear : both ; width: 80% ; color: red">Warning! Traveling down the elevator will most likely result in death and revoking of payment for current operation to compensate repairing and cleaning expenses.
+</div>
+
+<div style="font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">Vehicles can be sent back to regain vehicle tokens. All installed modules and ammo will be lost in the process.<br><br>
+Tokens available: <span class="gold">{{:data.tokens}}</span><br>
+Please, select vehicle below:
+</div>
+
+<div itemLabel>
+	<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: gold">
+		{{:helper.link(data.tank_name, null, {'select' : '1'}, data.tokens ? null : 'disabled')}}
+	</div>
+</div>
+
+<div itemLabel>
+	<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+		{{:data.tank_desc}}
+	</div>
+</div>
+
+<div itemLabel>
+	<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+		{{:data.tank_mod}}
+	</div>
+</div>
+
+<div itemLabel>
+	<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: gold">
+		{{:helper.link(data.apc_name, null, {'select' : '2'}, data.tokens ? null : 'disabled')}}
+	</div>
+</div>
+
+<div itemLabel>
+	<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+		{{:data.apc_desc}}
+	</div>
+</div>
+
+<div itemLabel>
+	<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+		{{:data.apc_mod}}
+	</div>
+</div>
+
+<br>
+<br>
+
+<div itemLabel>
+	{{if data.choice}}
+		<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+			Vehicle selected: <span class="gold">{{:data.choice}}</span>
+		</div>
+	{{/if}}
+</div>
+
+<div itemLabel>
+	{{if data.busy}}
+		<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+			Elevator status: <span class="red">BUSY. PLEASE WAIT.</span>
+		</div>
+
+	{{else data.location == "LOWERED"}}
+		<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+			Elevator status: <span class="green">LOWERED. READY FOR USE.</span>
+		</div>
+		<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 50% ; color: black">
+		{{:helper.link('Call up', 'arrowthickstop-1-e', {'call' : '1'}, null)}}
+		</div>
+
+	{{else data.location == "RAISED"}}
+		<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: white">
+			Elevator status: <span class="green">RAISED. READY FOR USE.</span>
+		</div>
+		<div style="padding-top: 5px ; font-weight: bold ; float: left ; clear : both ; width: 80% ; color: black">
+		{{:helper.link('Send down', 'arrowthickstop-1-e', {'send' : '1'}, null)}}
+		</div>
+
+	{{/if}}
+</div>
