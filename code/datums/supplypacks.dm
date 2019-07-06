@@ -14,7 +14,7 @@
 #define RO_PRICE_VERY_PRICY		100
 #define RO_PRICE_MAX_PRICY		120
 
-GLOBAL_LIST_INIT(all_supply_groups, list("Operations", "Weapons", "Hardpoint Modules", "Attachments", "Ammo", "Armor", "Clothing", "Medical", "Engineering", "Science", "Supplies"))
+//GLOBAL_LIST_INIT(all_supply_groups, list("Operations", "Weapons", "Hardpoint Modules", "Attachments", "Ammo", "Armor", "Clothing", "Medical", "Engineering", "Science", "Supplies"))
 
 /datum/supply_packs
 	var/name = null
@@ -626,7 +626,7 @@ WEAPONS
 	containertype = /obj/structure/closet/crate/explosives
 	containername = "\improper detpack explosives crate (WARNING)"
 	group = "Weapons"
-
+/*
 /*******************************************************************************
 HARDPOINT MODULES (and their ammo)
 *******************************************************************************/
@@ -866,7 +866,7 @@ HARDPOINT MODULES (and their ammo)
 	containername = "\improper tank ammo crate"
 	group = "Hardpoint Modules"
 
-
+*/
 /*******************************************************************************
 ATTACHMENTS
 *******************************************************************************/
