@@ -10,8 +10,8 @@
 
 	var/max_engineers = 3
 	var/max_medics = 4
-	var/max_smartgun = 1
-	var/max_specialists = 1
+	var/max_smartgun = 2
+	var/max_specialists = 2
 	var/max_leaders = 1
 
 	var/num_engineers = 0
@@ -46,7 +46,7 @@
 	usable = TRUE
 	radio_freq = FREQ_ALPHA
 
-
+/*
 /datum/squad/bravo
 	name = "Bravo"
 	id = BRAVO_SQUAD
@@ -62,7 +62,7 @@
 	color = "#c864c8" // rgb(200,100,200)
 	access = list(ACCESS_MARINE_CHARLIE)
 	usable = TRUE
-	radio_freq = FREQ_CHARLIE
+	radio_freq = FREQ_CHARLIE */
 
 /datum/squad/delta
 	name = "Delta"
