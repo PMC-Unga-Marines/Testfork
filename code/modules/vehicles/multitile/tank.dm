@@ -1,7 +1,7 @@
 
 //TANKS, HURRAY
 //Read the documentation in cm_armored.dm and multitile.dm before trying to decipher this stuff
-
+/*
 
 /obj/vehicle/multitile/root/cm_armored/tank
 	name = "\improper M34A2 Longstreet Light Tank"
@@ -344,4 +344,4 @@
 		return TRUE
 
 	HP.active_effect(A)
-	return TRUE
+	return TRUE*/

@@ -16,7 +16,7 @@ Vehicles are placed on the map by a spawner or admin verb
 	name = "Landmark"
 	desc = "Where the interiors for multitiles start spawning"
 */
-
+/*
 /obj/effect/multitile_spawner
 
 	var/width = 2
@@ -303,3 +303,4 @@ Vehicles are placed on the map by a spawner or admin verb
 		new_y = round(new_y, 1) //Sometimes using the rotation matrix gets you off by 1e-5 or so
 		C.x_pos = new_x
 		C.y_pos = new_y
+*/

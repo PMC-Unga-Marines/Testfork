@@ -2,7 +2,7 @@
 All of the hardpoints, for the tank or other
 Currently only has the tank hardpoints
 */
-
+/*
 /obj/item/hardpoint
 
 	var/slot //What slot do we attach to?
@@ -1029,3 +1029,4 @@ Currently only has the tank hardpoints
 ///////////////
 // AMMO MAGS // END
 ///////////////
+*/
