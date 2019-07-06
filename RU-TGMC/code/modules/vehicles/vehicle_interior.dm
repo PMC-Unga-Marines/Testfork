@@ -116,7 +116,7 @@
 	side_door_busy = TRUE
 	visible_message(user, "<span class='notice'>[user] starts climbing out of [src].</span>",
 		"<span class='notice'>You start climbing out of [src].</span>")
-	if(!do_after(user, 15, needhand = FALSE, show_busy_icon = TRUE))
+	if(!do_after(user, 15, needhand = FALSE))
 		to_chat(user, "<span class='notice'>Something interrupted you while getting out.</span>")
 		side_door_busy = FALSE
 		return
@@ -343,7 +343,7 @@
 /obj/structure/bed/chair/comfy/beige/apc
 	resistance_flags = UNACIDABLE
 
-/obj/structure/bed/chair/comfy/beige/apc/attack_alien(mob/living/carbon/Xenomorph/M)
+/obj/structure/bed/chair/comfy/beige/apc/attack_alien(mob/living/carbon/xenomorph/M)
 	return
 
 /obj/structure/bed/chair/comfy/beige/apc/attackby(obj/item/W, mob/user)
@@ -352,7 +352,7 @@
 /obj/structure/bed/chair/comfy/black/apc
 	resistance_flags = UNACIDABLE
 
-/obj/structure/bed/chair/comfy/black/apc/attack_alien(mob/living/carbon/Xenomorph/M)
+/obj/structure/bed/chair/comfy/black/apc/attack_alien(mob/living/carbon/xenomorph/M)
 	return
 
 /obj/structure/bed/chair/comfy/black/apc/attackby(obj/item/W, mob/user)
