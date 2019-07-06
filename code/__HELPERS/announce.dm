@@ -22,7 +22,7 @@
 			announcement += "<h1 class='alert'>Command Announcement</h1>"
 
 
-	announcement += "<br><span class='alert'>[html_encode(message)]</span><br>"
+	announcement += "<br><span class='alert'>[html_encode(sanitize_ru(message))]</span><br>"
 	announcement += "<br>"
 
 	var/s = sound(sound)
@@ -35,7 +35,7 @@
 
 /proc/print_command_report(papermessage, papertitle = "paper", announcemessage = "A report has been downloaded and printed out at all communications consoles.", announcetitle = "Incoming Classified Message", announce = TRUE)
 	if(announce)
-		priority_announce(announcemessage, announcetitle, sound = 'sound/AI/commandreport.ogg')
+		priority_announce(sanitize_ru(announcemessage), announcetitle, sound = 'sound/AI/commandreport.ogg')
 
 	for(var/obj/machinery/computer/communications/C in GLOB.machines)
 		if(C.machine_stat & (BROKEN|NOPOWER))
@@ -54,7 +54,7 @@
 	for(var/i in receivers)
 		var/mob/M = i
 		if(!isnewplayer(M) && !isdeaf(M))
-			to_chat(M, "<span class='big bold'><font color = red>[html_encode(title)]</font color><BR>[html_encode(message)]</span><BR>")
+			to_chat(M, "<span class='big bold'><font color = red>[html_encode(title)]</font color><BR>[html_encode(sanitize_ru(message))]</span><BR>")
 			if(alert)
 				SEND_SOUND(M, sound('sound/misc/notice1.ogg'))
 			else

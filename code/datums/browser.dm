@@ -61,11 +61,16 @@
 
 /datum/browser/proc/get_header()
 	var/file
+	var/filename
 	for(file in stylesheets)
-		head_content += "<link rel='stylesheet' type='text/css' href='[file]'>"
+		filename = "[ckey(file)].css"
+		user << browse_rsc(stylesheets[file], filename)
+		head_content += "<link rel='stylesheet' type='text/css' href='[filename]'>"
 
 	for(file in scripts)
-		head_content += "<script type='text/javascript' src='[file]'></script>"
+		filename = "[ckey(file)].js"
+		user << browse_rsc(scripts[file], filename)
+		head_content += "<script type='text/javascript' src='[filename]'></script>"
 
 	var/title_attributes = "class='uiTitle'"
 	if(title_image)
@@ -73,7 +78,7 @@
 
 	return {"<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<head>
 		[head_content]
@@ -90,6 +95,9 @@
 	return {"
 			</div>
 		</div>
+		<script>
+			document.body.innerHTML = document.body.innerHTML.replace(/¶/g, "ÿ");<!-- omg its so weird --!>
+		</script>
 	</body>
 </html>"}
 

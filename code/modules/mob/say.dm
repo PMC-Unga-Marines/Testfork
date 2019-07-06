@@ -15,7 +15,7 @@
 	if(!message)
 		return
 
-	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+	message = trim(copytext(sanitize(sanitize_ru(message)), 1, MAX_MESSAGE_LEN))
 
 	emote("me", EMOTE_VISIBLE, message, TRUE)
 
@@ -31,7 +31,7 @@
 
 
 /mob/proc/whisper(message, datum/language/language)
-	say(message, language)
+	say(sanitize_ru(message), language)
 
 
 /mob/proc/say_dead(message)

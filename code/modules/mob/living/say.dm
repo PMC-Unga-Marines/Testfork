@@ -49,14 +49,14 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 	var/static/list/one_character_prefix = list(MODE_HEADSET = TRUE, MODE_ROBOT = TRUE, MODE_WHISPER = TRUE)
 
 	if(sanitize)
-		message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+		message = trim(copytext(sanitize(sanitize_ru(message)), 1, MAX_MESSAGE_LEN))
 	
 	if(!message)
 		return
 
 	var/datum/saymode/saymode = get_saymode(message, talk_key)
 	var/message_mode = get_message_mode(message)
-	var/original_message = message
+	var/original_message = sanitize_ru(message)
 	var/in_critical = InCritical()
 
 	if(one_character_prefix[message_mode])

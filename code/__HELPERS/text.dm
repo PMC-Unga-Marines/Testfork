@@ -84,13 +84,13 @@
 
 // Used to get a sanitized input.
 /proc/stripped_input(mob/user, message = "", title = "", default = "", max_length = MAX_MESSAGE_LEN)
-	var/name = input(user, message, title, default) as text|null
+	var/name = sanitize_ru(input(user, message, title, default) as text|null)
 	return html_encode(trim(name, max_length))
 
 
 // Used to get a properly sanitized multiline input, of max_length
 /proc/stripped_multiline_input(mob/user, message = "", title = "", default = "", max_length = MAX_MESSAGE_LEN)
-	var/name = input(user, message, title, default) as message|null
+	var/name = sanitize_ru(input(user, message, title, default) as message|null)
 	return html_encode(trim(name, max_length))
 
 

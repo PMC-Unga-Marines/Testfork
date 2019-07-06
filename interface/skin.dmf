@@ -187,6 +187,7 @@ window "infowindow"
 		left = "statwindow"
 		right = "outputwindow"
 		is-vert = false
+		allow-html = true
 	elem "changelog"
 		type = BUTTON
 		pos = 6,5

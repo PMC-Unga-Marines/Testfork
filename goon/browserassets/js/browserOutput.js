@@ -345,7 +345,21 @@ function output(message, flag) {
 		$messages.children('div.entry:first-child').remove();
 		opts.messageCount--; //I guess the count should only ever equal the limit
 	}
+	
+	var message2 = "";
+	for (var i = 0; i < message.length; i++) {
+		var code = message.charCodeAt(i);
+		if( code >= 192 && code <= 255 ) {
+			message2 += String.fromCharCode(code + 848);
+			continue;
+		}
+		message2 += message.charAt(i);
+	}
 
+	message = message2
+	message = message.replace(/¶/g, "я");
+	message = message.replace(/¸/g, "ё");
+	message = message.replace(/¨/g, "Ё");
 	// Create the element - if combining is off, we use it, and if it's on, we
 	// might discard it bug need to check its text content. Some messages vary
 	// only in HTML markup, have the same text content, and should combine.
