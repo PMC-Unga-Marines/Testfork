@@ -184,12 +184,12 @@
 		if(current_specialists >= maximum_specialists)
 			S.max_specialists = 0
 		else
-			S.max_specialists = 1
+			S.max_specialists = 2
 			current_specialists++
 		if(current_smartgunners >= maximum_smartgunners)
 			S.max_smartgun = 0
 		else
-			S.max_smartgun = 1
+			S.max_smartgun = 2
 			current_smartgunners++
 
 
