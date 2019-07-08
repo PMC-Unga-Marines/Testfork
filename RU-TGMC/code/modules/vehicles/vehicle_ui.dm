@@ -122,11 +122,11 @@
 		else
 			data += list("main_gun_sel" = FALSE)
 
-		for(var/i = 1; i <= HP5.clips.len; i++)
-			if(HP5.clips[i].len > 1)
+		for(var/i = 1; i <= length(HP5.clips); i++)
+			if(length(HP5.clips[i]) > 1)
 				data += list("main_gun_ammo_type_[i]" = HP5.clips[i][1])
 			var/ammo = 0
-			for(var/j = 2; j <= HP5.clips[i].len; j++)
+			for(var/j = 2; j <= length(HP5.clips[i]); j++)
 				var /obj/item/ammo_magazine/tank/A = HP5.clips[i][j]
 				ammo += A.current_rounds
 			data += list("main_gun_ammo_[i]" = ammo)

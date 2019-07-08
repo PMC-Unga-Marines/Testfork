@@ -284,8 +284,8 @@ var/list/apc_dmg_distributions = list(
 
 	sleep(20)
 	var/obj/item/ammo_magazine/A = HP.clips[1]
-	HP.clips[1].Move(entrance.loc)	//LISTS START AT 1 REEEEEEEEEEEE
-	HP.clips[1].update_icon()
+	A.Move(entrance.loc)	//LISTS START AT 1 REEEEEEEEEEEE
+	A.update_icon()
 	HP.clips.Remove(A)
 	if(length(HP.clips) > 0)
 		to_chat(usr, "<span class='notice'>You reload the [HP.name].</span>")
@@ -1269,8 +1269,8 @@ var/list/apc_dmg_distributions = list(
 			var/obj/item/ammo_magazine/A
 			for(i = 0; i <= length(old.clips); i++)
 				A = old.clips[1]
-				old.clips[1].Move(entrance.loc)
-				old.clips[1].update_icon()
+				A.Move(entrance.loc)
+				A.update_icon()
 				old.clips.Remove(A)
 			user.visible_message("<span class='notice'>[user] removes ammunition from \the [old].</span>", "<span class='notice'>You remove ammunition from \the [old].</span>")
 
