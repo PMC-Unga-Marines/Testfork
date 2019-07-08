@@ -238,8 +238,8 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 //Same thing but for rotations
 /obj/vehicle/multitile/root/cm_armored/try_rotate(var/deg, var/mob/user, var/force = 0)
 	if(world.time < next_move && !force) return
-
-	if(hardpoints[HDPT_TREADS] && hardpoints[HDPT_TREADS].obj_integrity > 0)	//same goes for turning
+	var/obj/item/hardpoint/HP = hardpoints[HDPT_TREADS]
+	if(HP && HP.obj_integrity > 0)	//same goes for turning
 		next_move = world.time + src.speed * (force ? 2 : 3) //3 for a 3 point turn, idk
 	else
 		next_move = world.time + move_delay * (force ? 2 : 3)
