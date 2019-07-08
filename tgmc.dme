@@ -1370,6 +1370,7 @@
 #include "RU-TGMC\code\datums\suplypacks.dm"
 #include "RU-TGMC\code\game\almayer.dm"
 #include "RU-TGMC\code\game\objects\items\manual.dm"
+#include "RU-TGMC\code\game\objects\structures\window.dm"
 #include "RU-TGMC\code\modules\mob\living\carbon\xenomorph\xeno_defines.dm"
 #include "RU-TGMC\code\modules\mob\living\carbon\xenomorph\caste\crusher\crusher.dm"
 #include "RU-TGMC\code\modules\mob\living\carbon\xenomorph\caste\queen\queen.dm"
