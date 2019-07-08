@@ -251,6 +251,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
 "aaK" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/camera/autoname/mainship{
 	dir = 4
 	},
@@ -272,6 +273,24 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/exoarmor)
+=======
+/obj/structure/table/almayer,
+/obj/item/storage/toolbox/mechanical,
+/obj/item/weapon/combat_knife,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aaL" = (
+/obj/structure/bed,
+/obj/item/bedsheet/brown,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aaM" = (
+/obj/structure/table/almayer,
+/obj/item/weapon/combat_knife,
+/obj/item/storage/toolbox/mechanical,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aaN" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -1046,6 +1065,7 @@
 /obj/item/whistle,
 /obj/item/megaphone,
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/ammo_magazine/acp,
 <<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
@@ -1053,6 +1073,8 @@
 =======
 =======
 >>>>>>> For merge.
+=======
+>>>>>>> Return position MAP.
 /turf/open/floor/almayer/mono,
 /area/almayer/living/numbertwobunks)
 >>>>>>> For merge.
@@ -1439,11 +1461,12 @@
 	icon_state = "shower";
 	dir = 4
 	},
-/obj/structure/window/reinforced/tinted/frosted{
-	icon_state = "fwindow";
-	dir = 1
-	},
 /obj/machinery/door/window/eastright/briefing,
+/obj/structure/window/reinforced/almayer1{
+	dir = 1;
+	icon_state = "fwindow";
+	layer = 2.79
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/living/numbertwobunks)
 "adO" = (
@@ -3507,9 +3530,13 @@
 /area/mainship/command/corporateliaison)
 "aiO" = (
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 /obj/item/storage/lockbox/loyalty,
 >>>>>>> For merge.
+=======
+/obj/item/storage/lockbox/loyalty,
+>>>>>>> Return position MAP.
 /obj/item/weapon/gun/pistol/vp70,
 /obj/item/ammo_magazine/pistol/vp70,
 /obj/structure/closet/cabinet,
@@ -4027,11 +4054,12 @@
 	icon_state = "shower";
 	dir = 4
 	},
-/obj/structure/window/reinforced/tinted/frosted{
-	icon_state = "fwindow";
-	dir = 1
-	},
 /obj/machinery/door/window,
+/obj/structure/window/reinforced/almayer1{
+	dir = 1;
+	icon_state = "fwindow";
+	layer = 2.79
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/living/commandbunks)
 "akc" = (
@@ -5497,6 +5525,7 @@
 	},
 /area/mainship/squads/req)
 "amr" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/power/apc/mainship,
 /obj/structure/cable{
 	d2 = 2;
@@ -5504,6 +5533,11 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/obj/structure/table/almayer,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "ams" = (
 /obj/machinery/alarm,
 /turf/open/floor/wood,
@@ -9109,7 +9143,8 @@
 	name = "secure evidence locker";
 	req_access_txt = "3"
 	},
-/obj/structure/window/reinforced{
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
 	dir = 8
 	},
 /turf/open/floor/mainship{
@@ -9833,6 +9868,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/engineering/engineering_workshop)
 "awk" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/mainship,
 /obj/structure/window/reinforced{
 	dir = 8
@@ -9843,15 +9879,41 @@
 /obj/item/clothing/gloves/latex,
 /obj/item/tool/taperoll/police,
 /turf/open/floor/mainship{
+=======
+/obj/structure/table/almayer,
+/obj/item/storage/box/evidence,
+/obj/item/storage/box/evidence,
+/obj/item/tool/hand_labeler,
+/obj/item/reagent_container/spray/cleaner,
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "fwindow";
+	dir = 4
+	},
+/turf/open/floor/almayer{
+>>>>>>> Return position MAP.
 	icon_state = "dark_sterile"
 	},
 /area/mainship/shipboard/brig)
 "awl" = (
-/obj/structure/bed/chair/office/dark{
-	dir = 1
+/obj/structure/table/almayer,
+/obj/item/detective_scanner,
+/obj/item/detective_scanner,
+/obj/item/clothing/gloves/latex,
+/obj/item/tool/taperoll/police,
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	layer = 4.1
 	},
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	dir = 8
+	},
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/window/reinforced,
 /turf/open/floor/mainship{
+=======
+/turf/open/floor/almayer{
+>>>>>>> Return position MAP.
 	icon_state = "dark_sterile"
 	},
 /area/mainship/shipboard/brig)
@@ -9896,17 +9958,26 @@
 	},
 /area/mainship/command/cic)
 "awq" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/window/reinforced,
 /turf/open/floor/mainship{
+=======
+/obj/structure/bed/chair/office/dark{
+	dir = 1
+	},
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	layer = 4.1
+	},
+/turf/open/floor/almayer{
+>>>>>>> Return position MAP.
 	icon_state = "dark_sterile"
 	},
 /area/mainship/shipboard/brig)
 "awr" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/machinery/door/window{
-	dir = 2
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	layer = 4.1
 	},
 /turf/open/floor/mainship{
 	icon_state = "dark_sterile"
@@ -10557,28 +10628,56 @@
 	},
 /area/mainship/command/cic)
 "axR" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/mainship,
 /obj/machinery/computer/shuttle/shuttle_control/dropship2,
 /obj/structure/window/reinforced/toughened{
 	dir = 8
+=======
+/obj/machinery/door/window{
+	dir = 2
+>>>>>>> Return position MAP.
 	},
-/obj/structure/window/reinforced/toughened{
-	dir = 1
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "fwindow";
+	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/plating/mainship,
 /area/mainship/command/cic)
+=======
+/turf/open/floor/almayer{
+	icon_state = "dark_sterile"
+	},
+/area/almayer/shipboard/brig)
+>>>>>>> Return position MAP.
 "axS" = (
 /obj/machinery/door/window/northleft,
 /turf/open/floor/plating/mainship,
 /area/mainship/command/cic)
 "axT" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/mainship,
 /obj/machinery/computer/shuttle/shuttle_control/dropship1,
 /obj/structure/window/reinforced/toughened{
 	dir = 4
+=======
+/obj/structure/table/almayer{
+	layer = 2.8
+>>>>>>> Return position MAP.
 	},
-/obj/structure/window/reinforced/toughened{
-	dir = 1
+/obj/machinery/computer/shuttle/shuttle_control/dropship2{
+	layer = 2.98
+	},
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
+	},
+/obj/structure/window/reinforced/almayer1{
+	dir = 1;
+	icon_state = "fwindow";
+	layer = 2.79
 	},
 /turf/open/floor/plating/mainship,
 /area/mainship/command/cic)
@@ -11495,8 +11594,14 @@
 /area/mainship/command/cic)
 "azE" = (
 /obj/machinery/computer/communications,
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/mainship,
 /obj/structure/window/reinforced/toughened{
+=======
+/obj/structure/table/almayer,
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+>>>>>>> Return position MAP.
 	dir = 8
 	},
 /turf/open/floor/plating/mainship,
@@ -12557,6 +12662,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "aBw" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/computer/station_alert,
 /obj/structure/table/mainship,
 /obj/structure/window/reinforced/toughened{
@@ -12578,6 +12684,58 @@
 /obj/machinery/computer/camera_advanced/overwatch/main,
 /turf/open/floor/plating/mainship,
 /area/mainship/command/cic)
+=======
+/obj/structure/table/almayer,
+/obj/machinery/door_control{
+	id = "Hangar Lockdown";
+	name = "Hangar Lockdown";
+	pixel_x = -7;
+	pixel_y = 2
+	},
+/obj/machinery/door_control{
+	id = "CIC Lockdown";
+	name = "CIC Lockdown";
+	pixel_x = -7;
+	pixel_y = 9;
+	req_access_txt = "1"
+	},
+/obj/machinery/door_control{
+	id = "bot_armory";
+	name = "Armory Lockdown";
+	pixel_x = -7;
+	pixel_y = -5;
+	req_access_txt = "1"
+	},
+/obj/item/radio/intercom/general{
+	pixel_x = -12;
+	pixel_y = -42
+	},
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "fwindow";
+	dir = 4
+	},
+/turf/open/floor/plating/almayer,
+/area/almayer/command/cic)
+"aBx" = (
+/obj/machinery/door/window/southright{
+	layer = 4.1
+	},
+/turf/open/floor/plating/almayer,
+/area/almayer/command/cic)
+"aBy" = (
+/obj/machinery/computer/station_alert,
+/obj/structure/table/almayer,
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	layer = 4.1
+	},
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	dir = 8
+	},
+/turf/open/floor/plating/almayer,
+/area/almayer/command/cic)
+>>>>>>> Return position MAP.
 "aBz" = (
 /obj/structure/cable,
 /obj/machinery/power/apc/mainship{
@@ -14055,6 +14213,7 @@
 	},
 /area/mainship/shipboard/chief_mp_office)
 "aEs" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/mainship,
 /obj/structure/window/reinforced{
 	dir = 4
@@ -14067,6 +14226,26 @@
 	icon_state = "dark_sterile"
 	},
 /area/mainship/shipboard/brig)
+=======
+/obj/structure/table/almayer{
+	layer = 2.8
+	},
+/obj/machinery/computer/shuttle/shuttle_control/dropship1{
+	layer = 2.98
+	},
+/obj/structure/window/reinforced/almayer1{
+	dir = 4;
+	icon_state = "fwindow";
+	layer = 3.31
+	},
+/obj/structure/window/reinforced/almayer1{
+	dir = 1;
+	icon_state = "fwindow";
+	layer = 2.79
+	},
+/turf/open/floor/plating/almayer,
+/area/almayer/command/cic)
+>>>>>>> Return position MAP.
 "aEt" = (
 /obj/machinery/cryopod,
 /turf/open/floor/mainship/mono,
@@ -14174,9 +14353,20 @@
 	},
 /area/mainship/command/cic)
 "aEA" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/firealarm,
 /turf/open/floor/mainship/mono,
 /area/mainship/living/tankerbunks)
+=======
+/obj/structure/closet/secure_closet/guncabinet/mp_armory{
+	req_one_access_txt = "22;2;7"
+	},
+/turf/open/floor/almayer{
+	tag = "icon-redfull";
+	icon_state = "redfull"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aEB" = (
 /obj/structure/closet/secure_closet/staff_officer,
 /turf/open/floor/mainship{
@@ -14211,6 +14401,7 @@
 	},
 /area/mainship/shipboard/brig_cells)
 "aEE" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/alarm,
 /turf/open/floor/mainship/mono,
 /area/mainship/living/tankerbunks)
@@ -14222,6 +14413,29 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/living/tankerbunks)
+=======
+/obj/structure/table/almayer,
+/obj/item/ammo_magazine/smg/m39,
+/obj/item/ammo_magazine/smg/m39,
+/obj/item/ammo_magazine/smg/m39,
+/obj/item/ammo_magazine/smg/m39,
+/obj/item/weapon/gun/smg/m39,
+/obj/item/weapon/gun/smg/m39,
+/obj/item/weapon/gun/smg/m39,
+/obj/item/weapon/gun/smg/m39,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/almayer{
+	tag = "icon-redfull";
+	icon_state = "redfull"
+	},
+/area/almayer/hallways/exoarmor)
+"aEF" = (
+/obj/machinery/vending/cola,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aEG" = (
 /obj/structure/flora/pottedplant,
 /obj/effect/decal/warning_stripes/thin{
@@ -14262,6 +14476,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/living/pilotbunks)
 "aEL" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/power/apc/mainship,
 /obj/structure/cable{
 	d2 = 2;
@@ -14269,6 +14484,14 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/living/pilotbunks)
+=======
+/obj/machinery/vending/snack,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aEM" = (
 /obj/structure/rack,
 /obj/item/reagent_container/food/snacks/chocolatebar,
@@ -15256,32 +15479,14 @@
 /area/almayer/medical/medical_science)
 =======
 /obj/structure/table/almayer,
-/obj/machinery/door_control{
-	id = "Hangar Lockdown";
-	name = "Hangar Lockdown";
-	pixel_x = -7;
-	pixel_y = 2
-	},
-/obj/machinery/door_control{
-	id = "CIC Lockdown";
-	name = "CIC Lockdown";
-	pixel_x = -7;
-	pixel_y = 9;
-	req_access_txt = "1"
-	},
-/obj/machinery/door_control{
-	id = "bot_armory";
-	name = "Armory Lockdown";
-	pixel_x = -7;
-	pixel_y = -5;
-	req_access_txt = "1"
-	},
-/obj/structure/window/reinforced/toughened{
+/obj/machinery/computer/camera_advanced/overwatch/main,
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "fwindow";
 	dir = 4
 	},
-/obj/item/radio/intercom/general{
-	pixel_x = -12;
-	pixel_y = -42
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	layer = 4.1
 	},
 /turf/open/floor/plating/almayer,
 /area/almayer/command/cic)
@@ -17982,6 +18187,7 @@
 	},
 /area/mainship/squads/bravo)
 "aMn" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/effect/landmark/start/marine/pilotofficer,
 /obj/machinery/camera/autoname/mainship{
 	dir = 1
@@ -18000,6 +18206,35 @@
 	},
 /turf/open/floor/mainship,
 /area/mainship/hallways/hangar)
+=======
+/obj/machinery/vending/coffee,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aMo" = (
+/obj/machinery/door/window/eastright{
+	req_access = null;
+	req_access_txt = "0"
+	},
+/obj/structure/window/reinforced/tinted/frosted{
+	icon_state = "rwindow"
+	},
+/obj/machinery/shower{
+	tag = "icon-shower (EAST)";
+	icon_state = "shower";
+	dir = 4
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aMp" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aMq" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -19135,8 +19370,11 @@
 	icon_state = "shower";
 	dir = 4
 	},
-/obj/structure/window/reinforced,
 /obj/machinery/door/window,
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	layer = 4.1
+	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/shipboard/brig_cells)
 "aOq" = (
@@ -19902,9 +20140,12 @@
 /obj/machinery/shower{
 	dir = 8
 	},
-/obj/structure/window/reinforced,
 /obj/machinery/door/window{
 	dir = 8
+	},
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "twindow";
+	layer = 4.1
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/shipboard/brig_cells)
@@ -21044,6 +21285,7 @@
 /turf/open/floor/mainship,
 /area/mainship/powered)
 "aTc" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/door_control{
 	id = "garage1";
 	name = "Vehicle Garage 1";
@@ -21060,6 +21302,13 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/hangar)
+=======
+/obj/structure/table/almayer,
+/obj/item/clipboard,
+/obj/item/paper,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aTd" = (
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
@@ -21187,6 +21436,7 @@
 	},
 /area/mainship/living/captain_mess)
 "aTr" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/door_control{
 	id = "garage2";
 	name = "Vehicle Garage 2";
@@ -21203,6 +21453,13 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/hangar)
+=======
+/obj/structure/table/almayer,
+/obj/item/storage/box/uscm_mre,
+/obj/item/weapon/combat_knife,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aTs" = (
 /obj/machinery/door/poddoor/mainship{
 	dir = 2;
@@ -21212,6 +21469,7 @@
 /turf/open/floor/plating,
 /area/mainship/hallways/hangar)
 "aTt" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/door/poddoor/mainship{
 	dir = 2;
 	id = "garage2";
@@ -21231,6 +21489,22 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/hangar)
+=======
+/obj/machinery/light/small{
+	dir = 8
+	},
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aTu" = (
+/obj/effect/landmark/start{
+	name = "Walker Operator"
+	},
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aTv" = (
 /obj/structure/filingcabinet,
 /turf/open/floor/mainship{
@@ -21680,12 +21954,12 @@
 	},
 /area/almayer/living/briefing)
 "aUq" = (
-/obj/item/radio/intercom/general,
-/obj/structure/closet/crate/delta,
-/turf/open/floor/plating/almayer/striped{
-	dir = 8
+/obj/structure/bed/chair/reinforced,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/turf/open/floor/almayer{
+	icon_state = "redfull"
 	},
-/area/almayer/squads/req)
+/area/almayer/living/briefing)
 "aUr" = (
 /obj/structure/table/almayer,
 /obj/item/radio/intercom/dropship/normandy{
@@ -21778,7 +22052,124 @@
 	icon_state = "cargo"
 	},
 /area/almayer/squads/delta)
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+"aUD" = (
+/obj/effect/landmark/start/marine/tankcrewman,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aUE" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-N";
+	icon_state = "N"
+	},
+/turf/open/floor/plating/almayer,
+/area/almayer/hallways/exoarmor)
+"aUF" = (
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aUG" = (
+/obj/structure/toilet{
+	dir = 4
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aUH" = (
+/obj/structure/sink{
+	dir = 4;
+	icon_state = "sink";
+	pixel_x = 11
+	},
+/obj/structure/mirror{
+	icon_state = "mirror";
+	pixel_x = 30
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aUI" = (
+/obj/effect/landmark/start/marine/pilotofficer,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aUJ" = (
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/structure/bed/chair{
+	dir = 1
+	},
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aUK" = (
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aUL" = (
+/obj/structure/closet/secure_closet/personal/cabinet{
+	req_access = null
+	},
+/obj/item/clothing/mask/rebreather/scarf,
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aUM" = (
+/obj/machinery/door/poddoor/shutters/almayer{
+	dir = 2;
+	id = "bot_armory";
+	name = "\improper Armory Shutters"
+	},
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/exoarmor)
+"aUN" = (
+/obj/structure/table/almayer,
+/obj/machinery/microwave,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aUO" = (
+/obj/machinery/vending/marineFood,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aUP" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 1;
+	name = "Bathroom"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aUQ" = (
+/obj/item/clothing/mask/rebreather/scarf,
+/obj/structure/closet/secure_closet/personal/cabinet{
+	req_access = null
+	},
+/turf/open/floor/wood,
+/area/almayer/hallways/exoarmor)
+"aUR" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 2;
+	name = "\improper Walker Operator's Room";
+	req_one_access_txt = "3;28"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aUS" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 2;
+	name = "\improper Vehicle Crewman's Room";
+	req_one_access_txt = "3;27"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aUT" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -21795,7 +22186,41 @@
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/aft_hallway)
+=======
+/area/almayer/hallways/aft_hallway)
+"aUV" = (
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aUW" = (
+/obj/structure/table/almayer,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aUX" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 2;
+	name = "\improper Pilot's Room";
+	req_one_access_txt = "3;23"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aUY" = (
+/obj/structure/cable{
+	icon_state = "0-4";
+	d2 = 4
+	},
+/obj/machinery/power/apc/almayer{
+	dir = 4
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aUZ" = (
 /obj/machinery/light/small,
 /obj/structure/cable/yellow{
@@ -21815,7 +22240,20 @@
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/aft_hallway)
+=======
+/area/almayer/hallways/aft_hallway)
+"aVb" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aVc" = (
 /obj/machinery/light{
 	dir = 8
@@ -21827,7 +22265,25 @@
 	dir = 4;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/aft_hallway)
+=======
+/area/almayer/hallways/aft_hallway)
+"aVd" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 4;
+	name = "\improper Garage Staff Quarters";
+	req_one_access_txt = "3;27;28"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aVe" = (
 /obj/structure/ladder{
 	height = 2;
@@ -21860,6 +22316,21 @@
 "aVi" = (
 /turf/closed/wall/mainship/outer,
 /area/space)
+"aVj" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
 "aVk" = (
 /turf/closed/wall/mainship/outer,
 /area/mainship/hull/lower_hull)
@@ -21992,7 +22463,56 @@
 /area/mainship/shipboard/starboard_point_defense)
 "aVB" = (
 /turf/open/floor/plating,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hull/lower_hull)
+=======
+/area/almayer/hull/lower_hull)
+"aVC" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 1;
+	icon_state = "pipe-c"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aVD" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aVE" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 2;
+	icon_state = "pipe-c"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 6
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aVF" = (
 /obj/structure/largecrate/random/case,
 /turf/open/floor/mainship/mono,
@@ -22053,7 +22573,46 @@
 	icon_state = "1-2"
 	},
 /turf/open/floor/plating/plating_catwalk,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hull/lower_hull)
+=======
+/area/almayer/hull/lower_hull)
+"aVO" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/obj/machinery/atmospherics/components/unary/vent_pump/layer1{
+	dir = 8;
+	on = 1
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aVP" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 4;
+	name = "\improper Pilot's Quarters";
+	req_one_access_txt = "3;23"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aVQ" = (
+/obj/structure/cable{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/obj/machinery/power/apc/almayer,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aVR" = (
 /obj/structure/largecrate/random/barrel/red,
 /turf/open/floor/mainship/mono,
@@ -22062,8 +22621,40 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/shipboard/starboard_point_defense)
 "aVT" = (
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/starboard_point_defense)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/shipboard/starboard_point_defense)
+"aVU" = (
+/obj/machinery/camera/autoname/almayer{
+	dir = 8;
+	icon_state = "camera";
+	name = "ship-grade camera";
+	network = list("almayer");
+	tag = "icon-camera (EAST)"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+"aVV" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aVW" = (
+/obj/structure/table/almayer,
+/obj/item/storage/box/donkpockets,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aVX" = (
 /obj/structure/largecrate/random/case/double,
 /turf/open/floor/mainship/mono,
@@ -22071,6 +22662,7 @@
 "aVY" = (
 /obj/structure/largecrate/random/barrel/yellow,
 /turf/open/floor/plating/plating_catwalk,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hull/lower_hull)
 "aWb" = (
 /obj/docking_port/stationary/escape_pod/down,
@@ -22079,6 +22671,72 @@
 "aWf" = (
 /turf/closed/wall/mainship,
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hull/lower_hull)
+"aVZ" = (
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aWa" = (
+/obj/machinery/light,
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aWb" = (
+/obj/docking_port/stationary/escape_pod/down,
+/turf/open/floor/plating,
+/area/almayer/hull/lower_hull)
+"aWc" = (
+/obj/structure/table/almayer,
+/obj/item/clipboard,
+/obj/item/paper,
+/obj/item/storage/firstaid/regular,
+/obj/machinery/camera/autoname/almayer{
+	dir = 1;
+	icon_state = "camera";
+	name = "ship-grade camera";
+	network = list("almayer");
+	tag = "icon-camera (NORTH)"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aWd" = (
+/obj/structure/table/almayer,
+/obj/item/storage/box/uscm_mre,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aWe" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"aWf" = (
+/turf/closed/wall/almayer,
+/area/almayer/hallways/starboard_hallway)
+"aWg" = (
+/obj/machinery/firealarm{
+	pixel_y = 28
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aWh" = (
 /obj/structure/closet/crate,
 /turf/open/floor/mainship/mono,
@@ -22087,8 +22745,21 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/starboard_point_defense)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/shipboard/starboard_point_defense)
+"aWj" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 4;
+	name = "\improper Garage Staff Quarters";
+	req_one_access_txt = "3;27;28"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aWk" = (
 /obj/structure/largecrate/random/barrel/white,
 /turf/open/floor/mainship/mono,
@@ -22098,7 +22769,15 @@
 	dir = 8;
 	icon_state = "green"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hallways/starboard_hallway)
+"aWm" = (
+/obj/machinery/light,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aWn" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 4
@@ -22393,7 +23072,8 @@
 	},
 /area/mainship/hallways/starboard_hallway)
 "aXa" = (
-/obj/structure/window/reinforced{
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
 	dir = 4
 	},
 /turf/open/floor/mainship{
@@ -22401,10 +23081,13 @@
 	},
 /area/mainship/squads/alpha)
 "aXb" = (
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
 	},
-/obj/structure/window/reinforced{
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
 	dir = 4
 	},
 /turf/open/floor/mainship{
@@ -22414,8 +23097,10 @@
 	},
 /area/mainship/squads/alpha)
 "aXc" = (
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
 	},
 /turf/open/floor/mainship{
 	dir = 1;
@@ -22443,7 +23128,18 @@
 	dir = 8;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/alpha)
+=======
+/area/almayer/squads/alpha)
+"aXg" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-SE-out";
+	icon_state = "SE-out"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aXh" = (
 /obj/machinery/marine_selector/clothes/specialist/alpha,
 /turf/open/floor/mainship/mono,
@@ -22454,8 +23150,20 @@
 /area/mainship/squads/alpha)
 "aXj" = (
 /obj/structure/closet/firecloset,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/starboard_hallway)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/starboard_hallway)
+"aXk" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-S";
+	icon_state = "S"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aXl" = (
 /obj/structure/closet/emcloset,
 /turf/open/floor/mainship/mono,
@@ -22516,7 +23224,11 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/hull/lower_hull)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "aXv" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/mainship{
@@ -22529,10 +23241,42 @@
 /area/almayer/hallways/starboard_hallway)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 "aXw" = (
 /turf/closed/wall/mainship,
 /area/mainship/living/basketball)
+=======
+=======
+"aXv" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-S";
+	icon_state = "S"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
+"aXw" = (
+/turf/closed/wall/almayer,
+/area/almayer/living/basketball)
+"aXx" = (
+/obj/machinery/camera/autoname/almayer{
+	dir = 1;
+	icon_state = "camera";
+	name = "ship-grade camera";
+	network = list("almayer");
+	tag = "icon-camera (NORTH)"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aXy" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -22624,7 +23368,19 @@
 	dir = 1
 	},
 /turf/open/floor/wood,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/basketball)
+=======
+/area/almayer/living/basketball)
+"aXI" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 4;
+	name = "\improper Pilot's Quarters";
+	req_one_access_txt = "3;23"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aXJ" = (
 /turf/open/floor/mainship/mono,
 /area/mainship/living/starboard_emb)
@@ -22649,8 +23405,22 @@
 "aXN" = (
 /obj/structure/closet,
 /obj/item/contraband/poster,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/living/starboard_emb)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/living/starboard_emb)
+"aXO" = (
+/obj/machinery/light,
+/obj/structure/table/almayer,
+/obj/item/storage/firstaid/regular,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "aXP" = (
 /obj/structure/closet,
 /obj/machinery/light{
@@ -22668,6 +23438,7 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/living/starboard_emb)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "aXS" = (
 /obj/structure/closet,
 /obj/item/radio/intercom/general,
@@ -22675,7 +23446,40 @@
 /area/almayer/living/starboard_emb)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+"aXQ" = (
+/obj/structure/bed/chair{
+	dir = 8
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+"aXR" = (
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/hangar)
+"aXS" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "aXT" = (
 /turf/open/floor/mainship{
 	dir = 4;
@@ -22737,7 +23541,26 @@
 	dir = 1;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hallways/starboard_hallway)
+"aYe" = (
+/obj/effect/decal/warning_stripes/thin{
+	dir = 9
+	},
+/obj/effect/decal/warning_stripes/thin{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aYf" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 5
@@ -22795,7 +23618,30 @@
 	dir = 8;
 	icon_state = "orange"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hallways/starboard_hallway)
+"aYn" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 5
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
+/turf/open/floor/plating/plating_catwalk,
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aYo" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -22953,7 +23799,30 @@
 	icon_state = "redcorner";
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hallways/starboard_hallway)
+"aYF" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/open/floor/plating/plating_catwalk,
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aYG" = (
 /turf/open/floor/mainship{
 	icon_state = "redcorner";
@@ -22970,7 +23839,11 @@
 =======
 /area/almayer/squads/alpha)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "aYI" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/mainship{
@@ -22983,7 +23856,31 @@
 /area/almayer/squads/alpha)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+"aYI" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
+	dir = 4
+	},
+/turf/open/floor/plating/plating_catwalk,
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "aYJ" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -22992,7 +23889,19 @@
 	dir = 1;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/alpha)
+=======
+/area/almayer/squads/alpha)
+"aYK" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aYL" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on{
 	dir = 4
@@ -23028,7 +23937,17 @@
 	dir = 1;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/alpha)
+=======
+/area/almayer/squads/alpha)
+"aYP" = (
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aYQ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -23278,7 +24197,29 @@
 	icon_regular_floor = "cargo_arrow";
 	icon_state = "cargo_arrow"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/alpha)
+=======
+/area/almayer/squads/alpha)
+"aZs" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-SE-out";
+	icon_state = "SE-out"
+	},
+/obj/machinery/door_control{
+	id = "garage_walker";
+	name = "Walker Bay";
+	pixel_x = 0;
+	pixel_y = -25;
+	req_one_access_txt = "3;7;28";
+	throw_range = 15
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aZt" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -23348,8 +24289,23 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/starboard_point_defense)
 "aZy" = (
+<<<<<<< refs/remotes/tgstation/master
 /turf/closed/wall/mainship/outer,
 /area/mainship/hallways/starboard_umbilical)
+=======
+/turf/closed/wall/almayer/outer,
+/area/almayer/hallways/starboard_umbilical)
+"aZz" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-S";
+	icon_state = "S"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aZA" = (
 /obj/machinery/light{
 	dir = 8
@@ -23449,13 +24405,47 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/alpha)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/squads/alpha)
+"aZN" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes{
+	tag = "icon-S";
+	icon_state = "S"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aZO" = (
 /turf/open/floor/mainship{
 	icon_state = "cargo"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/alpha)
+=======
+/area/almayer/squads/alpha)
+"aZP" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-SW-out";
+	icon_state = "SW-out"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "aZQ" = (
 /obj/machinery/marine_selector/clothes/alpha,
 /obj/structure/window/reinforced{
@@ -23646,7 +24636,18 @@
 /turf/open/floor/mainship{
 	icon_state = "redfull"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/shipboard/firing_range)
+=======
+/area/almayer/shipboard/firing_range)
+"bam" = (
+/obj/machinery/light,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "ban" = (
 /obj/structure/cable{
 	d1 = 2;
@@ -23785,8 +24786,31 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/hallways/starboard_hallway)
 "baC" = (
+<<<<<<< refs/remotes/tgstation/master
 /turf/closed/wall/mainship,
 /area/mainship/hallways/starboard_umbilical)
+=======
+/turf/closed/wall/almayer,
+/area/almayer/hallways/starboard_umbilical)
+"baD" = (
+/obj/machinery/door_control{
+	id = "garage1";
+	name = "Vehicle Garage";
+	pixel_x = 0;
+	pixel_y = -25;
+	req_access_txt = "0";
+	req_one_access_txt = "3;7;27"
+	},
+/obj/effect/decal/warning_stripes{
+	tag = "icon-SE-out";
+	icon_state = "SE-out"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "baE" = (
 /obj/machinery/door/airlock/mainship/security/glass{
 	dir = 4;
@@ -23943,8 +24967,24 @@
 "bba" = (
 /obj/machinery/vending/marine,
 /obj/structure/window/reinforced,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/bravo)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/squads/bravo)
+"bbb" = (
+/obj/machinery/door/poddoor/almayer{
+	dir = 2;
+	id = "garage_walker";
+	name = "\improper Walker Bay"
+	},
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bbc" = (
 /obj/machinery/marine_selector/clothes/bravo,
 /obj/structure/window/reinforced,
@@ -23957,7 +24997,11 @@
 =======
 /area/almayer/squads/bravo)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "bbe" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/mainship{
@@ -23969,12 +25013,52 @@
 /area/almayer/squads/bravo)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+"bbd" = (
+/obj/machinery/door/poddoor/almayer{
+	dir = 2;
+	id = "garage1";
+	name = "\improper Tank Garage"
+	},
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/exoarmor)
+"bbe" = (
+/obj/structure/rack,
+/obj/item/tool/weldingtool,
+/obj/item/clothing/glasses/welding,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "bbf" = (
 /turf/open/floor/mainship{
 	icon_state = "cargo"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/bravo)
+=======
+/area/almayer/squads/bravo)
+"bbg" = (
+/obj/machinery/door/airlock/almayer/generic{
+	dir = 4;
+	name = "\improper Walker Bay";
+	req_one_access_txt = "0"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bbh" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -23988,8 +25072,23 @@
 /area/mainship/living/cafeteria_starboard)
 "bbj" = (
 /obj/machinery/vending/marineFood,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/living/cafeteria_starboard)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/living/cafeteria_starboard)
+"bbk" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-N";
+	icon_state = "N"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bbl" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -24029,7 +25128,11 @@
 /turf/open/floor/almayer,
 /area/almayer/living/cafeteria_starboard)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "bbs" = (
 /obj/structure/table/mainship,
 /obj/item/radio/intercom/general,
@@ -24041,7 +25144,30 @@
 /area/almayer/living/cafeteria_starboard)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+"bbr" = (
+/obj/structure/closet/firecloset,
+/turf/open/floor/almayer{
+	icon_state = "cargo"
+	},
+/area/almayer/hallways/exoarmor)
+"bbs" = (
+/obj/machinery/camera/autoname/almayer{
+	dir = 2;
+	icon_state = "camera";
+	name = "ship-grade camera";
+	network = list("almayer")
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "bbt" = (
 /obj/structure/table/mainship,
 /obj/item/storage/box/MRE,
@@ -24061,7 +25187,33 @@
 /turf/open/floor/prison{
 	icon_state = "kitchen"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/cafeteria_starboard)
+=======
+/area/almayer/living/cafeteria_starboard)
+"bbx" = (
+/obj/machinery/door_control{
+	id = "garage1";
+	name = "Vehicle Garage";
+	pixel_x = 0;
+	pixel_y = 30;
+	req_one_access_txt = "0";
+	throw_range = 15
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "NE-out";
+	tag = "icon-NE-out"
+	},
+/obj/effect/decal/warning_stripes{
+	tag = "icon-W";
+	icon_state = "W"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bby" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 1
@@ -24094,30 +25246,78 @@
 /turf/open/floor/mainship{
 	icon_state = "orangecorner"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_umbilical)
 "bbC" = (
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
+=======
+/area/almayer/hallways/starboard_umbilical)
+"bbB" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-N";
+	icon_state = "N"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bbC" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-NW-out";
+	icon_state = "NW-out"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+>>>>>>> Return position MAP.
 	},
 /area/mainship/hallways/exoarmor)
 "bbD" = (
-/obj/machinery/light{
-	dir = 1
+/obj/machinery/computer/vehicle_terminal{
+	density = 0;
+	pixel_y = 15
 	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "bbE" = (
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/almayer/hallways/exoarmor)
+"bbE" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-E";
+	icon_state = "E"
+	},
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bbF" = (
 /turf/closed/wall/mainship,
 /area/mainship/hallways/exoarmor)
 "bbG" = (
-/obj/machinery/door_control{
-	id = "tankgarage2";
-	name = "Tank Garage Shutters";
-	pixel_x = -25
+/obj/machinery/gear{
+	id = "garage_gear"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "bbH" = (
@@ -24140,26 +25340,98 @@
 /obj/item/clothing/glasses/welding,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
-"bbM" = (
-/obj/structure/rack,
-/obj/item/tool/weldpack,
-/obj/machinery/light{
-	dir = 1
+=======
+/obj/machinery/door/poddoor/railing{
+	dir = 4;
+	id = "garage_railing"
 	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bbH" = (
+/turf/open/floor/almayer/empty,
+/area/almayer/squads/tankdeliveries)
+"bbI" = (
+/obj/structure/rack,
+/obj/item/tool/wrench,
+/obj/item/tool/crowbar,
+/obj/item/tool/screwdriver,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bbJ" = (
+/obj/machinery/door_control{
+	id = "garage_walker";
+	name = "Walker Bay";
+	pixel_x = -25;
+	req_one_access_txt = "0";
+	throw_range = 15
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bbK" = (
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bbL" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-N";
+	icon_state = "N"
+	},
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
+"bbM" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-NW-out";
+	icon_state = "NW-out"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bbN" = (
-/obj/machinery/door_control{
-	id = "tankgarage1";
-	name = "Tank Garage Shutters";
-	pixel_x = 25
+/obj/effect/decal/cleanable/blood/oil,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "bbO" = (
 /obj/machinery/tank_part_fabricator,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/almayer/hallways/exoarmor)
+"bbO" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-W";
+	icon_state = "W"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bbP" = (
 /obj/structure/ship_ammo/rocket/banshee,
 /turf/open/floor/mainship/mono,
@@ -24209,8 +25481,24 @@
 /area/mainship/hallways/hangar)
 "bbX" = (
 /obj/structure/ship_ammo/rocket/widowmaker,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bbY" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bbZ" = (
 /obj/structure/ship_ammo/rocket/keeper,
 /turf/open/floor/mainship/mono,
@@ -24287,7 +25575,20 @@
 	dir = 4;
 	icon_state = "green"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/basketball)
+=======
+/area/almayer/living/basketball)
+"bck" = (
+/obj/machinery/firealarm{
+	pixel_y = 28
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bcl" = (
 /turf/open/floor/wood,
 /area/mainship/living/chapel)
@@ -24296,7 +25597,21 @@
 	pixel_y = 30
 	},
 /turf/open/floor/wood,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/chapel)
+=======
+/area/almayer/living/chapel)
+"bcn" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-E";
+	icon_state = "E"
+	},
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bco" = (
 /obj/structure/bed,
 /obj/item/bedsheet/yellow,
@@ -24324,7 +25639,22 @@
 	icon_state = "orangecorner";
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hallways/starboard_hallway)
+"bct" = (
+/obj/machinery/door/poddoor/railing{
+	dir = 4;
+	id = "garage_railing"
+	},
+/turf/open/floor/almayer{
+	dir = 8;
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bcu" = (
 /obj/structure/disposalpipe/segment/corner{
 	dir = 1
@@ -24461,7 +25791,22 @@
 	icon_regular_floor = "cargo_arrow";
 	icon_state = "cargo_arrow"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/bravo)
+=======
+/area/almayer/squads/bravo)
+"bcF" = (
+/obj/machinery/light{
+	dir = 8;
+	icon_state = "tube1";
+	pixel_y = 0
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bcG" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -24540,6 +25885,7 @@
 	},
 /area/mainship/hallways/starboard_umbilical)
 "bcP" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/door/poddoor/shutters/mainship{
 	dir = 4;
 	id = "tankgarage2";
@@ -24547,17 +25893,21 @@
 	},
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
+=======
+/obj/structure/window/framed/almayer,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+>>>>>>> Return position MAP.
 	},
 /area/mainship/hallways/exoarmor)
 "bcQ" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/effect/decal/cleanable/blood/oil,
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
 	},
-/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1{
-	dir = 1
-	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "bcR" = (
@@ -24570,16 +25920,29 @@
 	dir = 4
 	},
 /turf/open/floor/mainship{
+=======
+/area/almayer/hallways/exoarmor)
+"bcR" = (
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+>>>>>>> Return position MAP.
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/exoarmor)
 "bcS" = (
-/obj/machinery/door_control{
-	id = "tankgarage";
-	name = "Tank Garage Shutters";
-	pixel_x = 25
+/obj/machinery/camera/autoname/almayer{
+	dir = 8;
+	icon_state = "camera";
+	name = "ship-grade camera";
+	network = list("almayer");
+	tag = "icon-camera (EAST)"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship{
+=======
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+>>>>>>> Return position MAP.
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/exoarmor)
@@ -24779,7 +26142,23 @@
 /turf/open/floor/mainship{
 	icon_state = "orange"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/bravo)
+=======
+/area/almayer/squads/bravo)
+"bdw" = (
+/obj/machinery/vehicle_vendor/tank_vendor_ui,
+/obj/machinery/light{
+	dir = 8;
+	icon_state = "tube1";
+	pixel_y = 0
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bdx" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -24865,23 +26244,78 @@
 	dir = 4
 	},
 /obj/item/tank/emergency_oxygen/double,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/starboard_umbilical)
-"bdL" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/starboard_umbilical)
+"bdJ" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
+/obj/effect/multitile_spawner/cm_armored/tank/decrepit,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bdK" = (
+/obj/effect/elevator_garage,
+/obj/machinery/door/poddoor/railing{
+	dir = 4;
+	id = "garage_railing"
+	},
+/turf/open/floor/almayer{
+	dir = 8;
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
+"bdL" = (
+/obj/structure/table/almayer,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bdM" = (
+/turf/open/floor/almayer{
+	tag = "icon-test_floor5";
+	icon_state = "test_floor5"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bdN" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 4
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
 	},
+/obj/effect/decal/warning_stripes{
+	tag = "icon-W";
+	icon_state = "W"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
+=======
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+>>>>>>> Return position MAP.
 	},
 /area/mainship/hallways/exoarmor)
 "bdO" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/door/poddoor/shutters/mainship{
 	dir = 4;
 	id = "tankgarage2";
@@ -24896,22 +26330,96 @@
 /area/mainship/hallways/exoarmor)
 "bdR" = (
 /obj/structure/table/mainship,
+=======
+/obj/structure/prop/almayer/hangar_stencil,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8";
+	pixel_x = 0
+	},
+/turf/open/floor/almayer{
+	icon_state = "cargo"
+	},
+/area/almayer/hallways/exoarmor)
+"bdP" = (
+>>>>>>> Return position MAP.
 /obj/structure/cable{
 	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
 	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "bdV" = (
 /obj/machinery/light{
 	dir = 1
+=======
+/area/almayer/hallways/exoarmor)
+"bdQ" = (
+/obj/structure/table/almayer,
+/obj/item/tool/weldpack,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
 	},
+/area/almayer/hallways/exoarmor)
+"bdR" = (
+/obj/structure/prop/almayer/hangar_stencil{
+	icon_state = "dropship2"
+	},
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/exoarmor)
+"bdS" = (
+/obj/machinery/light,
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+>>>>>>> Return position MAP.
+	},
+/area/almayer/hallways/exoarmor)
+"bdT" = (
+/obj/machinery/vehicle_vendor/module_repair_station,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bdU" = (
 /obj/structure/rack,
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/tool/hand_labeler,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/obj/item/ammo_magazine/tank/tank_slauncher,
+/obj/item/ammo_magazine/apc/flare_launcher,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+"bdV" = (
+/obj/structure/rack,
+/obj/item/tool/weldpack,
+/obj/item/clothing/glasses/welding,
+/obj/item/storage/belt/utility/full,
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bdW" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 4
@@ -24945,7 +26453,16 @@
 /turf/open/floor/mainship{
 	icon_state = "cargo"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/shipboard/firing_range)
+=======
+/area/almayer/shipboard/firing_range)
+"bec" = (
+/obj/machinery/light,
+/obj/structure/reagent_dispensers/fueltank,
+/turf/open/floor/almayer,
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
 "bed" = (
 /obj/structure/window/framed/mainship,
 /turf/open/floor/plating,
@@ -25199,32 +26716,73 @@
 "beK" = (
 /obj/structure/table/mainship,
 /obj/effect/spawner/random/technology_scanner,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/starboard_umbilical)
-"beM" = (
-/obj/structure/bed/chair{
-	dir = 4
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/starboard_umbilical)
+"beL" = (
+/obj/effect/decal/warning_stripes{
+	tag = "icon-E";
+	icon_state = "E"
 	},
+/obj/machinery/light,
+/turf/open/floor/almayer{
+	tag = "icon-test_floor4";
+	icon_state = "test_floor4"
+	},
+/area/almayer/hallways/exoarmor)
+>>>>>>> Return position MAP.
+"beM" = (
+/obj/machinery/gear{
+	id = "garage_gear"
+	},
+/obj/structure/sign/securearea{
+	desc = "A warning sign which reads 'DANGER! DO NOT LAUNCH ELEVATOR WITH PERSON ON IT'.";
+	name = "DANGER!";
+	pixel_y = -30
+	},
+/obj/machinery/door/poddoor/railing{
+	dir = 4;
+	id = "garage_railing"
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "mono";
+	icon_state = "mono"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "beN" = (
 /obj/structure/table/mainship,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
-"beO" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+=======
+/area/almayer/hallways/exoarmor)
+"beN" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull8B"
 	},
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
+"beO" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull2"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/mainship,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "beP" = (
-/obj/structure/bed/chair{
-	dir = 8
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull7B"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "beQ" = (
@@ -25241,6 +26799,24 @@
 /obj/effect/multitile_spawner/cm_armored/tank,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/vehicle_interior/apc_1)
+"beQ" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull8B"
+	},
+/area/vehicle_interior/apc_2)
+"beR" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull2"
+	},
+/area/vehicle_interior/apc_2)
+"beS" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull7B"
+	},
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "beT" = (
 /obj/machinery/light,
 /turf/open/floor/mainship{
@@ -25282,8 +26858,18 @@
 /obj/effect/decal/warning_stripes/thin{
 	dir = 9
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/shipboard/firing_range)
+=======
+/turf/open/floor/almayer,
+/area/almayer/shipboard/firing_range)
+"beZ" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull8B"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bfa" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1{
 	on = 1
@@ -25492,7 +27078,8 @@
 /turf/open/floor/mainship,
 /area/mainship/hallways/starboard_hallway)
 "bfA" = (
-/obj/structure/window/reinforced{
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
 	dir = 4
 	},
 /turf/open/floor/mainship{
@@ -25501,11 +27088,14 @@
 	},
 /area/mainship/squads/bravo)
 "bfB" = (
-/obj/structure/window/reinforced{
-	dir = 4
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
 	},
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
+	dir = 4
 	},
 /turf/open/floor/mainship{
 	icon_regular_floor = "cargo_arrow";
@@ -25513,8 +27103,10 @@
 	},
 /area/mainship/squads/bravo)
 "bfC" = (
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
 	},
 /turf/open/floor/mainship{
 	icon_regular_floor = "cargo_arrow";
@@ -25541,7 +27133,16 @@
 	dir = 8;
 	icon_state = "orange"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/bravo)
+=======
+/area/almayer/squads/bravo)
+"bfG" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull2"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bfH" = (
 /obj/machinery/marine_selector/clothes/specialist/bravo,
 /turf/open/floor/mainship/mono,
@@ -25621,6 +27222,7 @@
 	},
 /area/mainship/hallways/starboard_umbilical)
 "bfT" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/prop/mainship/hangar_stencil{
 	icon_state = "dropship2"
 	},
@@ -25628,15 +27230,22 @@
 	icon_state = "cargo"
 	},
 /area/mainship/hallways/exoarmor)
+=======
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull7B"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bfU" = (
 /turf/open/floor/mainship{
 	icon_state = "cargo"
 	},
 /area/mainship/hallways/exoarmor)
 "bfV" = (
-/obj/structure/cargo_container/gorg{
-	dir = 8
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull10"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
 "bfW" = (
@@ -25665,6 +27274,28 @@
 /obj/item/radio,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/vehicle_interior/apc_1)
+"bfW" = (
+/obj/structure/table/reinforced,
+/obj/item/storage/box/bodybags,
+/obj/item/storage/firstaid/adv,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bfX" = (
+/obj/machinery/autodoc,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bfY" = (
+/obj/machinery/autodoc_console,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bfZ" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull9"
+	},
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bga" = (
 /obj/structure/ship_ammo/minirocket,
 /turf/open/floor/mainship/mono,
@@ -25919,8 +27550,18 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/living/chapel)
+=======
+/turf/open/floor/almayer,
+/area/almayer/living/chapel)
+"bgC" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull10"
+	},
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "bgD" = (
 /obj/structure/closet,
 /obj/machinery/light,
@@ -26032,6 +27673,7 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/hallways/starboard_umbilical)
 "bgY" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/tool/screwdriver,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
@@ -26039,15 +27681,27 @@
 /obj/machinery/light,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
-"bha" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+=======
+/turf/open/floor/almayer{
+	icon_state = "cargo"
 	},
+/area/vehicle_interior/apc_2)
+"bgZ" = (
+/obj/structure/vehicle_interior/supply_receiver,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
+"bha" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull9"
+	},
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "bhb" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -26076,8 +27730,18 @@
 /obj/effect/decal/warning_stripes/thin{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bhe" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull10"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bhf" = (
 /obj/structure/table/mainship,
 /obj/item/ammo_magazine/pistol,
@@ -26205,7 +27869,17 @@
 	icon_state = "green";
 	dir = 2
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/basketball)
+=======
+/area/almayer/living/basketball)
+"bht" = (
+/obj/structure/prop/almayer/sensor_computer1,
+/turf/open/floor/almayer{
+	icon_state = "cargo"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bhu" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
@@ -26378,8 +28052,18 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/living/cafeteria_starboard)
+=======
+/turf/open/floor/almayer,
+/area/almayer/living/cafeteria_starboard)
+"bhL" = (
+/turf/open/floor/almayer{
+	icon_state = "cargo"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bhM" = (
 /obj/structure/table/mainship,
 /turf/open/floor/prison{
@@ -26397,8 +28081,24 @@
 	},
 /area/mainship/living/cafeteria_starboard)
 "bhO" = (
+<<<<<<< refs/remotes/tgstation/master
 /turf/closed/wall/mainship,
 /area/mainship/engineering/lower_engineering)
+=======
+/turf/closed/wall/almayer,
+/area/almayer/engineering/lower_engineering)
+"bhP" = (
+/obj/structure/prop/almayer/sensor_computer3,
+/turf/open/floor/almayer{
+	icon_state = "cargo"
+	},
+/area/vehicle_interior/apc_3)
+"bhQ" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull9"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bhR" = (
 /obj/structure/table/mainship,
 /turf/open/floor/mainship/mono,
@@ -26446,13 +28146,26 @@
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_umbilical)
+=======
+/area/almayer/hallways/starboard_umbilical)
+"bhY" = (
+/turf/open/space/transit/north/shuttlespace_ns2,
+/area/space)
+"bhZ" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull3"
+	},
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bia" = (
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/hangar)
 "bib" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -26463,6 +28176,22 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/hangar)
+=======
+/obj/structure/bed/chair/dropship/passenger,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bic" = (
+/obj/structure/bed/chair/dropship/passenger,
+/obj/item/radio/intercom{
+	name = "Almayer intercom";
+	pixel_y = 35
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bid" = (
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bie" = (
 /obj/machinery/door_control{
 	id = "ammo2";
@@ -26586,13 +28315,25 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/hallways/starboard_hallway)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bip" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer,
 /area/almayer/hallways/starboard_hallway)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+"bip" = (
+/obj/machinery/vending/MarineMed{
+	req_one_access = null
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "biq" = (
 /obj/machinery/light{
 	dir = 1
@@ -26601,8 +28342,20 @@
 /area/mainship/hallways/starboard_hallway)
 "bir" = (
 /obj/machinery/vending/nanomed,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/hallways/starboard_hallway)
+=======
+/turf/open/floor/almayer,
+/area/almayer/hallways/starboard_hallway)
+"bis" = (
+/obj/machinery/vending/MarineMed/Blood{
+	req_access = null;
+	req_one_access = null
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bit" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -26622,8 +28375,18 @@
 /obj/machinery/camera/autoname/mainship{
 	dir = 2
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/starboard_hallway)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/starboard_hallway)
+"bix" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull4"
+	},
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "biy" = (
 /obj/machinery/vending/nanomed,
 /turf/open/floor/mainship/mono,
@@ -26707,11 +28470,15 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/hallways/hangar)
 "biJ" = (
-/obj/effect/decal/warning_stripes/thin{
-	dir = 5
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull3"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "biK" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 1
@@ -26725,6 +28492,7 @@
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
 "biM" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/effect/decal/warning_stripes/thin{
 	dir = 1
 	},
@@ -26736,6 +28504,22 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/obj/structure/bed/chair/dropship/passenger,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+"biN" = (
+/obj/structure/bed/chair/dropship/passenger,
+/obj/item/radio/intercom{
+	name = "Almayer intercom";
+	pixel_y = 35
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+"biO" = (
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "biP" = (
 /obj/machinery/light{
 	dir = 1
@@ -26773,7 +28557,18 @@
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/hangar)
+=======
+/area/almayer/hallways/hangar)
+"biV" = (
+/obj/machinery/vending/marine/cargo_ammo{
+	contraband = list(/obj/item/ammo_magazine/sniper = 0, /obj/item/ammo_magazine/sniper/incendiary = 0, /obj/item/ammo_magazine/sniper/flak = 0, /obj/item/ammo_magazine/rifle/m4ra = 0, /obj/item/ammo_magazine/rifle/incendiary = 1, /obj/item/ammo_magazine/rifle/m41aMK1 = 0, /obj/item/ammo_magazine/rifle/lmg = 0);
+	products = list(/obj/item/storage/large_holster/machete/full = 5, /obj/item/ammo_magazine/pistol = 20, /obj/item/ammo_magazine/pistol/ap = 5, /obj/item/ammo_magazine/pistol/incendiary = 2, /obj/item/ammo_magazine/pistol/extended = 10, /obj/item/ammo_magazine/pistol/m1911 = 0, /obj/item/ammo_magazine/revolver = 20, /obj/item/ammo_magazine/revolver/marksman = 5, /obj/item/ammobox/m39 = 2, /obj/item/ammo_magazine/smg/m39 = 15, /obj/item/ammobox/m39ap = 1, /obj/item/ammo_magazine/smg/m39/ap = 5, /obj/item/ammobox/m39ext = 1, /obj/item/ammo_magazine/smg/m39/extended = 5, /obj/item/ammobox = 2, /obj/item/ammo_magazine/rifle = 15, /obj/item/ammobox/ext = 1, /obj/item/ammo_magazine/rifle/extended = 5, /obj/item/ammobox/ap = 1, /obj/item/ammo_magazine/rifle/ap = 5, /obj/item/ammo_magazine/shotgunbox = 3, /obj/item/ammo_magazine/shotgun = 10, /obj/item/ammo_magazine/shotgunbox/buckshot = 3, /obj/item/ammo_magazine/shotgun/buckshot = 10, /obj/item/ammo_magazine/shotgun/flechette = 15, /obj/item/smartgun_powerpack = 2)
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "biW" = (
 /obj/machinery/door/firedoor/mainship,
 /obj/machinery/door/poddoor/shutters/mainship{
@@ -26784,7 +28579,19 @@
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hallways/starboard_hallway)
+"biX" = (
+/obj/machinery/vending/marine{
+	contraband = list();
+	desc = "A automated rack hooked up to a small supply of standard-issue weapons.";
+	products = list(/obj/item/weapon/gun/pistol/m4a3 = 10, /obj/item/weapon/gun/revolver/m44 = 5, /obj/item/weapon/gun/smg/m39 = 10, /obj/item/weapon/gun/rifle/m41a = 10, /obj/item/weapon/gun/shotgun/pump = 5, /obj/item/weapon/combat_knife = 10, /obj/item/weapon/throwing_knife = 5, /obj/item/storage/box/m94 = 10, /obj/item/attachable/flashlight = 15, /obj/item/attachable/bayonet = 10)
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "biY" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 5
@@ -26814,6 +28621,7 @@
 /obj/effect/decal/warning_stripes/thin{
 	dir = 9
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/hallways/starboard_hallway)
 "bjd" = (
@@ -26821,6 +28629,25 @@
 /obj/structure/disposalpipe/segment,
 /turf/open/floor/mainship,
 /area/mainship/hallways/starboard_hallway)
+=======
+/turf/open/floor/almayer,
+/area/almayer/hallways/starboard_hallway)
+"bjc" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull4"
+	},
+/area/vehicle_interior/apc_2)
+"bjd" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/obj/structure/disposalpipe/segment,
+/turf/open/floor/almayer,
+/area/almayer/hallways/starboard_hallway)
+"bje" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull3"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bjf" = (
 /obj/machinery/door_control{
 	id = "laddernorthwest";
@@ -26887,7 +28714,15 @@
 	dir = 4;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/starboard_hallway)
+=======
+/area/almayer/hallways/starboard_hallway)
+"bjo" = (
+/obj/structure/bed/chair/dropship/passenger,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bjp" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -27013,24 +28848,18 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/hallways/hangar)
 "bjD" = (
-/obj/structure/cable{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/bed/chair/dropship/passenger,
+/obj/item/radio/intercom{
+	name = "Almayer intercom";
+	pixel_y = 35
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
-	dir = 5
-	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bjE" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -27077,7 +28906,14 @@
 	icon_state = "1-4"
 	},
 /turf/open/floor/plating/plating_catwalk,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/hangar)
+=======
+/area/almayer/hallways/hangar)
+"bjH" = (
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bjI" = (
 /obj/machinery/door/poddoor/mainship{
 	density = 0;
@@ -27772,7 +29608,19 @@
 	dir = 1;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/shipboard/weapon_room)
+=======
+/area/almayer/shipboard/weapon_room)
+"bkF" = (
+/obj/structure/vehicle_interior/tcomms_hub,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+"bkG" = (
+/obj/machinery/vehicle_interior/tcomms_receiver,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bkH" = (
 /turf/open/floor/plating/mainship,
 /area/mainship/shipboard/starboard_missiles)
@@ -27787,10 +29635,22 @@
 /turf/open/floor/plating,
 /area/mainship/shipboard/starboard_missiles)
 "bkK" = (
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/mainship,
 /obj/machinery/prop/mainship/computer,
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/starboard_missiles)
+=======
+/obj/structure/table/almayer,
+/obj/machinery/prop/almayer/computer,
+/turf/open/floor/almayer/mono,
+/area/almayer/shipboard/starboard_missiles)
+"bkL" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull4"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bkM" = (
 /obj/structure/largecrate/random/case,
 /turf/open/floor/mainship/mono,
@@ -27846,8 +29706,16 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bkV" = (
+/turf/open/space/transit/north/shuttlespace_ns4,
+/area/space)
+>>>>>>> Return position MAP.
 "bkW" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 1
@@ -27980,8 +29848,17 @@
 	},
 /area/mainship/shipboard/weapon_room)
 "blq" = (
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/shipboard/weapon_room)
+=======
+/turf/open/floor/almayer,
+/area/almayer/shipboard/weapon_room)
+"blr" = (
+/obj/effect/landmark/multitile_interior_cabin_exit,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bls" = (
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/shipboard/weapon_room)
@@ -28017,8 +29894,20 @@
 /area/mainship/shipboard/starboard_missiles)
 "blx" = (
 /obj/structure/largecrate/random/barrel/white,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bly" = (
+/obj/structure/vehicle_interior/cabin_door{
+	icon_state = "door_spark";
+	dir = 4
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "blz" = (
 /obj/machinery/landinglight/ds2{
 	dir = 4
@@ -28027,7 +29916,25 @@
 /area/mainship/hallways/hangar)
 "blA" = (
 /turf/open/floor/plating,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/hangar)
+=======
+/area/almayer/hallways/hangar)
+"blB" = (
+/turf/open/space/transit/north/shuttlespace_ns10,
+/area/space)
+"blC" = (
+/obj/effect/landmark/multitile_interior_cabin_exit,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+"blD" = (
+/obj/structure/vehicle_interior/cabin_door{
+	icon_state = "door_spark";
+	dir = 4
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "blE" = (
 /obj/machinery/landinglight/ds2/delaythree{
 	dir = 8
@@ -28045,8 +29952,43 @@
 /obj/machinery/landinglight/ds1{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"blH" = (
+/obj/effect/landmark/multitile_interior_cabin_exit,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+"blI" = (
+/obj/structure/vehicle_interior/cabin_door{
+	icon_state = "door_spark";
+	dir = 4
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+"blJ" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 1;
+	icon_state = "shuttle_chair"
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"blK" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 1;
+	icon_state = "shuttle_chair"
+	},
+/obj/item/radio/intercom{
+	frequency = 1469;
+	name = "local radio intercom";
+	pixel_y = -30
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "blL" = (
 /obj/machinery/landinglight/ds1/delaythree{
 	dir = 8
@@ -28349,14 +30291,67 @@
 /obj/effect/decal/warning_stripes/thin{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bmw" = (
+/obj/machinery/bodyscanner,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bmx" = (
+/obj/machinery/body_scanconsole,
+/obj/machinery/camera/autoname/almayer{
+	dir = 8;
+	icon_state = "camera";
+	name = "military-grade camera";
+	network = list("apc_1");
+	tag = "icon-camera (EAST)"
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bmy" = (
+/turf/open/space/transit/north/shuttlespace_ns1,
+/area/space)
+"bmz" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 1;
+	icon_state = "shuttle_chair"
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+"bmA" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 1;
+	icon_state = "shuttle_chair"
+	},
+/obj/item/radio/intercom{
+	frequency = 1469;
+	name = "local radio intercom";
+	pixel_y = -30
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "bmB" = (
 /turf/open/floor/mainship{
 	dir = 8;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/shipboard/starboard_missiles)
+=======
+/area/almayer/shipboard/starboard_missiles)
+"bmC" = (
+/obj/structure/rack,
+/obj/item/storage/box/m94,
+/obj/item/storage/box/m94,
+/obj/item/storage/box/sentry,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "bmD" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 8
@@ -28364,9 +30359,71 @@
 /obj/effect/decal/warning_stripes/thin{
 	dir = 2
 	},
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/prop/mainship/hangar_stencil,
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/obj/structure/prop/almayer/hangar_stencil,
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bmE" = (
+/obj/structure/rack,
+/obj/item/storage/box/m94,
+/obj/item/storage/box/explosive_mines,
+/obj/machinery/camera/autoname/almayer{
+	dir = 8;
+	icon_state = "camera";
+	name = "military-grade camera";
+	network = list("apc_2");
+	tag = "icon-camera (EAST)"
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+"bmF" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 1;
+	icon_state = "shuttle_chair"
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+"bmG" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 1;
+	icon_state = "shuttle_chair"
+	},
+/obj/item/radio/intercom{
+	frequency = 1469;
+	name = "local radio intercom";
+	pixel_y = -30
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+"bmH" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 1;
+	icon_state = "shuttle_chair"
+	},
+/obj/machinery/camera/autoname/almayer{
+	dir = 8;
+	icon_state = "camera";
+	name = "military-grade camera";
+	network = list("apc_3");
+	tag = "icon-camera (EAST)"
+	},
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+"bmI" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull6"
+	},
+/area/vehicle_interior/apc_1)
+"bmJ" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull1"
+	},
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bmK" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 2
@@ -28375,8 +30432,18 @@
 /obj/machinery/landinglight/ds1/delaytwo{
 	dir = 8
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bmL" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull11"
+	},
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bmM" = (
 /obj/machinery/door/airlock/multi_tile/mainship/medidoor{
 	name = "\improper Medical Bay";
@@ -28439,7 +30506,15 @@
 	dir = 1;
 	icon_state = "sterile_green_side"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/medical/lower_medical)
+=======
+/area/almayer/medical/lower_medical)
+"bmU" = (
+/obj/structure/bed/roller,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bmV" = (
 /obj/machinery/sleeper,
 /turf/open/floor/mainship{
@@ -28508,7 +30583,15 @@
 	dir = 1;
 	icon_state = "sterile_green_side"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/medical/lower_medical)
+=======
+/area/almayer/medical/lower_medical)
+"bne" = (
+/obj/machinery/iv_drip,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bnf" = (
 /obj/structure/bed,
 /obj/item/bedsheet/medical,
@@ -28527,7 +30610,20 @@
 	dir = 1;
 	icon_state = "sterile_green_side"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/medical/surgery_hallway)
+=======
+/area/almayer/medical/surgery_hallway)
+"bnh" = (
+/obj/effect/landmark/multitile_interior_exit,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"bni" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull12"
+	},
+/area/vehicle_interior/apc_1)
+>>>>>>> Return position MAP.
 "bnj" = (
 /obj/structure/flora/pottedplant{
 	icon_state = "plant-21"
@@ -28536,7 +30632,19 @@
 	dir = 1;
 	icon_state = "sterile_green_side"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/medical/lower_medical)
+=======
+/area/almayer/medical/lower_medical)
+"bnk" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull5"
+	},
+/area/vehicle_interior/apc_1)
+"bnl" = (
+/turf/open/space/transit/north/shuttlespace_ns15,
+/area/space)
+>>>>>>> Return position MAP.
 "bnm" = (
 /obj/structure/window/framed/mainship/white,
 /obj/machinery/door/firedoor/mainship,
@@ -28557,7 +30665,16 @@
 	icon_state = "sterile_green_corner";
 	dir = 1
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/medical/operating_room_one)
+=======
+/area/almayer/medical/operating_room_one)
+"bno" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull6"
+	},
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "bnp" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -28724,7 +30841,11 @@
 =======
 /area/almayer/living/cryo_cells)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "bnL" = (
 /obj/machinery/cryopod/right,
 /obj/item/radio/intercom/general,
@@ -28737,7 +30858,17 @@
 /area/almayer/living/cryo_cells)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+"bnL" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull1"
+	},
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "bnM" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 8
@@ -28751,7 +30882,16 @@
 /turf/open/floor/mainship{
 	icon_state = "orangefull"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/cryo_cells)
+=======
+/area/almayer/living/cryo_cells)
+"bnO" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull11"
+	},
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "bnP" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -28785,7 +30925,15 @@
 /obj/structure/window/framed/mainship,
 /obj/machinery/door/firedoor/mainship,
 /turf/open/floor/plating,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/cryo_cells)
+=======
+/area/almayer/living/cryo_cells)
+"bnT" = (
+/obj/effect/landmark/multitile_interior_exit,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
 "bnU" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -28934,8 +31082,38 @@
 /obj/machinery/landinglight/ds2/delayone{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bon" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull12"
+	},
+/area/vehicle_interior/apc_2)
+"boo" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull5"
+	},
+/area/vehicle_interior/apc_2)
+"bop" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull6"
+	},
+/area/vehicle_interior/apc_3)
+"boq" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull1"
+	},
+/area/vehicle_interior/apc_3)
+"bor" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull11"
+	},
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "bos" = (
 /obj/machinery/landinglight/ds2/delayone{
 	dir = 8
@@ -28950,8 +31128,33 @@
 /obj/machinery/landinglight/ds1/delayone{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bov" = (
+/obj/effect/landmark/multitile_interior_exit,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+"bow" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull12"
+	},
+/area/vehicle_interior/apc_3)
+"box" = (
+/turf/closed/wall/indestructible/vehicle{
+	icon_state = "hull5"
+	},
+/area/vehicle_interior/apc_3)
+"boy" = (
+/turf/open/space/transit/north/shuttlespace_ns5,
+/area/space)
+"boz" = (
+/turf/open/space/transit/north/shuttlespace_ns8,
+/area/space)
+>>>>>>> Return position MAP.
 "boA" = (
 /obj/machinery/landinglight/ds1/delayone{
 	dir = 8
@@ -28977,7 +31180,11 @@
 =======
 /area/almayer/medical/lower_medical)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "boE" = (
 /obj/machinery/iv_drip,
 /obj/item/radio/intercom/general,
@@ -28991,7 +31198,20 @@
 /area/almayer/medical/surgery_hallway)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+"boD" = (
+/obj/structure/vehicle_interior/side_door,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_1)
+"boE" = (
+/obj/structure/vehicle_interior/side_door,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_2)
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "boF" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -29138,12 +31358,31 @@
 	icon_state = "sterile_green_side";
 	dir = 9
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/medical/operating_room_one)
+=======
+/area/almayer/medical/operating_room_one)
+"boS" = (
+/obj/structure/vehicle_interior/side_door,
+/turf/open/shuttle/dropship,
+/area/vehicle_interior/apc_3)
+>>>>>>> Return position MAP.
 "boT" = (
 /turf/open/floor/mainship{
 	icon_state = "dark_sterile"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/medical/operating_room_one)
+=======
+/area/almayer/medical/operating_room_one)
+"boU" = (
+/obj/structure/bed/chair/reinforced,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/open/floor/almayer{
+	icon_state = "redfull"
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "boV" = (
 /obj/machinery/door_control{
 	id = "hangarentrancenorth";
@@ -29235,8 +31474,21 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/living/briefing)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/living/briefing)
+"bpi" = (
+/obj/structure/bed/chair/reinforced{
+	dir = 8
+	},
+/turf/open/floor/almayer{
+	icon_state = "redfull"
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bpj" = (
 /obj/structure/window/framed/mainship,
 /obj/machinery/door/firedoor/mainship,
@@ -29253,14 +31505,41 @@
 /area/mainship/squads/req)
 "bpl" = (
 /obj/structure/closet/secure_closet/req_officer,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/squads/req)
+"bpm" = (
+/obj/structure/bed/chair/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/turf/open/floor/almayer{
+	icon_state = "redfull"
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bpn" = (
 /obj/machinery/light{
 	dir = 1
 	},
 /turf/open/floor/plating/plating_catwalk,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/req)
+=======
+/area/almayer/squads/req)
+"bpo" = (
+/obj/structure/bed/chair/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/open/floor/almayer{
+	icon_state = "redfull"
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bpp" = (
 /obj/machinery/computer/supplycomp,
 /turf/open/floor/mainship/mono,
@@ -29577,14 +31856,85 @@
 /obj/machinery/landinglight/ds2/delaytwo{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bqg" = (
+/obj/structure/bed/chair/reinforced{
+	dir = 8
+	},
+/obj/docking_port/stationary/marine_dropship/crash_target,
+/turf/open/floor/almayer{
+	icon_state = "redfull"
+	},
+/area/almayer/living/briefing)
+"bqh" = (
+/obj/structure/closet/crate/delta,
+/turf/open/floor/plating/plating_catwalk,
+/area/almayer/squads/req)
+"bqi" = (
+/obj/structure/bed/chair/reinforced{
+	dir = 8
+	},
+/turf/open/floor/almayer{
+	icon_state = "bluefull"
+	},
+/area/almayer/living/briefing)
+"bqj" = (
+/obj/structure/bed/chair/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
+/turf/open/floor/almayer{
+	icon_state = "bluefull"
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bqk" = (
 /obj/docking_port/stationary/ert/target{
 	name = "Hangar"
 	},
 /turf/open/floor/plating,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/hangar)
+=======
+/area/almayer/hallways/hangar)
+"bql" = (
+/obj/structure/bed/chair/reinforced{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/turf/open/floor/almayer{
+	icon_state = "bluefull"
+	},
+/area/almayer/living/briefing)
+"bqm" = (
+/turf/open/floor/almayer/mono,
+/area/space)
+"bqn" = (
+/obj/item/radio/intercom/general,
+/turf/open/floor/plating/almayer/striped{
+	dir = 8
+	},
+/area/almayer/squads/req)
+"bqo" = (
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "rwindow";
+	dir = 1
+	},
+/obj/structure/bed/chair/comfy{
+	icon_state = "comfychair";
+	dir = 1
+	},
+/turf/open/floor/almayer{
+	dir = 1;
+	icon_state = "silver"
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bqp" = (
 /obj/machinery/landinglight/ds2{
 	dir = 8
@@ -29618,7 +31968,75 @@
 /turf/open/floor/prison{
 	icon_state = "kitchen"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/captain_mess)
+=======
+/area/almayer/living/captain_mess)
+"bqt" = (
+/obj/structure/bed/chair/comfy{
+	icon_state = "comfychair";
+	dir = 1
+	},
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "rwindow";
+	dir = 1
+	},
+/turf/open/floor/almayer{
+	dir = 1;
+	icon_state = "silver"
+	},
+/area/almayer/living/briefing)
+"bqu" = (
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "rwindow";
+	dir = 1
+	},
+/turf/open/floor/almayer{
+	dir = 1;
+	icon_state = "silver"
+	},
+/area/almayer/living/briefing)
+"bqv" = (
+/obj/structure/table/almayer{
+	layer = 2.8
+	},
+/obj/item/flashlight/lamp,
+/obj/effect/landmark/map_item,
+/obj/structure/window/reinforced/almayer1{
+	dir = 4;
+	icon_state = "window";
+	layer = 3.2
+	},
+/obj/structure/window/reinforced/almayer1{
+	dir = 1;
+	icon_state = "rwindow";
+	layer = 2.79
+	},
+/turf/open/floor/almayer{
+	dir = 5;
+	icon_state = "silver"
+	},
+/area/almayer/living/briefing)
+"bqw" = (
+/obj/structure/bed/chair/comfy,
+/obj/structure/window/reinforced/almayer1{
+	layer = 4.1
+	},
+/turf/open/floor/almayer{
+	icon_state = "silver";
+	dir = 2
+	},
+/area/almayer/living/briefing)
+"bqx" = (
+/obj/structure/window/reinforced/almayer1{
+	layer = 4.1
+	},
+/turf/open/floor/almayer{
+	icon_state = "silver";
+	dir = 2
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bqy" = (
 /obj/machinery/door/airlock/mainship/engineering{
 	dir = 2;
@@ -29882,8 +32300,30 @@
 /obj/effect/decal/warning_stripes/thin{
 	dir = 8
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hull/lower_hull)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hull/lower_hull)
+"bqU" = (
+/obj/structure/table/almayer,
+/obj/item/megaphone,
+/obj/item/flashlight,
+/obj/item/whistle,
+/obj/structure/window/reinforced/almayer1{
+	layer = 4.1
+	},
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
+	dir = 4
+	},
+/turf/open/floor/almayer{
+	dir = 6;
+	icon_state = "silver"
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bqV" = (
 /turf/open/floor/mainship,
 /area/mainship/living/briefing)
@@ -29919,8 +32359,22 @@
 	},
 /area/mainship/squads/req)
 "brb" = (
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/squads/req)
+=======
+/turf/open/floor/almayer,
+/area/almayer/squads/req)
+"brc" = (
+/obj/machinery/door/window/southleft/briefing{
+	layer = 4.1
+	},
+/turf/open/floor/almayer{
+	icon_state = "silvercorner";
+	dir = 2
+	},
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "brd" = (
 /obj/machinery/photocopier,
 /turf/open/floor/mainship/mono,
@@ -30308,8 +32762,24 @@
 /obj/effect/decal/warning_stripes/thin{
 	dir = 6
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hull/lower_hull)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hull/lower_hull)
+"brT" = (
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
+	dir = 4
+	},
+/turf/open/floor/almayer{
+	dir = 1;
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/squads/charlie)
+>>>>>>> Return position MAP.
 "brU" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 2
@@ -30375,8 +32845,77 @@
 /obj/machinery/landinglight/ds2/delaythree{
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+"bsd" = (
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
+	dir = 4
+	},
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
+	},
+/turf/open/floor/almayer{
+	dir = 1;
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/squads/charlie)
+"bse" = (
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
+	},
+/turf/open/floor/almayer{
+	dir = 1;
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/squads/charlie)
+"bsf" = (
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
+	dir = 4
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/squads/delta)
+"bsg" = (
+/obj/structure/window/reinforced/almayer1{
+	icon_state = "window";
+	dir = 4
+	},
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/squads/delta)
+"bsh" = (
+/obj/structure/window/reinforced/almayer1{
+	dir = 8;
+	icon_state = "twindow";
+	layer = 3.3
+	},
+/turf/open/floor/almayer{
+	icon_regular_floor = "cargo_arrow";
+	icon_state = "cargo_arrow"
+	},
+/area/almayer/squads/delta)
+>>>>>>> Return position MAP.
 "bsm" = (
 /obj/machinery/landinglight/ds1/delaythree{
 	dir = 4
@@ -33110,6 +35649,7 @@
 	icon_state = "silvercorner";
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/briefing)
 "bAC" = (
 /obj/structure/bed/chair/comfy{
@@ -33148,6 +35688,9 @@
 	icon_state = "silver"
 	},
 /area/mainship/living/briefing)
+=======
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bAF" = (
 /obj/machinery/door/firedoor/mainship,
 /turf/open/floor/mainship{
@@ -33208,6 +35751,7 @@
 "bAM" = (
 /obj/structure/supply_drop/alpha,
 /turf/open/floor/plating,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/req)
 "bAN" = (
 /obj/structure/supply_drop/bravo,
@@ -33217,6 +35761,9 @@
 /obj/structure/closet/crate/bravo,
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/squads/req)
+=======
+/area/almayer/squads/req)
+>>>>>>> Return position MAP.
 "bAP" = (
 /obj/effect/landmark/start/marine/squadleader,
 /obj/effect/decal/warning_stripes/thin{
@@ -34100,6 +36647,7 @@
 /obj/structure/flora/pottedplant{
 	icon_state = "plant-22"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/living/briefing)
 "bDt" = (
@@ -34144,6 +36692,10 @@
 	icon_state = "orangefull"
 	},
 /area/mainship/living/briefing)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/living/briefing)
+>>>>>>> Return position MAP.
 "bDz" = (
 /obj/structure/cable/yellow{
 	d2 = 4;
@@ -34211,6 +36763,7 @@
 	dir = 9;
 	icon_state = "green"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/squads/req)
 "bDE" = (
 /obj/structure/closet/crate/charlie,
@@ -34220,6 +36773,9 @@
 /obj/structure/supply_drop/charlie,
 /turf/open/floor/plating,
 /area/mainship/squads/req)
+=======
+/area/almayer/squads/req)
+>>>>>>> Return position MAP.
 "bDG" = (
 /obj/structure/supply_drop/delta,
 /turf/open/floor/plating,
@@ -35786,6 +38342,7 @@
 	dir = 8;
 	icon_state = "bluecorner"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hull/lower_hull)
 "bIz" = (
 /obj/structure/bed/chair/reinforced{
@@ -35795,6 +38352,9 @@
 	icon_state = "orangefull"
 	},
 /area/mainship/living/briefing)
+=======
+/area/almayer/hull/lower_hull)
+>>>>>>> Return position MAP.
 "bIA" = (
 /obj/structure/bed/chair/reinforced{
 	dir = 1
@@ -38363,6 +40923,7 @@
 	icon_state = "4-8"
 	},
 /turf/open/floor/plating/plating_catwalk,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/hangar)
 "bPT" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -38383,6 +40944,9 @@
 	},
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/hallways/hangar)
+=======
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "bPU" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -39091,6 +41655,7 @@
 /area/mainship/engineering/lower_engineering)
 "bQV" = (
 /obj/machinery/light,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
 "bQW" = (
@@ -39102,6 +41667,10 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/hangar)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/hangar)
+>>>>>>> Return position MAP.
 "bQZ" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 4
@@ -39512,6 +42081,7 @@
 	icon_state = "1-2"
 	},
 /turf/open/floor/plating/plating_catwalk,
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/port_umbilical)
 "bSc" = (
 /turf/closed/wall/mainship,
@@ -39538,6 +42108,9 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/hangar)
+=======
+/area/almayer/hallways/port_umbilical)
+>>>>>>> Return position MAP.
 "bSf" = (
 /turf/closed/wall/mainship,
 /area/mainship/living/pilotbunks)
@@ -39969,6 +42542,7 @@
 /area/mainship/hallways/port_umbilical)
 "bTq" = (
 /obj/machinery/suit_storage_unit/carbon_unit,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/port_umbilical)
 "bTr" = (
@@ -40065,6 +42639,10 @@
 /obj/machinery/vending/marine,
 /turf/open/floor/mainship/mono,
 /area/mainship/living/pilotbunks)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/port_umbilical)
+>>>>>>> Return position MAP.
 "bTJ" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 4
@@ -40428,6 +43006,7 @@
 	dir = 4
 	},
 /obj/effect/spawner/random/tool,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/port_umbilical)
 "bUR" = (
@@ -40613,6 +43192,10 @@
 "bVj" = (
 /turf/open/floor/mainship,
 /area/mainship/living/pilotbunks)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/port_umbilical)
+>>>>>>> Return position MAP.
 "bVk" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 2
@@ -40942,6 +43525,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship,
 /area/mainship/hallways/port_hallway)
 "bVT" = (
@@ -40977,6 +43561,10 @@
 	icon_state = "cargo_arrow"
 	},
 /area/mainship/squads/charlie)
+=======
+/turf/open/floor/almayer,
+/area/almayer/hallways/port_hallway)
+>>>>>>> Return position MAP.
 "bVW" = (
 /turf/open/floor/plating/plating_catwalk,
 /area/mainship/squads/charlie)
@@ -41087,6 +43675,7 @@
 /obj/structure/table/mainship,
 /obj/item/tank/oxygen/red,
 /obj/item/tool/screwdriver,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/port_umbilical)
 "bWp" = (
@@ -41121,6 +43710,10 @@
 /obj/effect/landmark/start/marine/pilotofficer,
 /turf/open/floor/mainship,
 /area/mainship/living/pilotbunks)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hallways/port_umbilical)
+>>>>>>> Return position MAP.
 "bWv" = (
 /obj/machinery/door/poddoor/mainship{
 	density = 0;
@@ -41376,6 +43969,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hull/lower_hull)
 "bXh" = (
@@ -41427,6 +44021,18 @@
 	icon_state = "sterile"
 	},
 /area/mainship/living/pilotbunks)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hull/lower_hull)
+"bXi" = (
+/obj/structure/noticeboard,
+/turf/closed/wall/almayer,
+/area/almayer/engineering/upper_engineering)
+"bXl" = (
+/obj/machinery/door/airlock/almayer/maint,
+/turf/open/floor/almayer,
+/area/almayer/shipboard/ex_firing_range)
+>>>>>>> Return position MAP.
 "bXt" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 8
@@ -41751,6 +44357,7 @@
 	icon_state = "orangecorner";
 	dir = 4
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/port_umbilical)
 "bYp" = (
 /obj/machinery/vending/uniform_supply,
@@ -41788,6 +44395,9 @@
 /obj/item/bedsheet/brown,
 /turf/open/floor/wood,
 /area/mainship/living/tankerbunks)
+=======
+/area/almayer/hallways/port_umbilical)
+>>>>>>> Return position MAP.
 "bYv" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -41801,6 +44411,7 @@
 	dir = 1;
 	icon_state = "red"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/command/cic)
 "bYw" = (
 /obj/machinery/vending/cola,
@@ -41821,11 +44432,15 @@
 /obj/item/bedsheet/brown,
 /turf/open/floor/wood,
 /area/mainship/living/pilotbunks)
+=======
+/area/almayer/command/cic)
+>>>>>>> Return position MAP.
 "bYA" = (
 /obj/machinery/door/airlock/mainship/maint{
 	dir = 4;
 	name = "Tool Closet"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/ex_firing_range)
 "bYB" = (
@@ -41846,6 +44461,10 @@
 	icon_state = "sterile"
 	},
 /area/mainship/living/pilotbunks)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/shipboard/ex_firing_range)
+>>>>>>> Return position MAP.
 "bYD" = (
 /obj/structure/dropship_equipment/weapon/minirocket_pod,
 /obj/effect/decal/warning_stripes/thin{
@@ -43700,6 +46319,7 @@
 	dir = 4;
 	icon_state = "blue"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hallways/port_hallway)
 "cdM" = (
 /obj/structure/window/reinforced{
@@ -43731,6 +46351,9 @@
 	icon_state = "cargo_arrow"
 	},
 /area/mainship/squads/delta)
+=======
+/area/almayer/hallways/port_hallway)
+>>>>>>> Return position MAP.
 "cdP" = (
 /obj/machinery/light{
 	dir = 4
@@ -44334,6 +46957,7 @@
 	name = "\improper Experimental Weaponry Storage";
 	req_one_access_txt = "0"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/door/firedoor/mainship,
 /turf/open/floor/mainship,
 /area/mainship/shipboard/ex_firing_range)
@@ -44351,6 +46975,11 @@
 	icon_state = "silver"
 	},
 /area/mainship/living/briefing)
+=======
+/obj/machinery/door/firedoor/theseus,
+/turf/open/floor/almayer,
+/area/almayer/shipboard/ex_firing_range)
+>>>>>>> Return position MAP.
 "cfJ" = (
 /obj/structure/bed/chair/office/dark{
 	dir = 4
@@ -44366,6 +46995,7 @@
 /obj/item/paper_bin,
 /obj/item/tool/pen,
 /obj/item/tool/pen,
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/brig_cells)
 "cfM" = (
@@ -44410,6 +47040,10 @@
 	},
 /turf/open/floor/wood,
 /area/mainship/living/pilotbunks)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/shipboard/brig_cells)
+>>>>>>> Return position MAP.
 "cfS" = (
 /obj/structure/bed/chair{
 	dir = 8
@@ -44502,6 +47136,7 @@
 	id = "Cell 6";
 	name = "Cell 6"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/shipboard/brig_cells)
 "cge" = (
@@ -44512,6 +47147,10 @@
 	icon_state = "emeraldfull"
 	},
 /area/mainship/living/briefing)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/shipboard/brig_cells)
+>>>>>>> Return position MAP.
 "cgl" = (
 /turf/open/floor/mainship{
 	icon_state = "dark_sterile"
@@ -45141,6 +47780,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/hull/upper_hull)
 "chF" = (
@@ -45151,6 +47791,10 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/exoarmor)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/hull/upper_hull)
+>>>>>>> Return position MAP.
 "chG" = (
 /obj/structure/bed/chair/wood/wings{
 	icon_state = "wooden_chair_wings";
@@ -45482,7 +48126,12 @@
 	dir = 8;
 	icon_state = "silvercorner"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/command/cic)
+=======
+/area/almayer/command/cic)
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "ciJ" = (
 /obj/structure/rack,
 /obj/item/storage/backpack/marine/engineerpack,
@@ -45521,7 +48170,12 @@
 /area/almayer/hallways/repair_bay)
 =======
 >>>>>>> For merge.
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+=======
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "ciN" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -45546,6 +48200,7 @@
 	dir = 2;
 	icon_state = "orange"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/hull/upper_hull)
 "ciQ" = (
 /obj/structure/closet/firecloset,
@@ -45553,6 +48208,9 @@
 	icon_state = "test_floor4"
 	},
 /area/mainship/hallways/exoarmor)
+=======
+/area/almayer/hull/upper_hull)
+>>>>>>> Return position MAP.
 "ciR" = (
 /obj/machinery/power/smes/preset,
 /obj/structure/cable{
@@ -46075,6 +48733,7 @@
 /obj/item/stack/sheet/glass/reinforced{
 	amount = 30
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/engineering/engineering_workshop)
 "ckA" = (
@@ -46088,6 +48747,10 @@
 /obj/item/whistle,
 /turf/open/floor/wood,
 /area/mainship/living/tankerbunks)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/engineering/engineering_workshop)
+>>>>>>> Return position MAP.
 "ckD" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1,
 /obj/structure/cable/yellow{
@@ -46131,7 +48794,11 @@
 =======
 /area/almayer/shipboard/weapon_room)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
+=======
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> Return position MAP.
 "ckJ" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/mainship{
@@ -46154,7 +48821,13 @@
 /turf/open/floor/mainship{
 	icon_state = "orangefull"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/living/briefing)
+=======
+/area/almayer/living/briefing)
+=======
+>>>>>>> Return position MAP.
+>>>>>>> Return position MAP.
 "ckL" = (
 /obj/machinery/door/poddoor/shutters/mainship{
 	dir = 4;
@@ -46216,6 +48889,7 @@
 /turf/open/floor/mainship{
 	icon_state = "test_floor4"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/shipboard/port_missiles)
 "ckT" = (
 /obj/structure/bed/chair/reinforced{
@@ -46281,6 +48955,17 @@
 	},
 /turf/open/floor/plating/mainship,
 /area/mainship/living/tankerbunks)
+=======
+/area/almayer/shipboard/port_missiles)
+"ckV" = (
+/obj/structure/noticeboard,
+/turf/closed/wall/almayer,
+/area/almayer/squads/req)
+"ckY" = (
+/obj/structure/noticeboard,
+/turf/closed/wall/almayer,
+/area/almayer/engineering/lower_engineering)
+>>>>>>> Return position MAP.
 "clb" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layer1{
@@ -46824,6 +49509,7 @@
 /obj/machinery/light{
 	dir = 1
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship_hull,
 /area/mainship/living/captain_mess)
 "hhV" = (
@@ -46833,6 +49519,10 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/turf/open/floor/theseus_hull,
+/area/almayer/living/captain_mess)
+>>>>>>> Return position MAP.
 "hjx" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -46859,6 +49549,7 @@
 /turf/open/floor/mainship{
 	icon_state = "cargo"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /area/mainship/command/cic)
 "hxX" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1{
@@ -46867,6 +49558,9 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/mainship/hallways/exoarmor)
+=======
+/area/almayer/command/cic)
+>>>>>>> Return position MAP.
 "hyf" = (
 /obj/structure/window/framed/mainship/requisitions,
 /turf/open/floor/plating,
@@ -48502,6 +51196,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/mainship/mono,
 /area/mainship/squads/req)
 "vFl" = (
@@ -48513,6 +51208,10 @@
 	icon_state = "orangefull"
 	},
 /area/mainship/living/briefing)
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/squads/req)
+>>>>>>> Return position MAP.
 "vFM" = (
 /obj/machinery/door/poddoor/railing{
 	dir = 8;
@@ -121299,11 +123998,11 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bhY
+bkV
+bkV
+bkV
+boy
 aab
 aaa
 aaa
@@ -121555,12 +124254,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beN
+bhZ
+bhZ
+bhZ
+bmI
+bnl
 aab
 aaa
 aaa
@@ -121812,12 +124511,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beO
+bib
+bid
+blJ
+bmJ
+boz
 aab
 aaa
 aaa
@@ -122069,12 +124768,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beO
+bic
+bid
+blK
+bmJ
+bnl
 aab
 aaa
 aaa
@@ -122326,12 +125025,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beO
+bib
+bid
+blJ
+bmJ
+blB
 aab
 aaa
 aaa
@@ -122582,13 +125281,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beN
+bfV
+bib
+bid
+blJ
+bmL
+bmI
 aab
 aaa
 aaa
@@ -122839,13 +125538,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beO
+bfW
+bid
+bid
+bid
+bmU
+bmJ
 aab
 aaa
 aaa
@@ -123096,13 +125795,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beO
+bfX
+bid
+bid
+bid
+bne
+bmJ
 aab
 aaa
 aaa
@@ -123353,13 +126052,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beO
+bfY
+bid
+bid
+bid
+bnh
+boD
 aab
 aaa
 aaa
@@ -123610,13 +126309,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beP
+bfZ
+bip
+bid
+bmw
+bni
+bnk
 aab
 aaa
 aaa
@@ -123868,12 +126567,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beO
+bis
+blr
+bmx
+bmJ
+boz
 aab
 aaa
 aaa
@@ -124125,12 +126824,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beP
+bix
+bly
+bix
+bnk
+bnl
 aab
 aaa
 aaa
@@ -124384,10 +127083,10 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
+blB
+bmy
+bnl
+blB
 aab
 aaa
 aaa
@@ -124639,12 +127338,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beQ
+biJ
+biJ
+biJ
+bno
+bnl
 aab
 aaa
 aaa
@@ -124896,12 +127595,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beR
+biM
+biO
+bmz
+bnL
+boz
 aab
 aaa
 aaa
@@ -125153,12 +127852,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beR
+biN
+biO
+bmA
+bnL
+bnl
 aab
 aaa
 aaa
@@ -125410,12 +128109,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beR
+biM
+biO
+bmz
+bnL
+blB
 aab
 aaa
 aaa
@@ -125666,13 +128365,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beQ
+bgC
+biM
+biO
+bmz
+bnO
+bno
 aab
 aaa
 aaa
@@ -125923,13 +128622,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beR
+bgY
+biO
+biO
+biO
+bmz
+bnL
 aab
 aaa
 aaa
@@ -126180,13 +128879,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beR
+bgZ
+biO
+biO
+biO
+bmz
+bnL
 aab
 aaa
 aaa
@@ -126437,13 +129136,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beR
+bgY
+biO
+biO
+biO
+bnT
+boE
 aab
 aaa
 aaa
@@ -126694,13 +129393,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beS
+bha
+biV
+biO
+bmC
+bon
+boo
 aab
 aaa
 aaa
@@ -126952,12 +129651,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beR
+biX
+blC
+bmE
+bnL
+boz
 aab
 aaa
 aaa
@@ -127209,12 +129908,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beS
+bjc
+blD
+bjc
+boo
+bnl
 aab
 aaa
 aaa
@@ -127467,11 +130166,11 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bhY
+blB
+bmy
+bnl
+blB
 aab
 aaa
 aaa
@@ -127723,12 +130422,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beZ
+bje
+bje
+bje
+bop
+bnl
 aab
 aaa
 aaa
@@ -127980,12 +130679,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfG
+bjo
+bjH
+bmF
+boq
+boz
 aab
 aaa
 aaa
@@ -128237,12 +130936,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfG
+bjD
+bjH
+bmG
+boq
+bnl
 aab
 aaa
 aaa
@@ -128313,7 +131012,7 @@ auJ
 aSw
 asD
 auG
-awk
+awl
 azn
 awW
 asB
@@ -128494,12 +131193,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfG
+bjo
+bjH
+bmF
+boq
+blB
 aab
 aaa
 aaa
@@ -128570,7 +131269,7 @@ awg
 asF
 asD
 auH
-awl
+awq
 azn
 aBp
 asB
@@ -128750,13 +131449,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+beZ
+bhe
+bjo
+bjH
+bmF
+bor
+bop
 aab
 aaa
 aaa
@@ -128827,7 +131526,7 @@ awg
 asF
 asD
 auI
-awq
+awr
 azn
 aCQ
 asD
@@ -129007,13 +131706,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfG
+bht
+bjH
+bjH
+bjH
+bmF
+boq
 aab
 aaa
 aaa
@@ -129083,8 +131782,8 @@ aTa
 axM
 asF
 asD
-aEs
-awr
+awk
+axR
 azo
 aHt
 aEo
@@ -129264,13 +131963,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfG
+bhL
+bjH
+bjH
+bjH
+bmF
+boq
 aab
 aaa
 aaa
@@ -129521,13 +132220,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfG
+bhP
+bjH
+bjH
+bjH
+bov
+boS
 aab
 aaa
 aaa
@@ -129778,13 +132477,13 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfT
+bhQ
+bkF
+bjH
+bmF
+bow
+box
 aab
 aaa
 aaa
@@ -130036,12 +132735,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfG
+bkG
+blH
+bmH
+boq
+boz
 aab
 aaa
 aaa
@@ -130293,12 +132992,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
-aaa
-aaa
-aaa
+bfT
+bkL
+blI
+bkL
+box
+bnl
 aab
 aaa
 aaa
@@ -134332,14 +137031,14 @@ aaa
 aVk
 aVn
 aVs
-bbC
-bbC
-bbC
 aaK
-bbC
-bbC
+aTt
+aUK
+aUR
+aUY
+aVV
 bgb
-aaJ
+bbQ
 bjC
 biK
 bbQ
@@ -134366,14 +137065,14 @@ bbQ
 bmu
 bPR
 bbQ
-abi
-bSc
-bTr
-bUR
-bSc
-bXh
-bYp
-bSc
+aYP
+bbF
+bbe
+bbI
+bcF
+bdL
+bdQ
+bbF
 caj
 aVk
 aaa
@@ -134589,14 +137288,14 @@ aaa
 aVk
 aVm
 aVs
-bbD
-bbE
-bbE
-bbE
-bbE
-bgY
+aaL
+aTu
+aUL
+bbF
+aVb
+aVW
 bgb
-biJ
+bbQ
 bjC
 bkP
 bdW
@@ -134623,14 +137322,14 @@ bdW
 bPh
 bPR
 bbQ
-bbQ
-bSc
-bTs
-bUS
-bSc
-ckZ
-cla
-bSc
+aYP
+bbF
+aVZ
+aVZ
+aVZ
+aWe
+aVZ
+bbF
 caj
 aVk
 aaa
@@ -134846,14 +137545,14 @@ aaa
 aVk
 aVm
 aVs
-bbE
-bbE
-bfU
-bbE
-bfT
-bbE
-aTt
-biK
+bbF
+bbF
+bbF
+bbF
+aVb
+aVZ
+bgb
+bbQ
 bjC
 bbQ
 blz
@@ -134880,14 +137579,14 @@ bbQ
 bbQ
 bPR
 bbQ
-bbQ
-bSc
-bSc
-bUT
-bSc
-bXj
-bXj
-bSc
+aZs
+bbF
+bbg
+bbF
+bcP
+bcP
+bbF
+bbF
 caj
 aVk
 aaa
@@ -135103,14 +137802,14 @@ aaa
 aVk
 aVm
 aVs
-bbE
-hhV
-bbE
-bbE
-bbE
-bbE
+aaM
 aTt
-biK
+aUK
+aUS
+aVb
+aWa
+bgb
+bbQ
 bjC
 bkQ
 blA
@@ -135137,14 +137836,14 @@ blA
 bPi
 bPR
 bbQ
-bbQ
-bSc
-bTt
-bUU
-aMo
-bUU
-bTv
-bSc
+aZz
+bbb
+bbk
+bbJ
+bcQ
+bcR
+bdR
+bbF
 cak
 aVk
 aaa
@@ -135360,14 +138059,14 @@ aaa
 aVk
 aVm
 aVs
-bbE
-bdL
-bfU
-bbE
-bfU
-bbE
-aTr
-biK
+aaL
+aUD
+aUL
+bbF
+aVb
+aWc
+bgb
+bbQ
 bjC
 bkR
 blA
@@ -135392,16 +138091,16 @@ blA
 blA
 blA
 bPj
-bPR
-bbQ
-bbQ
-bSc
-aEA
-bUV
-bUU
-bXk
-bYr
-bSc
+aYF
+aYK
+aZN
+bbb
+bbk
+aVZ
+bcR
+bdM
+bdS
+bbF
 caj
 aVk
 aaa
@@ -135510,9 +138209,9 @@ aHy
 atc
 ajU
 aoh
-axR
+axT
 azE
-aBw
+aBy
 aCZ
 ajU
 aFS
@@ -135617,14 +138316,14 @@ aaa
 aVk
 aVm
 aVs
-bbD
-bdL
-bfX
-bbE
-bfV
-bbE
+bbF
+bbF
+bbF
+bbF
+aVb
+aWd
 bgb
-biL
+bbQ
 bjC
 bkS
 blA
@@ -135651,14 +138350,14 @@ blA
 bPk
 bPR
 bbQ
-bbQ
-bSc
-bTv
-bUW
-bUU
-bXk
-bYs
-bSc
+aZz
+bbb
+bbk
+bbK
+bcS
+bcR
+bcR
+bbF
 caj
 aVk
 aaa
@@ -135874,12 +138573,12 @@ aaa
 aVk
 aVm
 aVs
-bbC
-bdN
-bbC
-bbC
-bfW
-bbC
+amr
+aTt
+aUK
+aUS
+aVb
+aWe
 bgb
 bbQ
 bjC
@@ -135908,14 +138607,14 @@ blA
 bPl
 bPR
 bbQ
-bbQ
-bSc
-bTv
-bUW
-bSc
-bSc
-bSc
-bSc
+aZP
+bbF
+bbF
+bbF
+bbF
+bbF
+bbF
+bbF
 cal
 aVk
 aaa
@@ -136024,9 +138723,9 @@ aHz
 ate
 ajU
 als
-axT
+aEs
+aBw
 aGG
-aBy
 aCX
 ajU
 aFU
@@ -136131,12 +138830,12 @@ aaa
 aVk
 baf
 aVs
+aaL
+aUD
+aUL
 bbF
-bdO
-bcP
-bcP
-bcP
-bcP
+aVb
+aWg
 bgb
 bbR
 bjC
@@ -136165,14 +138864,14 @@ cko
 ckp
 bPR
 bzR
-bbQ
-bSc
-bTv
-bUW
-bSc
-cfM
-bYt
-bSc
+aYP
+bbF
+bbr
+bbL
+bdw
+aUY
+bdT
+bbF
 cal
 aVk
 aaa
@@ -136388,14 +139087,14 @@ aaa
 aVk
 aVn
 aVs
-bbG
-bdL
-bbE
-bbE
-bbE
-aaL
+bbF
+bbF
+bbF
+bbF
+aVd
+aWj
 bgb
-aaJ
+bbQ
 bjC
 bkR
 blA
@@ -136422,14 +139121,14 @@ cko
 bPj
 bPS
 bzR
-bbQ
-bSc
-aEE
-bUW
-bWp
-bXn
-ckA
-bSc
+aYP
+bbF
+bbs
+bbM
+aUF
+aVb
+aVZ
+bbF
 cal
 aVk
 aaa
@@ -136645,14 +139344,14 @@ aaa
 aVk
 aVn
 aVs
-bbH
-bdL
-bbE
-bbE
-bbE
-bgZ
+aEA
+aUE
+bbF
+aUF
+aVb
+aUF
 bgb
-biJ
+bbQ
 bjC
 bkS
 blA
@@ -136679,14 +139378,14 @@ cko
 ckq
 bPR
 bzR
-abi
-bSc
-aEF
-bUX
-bSc
-bSc
-bSc
-bSc
+aYP
+bbF
+aVZ
+aUF
+aUF
+aVb
+bdU
+bbF
 caj
 aVk
 aaa
@@ -136902,14 +139601,14 @@ aaa
 aVk
 aVm
 aVs
-bbI
-bdL
-beM
-beM
-beM
-bbE
-bia
-biK
+aEE
+aUE
+aUM
+aUF
+aVb
+aUF
+bgb
+bbQ
 bjC
 bkT
 blA
@@ -136936,14 +139635,14 @@ blA
 bPl
 bPR
 bbQ
-bQV
-bSc
-bTt
-bUY
-bWp
-bXn
-bYt
-bSc
+bam
+bbF
+aVZ
+bbN
+aUF
+aVb
+bdV
+bbF
 caj
 aVk
 aaa
@@ -137159,14 +139858,14 @@ aaa
 aVk
 aVm
 aVs
-bbJ
-bdL
-beN
-beN
-beN
-bbE
-bia
-biK
+aEA
+aUE
+bbF
+aUF
+aVj
+aWm
+bgb
+bbQ
 bjC
 bkQ
 blA
@@ -137193,14 +139892,14 @@ blA
 bPi
 bPR
 bbQ
-bbQ
-bSc
-bTy
-bUZ
-bSc
-cfN
-cfQ
-bSc
+aYP
+bbF
+aMp
+aUF
+aUF
+aVb
+bec
+bbF
 caj
 aVk
 aaa
@@ -137416,15 +140115,15 @@ aaa
 aVk
 aVm
 aVs
-amr
-bcQ
-bdR
-beO
-beO
-bha
-bib
-biM
-bjD
+bbF
+bbF
+bbF
+aUV
+aVC
+aXg
+bgb
+bbQ
+bjC
 bkR
 blA
 blA
@@ -137450,14 +140149,14 @@ blA
 bPj
 bPR
 bbQ
-bbQ
-bSd
-bdY
-bVa
-bgb
-bgb
-bgb
-bgb
+baD
+bbF
+bbx
+bbO
+bbO
+bdN
+bbO
+bbF
 caj
 aVk
 aaa
@@ -137673,15 +140372,15 @@ aaa
 aVk
 aVm
 aVs
-bbL
-bdL
-beP
-beP
-beP
-bbE
-bia
+aEF
+aUF
+aUN
+aUW
+aVD
+aXk
+aXR
 biK
-bjE
+bjC
 bkS
 blA
 blA
@@ -137707,14 +140406,14 @@ blA
 bPk
 bPR
 bbQ
-bbQ
-bSd
-bdY
-bVb
-aMp
-bdY
-bYw
-bgb
+aZz
+bbd
+bbk
+bfU
+aVZ
+bdO
+aVZ
+bbF
 caj
 aVk
 aaa
@@ -137930,15 +140629,15 @@ aaa
 aVk
 aVm
 aVs
-bbM
-bdL
-bbE
-bbE
-bbE
-bgZ
-bgb
-biL
-bjE
+aEL
+aUF
+aUF
+aUF
+aVE
+aXv
+aXS
+aYe
+aYn
 bbQ
 blE
 blE
@@ -137962,16 +140661,16 @@ bos
 bqp
 bqp
 bbQ
-bPT
-bQW
-bQW
-bSe
-bTz
-bVc
-bdY
-bdY
-bYx
-bgb
+aYI
+aYK
+aZN
+bbd
+bbB
+bbY
+bdJ
+bdP
+aVZ
+bbF
 caj
 aVk
 aaa
@@ -138187,14 +140886,14 @@ aaa
 aVk
 aVm
 aVs
-bbN
-bdL
-bbE
-bbE
-bbE
-bbE
-bgb
-bbQ
+aMn
+aUF
+aUO
+aUF
+aVO
+aXk
+aXR
+biK
 bjF
 bkU
 blF
@@ -138221,14 +140920,14 @@ bea
 bmt
 bPR
 bbQ
-bbQ
-bSd
-bdY
-bVd
-bWq
-bdY
-bYy
-bgb
+aZz
+bbd
+bbk
+bfU
+aVZ
+bfU
+aVZ
+bbF
 cak
 aVk
 aaa
@@ -138445,11 +141144,11 @@ aVk
 bag
 aVs
 bbF
-bcR
-beQ
-beQ
-beQ
-beQ
+bbF
+bbF
+aUF
+aVb
+aXx
 bgb
 bbR
 bjE
@@ -138478,14 +141177,14 @@ bbQ
 bmu
 bPR
 bbQ
-bbQ
-bSd
-bdY
-bVe
-bgb
-bgb
-bgb
-bgb
+aZP
+bbF
+bbC
+bck
+aVZ
+bbN
+aVZ
+bbF
 caj
 aVk
 aaa
@@ -138701,12 +141400,12 @@ aaa
 aVk
 aVm
 aVs
-bbC
-bdN
-bbC
-bbC
-bbC
-aaM
+aMo
+aUG
+bbF
+aUF
+aVb
+aWm
 bgb
 aoC
 bjE
@@ -138735,14 +141434,14 @@ bdW
 bPh
 bPU
 bbQ
-bbQ
-bSf
-bTA
-bVf
-bSf
-cfO
-bYz
-bSf
+aYP
+bbF
+bbD
+aVZ
+aVZ
+aVZ
+aVZ
+bbF
 caj
 aVk
 aaa
@@ -138958,14 +141657,14 @@ aaa
 aVk
 aVm
 aVs
-bdV
-bdL
-bbE
-bbE
-bfX
-bbE
+aMp
+aUH
+aUP
+aUF
+aVb
+aUF
 bgb
-abJ
+bbQ
 bjE
 bbQ
 bbQ
@@ -138992,14 +141691,14 @@ bdY
 bbQ
 bPR
 bbQ
-bbQ
-bSf
-bTB
-bVg
-bWr
-bXq
-cfR
-bSf
+aYP
+bbF
+bbE
+bcn
+bcn
+bcn
+beL
+bbF
 caj
 aVk
 aaa
@@ -139215,14 +141914,14 @@ aaa
 aVk
 baf
 aVs
-bfZ
-bdL
-bfU
-bbE
-bfY
-bbE
-aTu
-biK
+bbF
+bbF
+bbF
+bbF
+aVP
+aXI
+bgb
+bbQ
 bjE
 bbQ
 bbQ
@@ -139249,14 +141948,14 @@ bbQ
 bbQ
 bPR
 bbQ
-bQV
-bSf
-aEL
-bVh
-bSf
-bSf
-bSf
-bSf
+bam
+bbF
+bbG
+bct
+bdK
+bct
+beM
+bbF
 caj
 aVk
 aaa
@@ -139472,14 +142171,14 @@ aaa
 aVk
 aVm
 aVs
-bbO
-hxX
-bbE
-beR
-bbE
-bbE
-aTu
-biK
+aaL
+aUI
+aUQ
+bbF
+aVb
+aWg
+bgb
+bbQ
 bjE
 bbQ
 bbQ
@@ -139506,14 +142205,14 @@ bdY
 bbQ
 bPV
 bbQ
-abi
-bSf
-bTD
-bVi
-bSf
-cfO
-bYz
-bSf
+aYP
+bbF
+bbH
+bbH
+bbH
+bbH
+bbH
+bbF
 caj
 aVk
 aaa
@@ -139729,14 +142428,14 @@ aaa
 aVk
 aVm
 aVs
-bbE
-bbE
-bfU
-bbE
-bfU
-bbE
 aTc
-biK
+aUJ
+aUK
+aUX
+aVb
+aVV
+bgb
+bbQ
 bjE
 bkW
 bea
@@ -139763,14 +142462,14 @@ bea
 bPm
 bPR
 bbQ
-bbQ
-bSf
-bTE
-bVj
-bWr
-bXq
-cfR
-bSf
+aYP
+bbF
+bbH
+bbH
+bbH
+bbH
+bbH
+bbF
 caj
 aVk
 aaa
@@ -139986,14 +142685,14 @@ aaa
 aVk
 bag
 aVs
-bbD
-bbE
-bbE
-bbE
-bbE
-bbE
+bbF
+bbF
+bbF
+bbF
+aVj
+aXO
 bgb
-biL
+bbQ
 bjE
 biK
 bbQ
@@ -140020,14 +142719,14 @@ bbQ
 bPn
 bPR
 bbQ
-bbQ
-bSf
-bTF
-aMn
-bSf
-bSf
-bSf
-bSf
+aYP
+bbF
+bbH
+bbH
+bbH
+bbH
+bbH
+bbF
 caj
 aVk
 aaa
@@ -140243,12 +142942,12 @@ aaa
 aVk
 aVm
 aVs
-cfP
-bcS
-chF
-bYq
-ciJ
-ciQ
+aaL
+aUI
+aUQ
+bbF
+aVQ
+aVW
 bgb
 bbQ
 bjE
@@ -140277,14 +142976,14 @@ bOt
 bPo
 bPW
 bbQ
-bbQ
-bSf
-bTG
-bVj
-bSf
-bXr
-bYB
-bSf
+aYP
+bbF
+bbH
+bbH
+bbH
+bbH
+bbH
+bbF
 caj
 aVk
 aaa
@@ -140500,12 +143199,12 @@ aaa
 aVk
 aVm
 aVs
-bbF
-bbF
-bbF
-bbF
-bbF
-bgb
+aTr
+aUJ
+aUK
+aUX
+aVU
+aXQ
 bgb
 aoD
 bjG
@@ -140534,14 +143233,14 @@ bsm
 bbQ
 bPR
 bbQ
-bbQ
-bSf
-bTH
-bWu
-bWs
-bXs
-bYC
-bSf
+aYP
+bbF
+bbH
+bbH
+bbH
+bbH
+bbH
+bbF
 cal
 aVk
 aaa
@@ -140757,12 +143456,12 @@ aaa
 aVk
 aVm
 aVs
-bbP
-bbP
-bbP
-bbP
-bga
-bhc
+bgb
+bgb
+bgb
+bgb
+bgb
+bgb
 bgb
 biP
 bPS
@@ -140791,14 +143490,14 @@ blA
 bPp
 bPR
 bbQ
-bQV
-bSf
-bSf
-bSf
-bSf
-bSf
-bSf
-bSf
+bam
+bbF
+bbF
+bbF
+bbF
+bbF
+bbF
+bbF
 cal
 aVk
 aaa
@@ -141014,12 +143713,12 @@ aaa
 aVk
 aVm
 aVs
-bbQ
-bbQ
-bbQ
-bbQ
+bbP
+bbP
+bbP
+bbP
 bga
-bhd
+bhc
 bgb
 biQ
 bPS
@@ -141271,12 +143970,12 @@ aaa
 aVk
 aVm
 aVs
-aaJ
+bbQ
 bbQ
 bbQ
 bbQ
 bga
-bga
+bhd
 bgb
 biR
 bPS
@@ -141532,8 +144231,8 @@ bbR
 bbQ
 bbQ
 bbQ
-bbQ
-bbQ
+bga
+bga
 bgb
 biR
 bPS
@@ -154399,7 +157098,7 @@ bpb
 bzk
 bAB
 bqV
-bDt
+brc
 bzk
 bpb
 bpb
@@ -154654,9 +157353,9 @@ bxS
 bqV
 bxS
 bxS
-bAC
+bqo
 bBL
-bDu
+bqw
 bHk
 bHk
 bHp
@@ -154911,9 +157610,9 @@ bxS
 bqV
 bxS
 bxS
-bAC
+bqt
 bBL
-bDu
+bqw
 bHk
 bHk
 bqV
@@ -155168,9 +157867,9 @@ bxS
 bqV
 bxS
 bxS
-bAC
+bqt
 bqV
-bDu
+bqw
 bHk
 bHk
 bqV
@@ -155425,9 +158124,9 @@ bxS
 bqV
 bxS
 bxS
-bAD
+bqu
 bBO
-bDv
+bqx
 bHk
 bHk
 bqV
@@ -155682,9 +158381,9 @@ bxS
 bvW
 bxS
 bxS
-bAE
+bqv
 bBP
-cfI
+bqU
 bHk
 bHk
 bvW
@@ -156191,19 +158890,19 @@ blX
 bny
 bpb
 bqX
-bDw
-bDw
+bxS
+bxS
 bvX
-bIz
-vFl
-bIz
+bpi
+bqg
+bpi
 bqX
-ckX
-ckX
-ckX
+bqi
+bqi
+bqi
 bvX
-cge
-cge
+bHk
+bHk
 bqX
 bpb
 bny
@@ -156448,19 +159147,19 @@ blX
 bny
 bpb
 bqX
-bDw
-bDw
+bxS
+bxS
 bvX
-bIz
-bIz
-bIz
+bpi
+bpi
+bpi
 bqX
-ckX
-ckX
-ckX
+bqi
+bqi
+bqi
 bvX
-cge
-cge
+bHk
+bHk
 bqX
 bpb
 bny
@@ -156705,19 +159404,19 @@ blX
 bnx
 bpe
 bqY
-bDx
-bDx
+aUq
+aUq
 bvY
-ckK
-ckK
-ckK
+bpm
+bpm
+bpm
 bBQ
-ckU
-ckU
-ckU
+bqj
+bqj
+bqj
 bvY
-ciK
-ciK
+bIA
+bIA
 bKN
 bMt
 bnx
@@ -156962,19 +159661,19 @@ blg
 bnz
 bpf
 bqZ
-bDy
-bDy
+boU
+boU
 bvZ
-ckT
-ckT
-ckT
+bpo
+bpo
+bpo
 bqZ
-ckW
-ckW
-ckW
+bql
+bql
+bql
 bHq
-cge
-cge
+bHk
+bHk
 bqV
 bpb
 bNU
@@ -157219,19 +159918,19 @@ aYZ
 bnA
 bpg
 bqV
-bDw
-bDw
+bxS
+bxS
 bqV
-bIz
-bIz
-bIz
+bpi
+bpi
+bpi
 bqV
-ckX
-ckX
-ckX
+bqi
+bqi
+bqi
 bqV
-cge
-cge
+bHk
+bHk
 bqV
 bMu
 bnA
@@ -158013,7 +160712,7 @@ bRh
 bGq
 bSQ
 bUr
-bVT
+brT
 bWR
 bXO
 bZg
@@ -158023,7 +160722,7 @@ cbo
 ccf
 ccP
 cdx
-cdM
+bsf
 cec
 cbn
 aVs
@@ -158270,7 +160969,7 @@ bRa
 bRa
 bSQ
 bUs
-bVU
+bsd
 bWS
 bVW
 bZh
@@ -158280,7 +160979,7 @@ aIg
 ccg
 ccQ
 ccS
-cdN
+bsg
 ced
 cbn
 cez
@@ -158527,7 +161226,7 @@ bGq
 bRr
 bSQ
 bUs
-bVU
+bsd
 bWS
 bVW
 bZi
@@ -158537,7 +161236,7 @@ cbq
 cch
 ccQ
 ccS
-cdN
+bsg
 ced
 cbn
 ceA
@@ -158784,7 +161483,7 @@ bGq
 bRa
 bSQ
 bUs
-bVV
+bse
 bWT
 bXP
 bZh
@@ -158794,7 +161493,7 @@ aIE
 ccg
 ccR
 cdy
-cdO
+bsh
 ced
 cbn
 ceB
@@ -160310,7 +163009,7 @@ bxX
 bnC
 bAL
 bnF
-bDE
+bnC
 bnC
 bGh
 bwd
@@ -160567,7 +163266,7 @@ bxY
 bnC
 bAM
 bpq
-bDF
+bqm
 bnC
 bGh
 bHt
@@ -160822,9 +163521,9 @@ bnF
 avU
 bxZ
 bnC
-bAN
-bpq
 bDG
+bpq
+buH
 bnC
 sUb
 bMs
@@ -161079,9 +163778,9 @@ buG
 bAK
 bya
 bnC
-bAO
+bqh
 bnF
-aUq
+bqn
 bnC
 bGi
 bHv

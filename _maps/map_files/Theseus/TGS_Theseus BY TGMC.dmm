@@ -1031,6 +1031,7 @@
 /obj/effect/landmark/map_item,
 /obj/item/whistle,
 /obj/item/megaphone,
+/obj/item/ammo_magazine/acp,
 /turf/open/floor/almayer/mono,
 /area/almayer/living/numbertwobunks)
 "acL" = (
@@ -3468,7 +3469,6 @@
 /turf/open/floor/carpet,
 /area/almayer/command/corporateliaison)
 "aiO" = (
-/obj/item/storage/lockbox/loyalty,
 /obj/item/weapon/gun/pistol/vp70,
 /obj/item/ammo_magazine/pistol/vp70,
 /obj/structure/closet/cabinet,
