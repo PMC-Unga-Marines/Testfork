@@ -24,18 +24,20 @@
 	var/is_zoomed = FALSE
 
 	luminosity = 7
+	req_access = list(ACCESS_MARINE_TANK)
 
 /obj/effect/multitile_spawner/cm_armored/tank
 
 	width = 3
 	height = 3
 	spawn_dir = EAST
+	var/list/spawn_hardpoints = list()
 
 /obj/effect/multitile_spawner/cm_armored/tank/Initialize()
 	. = ..()
 
 	var/obj/vehicle/multitile/root/cm_armored/tank/R = new(src.loc)
-	R.dir = WEST
+	R.setDir(WEST)
 
 	var/datum/coords/dimensions = new
 	dimensions.x_pos = width
@@ -51,41 +53,11 @@
 
 	R.load_hitboxes(dimensions, root_pos)
 	R.load_entrance_marker(entr_mark)
-	R.update_icon()
-
-	R.camera = new /obj/machinery/camera(R)
-	R.camera.network = list("almayer")	//changed network from military to almayer,because Cams computers on Almayer have this network
-	R.camera.c_tag = "Armored Vehicle #[rand(1,10)]" //ARMORED VEHICLE to be at the start of cams list, numbers in case of events with multiple tanks and for APC
-
-	return INITIALIZE_HINT_QDEL
-
-//Pretty similar to the previous one
-//TODO: Make this code better and less repetetive
-//Spawns a tank that has a bunch of broken hardpoints
-/obj/effect/multitile_spawner/cm_armored/tank/decrepit/Initialize()
-	var/obj/vehicle/multitile/root/cm_armored/tank/R = new(src.loc)
-	R.dir = EAST
-
-	var/datum/coords/dimensions = new
-	dimensions.x_pos = width
-	dimensions.y_pos = height
-	var/datum/coords/root_pos = new
-	root_pos.x_pos = 1
-	root_pos.y_pos = 1
-
-	var/datum/coords/entr_mark = new
-	entr_mark.x_pos = -2
-	entr_mark.y_pos = 0
-
-	R.load_hitboxes(dimensions, root_pos)
-	R.load_entrance_marker(entr_mark)
-
-	//Manually adding those hardpoints
-	R.damaged_hps = list(
-				"primary",
-				"secondary",
-				"support",
-				"armor")
+	var/hardpoint_path
+	for(var/slot in spawn_hardpoints)
+		hardpoint_path = spawn_hardpoints[slot]
+		R.add_hardpoint(new hardpoint_path)
+	R.healthcheck()
 
 	R.update_icon()
 
@@ -94,144 +66,19 @@
 	R.camera.c_tag = "Armored Vehicle #[rand(1,10)]" //ARMORED VEHICLE to be at the start of cams list, numbers in case of events with multiple tanks and for APC
 
 	return INITIALIZE_HINT_QDEL
+/obj/effect/multitile_spawner/cm_armored/tank/decrepit
+	spawn_hardpoints = list(HDPT_PRIMARY = /obj/item/hardpoint/tank/primary/cannon/broken,
+							HDPT_SECDGUN = /obj/item/hardpoint/tank/secondary/m56cupola/broken,
+							HDPT_SUPPORT = /obj/item/hardpoint/tank/support/smoke_launcher/broken,
+							HDPT_ARMOR = /obj/item/hardpoint/tank/armor/ballistic/broken,
+							HDPT_TREADS = /obj/item/hardpoint/tank/treads/standard/broken)
 
-/obj/effect/multitile_spawner/cm_armored/tank/prebuilt/ltb/Initialize()
-	var/obj/vehicle/multitile/root/cm_armored/tank/R = new(src.loc)
-	R.dir = EAST
-
-	var/datum/coords/dimensions = new
-	dimensions.x_pos = width
-	dimensions.y_pos = height
-	var/datum/coords/root_pos = new
-	root_pos.x_pos = 1
-	root_pos.y_pos = 1
-
-	//Entrance relative to the root object. The tank spawns with the root centered on the marker
-	var/datum/coords/entr_mark = new
-	entr_mark.x_pos = -2
-	entr_mark.y_pos = 0
-
-	//Manually adding those hardpoints
-	R.add_hardpoint(new /obj/item/hardpoint/tank/primary/cannon, R.hardpoints[HDPT_PRIMARY])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/secondary/m56cupola, R.hardpoints[HDPT_SECDGUN])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/support/artillery_module, R.hardpoints[HDPT_SUPPORT])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/armor/ballistic, R.hardpoints[HDPT_ARMOR])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/treads/standard, R.hardpoints[HDPT_TREADS])
-	R.update_damage_distribs()
-
-	R.load_hitboxes(dimensions, root_pos)
-	R.load_entrance_marker(entr_mark)
-	R.healthcheck()
-
-	R.camera = new /obj/machinery/camera(R)
-	R.camera.network = list("almayer")	//changed network from military to almayer,because Cams computers on Almayer have this network
-	R.camera.c_tag = "Armored Vehicle #[rand(1,10)]" //ARMORED VEHICLE to be at the start of cams list, numbers in case of events with multiple tanks and for APC
-
-	return INITIALIZE_HINT_QDEL
-
-/obj/effect/multitile_spawner/cm_armored/tank/prebuilt/autocannon/Initialize()
-	var/obj/vehicle/multitile/root/cm_armored/tank/R = new(src.loc)
-	R.dir = EAST
-
-	var/datum/coords/dimensions = new
-	dimensions.x_pos = width
-	dimensions.y_pos = height
-	var/datum/coords/root_pos = new
-	root_pos.x_pos = 1
-	root_pos.y_pos = 1
-
-	//Entrance relative to the root object. The tank spawns with the root centered on the marker
-	var/datum/coords/entr_mark = new
-	entr_mark.x_pos = -2
-	entr_mark.y_pos = 0
-
-	//Manually adding those hardpoints
-	R.add_hardpoint(new /obj/item/hardpoint/tank/primary/autocannon, R.hardpoints[HDPT_PRIMARY])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/secondary/towlauncher, R.hardpoints[HDPT_SECDGUN])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/support/overdrive_enhancer, R.hardpoints[HDPT_SUPPORT])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/armor/concussive, R.hardpoints[HDPT_ARMOR])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/treads/standard, R.hardpoints[HDPT_TREADS])
-	R.update_damage_distribs()
-
-	R.load_hitboxes(dimensions, root_pos)
-	R.load_entrance_marker(entr_mark)
-	R.healthcheck()
-
-	R.camera = new /obj/machinery/camera(R)
-	R.camera.network = list("almayer")	//changed network from military to almayer,because Cams computers on Almayer have this network
-	R.camera.c_tag = "Armored Vehicle #[rand(1,10)]" //ARMORED VEHICLE to be at the start of cams list, numbers in case of events with multiple tanks and for APC
-
-	return INITIALIZE_HINT_QDEL
-
-/obj/effect/multitile_spawner/cm_armored/tank/prebuilt/minigun/Initialize()
-	var/obj/vehicle/multitile/root/cm_armored/tank/R = new(src.loc)
-	R.dir = EAST
-
-	var/datum/coords/dimensions = new
-	dimensions.x_pos = width
-	dimensions.y_pos = height
-	var/datum/coords/root_pos = new
-	root_pos.x_pos = 1
-	root_pos.y_pos = 1
-
-	//Entrance relative to the root object. The tank spawns with the root centered on the marker
-	var/datum/coords/entr_mark = new
-	entr_mark.x_pos = -2
-	entr_mark.y_pos = 0
-
-	//Manually adding those hardpoints
-	R.add_hardpoint(new /obj/item/hardpoint/tank/primary/minigun, R.hardpoints[HDPT_PRIMARY])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/secondary/grenade_launcher, R.hardpoints[HDPT_SECDGUN])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/support/weapons_sensor, R.hardpoints[HDPT_SUPPORT])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/armor/concussive, R.hardpoints[HDPT_ARMOR])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/treads/standard, R.hardpoints[HDPT_TREADS])
-	R.update_damage_distribs()
-
-	R.load_hitboxes(dimensions, root_pos)
-	R.load_entrance_marker(entr_mark)
-	R.healthcheck()
-
-	R.camera = new /obj/machinery/camera(R)
-	R.camera.network = list("almayer")	//changed network from military to almayer,because Cams computers on Almayer have this network
-	R.camera.c_tag = "Armored Vehicle #[rand(1,10)]" //ARMORED VEHICLE to be at the start of cams list, numbers in case of events with multiple tanks and for APC
-
-	return INITIALIZE_HINT_QDEL
-
-
-/obj/effect/multitile_spawner/cm_armored/tank/upp/Initialize()
-	. = ..()
-	var/obj/vehicle/multitile/root/cm_armored/tank/R = new(src.loc)
-	R.dir = EAST
-
-	R.name = "Type 91 \"Wolverine\" Main Battle Tank"
-	R.desc = "Watch out! It's UPP main battle tank! Has inbuilt Type 21 \"Zavesa\" smoke cover system. Entrance in the back."
-
-	var/datum/coords/dimensions = new
-	dimensions.x_pos = width
-	dimensions.y_pos = height
-	var/datum/coords/root_pos = new
-	root_pos.x_pos = 1
-	root_pos.y_pos = 1
-
-	var/datum/coords/entr_mark = new
-	entr_mark.x_pos = -2
-	entr_mark.y_pos = 0
-
-	R.load_hitboxes(dimensions, root_pos)
-	R.load_entrance_marker(entr_mark)
-
-	//Manually adding those hardpoints
-	R.add_hardpoint(new /obj/item/hardpoint/tank/primary/cannon/upp, R.hardpoints[HDPT_PRIMARY])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/secondary/m56cupola/upp, R.hardpoints[HDPT_SECDGUN])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/support/artillery_module/upp, R.hardpoints[HDPT_SUPPORT])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/armor/ballistic/upp, R.hardpoints[HDPT_ARMOR])
-	R.add_hardpoint(new /obj/item/hardpoint/tank/treads/standard/upp, R.hardpoints[HDPT_TREADS])
-	R.update_damage_distribs()
-
-	R.color = "#c2b678"
-	R.healthcheck()
-
-	return INITIALIZE_HINT_QDEL
+/obj/effect/multitile_spawner/cm_armored/tank/fixed
+	spawn_hardpoints = list(HDPT_PRIMARY = /obj/item/hardpoint/tank/primary/cannon,
+							HDPT_SECDGUN = /obj/item/hardpoint/tank/secondary/m56cupola,
+							HDPT_SUPPORT = /obj/item/hardpoint/tank/support/smoke_launcher,
+							HDPT_ARMOR = /obj/item/hardpoint/tank/armor/ballistic,
+							HDPT_TREADS = /obj/item/hardpoint/tank/treads/standard)
 
 /obj/vehicle/multitile/root/cm_armored/tank/Destroy()
 	if(gunner)
@@ -635,8 +482,8 @@
 		to_chat(M, "<span class='notice'>You climb out of [src].</span>")
 
 //No one but the driver can drive
-/obj/vehicle/multitile/root/cm_armored/tank/relaymove(var/mob/user, var/direction)
-	if(user != driver) return
+/obj/vehicle/multitile/root/cm_armored/tank/relaymove(mob/user, direction)
+	if(user != driver || user.incapacitated()) return
 
 	. = ..(user, direction)
 
@@ -685,9 +532,9 @@
 		next_sound_play = world.time + 21
 
 //No one but the driver can turn
-/obj/vehicle/multitile/root/cm_armored/tank/try_rotate(var/deg, var/mob/user, var/force = 0)
+/obj/vehicle/multitile/root/cm_armored/tank/try_rotate(deg, mob/user, force = 0)
 
-	if(user != driver) return
+	if(user != driver || user.incapacitated()) return
 
 	. = ..(deg, user, force)
 
@@ -698,10 +545,6 @@
 		C.pixel_x = old_x*cos(deg) - old_y*sin(deg)
 		C.pixel_y = old_x*sin(deg) + old_y*cos(deg)
 
-
-/obj/vehicle/multitile/hitbox/cm_armored/tank/Bump(var/atom/A)
-	. = ..()
-	if(isliving(A))
-		var/mob/living/M = A
-		var/obj/vehicle/multitile/root/cm_armored/tank/T
-		log_attack("[T ? T.driver : "Someone"] drove over [M]([M.client ? M.client.ckey : "disconnected"]) with [root]")
+/obj/vehicle/multitile/hitbox/cm_armored/tank/get_driver()
+	var/obj/vehicle/multitile/root/cm_armored/tank/T = root
+	return T?.driver

@@ -7,8 +7,7 @@ All of the hardpoints, for the tank and APC
 	icon = 'icons/obj/hardpoint_modules.dmi'
 	icon_state = "tires" //Placeholder
 
-	max_integrity = 0
-	obj_integrity = 0
+	max_integrity = 100
 	w_class = 15
 
 	//If we use ammo, put it here
@@ -25,13 +24,30 @@ All of the hardpoints, for the tank and APC
 	var/point_cost = 0
 
 	var/list/clips = list()
-	var/cur_ammo_type = 1
-	var/cur_clips = 0
 	var/max_clips = 1
+	var/cur_clips = 0
+	var/cur_ammo_type = 1
 
 //changed how ammo works. No more AMMO obj, we take what we need straight from first obj in CLIPS list (ex-backup_clips) and work with it.
 //Every ammo mag now has CURRENT_AMMO value, also it is possible now to unload ALL mags from the gun, not only backup clips.
 
+/obj/item/hardpoint/examine(mob/user)
+	. = ..()
+	var/status = obj_integrity <= 0.1 ? "broken" : "functional"
+	var/span_class = obj_integrity <= 0.1 ? "<span class = 'danger'>" : "<span class = 'notice'>"
+	if((user?.mind?.cm_skills && user.mind.cm_skills.engineer >= SKILL_ENGINEER_METAL) || isobserver(user))
+		switch(PERCENT(obj_integrity / max_integrity))
+			if(0.1 to 33)
+				status = "heavily damaged"
+				span_class = "<span class = 'warning'>"
+			if(33.1 to 66)
+				status = "damaged"
+				span_class = "<span class = 'warning'>"
+			if(66.1 to 90)
+				status = "slighty damaged"
+			if(90.1 to 100)
+				status = "intact"
+	to_chat(user, "[span_class]It's [status].</span>")
 
 /obj/item/hardpoint/tank
 
@@ -75,27 +91,27 @@ All of the hardpoints, for the tank and APC
 
 //If our cooldown has elapsed
 /obj/item/hardpoint/tank/proc/is_ready()
-	if(owner.z == 2 || owner.z == 3)
-		to_chat(usr, "<span class='warning'>Don't fire here, you'll blow a hole in the ship!</span>")
-		return 0
-	return 1
+	if(world.time < next_use)
+		to_chat(usr, "<span class='warning'>This module is not ready to be used yet.</span>")
+		return FALSE
+	if(!obj_integrity)
+		to_chat(usr, "<span class='warning'>This module is too broken to be used.</span>")
+		return FALSE
+	return TRUE
 
 /obj/item/hardpoint/tank/proc/try_add_clip(var/obj/item/ammo_magazine/tank/A, var/mob/user)
 
 	if(A.loc != user)
 		return 0
-
-	if(max_clips == 0)
+	if(!max_clips)
 		to_chat(user, "<span class='warning'>This module does not have room for additional ammo.</span>")
-		return 0
-
-	if(cur_clips >= max_clips)
+		return FALSE
+	else if(length(clips) >= max_clips)
 		to_chat(user, "<span class='warning'>The reloader is full.</span>")
-		return 0
-
-	if(!istype(src, A.gun_type))
+		return FALSE
+	else if(!istype(A, cur_ammo_type))
 		to_chat(user, "<span class='warning'>That is the wrong ammo type.</span>")
-		return 0
+		return FALSE
 
 	to_chat(user, "<span class='notice'>Loading \the [A] in \the [owner].</span>")
 
@@ -112,7 +128,7 @@ All of the hardpoints, for the tank and APC
 	else
 		playsound(src, 'sound/machines/hydraulics_1.ogg', 40, 1)
 
-	for(var/j = 1; j <= clips.len; j++)
+	for(var/j = 1; j <= length(clips); j++)
 		if(A.ammo_tag == clips[j][1])
 			clips[j] += A
 			cur_clips ++
@@ -159,11 +175,11 @@ All of the hardpoints, for the tank and APC
 	is_activatable = 1
 
 	remove_buff(var/mob/user)
-		for(var/i in 1 to clips.len)
+		for(var/i in 1 to length(clips))
 			var/list/ammo_type = clips[i]
-			if(ammo_type.len > 1)
+			if(length(ammo_type) > 1)
 				var/obj/item/ammo_magazine/A
-				for(var/j = 2; j <= ammo_type.len; j++)
+				for(var/j = 2; j <= length(ammo_type); j++)
 					A = ammo_type[j]
 					ammo_type[j].Move(owner.entrance.loc)
 					ammo_type[j].update_icon()
@@ -192,10 +208,10 @@ All of the hardpoints, for the tank and APC
 
 //this will switch to any ammo that's left after unloading last mag
 	proc/change_ammo_left(var/mob/user)
-		if(clips[cur_ammo_type].len == 1)
+		if(length(clips[cur_ammo_type]) == 1)
 			to_chat(user, "<span class='warning'>Warning! No [clips[cur_ammo_type][1]] ammo left.</span>")
-		for(var/i = 1; i <= clips.len; i++)
-			if(clips[i].len > 1)
+		for(var/i = 1; i <= length(clips); i++)
+			if(length(clips[i]) > 1)
 				cur_ammo_type = i
 				to_chat(user, "<span class='notice'>Switching to [clips[cur_ammo_type][1]]. Rearming will take 6 seconds.</span>")
 				return
@@ -208,11 +224,11 @@ All of the hardpoints, for the tank and APC
 	is_activatable = 1
 
 	remove_buff(var/mob/user)
-		for(var/i in 1 to clips.len)
+		for(var/i in 1 to length(clips))
 			var/list/ammo_type = clips[i]
-			if(ammo_type.len > 1)
+			if(length(ammo_type) > 1)
 				var/obj/item/ammo_magazine/A
-				for(var/j = 2; j <= ammo_type.len; j++)
+				for(var/j = 2; j <= length(ammo_type); j++)
 					A = ammo_type[j]
 					ammo_type[j].Move(owner.entrance.loc)
 					ammo_type[j].update_icon()
@@ -241,10 +257,10 @@ All of the hardpoints, for the tank and APC
 
 //this will switch to any ammo that's left after unloading last mag
 	proc/change_ammo_left(var/mob/user)
-		if(clips[cur_ammo_type].len == 1)
+		if(length(clips[cur_ammo_type]) == 1)
 			to_chat(user, "<span class='warning'>Warning! No [clips[cur_ammo_type][1]] ammo left.</span>")
-		for(var/i = 1; i <= clips.len; i++)
-			if(clips[i].len > 1)
+		for(var/i = 1; i <= length(clips); i++)
+			if(length(clips[i]) > 1)
 				cur_ammo_type = i
 				to_chat(user, "<span class='notice'>Switching to [clips[cur_ammo_type][1]]. Rearming will take 6 seconds.</span>")
 				return
@@ -466,7 +482,7 @@ All of the hardpoints, for the tank and APC
 			S = 'sound/weapons/tank_minigun_stop.ogg'
 		if(chained <= 0) chained = 1
 
-		next_use = world.time + (chained > chain_delays.len ? 0.5 : chain_delays[chained]) * owner.misc_ratios["prim_cool"]
+		next_use = world.time + (chained > length(chain_delays) ? 0.5 : chain_delays[chained]) * owner.misc_ratios["prim_cool"]
 		if(!prob(owner.accuracies["primary"] * 100 * owner.misc_ratios["prim_acc"] * owner.w_ratios["w_prim_acc"]))
 			T = get_step(T, pick(CARDINAL_DIRS))
 		var/obj/item/projectile/P = new
@@ -1751,7 +1767,7 @@ All of the hardpoints, for the tank and APC
 	if(max_clips == 0)
 		to_chat(user, "<span class='warning'>This module does not have room for additional ammo.</span>")
 		return 0
-	else if(clips.len >= max_clips)
+	else if(length(clips) >= max_clips)
 		to_chat(user, "<span class='warning'>The reloader is full.</span>")
 		return 0
 	else if(!istype(A, ammo_type.type))
@@ -1767,7 +1783,7 @@ All of the hardpoints, for the tank and APC
 	user.temporarilyRemoveItemFromInventory(A, 0)
 	user.visible_message("<span class='notice'>[user] installs [A] into [owner].</span>",
 		"<span class='notice'>You install \the [A] in \the [owner].</span>")
-	if (clips.len == 0)
+	if (length(clips) == 0)
 		user.visible_message("<span class='notice'>You hear clanking as \the [A] is getting automatically loaded into \the weapon.</span>")
 		playsound(src, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 	else
@@ -2351,3 +2367,22 @@ All of the hardpoints, for the tank and APC
 ///////////////
 // APC HARDPOINTS // END
 ///////////////
+
+////////////////////
+// BROKEN MODULES //
+////////////////////
+
+/obj/item/hardpoint/tank/primary/cannon/broken
+	obj_integrity = 0
+
+/obj/item/hardpoint/tank/secondary/m56cupola/broken
+	obj_integrity = 0
+
+/obj/item/hardpoint/tank/support/smoke_launcher/broken
+	obj_integrity = 0
+
+ /obj/item/hardpoint/tank/armor/ballistic/broken
+	obj_integrity = 0
+
+ /obj/item/hardpoint/tank/treads/standard/broken
+	obj_integrity = 0
