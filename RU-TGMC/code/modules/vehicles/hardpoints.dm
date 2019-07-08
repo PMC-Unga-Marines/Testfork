@@ -1456,6 +1456,7 @@ All of the hardpoints, for the tank and APC
 
 //Special ammo magazines for hardpoint modules. Some aren't here since you can use normal magazines on them
 /obj/item/ammo_magazine/tank
+	icon = 'RU-TGMC/icons/obj/items/ammo.dmi'
 	flags_magazine = 0 //No refilling
 	var/point_cost = 0
 	var/ammo_tag = null
@@ -2275,6 +2276,7 @@ All of the hardpoints, for the tank and APC
 
 //Special ammo magazines for hardpoint modules. Some aren't here since you can use normal magazines on them
 /obj/item/ammo_magazine/apc
+	icon = 'RU-TGMC/icons/obj/items/ammo.dmi'
 	flags_magazine = 0 //No refilling
 	var/point_cost = 0
 
