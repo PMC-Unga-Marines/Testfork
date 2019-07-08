@@ -228,7 +228,8 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 //The basic vehicle code that moves the tank, with movement delay implemented
 /obj/vehicle/multitile/root/cm_armored/relaymove(mob/user, direction)
 	if(world.time < next_move) return
-	if(hardpoints[HDPT_TREADS] && hardpoints[HDPT_TREADS].obj_integrity > 0)	//OD doesn't affect moving without treads anymore
+	var/obj/item/hardpoint/HP = hardpoints[HDPT_TREADS]
+	if(HP && HP.obj_integrity > 0)	//OD doesn't affect moving without treads anymore
 		next_move = world.time + src.speed
 	else
 		next_move = world.time + move_delay

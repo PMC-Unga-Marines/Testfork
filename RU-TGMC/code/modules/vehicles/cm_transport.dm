@@ -244,14 +244,16 @@ var/list/apc_dmg_distributions = list(
 		if(length(HP4.clips) <= 0)
 			to_chat(usr, "<span class='warning'>Primary weapon: [HP4.name]. Ammo: 0/0. 0/0 spare magazines available.</span>")
 		else
-			to_chat(usr, "<span class='warning'>Primary weapon: [HP4.name]. Ammo: [HP4.clips[1].current_rounds]/[HP4.clips[1].max_rounds]. [length(HP4.clips) - 1]/[HP4.max_clips - 1] spare magazines available.</span>")
+			var/obj/item/ammo_magazine/ammo = HP4.clips[1]
+			to_chat(usr, "<span class='warning'>Primary weapon: [HP4.name]. Ammo: [ammo.current_rounds]/[ammo.max_rounds]. [length(HP4.clips) - 1]/[HP4.max_clips - 1] spare magazines available.</span>")
 	if(HP3 == null || HP3.obj_integrity <= 0)
 		to_chat(usr, "<span class='warning'>Secondary weapon: Unavailable.</span>")
 	else
 		if(length(HP3.clips) <= 0)
 			to_chat(usr, "<span class='warning'>Secondary weapon: [HP3.name]. Ammo: 0/0. 0/0 spare magazines available.</span>")
 		else
-			to_chat(usr, "<span class='warning'>Secondary weapon: [HP3.name]. Ammo: [HP3.clips[1].current_rounds]/[HP3.clips[1].max_rounds]. [length(HP3.clips) - 1]/[HP3.max_clips - 1] spare magazines available.</span><br>")
+			var/obj/item/ammo_magazine/ammo = HP3.clips[1]
+			to_chat(usr, "<span class='warning'>Secondary weapon: [HP3.name]. Ammo: [ammo.current_rounds]/[ammo.max_rounds]. [length(HP3.clips) - 1]/[HP3.max_clips - 1] spare magazines available.</span><br>")
 
 /obj/vehicle/multitile/root/cm_transport/verb/reload_hp()
 	set name = "W Reload Weapon"
@@ -824,8 +826,9 @@ var/list/apc_dmg_distributions = list(
 	for(var/obj/item/clothing/mask/facehugger/FG in get_turf(src))
 		FG.Die()
 	for(var/obj/effect/xenomorph/spray/SR in get_turf(src))
-		if(istype(CA.hardpoints[HDPT_WHEELS], /obj/item/hardpoint/apc/wheels) && CA.hardpoints[HDPT_WHEELS].obj_integrity > 0)
-			CA.hardpoints[HDPT_WHEELS].obj_integrity -= 10
+		var/obj/item/hardpoint/HP = CA.hardpoints[HDPT_WHEELS]
+		if(istype(HP, /obj/item/hardpoint/apc/wheels) && HP.obj_integrity > 0)
+			HP.obj_integrity -= 10
 			healthcheck()
 
 	. = ..()

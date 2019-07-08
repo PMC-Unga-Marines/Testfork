@@ -181,8 +181,8 @@ All of the hardpoints, for the tank and APC
 				var/obj/item/ammo_magazine/A
 				for(var/j = 2; j <= length(ammo_type); j++)
 					A = ammo_type[j]
-					ammo_type[j].Move(owner.entrance.loc)
-					ammo_type[j].update_icon()
+					A.Move(owner.entrance.loc)
+					A.update_icon()
 					ammo_type.Remove(A)
 				user.visible_message("<span class='notice'>[user] removes [ammo_type[1]] ammunition from \the [src].</span>", "<span class='notice'>You remove [ammo_type[1]] ammunition from \the [src].</span>")
 
@@ -190,8 +190,8 @@ All of the hardpoints, for the tank and APC
 		to_chat(user, "<span class='notice'>Unloading [clips[mag_type][1]] magazine.</span>")
 		var /obj/item/ammo_magazine/tank/A = clips[mag_type][2]
 		sleep(10)
-		clips[mag_type][2].Move(owner.entrance.loc)
-		clips[mag_type][2].update_icon()
+		A.Move(owner.entrance.loc)
+		A.update_icon()
 		clips[mag_type].Remove(A)
 		cur_clips--
 		playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -230,8 +230,8 @@ All of the hardpoints, for the tank and APC
 				var/obj/item/ammo_magazine/A
 				for(var/j = 2; j <= length(ammo_type); j++)
 					A = ammo_type[j]
-					ammo_type[j].Move(owner.entrance.loc)
-					ammo_type[j].update_icon()
+					A.Move(owner.entrance.loc)
+					A.update_icon()
 					ammo_type.Remove(A)
 				user.visible_message("<span class='notice'>[user] removes [ammo_type[1]] ammunition from \the [src].</span>", "<span class='notice'>You remove [ammo_type[1]] ammunition from \the [src].</span>")
 
@@ -239,8 +239,8 @@ All of the hardpoints, for the tank and APC
 		to_chat(user, "<span class='notice'>Unloading [clips[mag_type][1]] magazine.</span>")
 		var /obj/item/ammo_magazine/tank/A = clips[mag_type][2]
 		sleep(10)
-		clips[mag_type][2].Move(owner.entrance.loc)
-		clips[mag_type][2].update_icon()
+		A.Move(owner.entrance.loc)
+		A.update_icon()
 		clips[mag_type].Remove(A)
 		cur_clips--
 		playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -347,8 +347,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading magazine.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -407,8 +407,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading magazine.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -494,8 +494,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading magazine.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -532,8 +532,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading magazine.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -564,8 +564,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading magazine.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -634,8 +634,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Fuel tank emptied, unloading fuel tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -693,8 +693,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -761,8 +761,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -820,8 +820,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -859,8 +859,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Fuel tank emptied, unloading fuel tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -891,8 +891,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -924,8 +924,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
@@ -956,8 +956,8 @@ All of the hardpoints, for the tank and APC
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
 			sleep(10)
-			clips[cur_ammo_type][2].Move(owner.entrance.loc)
-			clips[cur_ammo_type][2].update_icon()
+			A.Move(owner.entrance.loc)
+			A.update_icon()
 			clips[cur_ammo_type].Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
