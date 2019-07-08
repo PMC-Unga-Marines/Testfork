@@ -192,7 +192,9 @@ All of the hardpoints, for the tank and APC
 		sleep(10)
 		A.Move(owner.entrance.loc)
 		A.update_icon()
-		clips[mag_type].Remove(A)
+		var/list/list_mag_type = clips[mag_type]
+		list_mag_type.Remove(A)
+		clips[mag_type] = list_mag_type
 		cur_clips--
 		playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 
@@ -241,7 +243,9 @@ All of the hardpoints, for the tank and APC
 		sleep(10)
 		A.Move(owner.entrance.loc)
 		A.update_icon()
-		clips[mag_type].Remove(A)
+		var/list/list_mag_type = clips[mag_type]
+		list_mag_type.Remove(A)
+		clips[mag_type] = list_mag_type
 		cur_clips--
 		playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 
@@ -349,7 +353,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -409,7 +414,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -496,7 +502,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -534,7 +541,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -566,7 +574,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -636,7 +645,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -695,7 +705,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -763,7 +774,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -822,7 +834,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -861,7 +874,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -893,7 +907,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -926,7 +941,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
@@ -958,7 +974,8 @@ All of the hardpoints, for the tank and APC
 			sleep(10)
 			A.Move(owner.entrance.loc)
 			A.update_icon()
-			clips[cur_ammo_type].Remove(A)
+			var/list/list_cur_type = clips[cur_ammo_type]
+			list_cur_type.Remove(A)
 			cur_clips--
 			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
