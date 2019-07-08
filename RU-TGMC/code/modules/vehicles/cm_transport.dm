@@ -975,12 +975,12 @@ var/list/apc_dmg_distributions = list(
 	//Somehow we will deal no damage on this attack
 	if(!damage)
 		playsound(M.loc, 'sound/weapons/alien_claw_swipe.ogg', 25, 1)
-		M.animation_attack_on(src)
+		M.do_attack_animation(src)
 		M.visible_message("<span class='danger'>\The [M] lunges at [src]!</span>", \
 		"<span class='danger'>You lunge at [src]!</span>")
 		return 0
 
-	M.animation_attack_on(src)
+	M.do_attack_animation(src)
 	playsound(M.loc, pick('sound/weapons/alien_claw_metal1.ogg', 'sound/weapons/alien_claw_metal2.ogg', 'sound/weapons/alien_claw_metal3.ogg'), 25, 1)
 	M.visible_message("<span class='danger'>\The [M] slashes [src]!</span>", \
 	"<span class='danger'>You slash [src]!</span>")
