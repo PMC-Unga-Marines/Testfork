@@ -14,6 +14,10 @@ tools/Runtime Condenser/Input.txt
 tools/Runtime Condenser/Output.txt
 tools/MapDaemon/logs/*.txt
 .vscode/*
+code/__DEFINES/rust_g.config.dm
+config.zip
+libBSQL.so
+rust_g
 
 # ignore config, but not subdirs
 config/*
