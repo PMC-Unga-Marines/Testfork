@@ -26169,7 +26169,6 @@
 /obj/machinery/light{
 	dir = 8;
 	icon_state = "tube1";
-	pixel_y = 0
 	},
 /turf/open/floor/almayer{
 	icon_regular_floor = "mono";
@@ -26525,7 +26524,6 @@
 /obj/machinery/light{
 	dir = 8;
 	icon_state = "tube1";
-	pixel_y = 0
 	},
 /turf/open/floor/almayer{
 	icon_regular_floor = "mono";
