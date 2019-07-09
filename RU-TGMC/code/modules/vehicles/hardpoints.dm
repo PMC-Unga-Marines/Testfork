@@ -301,7 +301,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A primary 86mm cannon for tank."
 
 	max_integrity = 500
-	obj_integrity = 500
 	point_cost = 100
 	hp_weight = 2
 	icon_state = "ltb_cannon"
@@ -364,7 +363,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A primary light autocannon for tank. Designed for light scout tank. Shoots 30mm light HE rounds. Fire rate was reduced with adding IFF support."
 
 	max_integrity = 400
-	obj_integrity = 400
 	point_cost = 100
 	hp_weight = 1
 
@@ -425,7 +423,6 @@ All of the hardpoints, for the tank and APC
 	desc = "It's a minigun, what is not clear? Just go pew-pew-pew."
 
 	max_integrity = 350
-	obj_integrity = 350
 	point_cost = 100
 	hp_weight = 3
 
@@ -595,7 +592,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A secondary weapon for tank. Don't let it fool you, it's not your ordinary flamer, this thing literally shoots fireballs. No kidding."
 
 	max_integrity = 300
-	obj_integrity = 300
 	point_cost = 100
 	hp_weight = 2
 
@@ -656,7 +652,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A secondary weapon for tank that shoots powerful AP rockets. Deals heavy damage, but only on direct hits."
 
 	max_integrity = 500
-	obj_integrity = 500
 	point_cost = 100
 	hp_weight = 2
 
@@ -716,7 +711,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A secondary weapon for tank. Refitted M56 has higher accuracy and rate of fire. Compatible with IFF system."
 
 	max_integrity = 350
-	obj_integrity = 350
 	point_cost = 100
 	hp_weight = 2
 	var/burst_amount = 3
@@ -785,7 +779,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A secondary weapon for tank that shoots HEDP grenades further than you see. No, seriously, that's how it works."
 
 	max_integrity = 500
-	obj_integrity = 500
 	point_cost = 100
 	hp_weight = 2
 
@@ -995,7 +988,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Launches smoke forward to obscure vision."
 
 	max_integrity = 300
-	obj_integrity = 300
 	point_cost = 0
 	hp_weight = 1
 
@@ -1051,7 +1043,7 @@ All of the hardpoints, for the tank and APC
 		else if(new_dir in list(EAST, WEST))
 			icon_suffix = "EW"
 
-		var /obj/item/ammo_magazine/tank/tank_slauncher/A = clips[cur_ammo_type][2]
+		var/obj/item/ammo_magazine/tank/tank_slauncher/A = clips[cur_ammo_type][2]
 		if(obj_integrity <= 0) icon_state_suffix = "1"
 		else if(A.current_rounds <= 0) icon_state_suffix = "2"
 
@@ -1062,7 +1054,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Improves the accuracy and fire rate of all installed weapons. Actually more useful than you may think."
 
 	max_integrity = 250
-	obj_integrity = 250
 	point_cost = 100
 	hp_weight = 1
 
@@ -1094,7 +1085,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Pimp your ride. Increases the movement and turn speed of the vehicle it's attached to."
 
 	max_integrity = 250
-	obj_integrity = 250
 	point_cost = 100
 	hp_weight = 1
 
@@ -1114,7 +1104,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A bunch of enhanced optics and targeting computers. Greatly increases range of view of a gunner. Also adds structures visibility even in complete darkness."
 
 	max_integrity = 250
-	obj_integrity = 250
 	point_cost = 100
 	is_activatable = 1
 	var/is_active = 0
@@ -1205,7 +1194,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Standard tank armor. Middle ground in everything, from damage resistance to weight."
 
 	max_integrity = 800
-	obj_integrity = 800
 	point_cost = 100
 	hp_weight = 7
 
@@ -1233,7 +1221,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Special set of tank armor. Purpose: reduce vehicle parts degradation in hostile surroundings on planets with unstable and highly corrosive atmosphere."
 
 	max_integrity = 700
-	obj_integrity = 700
 	point_cost = 100
 	hp_weight = 5
 
@@ -1259,7 +1246,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Light armor, designed for recon type of tank loadouts. Offers less protection in exchange for better maneuverability. After initial tests resistance to blunt damage was increased due to drivers driving into walls."
 
 	max_integrity = 600
-	obj_integrity = 600
 
 	point_cost = 100
 	hp_weight = 3
@@ -1288,7 +1274,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Heavy armor for heavy tank. Converts your tank into what an essentially is a slowly moving bunker. High resistance to almost all types of damage."
 
 	max_integrity = 1000
-	obj_integrity = 1000
 	point_cost = 100
 	hp_weight = 10
 
@@ -1316,7 +1301,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Special set of tank armor, equipped with multipurpose front \"snowplow\". Designed to remove snow and demine minefields. As a result armor has high explosion damage resistance in front, while offering low protection from other types of damage."
 
 	max_integrity = 700
-	obj_integrity = 700
 	point_cost = 100
 	hp_weight = 4
 
@@ -1359,7 +1343,6 @@ All of the hardpoints, for the tank and APC
 	color = "#c2b678"
 
 	max_integrity = 900
-	obj_integrity = 900
 
 	apply_buff()
 		owner.dmg_multipliers["acid"] = 0.8
@@ -1381,7 +1364,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Standard tank treads. Suprisingly, greatly improves vehicle moving speed."
 
 	max_integrity = 500
-	obj_integrity = 500
 	point_cost = 25
 	hp_weight = 1
 
@@ -1399,7 +1381,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Heavily reinforced tank treads. Three times heavier but can endure more damage. Has special protective layer akin to M70 armor."
 
 	max_integrity = 750
-	obj_integrity = 750
 	point_cost = 25
 	hp_weight = 3
 
@@ -1461,7 +1442,6 @@ All of the hardpoints, for the tank and APC
 	color = "#c2b678"
 
 	max_integrity = 650
-	obj_integrity = 650
 
 /////////////////
 // TREAD SLOTS // END
@@ -1888,7 +1868,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A primary 45mm dual cannon for APC."
 
 	max_integrity = 500
-	obj_integrity = 500
 	point_cost = 100
 
 	icon_state = "dual_cannon"
@@ -1971,7 +1950,6 @@ All of the hardpoints, for the tank and APC
 	desc = "A secondary frontal cannon for APC."
 
 	max_integrity = 300
-	obj_integrity = 300
 	point_cost = 100
 
 	icon_state = "front_cannon"
@@ -2073,7 +2051,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Launches flares forward light up the area."
 
 	max_integrity = 300
-	obj_integrity = 300
 	point_cost = 100
 
 	icon_state = "flare_launcher"
@@ -2227,7 +2204,6 @@ All of the hardpoints, for the tank and APC
 	desc = "Standard armored APC wheels. Suprisingly, greatly improves vehicle moving speed."
 
 	max_integrity = 500
-	obj_integrity = 500
 	point_cost = 25
 
 	icon_state = "wheels"
@@ -2386,22 +2362,3 @@ All of the hardpoints, for the tank and APC
 ///////////////
 // APC HARDPOINTS // END
 ///////////////
-
-////////////////////
-// BROKEN MODULES //
-////////////////////
-
-/obj/item/hardpoint/tank/primary/cannon/broken
-	obj_integrity = 0
-
-/obj/item/hardpoint/tank/secondary/m56cupola/broken
-	obj_integrity = 0
-
-/obj/item/hardpoint/tank/support/smoke_launcher/broken
-	obj_integrity = 0
-
- /obj/item/hardpoint/tank/armor/ballistic/broken
-	obj_integrity = 0
-
- /obj/item/hardpoint/tank/treads/standard/broken
-	obj_integrity = 0

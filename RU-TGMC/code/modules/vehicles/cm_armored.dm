@@ -763,7 +763,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 						step_away(src,C.root,0)
 						//M.visible_message("<span class='danger'>[M] pushes against the [src], trying to hold it in place, but fails!</span>", "<span class='danger'>[src] is much heavier, you can't hold it in place!</span>")
 						return
-	if (!isxeno(src))
+	if(!isxeno(src))
 		if(buckled)
 			buckled.unbuckle()
 		step_away(src,C.root,0,0)
@@ -775,7 +775,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 /turf/closed/wall/tank_collision(obj/vehicle/multitile/hitbox/cm_armored/C, facing, turf/T, turf/temp)
 	var/obj/vehicle/multitile/root/cm_armored/tank/CA = C.root
 	var/damage = 30
-	var/tank_damage = 2
+	var/tank_damage = 10
 
 	if(facing == CA.old_dir && istype(CA.hardpoints[HDPT_ARMOR], /obj/item/hardpoint/tank/armor/snowplow) ) //Snowplow eliminates collision damage, and doubles damage dealt if we're facing the thing we're crushing
 		var/obj/item/hardpoint/tank/armor/snowplow/SP = CA.hardpoints[HDPT_ARMOR]
@@ -792,7 +792,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 /obj/machinery/tank_collision(obj/vehicle/multitile/hitbox/cm_armored/C, facing, turf/T, turf/temp)
 	var/obj/vehicle/multitile/root/cm_armored/tank/CA = C.root
 	var/damage = 30
-	var/tank_damage = 2
+	var/tank_damage = 5
 
 	if(facing == CA.old_dir && istype(CA.hardpoints[HDPT_ARMOR], /obj/item/hardpoint/tank/armor/snowplow) ) //Snowplow eliminates collision damage, and doubles damage dealt if we're facing the thing we're crushing
 		var/obj/item/hardpoint/tank/armor/snowplow/SP = CA.hardpoints[HDPT_ARMOR]
@@ -810,7 +810,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 /obj/structure/tank_collision(obj/vehicle/multitile/hitbox/cm_armored/C, facing, turf/T, turf/temp)
 	var/obj/vehicle/multitile/root/cm_armored/tank/CA = C.root
 	var/damage = 30
-	var/tank_damage = 2
+	var/tank_damage = 5
 
 	if(facing == CA.old_dir && istype(CA.hardpoints[HDPT_ARMOR], /obj/item/hardpoint/tank/armor/snowplow) ) //Snowplow eliminates collision damage, and doubles damage dealt if we're facing the thing we're crushing
 		var/obj/item/hardpoint/tank/armor/snowplow/SP = CA.hardpoints[HDPT_ARMOR]
@@ -922,33 +922,26 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 	if(istype(P, /datum/ammo/xeno/boiler_gas/corrosive))
 		dam_type = "acid"
 		take_damage_type(P.damage * 4, dam_type, P.firer)
-		healthcheck()
 		return
 	if(P.ammo.flags_ammo_behavior & AMMO_XENO_ACID)
 		dam_type = "acid"
 		take_damage_type(P.damage * (0.75 + P.ammo.penetration/100), dam_type, P.firer)
-		healthcheck()
 		return
 	if(istype(P, /datum/ammo/rocket/ap))
 		dam_type = "explosive"
 		take_damage_type(P.damage * (1.2 + P.ammo.penetration/100), dam_type, P.firer)
-		healthcheck()
 		return
 	/*if(istype(P, /datum/ammo/rocket/tow))
 		dam_type = "explosive"
 		take_damage_type(P.damage * (1.5 + P.ammo.penetration/100), dam_type, P.firer)
-		healthcheck()
 		return*/
 	if(istype(P, /datum/ammo/rocket/ltb))
 		dam_type = "explosive"
 		take_damage_type(P.damage * (3 + P.ammo.penetration/100), dam_type, P.firer)
-		healthcheck()
 		return
 
 	take_damage_type(P.damage * (0.75 + P.ammo.penetration/100), dam_type, P.firer)
 	playsound(src.loc, pick('sound/bullets/bullet_ricochet2.ogg', 'sound/bullets/bullet_ricochet3.ogg', 'sound/bullets/bullet_ricochet4.ogg', 'sound/bullets/bullet_ricochet5.ogg'), 25, 1)
-
-	healthcheck()
 
 //severity 1.0 explosions never really happen so we're gonna follow everyone else's example
 /obj/vehicle/multitile/root/cm_armored/ex_act(var/severity)
@@ -964,8 +957,6 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 
 		if(3.0)
 			take_damage_type(rand(20, 25), "explosive")
-
-	healthcheck()
 
 //Honestly copies some code from the Xeno files, just handling some special cases
 /obj/vehicle/multitile/root/cm_armored/attack_alien(mob/living/carbon/xenomorph/M, dam_bonus)
@@ -990,8 +981,6 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 	"<span class='danger'>You slash [src]!</span>")
 
 	take_damage_type(damage * ( (isxenoravager(M)) ? 2 : 1 ), "slash", M) //Ravs do a bitchin double damage
-
-	healthcheck()
 
 //used when entrance is blocked by something awful
 /obj/vehicle/multitile/root/cm_armored/tank/proc/get_new_exit_point()

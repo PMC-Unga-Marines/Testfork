@@ -32,6 +32,7 @@
 	height = 3
 	spawn_dir = EAST
 	var/list/spawn_hardpoints = list()
+	var/list/damaged_hps = list()
 
 /obj/effect/multitile_spawner/cm_armored/tank/Initialize()
 	. = ..()
@@ -57,7 +58,7 @@
 	for(var/slot in spawn_hardpoints)
 		hardpoint_path = spawn_hardpoints[slot]
 		R.add_hardpoint(new hardpoint_path)
-	R.healthcheck()
+	R.damaged_hps = damaged_hps
 
 	R.update_icon()
 
@@ -67,11 +68,12 @@
 
 	return INITIALIZE_HINT_QDEL
 /obj/effect/multitile_spawner/cm_armored/tank/decrepit
-	spawn_hardpoints = list(HDPT_PRIMARY = /obj/item/hardpoint/tank/primary/cannon/broken,
-							HDPT_SECDGUN = /obj/item/hardpoint/tank/secondary/m56cupola/broken,
-							HDPT_SUPPORT = /obj/item/hardpoint/tank/support/smoke_launcher/broken,
-							HDPT_ARMOR = /obj/item/hardpoint/tank/armor/ballistic/broken,
-							HDPT_TREADS = /obj/item/hardpoint/tank/treads/standard/broken)
+	damaged_hps = list(
+				HDPT_PRIMARY,
+				HDPT_SECDGUN ,
+				HDPT_SUPPORT,
+				HDPT_ARMOR,
+				HDPT_TREADS)
 
 /obj/effect/multitile_spawner/cm_armored/tank/fixed
 	spawn_hardpoints = list(HDPT_PRIMARY = /obj/item/hardpoint/tank/primary/cannon,
