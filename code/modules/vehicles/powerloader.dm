@@ -1,4 +1,4 @@
-/obj/vehicle/powerloader
+/*/obj/vehicle/powerloader
 	name = "\improper RPL-Y Cargo Loader"
 	icon = 'icons/obj/powerloader.dmi'
 	desc = "The RPL-Y Cargo Loader is a commercial mechanized exoskeleton used for lifting heavy materials and objects. An old but trusted design used in warehouses, constructions and military ships everywhere."
@@ -290,4 +290,8 @@
 		X.visible_message("<span class='danger'>[X] slashes [src].</span>", "<span class='danger'>We slash [src].</span>")
 		take_damage(rand(X.xeno_caste.melee_damage_lower, X.xeno_caste.melee_damage_upper))
 	else
+<<<<<<< refs/remotes/tgstation/master
 		attack_hand(X)
+=======
+		attack_hand(X)*/
+>>>>>>> Commit Powerloader
