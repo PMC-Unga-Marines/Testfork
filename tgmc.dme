@@ -1381,6 +1381,7 @@
 #include "RU-TGMC\code\modules\vehicles\elevator_garage.dm"
 #include "RU-TGMC\code\modules\vehicles\hardpoints.dm"
 #include "RU-TGMC\code\modules\vehicles\multitile.dm"
+#include "RU-TGMC\code\modules\vehicles\powerloader.dm"
 #include "RU-TGMC\code\modules\vehicles\tank.dm"
 #include "RU-TGMC\code\modules\vehicles\tankvendor.dm"
 #include "RU-TGMC\code\modules\vehicles\vehicle_interior.dm"
