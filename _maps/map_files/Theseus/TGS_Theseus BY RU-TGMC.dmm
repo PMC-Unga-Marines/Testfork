@@ -3464,7 +3464,6 @@
 /turf/open/floor/carpet,
 /area/almayer/command/corporateliaison)
 "aiO" = (
-/obj/item/storage/lockbox/loyalty,
 /obj/item/weapon/gun/pistol/vp70,
 /obj/item/ammo_magazine/pistol/vp70,
 /obj/structure/closet/cabinet,
@@ -21827,8 +21826,7 @@
 	dir = 8;
 	icon_state = "camera";
 	name = "ship-grade camera";
-	network = list("almayer");
-	
+	network = list("almayer")
 	},
 /turf/open/floor/almayer,
 /area/almayer/hallways/exoarmor)
@@ -21886,8 +21884,7 @@
 	dir = 1;
 	icon_state = "camera";
 	name = "ship-grade camera";
-	network = list("almayer");
-	
+	network = list("almayer")
 	},
 /turf/open/floor/almayer{
 	icon_regular_floor = "mono";
@@ -22403,8 +22400,7 @@
 	dir = 1;
 	icon_state = "camera";
 	name = "ship-grade camera";
-	network = list("almayer");
-	
+	network = list("almayer")
 	},
 /turf/open/floor/almayer,
 /area/almayer/hallways/exoarmor)
@@ -24145,8 +24141,7 @@
 	throw_range = 15
 	},
 /obj/effect/decal/warning_stripes{
-	icon_state = "NE-out";
-	
+	icon_state = "NE-out"
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "W"
@@ -24765,8 +24760,7 @@
 	dir = 8;
 	icon_state = "camera";
 	name = "ship-grade camera";
-	network = list("almayer");
-	
+	network = list("almayer")
 	},
 /turf/open/floor/almayer{
 	icon_state = "test_floor4"
@@ -25135,8 +25129,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 8;
-	icon_state = "1-8";
-	
+	icon_state = "1-8"
 	},
 /turf/open/floor/almayer{
 	icon_regular_floor = "mono";
@@ -28803,8 +28796,7 @@
 	dir = 8;
 	icon_state = "camera";
 	name = "military-grade camera";
-	network = list("apc_1");
-	
+	network = list("apc_1")
 	},
 /turf/open/shuttle/dropship,
 /area/vehicle_interior/apc_1)
@@ -28861,8 +28853,7 @@
 	dir = 8;
 	icon_state = "camera";
 	name = "military-grade camera";
-	network = list("apc_2");
-	
+	network = list("apc_2")
 	},
 /turf/open/shuttle/dropship,
 /area/vehicle_interior/apc_2)
@@ -28894,8 +28885,7 @@
 	dir = 8;
 	icon_state = "camera";
 	name = "military-grade camera";
-	network = list("apc_3");
-	
+	network = list("apc_3")
 	},
 /turf/open/shuttle/dropship,
 /area/vehicle_interior/apc_3)
