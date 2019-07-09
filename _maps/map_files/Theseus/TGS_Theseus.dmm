@@ -22595,7 +22595,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /turf/open/floor/almayer,
 /area/almayer/hallways/exoarmor)
@@ -22625,7 +22625,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /turf/open/floor/almayer,
 /area/almayer/hallways/exoarmor)
@@ -22667,13 +22667,13 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /turf/open/floor/almayer,
 /area/almayer/hallways/exoarmor)
@@ -22818,7 +22818,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 1;
@@ -22831,7 +22831,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -22928,7 +22928,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /obj/machinery/atmospherics/components/unary/vent_pump/layer1{
 	dir = 8;
@@ -22946,7 +22946,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /turf/open/floor/almayer,
 /area/almayer/hallways/exoarmor)
@@ -24576,7 +24576,6 @@
 /obj/machinery/door_control{
 	id = "garage_walker";
 	name = "Walker Bay";
-	pixel_x = 0;
 	pixel_y = -25;
 	req_one_access_txt = "3;7;28";
 	throw_range = 15
@@ -25160,7 +25159,6 @@
 /obj/machinery/door_control{
 	id = "garage1";
 	name = "Vehicle Garage";
-	pixel_x = 0;
 	pixel_y = -25;
 	req_access_txt = "0";
 	req_one_access_txt = "3;7;27"
@@ -25579,7 +25577,6 @@
 /obj/machinery/door_control{
 	id = "garage1";
 	name = "Vehicle Garage";
-	pixel_x = 0;
 	pixel_y = 30;
 	req_one_access_txt = "0";
 	throw_range = 15
@@ -26674,7 +26671,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "W"
@@ -26711,7 +26708,7 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8";
-	pixel_x = 0
+	
 	},
 /turf/open/floor/almayer{
 	icon_state = "cargo"
