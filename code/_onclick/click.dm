@@ -148,6 +148,11 @@
 		N.click_action(A, src, params)
 		return
 
+	if(istype(loc, /obj/vehicle/walker))
+		var/obj/vehicle/walker/N = loc
+		N.handle_click(A, src, params)
+		return
+
 	if(restrained())
 		changeNext_move(CLICK_CD_HANDCUFFED)
 		RestrainedClickOn(A)
