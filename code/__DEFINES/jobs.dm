@@ -35,6 +35,7 @@
 #define CHIEF_MEDICAL_OFFICER "Chief Medical Officer"
 #define COMMAND_MASTER_AT_ARMS "Command Master at Arms"
 #define TANK_CREWMAN "Tank Crewman"
+#define WALKER_PILOT "Walker Pilot"
 #define CORPORATE_LIAISON "Corporate Liaison"
 #define SYNTHETIC "Synthetic"
 #define MASTER_AT_ARMS "Master at Arms"
