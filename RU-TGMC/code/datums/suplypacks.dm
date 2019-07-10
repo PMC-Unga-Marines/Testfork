@@ -1,4 +1,4 @@
-GLOBAL_LIST_INIT(all_supply_groups, list("Operations", "Weapons", "Tank Hardpoint Modules", "APC Hardpoint Modules", "Attachments", "Ammo", "Armor", "Clothing", "Medical", "Engineering", "Science", "Supplies"))
+GLOBAL_LIST_INIT(all_supply_groups, list("Operations", "Weapons", "Tank Hardpoint Modules", "APC Hardpoint Modules", "Walker Hardpoint Modules", "Attachments", "Ammo", "Armor", "Clothing", "Medical", "Engineering", "Science", "Supplies"))
 
 /*******************************************************************************
 HARDPOINT MODULES (and their ammo)
@@ -353,3 +353,67 @@ APC Hardpoint Modules (and their ammo)
 	containertype = /obj/structure/closet/crate/ammo
 	containername = "apc ammo crate"
 	group = "APC Hardpoint Modules"
+
+
+/*******************************************************************************
+Walker Hardpoint Modules (and their ammo)
+*******************************************************************************/
+
+/datum/supply_packs/walker_smartgun
+	name = "M56 Double-Barrel Mounted Smartgun Assembly (x1)"
+	contains = list(/obj/item/walker_gun/smartgun)
+	cost = RO_PRICE_PRETTY_PRICY
+	containertype = /obj/structure/closet/crate/weapon
+	containername = "hardpoint module assembly crate"
+	group = "Walker Hardpoint Modules"
+
+/datum/supply_packs/walker_hmg
+	name = "M30 Machine Gun Assembly (x1)"
+	contains = list(/obj/item/walker_gun/hmg)
+	cost = RO_PRICE_PRETTY_PRICY
+	containertype = /obj/structure/closet/crate/weapon
+	containername = "hardpoint module assembly crate"
+	group = "Walker Hardpoint Modules"
+
+/datum/supply_packs/walker_flamer
+	name = "F40 \"Hellfire\" Flamethower Assembly (x1)"
+	contains = list(/obj/item/walker_gun/flamer)
+	cost = RO_PRICE_PRETTY_PRICY
+	containertype = /obj/structure/closet/crate/weapon
+	containername = "hardpoint module assembly crate"
+	group = "Walker Hardpoint Modules"
+
+/datum/supply_packs/walker_smart_ammo
+	name = "M56 Double-Barrel Magazines (x3)"
+	contains = list(
+					/obj/item/ammo_magazine/walker/smartgun,
+					/obj/item/ammo_magazine/walker/smartgun,
+					/obj/item/ammo_magazine/walker/smartgun
+					)
+	cost = RO_PRICE_CHEAP
+	containertype = /obj/structure/closet/crate/ammo
+	containername = "CW13 ammo crate"
+	group = "Walker Hardpoint Modules"
+
+/datum/supply_packs/walker_hmg_ammo
+	name = "M30 Machine Gun Magazines (x3)"
+	contains = list(
+					/obj/item/ammo_magazine/walker/hmg,
+					/obj/item/ammo_magazine/walker/hmg,
+					/obj/item/ammo_magazine/walker/hmg
+					)
+	cost = RO_PRICE_CHEAP
+	containertype = /obj/structure/closet/crate/ammo
+	containername = "CW13 ammo crate"
+	group = "Walker Hardpoint Modules"
+
+/datum/supply_packs/walker_flamer_ammo
+	name = "F40 Canisters (x2)"
+	contains = list(
+					/obj/item/ammo_magazine/walker/flamer,
+					/obj/item/ammo_magazine/walker/flamer
+					)
+	cost = RO_PRICE_CHEAP
+	containertype = /obj/structure/closet/crate/ammo
+	containername = "CW13 ammo crate"
+	group = "Walker Hardpoint Modules"
