@@ -337,6 +337,7 @@
 		if(!left)
 			to_chat(usr, "<span class='warning'>WARNING! Hardpoint is empty.</span>")
 			return
+		left.active_effect(A)
 	else
 		if(!right)
 			to_chat(usr, "<span class='warning'>WARNING! Hardpoint is empty.</span>")
