@@ -20764,9 +20764,7 @@
 /turf/open/floor/wood,
 /area/almayer/hallways/exoarmor)
 "aTu" = (
-/obj/effect/landmark/start{
-	name = "Walker Operator"
-	},
+/obj/effect/landmark/start/marine/walkerpilot,
 /turf/open/floor/wood,
 /area/almayer/hallways/exoarmor)
 "aTv" = (
@@ -24651,6 +24649,7 @@
 	dir = 8;
 	icon_state = "tube1";
 	},
+/obj/machinery/vehicle_vendor/mech_vendor_ui,
 /turf/open/floor/almayer{
 	icon_regular_floor = "mono";
 	icon_state = "mono"
@@ -25089,6 +25088,7 @@
 	},
 /area/almayer/hallways/exoarmor)
 "bdM" = (
+/obj/vehicle/walker,
 /turf/open/floor/almayer{
 	icon_state = "test_floor5"
 	},
