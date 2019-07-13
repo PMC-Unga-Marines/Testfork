@@ -1,4 +1,5 @@
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 ## Check code/controllers/configuration/entries for detailed explanations, all possible config options and some defaults.
 ## Anything after a "#" is commented out, uncomment things to enable them, comment to disable them.
 
@@ -181,3 +182,195 @@ LOOC_ENABLED
 BONES_CAN_BREAK
 >>>>>>> For merge with TG
 LIMBS_CAN_BREAK
+=======
+<<<<<<< refs/remotes/tgstation/master
+## Check code/controllers/configuration/entries for detailed explanations, all possible config options and some defaults.
+## Anything after a "#" is commented out, uncomment things to enable them, comment to disable them.
+
+$include dbconfig.txt
+
+## Server name: This appears at the top of the screen in-game.
+SERVER_NAME Something
+
+## Ship name. Used in various in-game places.
+SHIP_NAME Something Else
+
+## Hosted by name for unix platforms.
+HOSTEDBY yournamehere
+
+## The title of the main window.
+TITLE Change Me
+
+## Optional URL for faster resource downloading.
+#RESOURCE_URL url
+
+## Add a # infront of this if you want to use the SQL based admin system, the legacy system uses admins.txt and files in the data folder. You need to set up your database to use the SQL based system.
+ADMIN_LEGACY_SYSTEM
+
+## Add a # infront of this to disable the shutdown server verb.
+ALLOW_SHUTDOWN
+
+## If you use /tg/station-server 3 and you want to allow the shutdown server verb, 
+##	the server needs to be able to tell tgs3 that the shutdown is not a crash.
+## This should be the path to the TGCommandLine.exe program in your tgstation-server install.
+## Defaults to C:\Program Files (x86)\TG Station Server\TGCommandLine.exe if not set.
+## 32 bit OS users use: C:\Program Files\TG Station Server\TGCommandLine.exe
+#TGS3_COMMANDLINE_PATH
+
+LOCALHOST_RANK
+
+SEE_OWN_NOTES
+
+AUTOMUTE_ON
+
+PROTECT_LEGACY_ADMINS
+
+PROTECT_LEGACY_RANKS
+
+## Add your own URLs here.
+#FORUMURL
+#WIKIURL
+#RULESURL
+#DISCORDURL
+#DONATIONURL
+#GITHUBURL
+#BANAPPEALS
+
+## Feel free to just uncomment these.
+#SHIPURL https://goo.gl/utUdpq
+#LV624URL https://goo.gl/6tuwfg
+#BIGREDURL https://goo.gl/TN7mmT
+#ICECOLONYURL https://goo.gl/KYKNgJ
+#PRISONSTATIONURL https://goo.gl/GXoxnA
+#WHISKEYOUTPOSTURL https://goo.gl/ZwTS5X
+
+## Logging. Recommended you keep all of these on.
+LOG_OOC
+LOG_LOOC
+LOG_SAY
+LOG_TELECOMMS
+LOG_HIVEMIND
+LOG_ADMIN
+LOG_ADMINCHAT
+LOG_ACCESS
+LOG_GAME
+LOG_VOTE
+LOG_WHISPER
+LOG_EMOTE
+LOG_ATTACK
+LOG_HREFS
+LOG_RUNTIME
+LOG_MANIFEST
+
+
+## Only enable this if you have youtube-dl installed!
+# INVOKE_YOUTUBEDL youtube-dl
+
+## Gameplay options
+
+ALLOW_AI
+ALLOW_AI_MULTICAM
+
+LOOC_ENABLED
+
+BONES_CAN_BREAK
+=======
+## Check code/controllers/configuration/entries for detailed explanations, all possible config options and some defaults.
+## Anything after a "#" is commented out, uncomment things to enable them, comment to disable them.
+
+$include dbconfig.txt
+
+## Server name: This appears at the top of the screen in-game.
+SERVER_NAME Something
+
+## Ship name. Used in various in-game places.
+SHIP_NAME Something Else
+
+## Hosted by name for unix platforms.
+HOSTEDBY yournamehere
+
+## The title of the main window.
+TITLE Change Me
+
+## Optional URL for faster resource downloading.
+#RESOURCE_URL url
+
+## Add a # infront of this if you want to use the SQL based admin system, the legacy system uses admins.txt and files in the data folder. You need to set up your database to use the SQL based system.
+ADMIN_LEGACY_SYSTEM
+
+## Add a # infront of this to disable the shutdown server verb.
+ALLOW_SHUTDOWN
+
+## If you use /tg/station-server 3 and you want to allow the shutdown server verb, 
+##	the server needs to be able to tell tgs3 that the shutdown is not a crash.
+## This should be the path to the TGCommandLine.exe program in your tgstation-server install.
+## Defaults to C:\Program Files (x86)\TG Station Server\TGCommandLine.exe if not set.
+## 32 bit OS users use: C:\Program Files\TG Station Server\TGCommandLine.exe
+#TGS3_COMMANDLINE_PATH
+
+LOCALHOST_RANK
+
+SEE_OWN_NOTES
+
+AUTOMUTE_ON
+
+PROTECT_LEGACY_ADMINS
+
+PROTECT_LEGACY_RANKS
+
+## Add your own URLs here.
+#FORUMURL
+#WIKIURL
+#RULESURL
+#DISCORDURL
+#DONATIONURL
+#GITHUBURL
+#BANAPPEALS
+
+## Feel free to just uncomment these.
+#SHIPURL https://goo.gl/utUdpq
+#LV624URL https://goo.gl/6tuwfg
+#BIGREDURL https://goo.gl/TN7mmT
+#ICECOLONYURL https://goo.gl/KYKNgJ
+#PRISONSTATIONURL https://goo.gl/GXoxnA
+#WHISKEYOUTPOSTURL https://goo.gl/ZwTS5X
+
+## Logging. Recommended you keep all of these on.
+LOG_OOC
+LOG_LOOC
+LOG_SAY
+LOG_TELECOMMS
+LOG_HIVEMIND
+LOG_ADMIN
+LOG_ADMINCHAT
+LOG_ACCESS
+LOG_GAME
+LOG_VOTE
+LOG_WHISPER
+LOG_EMOTE
+LOG_ATTACK
+LOG_HREFS
+LOG_RUNTIME
+LOG_MANIFEST
+
+
+## Only enable this if you have youtube-dl installed!
+# INVOKE_YOUTUBEDL youtube-dl
+
+## Gameplay options
+
+GUEST_JOBBAN
+
+ALLOW_AI
+ALLOW_AI_MULTICAM
+
+LOOC_ENABLED
+
+BONES_CAN_BREAK
+<<<<<<< refs/remotes/tgstation/master
+>>>>>>> For merge with TG
+LIMBS_CAN_BREAK
+=======
+LIMBS_CAN_BREAK
+>>>>>>> For merge
+>>>>>>> For merge
