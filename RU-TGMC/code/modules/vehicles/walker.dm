@@ -22,8 +22,8 @@
 
 	pixel_x = -18
 
-	obj_integrity = 1200
-	max_integrity = 1200
+	obj_integrity = 700
+	max_integrity = 700
 
 	var/mob/pilot = null
 
