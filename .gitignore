@@ -18,8 +18,12 @@ code/__DEFINES/rust_g.config.dm
 config.zip
 libBSQL.so
 rust_g
+admin_ranks.txt
+config.txt
+
 
 # ignore config, but not subdirs
+config
 config/*
 !config/*/
 
