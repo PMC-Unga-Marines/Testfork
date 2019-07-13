@@ -6,4 +6,13 @@ Edit = EVERYTHING
 Name = Mentor
 Include = MENTOR COLOR
 Exclude =
+<<<<<<< refs/remotes/tgstation/master
 Edit =
+=======
+Edit =
+
+Name = BossOfThisGym
+Include = EVERYTHING
+Exclude =
+Edit = EVERYTHING
+>>>>>>> For merge with TG
