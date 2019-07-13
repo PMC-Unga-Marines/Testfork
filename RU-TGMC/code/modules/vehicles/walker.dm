@@ -13,7 +13,7 @@
 	layer = ABOVE_LYING_MOB_LAYER
 	opacity = TRUE
 	can_buckle = FALSE
-	move_delay = 4
+	move_delay = 6
 
 	var/lights = FALSE
 	var/lights_power = 8
