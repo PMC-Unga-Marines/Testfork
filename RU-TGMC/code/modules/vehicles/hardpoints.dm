@@ -2384,6 +2384,7 @@ All of the hardpoints, for the tank and APC
 
 	var/muzzle_flash 	= "muzzle_flash"
 	var/muzzle_flash_lum = 3 //muzzle flash brightness
+	var/muzzle_flash_lum_power = 2 //muzzle flash brightness
 
 /obj/item/walker_gun/proc/get_icon_image(var/hardpoint)
 	if(!owner)
@@ -2447,10 +2448,10 @@ All of the hardpoints, for the tank and APC
 	if(!istype(owner) || !istype(owner.loc,/turf))
 		return
 
-	if(owner.luminosity <= muzzle_flash_lum)
-		owner.set_light(luminosity - muzzle_flash_lum, luminosity - muzzle_flash_lum)
+	if(owner.light_power <= muzzle_flash_lum_power)
+		owner.set_light(light_range + muzzle_flash_lum, light_power + muzzle_flash_lum_power)
 		spawn(10)
-			owner.set_light(luminosity - muzzle_flash_lum, luminosity - muzzle_flash_lum)
+			owner.set_light(light_range - muzzle_flash_lum, light_power - muzzle_flash_lum_power)
 
 	if(prob(65)) //Not all the time.
 		var/image_layer = (owner && owner.dir == SOUTH) ? MOB_LAYER+0.1 : MOB_LAYER-0.1
