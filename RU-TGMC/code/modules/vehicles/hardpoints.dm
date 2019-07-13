@@ -2377,7 +2377,7 @@ All of the hardpoints, for the tank and APC
 	var/obj/item/ammo_magazine/walker/ammo = null
 	var/fire_sound = "gun_smartgun"
 	var/fire_delay = 0
-	var/can_fire = TRUE
+	var/last_fire = 0
 	var/burst = 1
 
 	w_class = 12.0
@@ -2392,9 +2392,6 @@ All of the hardpoints, for the tank and APC
 
 	return image(owner.icon, equip_state + hardpoint)
 
-/obj/item/walker_gun/proc/handle_delay()
-	can_fire = TRUE
-
 /obj/item/walker_gun/proc/active_effect(var/atom/target)
 	if(ammo.current_rounds <= 0 || !ammo)
 		to_chat(owner.pilot, "<span class='warning'>WARNING! System report: ammunition is depleted!</span>")
@@ -2403,12 +2400,10 @@ All of the hardpoints, for the tank and APC
 			ammo = null
 			visible_message("[owner.name]'s systems deployed used magazine.","")
 		return
-	if(!can_fire)
+	if(world.time < last_fire + fire_delay)
 		to_chat(owner.pilot, "<span class='warning'>WARNING! System report: weapon is not ready to fire again!</span>")
 		return
-	if(fire_delay)
-		can_fire = FALSE
-		addtimer(CALLBACK(src, .proc/handle_delay), fire_delay)
+	last_fire = world.time
 	var/obj/item/projectile/P
 	for(var/i = 1 to burst)
 		if(!owner.firing_arc(target))
@@ -2434,7 +2429,7 @@ All of the hardpoints, for the tank and APC
 	visible_message("<span class='danger'>[owner.name] fires from [name]!</span>", "<span class='warning'>You hear [istype(P.ammo, /datum/ammo/bullet) ? "gunshot" : "blast"]!</span>")
 
 	var/angle = round(Get_Angle(owner,target))
-	muzzle_flash(angle,owner)
+	muzzle_flash(angle)
 
 	if(ammo.current_rounds <= 0)
 		ammo.loc = owner.loc
@@ -2522,12 +2517,10 @@ All of the hardpoints, for the tank and APC
 			ammo = null
 			visible_message("[owner.name]'s systems deployed used magazine.","")
 		return
-	if(!can_fire)
+	if(world.time < last_fire + fire_delay)
 		to_chat(owner.pilot, "<span class='warning'>WARNING! System report: weapon is not ready to fire again!</span>")
 		return
-	if(fire_delay)
-		can_fire = FALSE
-		addtimer(CALLBACK(src, .proc/handle_delay), fire_delay)
+	last_fire = world.time
 	var/list/turf/turfs = getline(owner, target)
 	playsound(owner, fire_sound, 50, 1)
 	ammo.current_rounds--
