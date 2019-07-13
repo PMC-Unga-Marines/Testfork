@@ -24,6 +24,7 @@
 
 	obj_integrity = 700
 	max_integrity = 700
+	var/repair = FALSE
 
 	var/mob/pilot = null
 
@@ -513,6 +514,10 @@
 	if(obj_integrity >= max_integrity)
 		to_chat(user, "Armor seems fully intact.")
 		return
+	if(repair)
+		to_chat(user, "Someone already reparing this vehicle.")
+		return
+	repair = TRUE
 	var/repair_time = 1000
 	if(user.mind && user.mind.cm_skills && user.mind.cm_skills.engineer > SKILL_ENGINEER_DEFAULT)		//NO DIVIDING BY ZERO
 		/*
@@ -540,7 +545,7 @@
 		return
 	else
 		to_chat(user, "Repair has been interrupted.")
-
+	repair = FALSE
 
 
 /////////
