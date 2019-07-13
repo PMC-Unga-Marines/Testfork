@@ -2658,7 +2658,7 @@ All of the hardpoints, for the tank and APC
 	gun_type = /obj/item/walker_gun/smartgun
 
 /obj/item/ammo_magazine/walker/smartgun/incendiary
-	name = "M56 Double-Barrel Magazine (Incendiary)"
+	name = "M56 Double-Barrel \"Scorcher\" Magazine"
 	desc = "A armament MG magazine"
 	caliber = "10x28mm" //Correlates to smartguns
 	icon_state = "ammoboxslug"

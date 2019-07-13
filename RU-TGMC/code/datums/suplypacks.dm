@@ -408,13 +408,11 @@ Walker Hardpoint Modules (and their ammo)
 	group = "Walker Hardpoint Modules"
 
 /datum/supply_packs/walker_smart_ammo_inc
-	name = "M56 Double-Barrel Magazines (Incendiary) (x3)"
+	name = "M56 Double-Barrel \"Scorcher\" Magazines (x3)"
 	contains = list(
-					/obj/item/ammo_magazine/walker/smartgun/incendiary,
-					/obj/item/ammo_magazine/walker/smartgun/incendiary,
 					/obj/item/ammo_magazine/walker/smartgun/incendiary
 					)
-	cost = RO_PRICE_PRICY
+	cost = RO_PRICE_PRETTY_PRICY
 	containertype = /obj/structure/closet/crate/ammo
 	containername = "CW13 ammo crate"
 	group = "Walker Hardpoint Modules"

@@ -51,8 +51,8 @@
 
 /datum/ammo/bullet/smartgun/walker/incendiary/New()
 	..()
-	damage = CONFIG_GET(number/combat_define/llow_hit_damage)
-	penetration = CONFIG_GET(number/combat_define/mlow_armor_penetration)
+	damage = CONFIG_GET(number/combat_define/min_hit_damage)
+	penetration = CONFIG_GET(number/combat_define/min_armor_penetration)
 
 /datum/ammo/bullet/machinegun/walker
 
