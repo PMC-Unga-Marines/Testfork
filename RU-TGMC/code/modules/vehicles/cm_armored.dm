@@ -718,10 +718,10 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 					pixel_x_tower = -50
 					pixel_y_tower = -20
 				if(SOUTH)
-					pixel_x_tower = -29
+					pixel_x_tower = -24
 					pixel_y_tower = -50
 				if(NORTH)
-					pixel_x_tower = -29
+					pixel_x_tower = -24
 					pixel_y_tower = 20
 		else
 			switch(tower_dir)
@@ -732,10 +732,10 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 					pixel_x_tower = -50
 					pixel_y_tower = 30
 				if(SOUTH)
-					pixel_x_tower = -29
+					pixel_x_tower = -24
 					pixel_y_tower = -5
 				if(NORTH)
-					pixel_x_tower = -29
+					pixel_x_tower = -24
 					pixel_y_tower = 70
 
 	else if(dir in list(EAST, WEST))
