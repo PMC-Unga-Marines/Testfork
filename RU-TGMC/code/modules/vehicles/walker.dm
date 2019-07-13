@@ -13,7 +13,7 @@
 	layer = ABOVE_LYING_MOB_LAYER
 	opacity = TRUE
 	can_buckle = FALSE
-	move_delay = 6
+	move_delay = 4
 
 	var/lights = FALSE
 	var/lights_power = 8
@@ -22,8 +22,8 @@
 
 	pixel_x = -18
 
-	obj_integrity = 500
-	max_integrity = 500
+	obj_integrity = 1200
+	max_integrity = 1200
 
 	var/mob/pilot = null
 
