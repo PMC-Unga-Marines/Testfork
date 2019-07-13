@@ -39,7 +39,9 @@
 
 	var/obj/vehicle/multitile/root/cm_armored/tank/R = new(src.loc)
 	R.setDir(WEST)
-
+	R.tower_dir = R.dir
+	R.last_dir = R.dir
+	
 	var/datum/coords/dimensions = new
 	dimensions.x_pos = width
 	dimensions.y_pos = height
@@ -151,6 +153,30 @@
 	gunner = null
 	driver = null
 	swap_seat = null
+
+/obj/vehicle/multitile/root/cm_armored/tank/verb/rotate_left_tower()
+	set name = "G Rotate Tower left"
+	set category = "Vehicle"	//changed verb category to new one, because Object category is bad.
+	set src = usr.loc
+
+	if(usr != gunner) return
+	rotate_tower(0)
+
+/obj/vehicle/multitile/root/cm_armored/tank/verb/rotate_right_tower()
+	set name = "G Rotate Tower right"
+	set category = "Vehicle"	//changed verb category to new one, because Object category is bad.
+	set src = usr.loc
+
+	if(usr != gunner) return
+	rotate_tower(1)
+
+/obj/vehicle/multitile/root/cm_armored/tank/verb/unfix_tower()
+	set name = "G Unfix/Fix Tower"
+	set category = "Vehicle"	//changed verb category to new one, because Object category is bad.
+	set src = usr.loc
+
+	if(usr != gunner) return
+	tower_fixed = !tower_fixed
 
 //megaphone proc. Simply adding megaphone to tank and activate it doesn't work, so writing new Megaphone code for tank
 /obj/vehicle/multitile/root/cm_armored/tank/proc/use_megaphone(mob/living/user)

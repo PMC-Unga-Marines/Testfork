@@ -17,6 +17,8 @@ All of the hardpoints, for the tank and APC
 	var/disp_icon //This also differentiates tank vs apc vs other
 	var/disp_icon_state
 
+	var/disp_icon_tower
+
 	var/next_use = 0
 	var/ammo_switch_timer = 60
 	var/is_activatable = 0
@@ -24,9 +26,9 @@ All of the hardpoints, for the tank and APC
 	var/point_cost = 0
 
 	var/list/clips = list()
-	var/max_clips = 1
-	var/cur_clips = 0
 	var/cur_ammo_type = 1
+	var/cur_clips = 0
+	var/max_clips = 1
 
 //changed how ammo works. No more AMMO obj, we take what we need straight from first obj in CLIPS list (ex-backup_clips) and work with it.
 //Every ammo mag now has CURRENT_AMMO value, also it is possible now to unload ALL mags from the gun, not only backup clips.
@@ -54,8 +56,9 @@ All of the hardpoints, for the tank and APC
 	var/slot //What slot do we attach to?
 	var/obj/vehicle/multitile/root/cm_armored/owner //Who do we work for?
 
-	icon = 'icons/obj/hardpoint_modules.dmi'
+	icon = 'RU-TGMC/icons/obj/vehicles/hardpoint_modules.dmi'
 	icon_state = "tires" //Placeholder
+	disp_icon_tower = "tower"
 
 	var/hp_weight = 1	//this is new variable for weight of every single module as a part of new tank weight system
 
@@ -99,20 +102,23 @@ All of the hardpoints, for the tank and APC
 		return FALSE
 	return TRUE
 
-/obj/item/hardpoint/tank/proc/try_add_clip(var/obj/item/ammo_magazine/tank/A, var/mob/user)
+/obj/item/hardpoint/tank/proc/try_add_clip(obj/item/ammo_magazine/tank/A, mob/user)
 
 	if(A.loc != user)
 		return 0
-	if(!max_clips)
-		to_chat(user, "<span class='warning'>This module does not have room for additional ammo.</span>")
-		return FALSE
-	else if(length(clips) >= max_clips)
-		to_chat(user, "<span class='warning'>The reloader is full.</span>")
-		return FALSE
-	else if(!istype(A, cur_ammo_type))
-		to_chat(user, "<span class='warning'>That is the wrong ammo type.</span>")
-		return FALSE
 
+	if(max_clips == 0)
+		to_chat(user, "<span class='warning'>This module does not have room for additional ammo.</span>")
+		return 0
+
+	if(cur_clips >= max_clips)
+		to_chat(user, "<span class='warning'>The reloader is full.</span>")
+		return 0
+	
+	if(!istype(src, A.gun_type))
+		to_chat(user, "<span class='warning'>That is the wrong ammo type.</span>")
+		return 0
+	
 	to_chat(user, "<span class='notice'>Loading \the [A] in \the [owner].</span>")
 
 	if(!do_after(user, 10, TRUE))
@@ -136,7 +142,7 @@ All of the hardpoints, for the tank and APC
 	return 1
 
 //Returns the image object to overlay onto the root object
-/obj/item/hardpoint/tank/proc/get_icon_image(var/x_offset, var/y_offset, var/new_dir)
+/obj/item/hardpoint/tank/proc/get_icon_image(x_offset, y_offset, new_dir)
 
 	var/icon_suffix = "NS"
 	var/icon_state_suffix = "0"
@@ -151,12 +157,12 @@ All of the hardpoints, for the tank and APC
 
 	return image(icon = "[disp_icon]_[icon_suffix]", icon_state = "[disp_icon_state]_[icon_state_suffix]", pixel_x = x_offset, pixel_y = y_offset)
 
-/obj/item/hardpoint/tank/proc/firing_arc(var/atom/A)
+/obj/item/hardpoint/tank/proc/firing_arc(atom/A)
 	var/turf/T = get_turf(A)
 	var/dx = T.x - owner.x
 	var/dy = T.y - owner.y
 	var/deg = 0
-	switch(owner.dir)
+	switch(owner.tower_dir)
 		if(EAST) deg = 0
 		if(NORTH) deg = -90
 		if(WEST) deg = -180
@@ -188,7 +194,7 @@ All of the hardpoints, for the tank and APC
 
 	unload_mag(var/mag_type, var/mob/user)
 		to_chat(user, "<span class='notice'>Unloading [clips[mag_type][1]] magazine.</span>")
-		var /obj/item/ammo_magazine/tank/A = clips[mag_type][2]
+		var/obj/item/ammo_magazine/tank/A = clips[mag_type][2]
 		sleep(10)
 		A.Move(owner.entrance.loc)
 		A.update_icon()
@@ -322,7 +328,11 @@ All of the hardpoints, for the tank and APC
 	apply_buff()
 		owner.cooldowns["primary"] = 200
 		owner.accuracies["primary"] = 0.97
-
+		owner.tower_delay += 10
+	
+	remove_buff()
+		owner.tower_delay -= 10
+	
 	is_ready()
 		if(world.time < next_use)
 			var/CD = round(next_use - world.time) / 10
@@ -334,7 +344,7 @@ All of the hardpoints, for the tank and APC
 		return 1
 
 	active_effect(var/turf/T)
-		var /obj/item/ammo_magazine/tank/ltb_cannon/A = clips[cur_ammo_type][2]
+		var/obj/item/ammo_magazine/tank/ltb_cannon/A = clips[cur_ammo_type][2]
 		if(A == null || A.current_rounds <= 0)
 			to_chat(usr, "<span class='warning'>This module does not have any ammo.</span>")
 			return
@@ -383,7 +393,11 @@ All of the hardpoints, for the tank and APC
 	apply_buff()
 		owner.cooldowns["primary"] = 5
 		owner.accuracies["primary"] = 0.97
-
+		owner.tower_delay += 5
+	
+	remove_buff()
+		owner.tower_delay -= 5
+	
 	is_ready()
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>This module is not ready to be used yet.</span>")
@@ -394,7 +408,7 @@ All of the hardpoints, for the tank and APC
 		return 1
 
 	active_effect(var/turf/T)
-		var /obj/item/ammo_magazine/tank/autocannon/A = clips[cur_ammo_type][2]
+		var/obj/item/ammo_magazine/tank/autocannon/A = clips[cur_ammo_type][2]
 		if(A == null || A.current_rounds <= 0)
 			to_chat(usr, "<span class='warning'>This module does not have any ammo.</span>")
 			return
@@ -458,6 +472,10 @@ All of the hardpoints, for the tank and APC
 	apply_buff()
 		owner.cooldowns["primary"] = 60 //will be overridden, please ignore
 		owner.accuracies["primary"] = 0.33
+		owner.tower_delay += 15
+	
+	remove_buff()
+		owner.tower_delay -= 15
 
 	is_ready()
 		if(world.time < next_use)
@@ -610,6 +628,11 @@ All of the hardpoints, for the tank and APC
 	apply_buff()
 		owner.cooldowns["secondary"] = 20
 		owner.accuracies["secondary"] = 0.5
+		owner.tower_delay += 5
+	
+	remove_buff()
+		owner.tower_delay -= 5
+
 
 	is_ready()
 		if(world.time < next_use)
@@ -670,6 +693,10 @@ All of the hardpoints, for the tank and APC
 	apply_buff()
 		owner.cooldowns["secondary"] = 150
 		owner.accuracies["secondary"] = 0.97
+		owner.tower_delay += 10
+	
+	remove_buff()
+		owner.tower_delay -= 10
 
 	is_ready()
 		if(world.time < next_use)
@@ -731,6 +758,11 @@ All of the hardpoints, for the tank and APC
 	apply_buff()
 		owner.cooldowns["secondary"] = 8
 		owner.accuracies["secondary"] = 0.8
+		owner.tower_delay += 10
+	
+	remove_buff()
+		owner.tower_delay -= 10
+
 
 	is_ready()
 		if(world.time < next_use)
@@ -797,6 +829,11 @@ All of the hardpoints, for the tank and APC
 	apply_buff()
 		owner.cooldowns["secondary"] = 7
 		owner.accuracies["secondary"] = 0.8
+		owner.tower_delay += 10
+	
+	remove_buff()
+		owner.tower_delay -= 10
+
 
 	is_ready()
 		if(world.time < next_use)
@@ -1288,6 +1325,8 @@ All of the hardpoints, for the tank and APC
 		owner.dmg_multipliers["explosive"] = 0.4
 		owner.dmg_multipliers["blunt"] = 0.4
 		owner.dmg_multipliers["bullet"] = 0.05 //juggernaut is not meant to be just shot, fuck off
+		owner.tower_delay += 10
+
 
 	remove_buff()
 		owner.dmg_multipliers["acid"] = 1.5
@@ -1295,6 +1334,7 @@ All of the hardpoints, for the tank and APC
 		owner.dmg_multipliers["explosive"] = 1.0
 		owner.dmg_multipliers["blunt"] = 0.9
 		owner.dmg_multipliers["bullet"] = 0.67
+		owner.tower_delay += 10
 
 /obj/item/hardpoint/tank/armor/snowplow
 	name = "M37 \"Snowplow\" Armor"
