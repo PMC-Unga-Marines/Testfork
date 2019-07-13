@@ -2640,12 +2640,30 @@ All of the hardpoints, for the tank and APC
 	w_class = 12.0
 
 /obj/item/ammo_magazine/walker/smartgun
-	name = "M56 Double-Barrel Magazine"
+	name = "M56 Double-Barrel Magazine (Standart)"
 	desc = "A armament MG magazine"
 	caliber = "10x28mm" //Correlates to smartguns
 	icon_state = "big_ammo_box"
-	default_ammo = /datum/ammo/bullet/smartgun
+	default_ammo = /datum/ammo/bullet/smartgun/walker
 	max_rounds = 700
+	gun_type = /obj/item/walker_gun/smartgun
+
+/obj/item/ammo_magazine/walker/smartgun/ap
+	name = "M56 Double-Barrel Magazine (AP)"
+	desc = "A armament MG magazine"
+	caliber = "10x28mm" //Correlates to smartguns
+	icon_state = "big_ammo_box_ap"
+	default_ammo = /datum/ammo/bullet/smartgun/walker/ap
+	max_rounds = 500
+	gun_type = /obj/item/walker_gun/smartgun
+
+/obj/item/ammo_magazine/walker/smartgun/incendiary
+	name = "M56 Double-Barrel Magazine (Incendiary)"
+	desc = "A armament MG magazine"
+	caliber = "10x28mm" //Correlates to smartguns
+	icon_state = "ammoboxslug"
+	default_ammo = /datum/ammo/bullet/smartgun/walker/incendiary
+	max_rounds = 500
 	gun_type = /obj/item/walker_gun/smartgun
 
 /obj/item/ammo_magazine/walker/hmg
@@ -2653,7 +2671,7 @@ All of the hardpoints, for the tank and APC
 	desc = "A armament M30 magazine"
 	icon_state = "ua571c"
 	max_rounds = 300
-	default_ammo = /datum/ammo/bullet/machinegun
+	default_ammo = /datum/ammo/bullet/machinegun/walker
 	gun_type = /obj/item/walker_gun/hmg
 
 /obj/item/ammo_magazine/walker/flamer
