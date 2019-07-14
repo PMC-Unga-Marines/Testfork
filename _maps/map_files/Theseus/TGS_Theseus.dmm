@@ -15355,11 +15355,15 @@
 "aGG" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
+=======
+>>>>>>> Try to fix map conflict
 /obj/item/radio/intercom/general,
 /obj/machinery/chem_dispenser,
 /turf/open/floor/almayer{
 	dir = 1;
 	icon_state = "sterile_green_side"
+<<<<<<< refs/remotes/tgstation/master
 	},
 /area/almayer/medical/medical_science)
 =======
@@ -15381,6 +15385,10 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+	},
+/area/almayer/medical/medical_science)
+>>>>>>> Try to fix map conflict
 "aGH" = (
 /obj/machinery/alarm,
 /turf/open/floor/almayer{
