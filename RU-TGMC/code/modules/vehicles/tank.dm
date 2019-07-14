@@ -41,7 +41,7 @@
 	R.setDir(WEST)
 	R.tower_dir = R.dir
 	R.last_dir = R.dir
-	
+
 	var/datum/coords/dimensions = new
 	dimensions.x_pos = width
 	dimensions.y_pos = height
@@ -387,7 +387,7 @@
 	to_chat(targ, "<span class='danger'>[M] forcibly drags you out of your seat and dumps you on the ground!</span>")
 	targ.forceMove(entrance.loc)
 	targ.unset_interaction()
-	targ.KnockDown(7, 1)
+	targ.knock_down(7, 1)
 	log_admin("[M]([M.client ? M.client.ckey : "disconnected"]) dragged [targ]([targ.client ? targ.client.ckey : "disconnected"]) from the [name].")
 	message_admins("[M]([M.client ? M.client.ckey : "disconnected"]) dragged [targ]([targ.client ? targ.client.ckey : "disconnected"]) from the [name].")
 

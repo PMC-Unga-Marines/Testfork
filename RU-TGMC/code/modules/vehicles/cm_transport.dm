@@ -127,7 +127,7 @@ var/list/apc_dmg_distributions = list(
 //And other checks to make sure you aren't breaking the law
 /obj/vehicle/multitile/root/cm_transport/proc/click_action(A, mob/user, params)
 	var/list/mods = params2list(params)
-	
+
 	if(istype(A, /obj/screen) || A == src || mods["middle"] || mods["shift"] || mods["alt"])
 		return
 
@@ -150,7 +150,7 @@ var/list/apc_dmg_distributions = list(
 		return
 
 	HP.active_effect(get_turf(A))
-	
+
 //Used by the gunner to swap which module they are using
 //e.g. from the minigun to the smoke launcher
 //Only the active hardpoint module can be used
@@ -464,7 +464,7 @@ var/list/apc_dmg_distributions = list(
 				return
 			switch(XEN.t_squish_level)
 				if(0)
-					M.KnockDown(5)
+					M.knock_down(5)
 				if(1)
 					var/facing = get_dir(src, M)
 					var/turf/T = loc
@@ -473,7 +473,7 @@ var/list/apc_dmg_distributions = list(
 						temp = get_step(temp, facing)
 					T = get_step(temp, pick(CARDINAL_DIRS))
 					M.throw_at(T, 4, 1, src, 1)
-					M.KnockDown(1)
+					M.knock_down(1)
 					M.apply_damage(5 + rand(5, 10), BRUTE)
 				if(2)
 					M.apply_damage(5 + rand(5, 10), BRUTE)
@@ -484,7 +484,7 @@ var/list/apc_dmg_distributions = list(
 					return
 		if (!isxeno(M))
 			step_away(M,root,0,0)
-			M.KnockDown(3)
+			M.knock_down(3)
 			M.apply_damage(10 + rand(0, 10), BRUTE)
 		M.visible_message("<span class='danger'>[src] runs over [M]!</span>", "<span class='danger'>[src] runs you over! Get out of the way!</span>")
 		log_attack("[src] drove over/bumped into [M]([M.client ? M.client.ckey : "disconnected"]).")

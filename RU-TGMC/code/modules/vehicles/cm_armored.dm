@@ -485,7 +485,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 		return
 
 	var/obj/item/hardpoint/tank/HP = hardpoints[slot]
-	
+
 	if(!HP)
 		to_chat(usr, "<span class='warning'>Primary weapon is not installed.</span>")
 		return
@@ -785,7 +785,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 			overlays += I
 			continue
 
-		if(H && !(i in list(HDPT_PRIMARY, HDPT_SECDGUN)))	
+		if(H && !(i in list(HDPT_PRIMARY, HDPT_SECDGUN)))
 			I = H.get_icon_image(0, 0, dir)
 			overlays += I
 
@@ -849,13 +849,13 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 			if(WEIGHT_LIGHT)
 				switch(XEN.t_squish_level)
 					if(0)
-						KnockDown(5)
+						knock_down(5)
 					if(1)
 						for(var/i=0;i<3;i++)
 							temp = get_step(temp, facing)
 						T = get_step(temp, pick(CARDINAL_DIRS))
 						throw_at(T, 4, 1, CA, 1)
-						KnockDown(1)
+						knock_down(1)
 						apply_damage(5 + rand(5, 10), BRUTE)
 						if(istype(CA.hardpoints[HDPT_ARMOR], /obj/item/hardpoint/tank/armor/snowplow))
 							apply_damage(10 + rand(5, 10), BRUTE)
@@ -870,19 +870,19 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 			if(WEIGHT_MEDIUM)
 				switch(XEN.t_squish_level)
 					if(0)
-						KnockDown(5)
+						knock_down(5)
 					if(1)
 						temp = get_step(temp, facing)
 						temp = get_step(temp, facing)
 						T = get_step(temp, pick(CARDINAL_DIRS))
 						throw_at(T, 2, 1, C, 1)
-						KnockDown(1)
+						knock_down(1)
 						apply_damage(5 + rand(5, 10), BRUTE)
 						if(istype(CA.hardpoints[HDPT_ARMOR], /obj/item/hardpoint/tank/armor/snowplow))
 							apply_damage(5 + rand(5, 10), BRUTE)
 					if(2)
 						step_away(src, C.root,0)
-						KnockDown(2)
+						knock_down(2)
 						apply_damage(5 + rand(5, 10), BRUTE)
 						if(istype(CA.hardpoints[HDPT_ARMOR], /obj/item/hardpoint/tank/armor/snowplow))
 							apply_damage(5 + rand(5, 10), BRUTE)
@@ -892,13 +892,13 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 			if(WEIGHT_HEAVY)
 				switch(XEN.t_squish_level)
 					if(0)
-						KnockDown(5)
+						knock_down(5)
 					if(1)
-						KnockDown(4)
+						knock_down(4)
 						apply_damage(5 + rand(5, 10), BRUTE)
 					if(2)
 						step_away(src,C.root,0)
-						KnockDown(4)
+						knock_down(4)
 						apply_damage(5 + rand(5, 10), BRUTE)
 					if(3)
 						step_away(src,C.root,0)
@@ -908,7 +908,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 		if(buckled)
 			buckled.unbuckle()
 		step_away(src,C.root,0,0)
-		KnockDown(3)
+		knock_down(3)
 		apply_damage(10 + rand(0, 10), BRUTE)
 		if(istype(CA.hardpoints[HDPT_ARMOR], /obj/item/hardpoint/tank/armor/snowplow))
 			apply_damage(10 + rand(5, 10), BRUTE)
@@ -1038,7 +1038,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 		var/obj/item/hardpoint/tank/HP = hardpoints[i]
 		if(!istype(HP)) continue
 		HP.obj_integrity -= damage * dmg_distribs[i] * get_dmg_multi(type)
-	
+
 	healthcheck()
 
 	if(istype(attacker, /mob))
