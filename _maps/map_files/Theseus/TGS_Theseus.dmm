@@ -2,10 +2,13 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aaa" = (
 /turf/open/space,
@@ -608,6 +611,7 @@
 /obj/item/radio/intercom/general,
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/almayer/mono,
 /area/almayer/living/officer_rnr)
 =======
@@ -618,6 +622,10 @@
 /turf/open/floor/grass,
 /area/almayer/living/starboard_garden)
 >>>>>>> Convert
+=======
+/turf/open/floor/grass,
+/area/almayer/living/starboard_garden)
+>>>>>>> Add files via upload
 "abE" = (
 /obj/structure/cable{
 	d2 = 2;
@@ -1049,6 +1057,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/ammo_magazine/acp,
 =======
 >>>>>>> For merge.
@@ -1061,6 +1070,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 /turf/open/floor/almayer/mono,
 /area/almayer/living/numbertwobunks)
 "acL" = (
@@ -1102,6 +1113,7 @@
 /obj/item/radio/intercom/general,
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/wood,
 /area/almayer/living/commandbunks)
 =======
@@ -1112,6 +1124,10 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/living/officer_rnr)
 >>>>>>> Convert
+=======
+/turf/open/floor/almayer/mono,
+/area/almayer/living/officer_rnr)
+>>>>>>> Add files via upload
 "acR" = (
 /obj/machinery/door/airlock/almayer/command/CPTstudy,
 /turf/open/floor/wood,
@@ -2395,6 +2411,7 @@
 "agc" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/marine_selector/clothes/synth,
 =======
 /obj/structure/closet/secure_closet/engineering_personal,
@@ -2404,6 +2421,10 @@
 /obj/structure/closet/secure_closet/engineering_personal,
 /obj/item/tool/extinguisher/mini,
 >>>>>>> Convert
+=======
+/obj/structure/closet/secure_closet/engineering_personal,
+/obj/item/tool/extinguisher/mini,
+>>>>>>> Add files via upload
 /turf/open/floor/almayer/mono,
 /area/almayer/command/cic)
 "agd" = (
@@ -3522,6 +3543,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 /obj/item/storage/lockbox/loyalty,
 >>>>>>> For merge.
@@ -3533,6 +3555,8 @@
 >>>>>>> Convert
 =======
 >>>>>>> Delete object
+=======
+>>>>>>> Add files via upload
 /obj/item/weapon/gun/pistol/vp70,
 /obj/item/ammo_magazine/pistol/vp70,
 /obj/structure/closet/cabinet,
@@ -3611,6 +3635,7 @@
 /obj/item/radio/intercom/general,
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /turf/open/floor/almayer,
 /area/almayer/hallways/aft_hallway)
 =======
@@ -3621,6 +3646,10 @@
 /turf/open/floor/wood,
 /area/almayer/living/commandbunks)
 >>>>>>> Convert
+=======
+/turf/open/floor/wood,
+/area/almayer/living/commandbunks)
+>>>>>>> Add files via upload
 "aiZ" = (
 /obj/machinery/vending/nanomed,
 /turf/open/floor/almayer{
@@ -3691,6 +3720,7 @@
 "aji" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
 	dir = 5;
@@ -3700,6 +3730,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/bed/chair,
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -3707,9 +3739,12 @@
 	},
 /area/almayer/shipboard/brig)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "ajj" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -3897,6 +3932,7 @@
 "ajH" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/bed/chair,
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -3913,6 +3949,11 @@
 /turf/open/floor/almayer,
 /area/almayer/hallways/aft_hallway)
 >>>>>>> Convert
+=======
+/obj/item/radio/intercom/general,
+/turf/open/floor/almayer,
+/area/almayer/hallways/aft_hallway)
+>>>>>>> Add files via upload
 "ajI" = (
 /obj/structure/closet/secure_closet/injection,
 /turf/open/floor/almayer/mono,
@@ -5081,6 +5122,7 @@
 "alR" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -5100,15 +5142,20 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
 	dir = 5;
 	icon_state = "blue"
 	},
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /area/almayer/hallways/aft_hallway)
 "alS" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
@@ -6243,6 +6290,7 @@
 "aoc" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/radio/intercom/general,
 /obj/structure/prop/almayer/mapping_computer,
 /turf/open/floor/almayer{
@@ -6253,6 +6301,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -6271,9 +6321,12 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/almayer/hallways/aft_hallway)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aod" = (
 /obj/machinery/light{
 	dir = 1
@@ -6306,6 +6359,7 @@
 /turf/open/floor/almayer{
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 	dir = 5;
 	icon_state = "orange"
 =======
@@ -6316,6 +6370,10 @@
 	dir = 9;
 	icon_state = "red"
 >>>>>>> Convert
+=======
+	dir = 9;
+	icon_state = "red"
+>>>>>>> Add files via upload
 	},
 /area/almayer/command/cic)
 "aog" = (
@@ -7013,6 +7071,7 @@
 "apV" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/rack,
 /obj/item/radio/intercom/general,
 /obj/item/storage/pouch/tools,
@@ -7021,6 +7080,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/item/radio/intercom/general,
 /obj/structure/prop/almayer/mapping_computer,
 /turf/open/floor/almayer{
@@ -7029,9 +7090,12 @@
 	},
 /area/almayer/command/cic)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "apW" = (
 /obj/structure/table/almayer,
 /obj/item/clipboard,
@@ -7749,6 +7813,7 @@
 /obj/structure/rack,
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/clothing/suit/armor/bulletproof,
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -7758,14 +7823,19 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/item/radio/intercom/general,
 /obj/item/storage/pouch/tools,
 /turf/open/floor/almayer/mono,
 /area/almayer/command/telecomms)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "arE" = (
 /turf/open/floor/almayer{
 	dir = 8;
@@ -8902,12 +8972,15 @@
 "auk" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer/mono,
 /area/almayer/command/self_destruct)
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/rack,
 /obj/item/clothing/suit/armor/bulletproof,
 /obj/item/radio/intercom/general,
@@ -8916,9 +8989,12 @@
 	},
 /area/almayer/medical/upper_medical)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aul" = (
 /obj/structure/table/almayer,
 /obj/machinery/firealarm,
@@ -9012,6 +9088,7 @@
 "auv" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
@@ -9041,6 +9118,11 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/command/self_destruct)
 >>>>>>> Convert
+=======
+/obj/item/radio/intercom/general,
+/turf/open/floor/almayer/mono,
+/area/almayer/command/self_destruct)
+>>>>>>> Add files via upload
 "auw" = (
 /obj/structure/disposalpipe/segment/corner{
 	dir = 2
@@ -10231,6 +10313,7 @@
 "axb" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/almayer,
 /obj/item/tool/hand_labeler,
 /obj/item/radio/intercom/general,
@@ -10239,6 +10322,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
@@ -10259,9 +10344,12 @@
 	},
 /area/almayer/shipboard/chief_mp_office)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "axc" = (
 /obj/machinery/vending/engivend,
 /turf/open/floor/almayer/mono,
@@ -10969,12 +11057,16 @@
 	},
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 /mob/living/silicon/decoy/ship_ai,
 >>>>>>> For merge.
 =======
 /mob/living/silicon/decoy/ship_ai,
 >>>>>>> Convert
+=======
+/mob/living/silicon/decoy/ship_ai,
+>>>>>>> Add files via upload
 /turf/open/floor/almayer{
 	icon_state = "ai_floors"
 	},
@@ -11566,6 +11658,7 @@
 "azG" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/table/almayer,
 /obj/machinery/door_control{
 	id = "Hangar Lockdown";
@@ -11599,6 +11692,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/disposalpipe/segment,
 /obj/machinery/light{
 	dir = 8
@@ -11609,9 +11704,12 @@
 	},
 /area/almayer/shipboard/brig)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "azH" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on{
 	dir = 4
@@ -11973,9 +12071,12 @@
 /area/almayer/command/airoom)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aAq" = (
 /obj/structure/bed/chair/office/dark{
 	dir = 1
@@ -11985,9 +12086,12 @@
 	},
 /area/almayer/command/airoom)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aAr" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -12783,6 +12887,7 @@
 /obj/item/radio/intercom/general,
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/vending/coffee,
 /turf/open/floor/almayer{
 	dir = 2;
@@ -12792,6 +12897,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /turf/open/floor/almayer{
 	dir = 4;
 	icon_regular_floor = "cargo_arrow";
@@ -12799,9 +12906,12 @@
 	},
 /area/almayer/command/cic)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aBP" = (
 /obj/machinery/vending/snack,
 /turf/open/floor/almayer{
@@ -12963,11 +13073,14 @@
 "aCe" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/machinery/camera,
 =======
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /turf/open/floor/almayer{
 	icon_state = "ai_floors"
 	},
@@ -12985,9 +13098,12 @@
 /area/almayer/command/airoom)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aCg" = (
 /obj/structure/table/almayer,
 /obj/machinery/computer/station_alert,
@@ -13004,9 +13120,12 @@
 	},
 /area/almayer/command/airoom)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aCi" = (
 /obj/machinery/telecomms/processor/preset_two,
 /turf/open/floor/almayer{
@@ -14857,6 +14976,7 @@
 "aFI" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/disposalpipe/segment,
 /obj/machinery/light{
 	dir = 8
@@ -14869,15 +14989,20 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/table/almayer,
 /obj/item/tool/hand_labeler,
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer/mono,
 /area/almayer/engineering/upper_engineering)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aFJ" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -15137,6 +15262,7 @@
 "aGm" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/bed/chair{
 	dir = 8
 	},
@@ -15152,6 +15278,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/item/radio/intercom/general,
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -15164,9 +15292,12 @@
 	},
 /area/almayer/hallways/aft_hallway)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aGn" = (
 /obj/structure/cable{
 	d2 = 2;
@@ -15356,6 +15487,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 >>>>>>> Try to fix map conflict
 /obj/item/radio/intercom/general,
@@ -15369,6 +15501,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/table/almayer,
 /obj/machinery/computer/camera_advanced/overwatch/main,
 /obj/structure/window/reinforced/almayer1{
@@ -15382,6 +15516,7 @@
 /turf/open/floor/plating/almayer,
 /area/almayer/command/cic)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
@@ -15389,6 +15524,8 @@
 	},
 /area/almayer/medical/medical_science)
 >>>>>>> Try to fix map conflict
+=======
+>>>>>>> Add files via upload
 "aGH" = (
 /obj/machinery/alarm,
 /turf/open/floor/almayer{
@@ -15921,6 +16058,7 @@
 /obj/item/radio/intercom/general,
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/bed/chair,
 /turf/open/floor/almayer{
 	dir = 1;
@@ -15934,6 +16072,11 @@
 /turf/open/floor/almayer{
 	dir = 2;
 >>>>>>> Convert
+=======
+/obj/machinery/vending/coffee,
+/turf/open/floor/almayer{
+	dir = 2;
+>>>>>>> Add files via upload
 	icon_state = "sterile_green_side"
 	},
 /area/almayer/medical/upper_medical)
@@ -16553,6 +16696,7 @@
 "aJp" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/closet/secure_closet/engineering_electrical,
 /obj/machinery/light/small,
 /turf/open/floor/almayer{
@@ -16570,6 +16714,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/bed/chair{
 	dir = 8
 	},
@@ -16592,9 +16738,12 @@
 	},
 /area/almayer/shipboard/brig)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aJr" = (
 /obj/structure/disposalpipe/segment,
 /obj/machinery/light{
@@ -16957,6 +17106,7 @@
 "aKk" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/prop/almayer/mapping_computer,
 /obj/item/radio/intercom/general{
 	icon_state = "intercom";
@@ -16970,6 +17120,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/item/radio/intercom/general,
 /obj/machinery/chem_dispenser,
 /turf/open/floor/almayer{
@@ -16978,9 +17130,12 @@
 	},
 /area/almayer/medical/medical_science)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aKl" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 6
@@ -17001,6 +17156,7 @@
 "aKn" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/prop/almayer/mapping_computer,
 /obj/item/radio/intercom/general{
 	icon_state = "intercom";
@@ -17014,6 +17170,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/item/radio/intercom/general,
 /obj/structure/bed/chair,
 /turf/open/floor/almayer{
@@ -17022,9 +17180,12 @@
 	},
 /area/almayer/medical/upper_medical)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aKo" = (
 /obj/machinery/door/airlock/almayer/marine/charlie{
 	dir = 4
@@ -18134,6 +18295,7 @@
 "aMs" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/radio/intercom/general,
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -18148,6 +18310,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/closet/secure_closet/engineering_electrical,
 /obj/machinery/light/small,
 /turf/open/floor/almayer{
@@ -18155,9 +18319,12 @@
 	},
 /area/almayer/command/telecomms)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aMt" = (
 /obj/machinery/camera/autoname/almayer{
 	dir = 1
@@ -19027,6 +19194,7 @@
 "aNV" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -19050,6 +19218,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/closet/emcloset,
 /obj/item/radio/intercom/general{
 	icon_state = "intercom";
@@ -19058,9 +19228,12 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/command/telecomms)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aNW" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -19580,19 +19753,25 @@
 "aPc" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/effect/landmark/start/ai_spawn,
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/table/almayer,
 /obj/item/folder/yellow,
 /obj/machinery/camera/autoname/almayer{
 	dir = 8
 	},
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /turf/open/floor/almayer{
 	icon_state = "ai_floors"
 	},
@@ -19710,6 +19889,7 @@
 "aPq" = (
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/radio/intercom/general,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -19722,6 +19902,8 @@
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /obj/structure/prop/almayer/mapping_computer,
 /obj/item/radio/intercom/general{
 	icon_state = "intercom";
@@ -19733,9 +19915,12 @@
 	},
 /area/almayer/command/cic)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aPr" = (
 /obj/machinery/camera/autoname/almayer{
 	dir = 4
@@ -21236,9 +21421,12 @@
 /area/almayer/living/bridgebunks)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aTk" = (
 /obj/structure/prop/almayer/mapping_computer,
 /obj/item/radio/intercom/general{
@@ -21251,9 +21439,12 @@
 	},
 /area/almayer/command/cic)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aTl" = (
 /obj/machinery/flasher{
 	id = "Cell 2";
@@ -21269,6 +21460,7 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/shipboard/brig_cells)
 "aTn" = (
+<<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
@@ -21293,6 +21485,11 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/almayer/hallways/aft_hallway)
 >>>>>>> Convert
+=======
+/obj/item/radio/intercom/general,
+/turf/open/floor/plating/plating_catwalk,
+/area/almayer/hallways/aft_hallway)
+>>>>>>> Add files via upload
 "aTo" = (
 /obj/structure/reagent_dispensers/water_cooler,
 /turf/open/floor/almayer,
@@ -21442,9 +21639,12 @@
 /area/almayer/hallways/repair_bay)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aTE" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -21459,9 +21659,12 @@
 	},
 /area/almayer/shipboard/brig_cells)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aTF" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -21575,9 +21778,12 @@
 /area/almayer/hull/upper_hull)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aTR" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -21617,9 +21823,12 @@
 	},
 /area/almayer/hallways/starboard_hallway)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aTU" = (
 /obj/structure/hoop{
 	dir = 4;
@@ -21658,18 +21867,24 @@
 /area/almayer/hallways/aft_hallway)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aTZ" = (
 /obj/structure/closet,
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer/mono,
 /area/almayer/living/starboard_emb)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aUa" = (
 /obj/machinery/door/airlock/almayer/medical/glass{
 	dir = 2;
@@ -21694,9 +21909,12 @@
 /area/almayer/shipboard/ex_firing_range)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aUd" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -21762,9 +21980,12 @@
 	},
 /area/almayer/engineering/lower_engine_monitoring)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aUn" = (
 /obj/machinery/light/small,
 /obj/structure/cable/yellow{
@@ -21782,9 +22003,12 @@
 /area/almayer/shipboard/starboard_point_defense)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aUp" = (
 /obj/machinery/door/firedoor/theseus,
 /obj/item/radio/intercom/general,
@@ -21850,9 +22074,12 @@
 /turf/open/floor/almayer/mono,
 /area/almayer/hallways/port_hallway)
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aUx" = (
 /turf/open/floor/theseus_hull/dir{
 	dir = 10
@@ -21860,9 +22087,12 @@
 /area/space)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "aUy" = (
 /obj/structure/bed/chair/wood/normal{
 	icon_state = "wooden_chair";
@@ -21900,12 +22130,15 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> For merge.
 =======
 =======
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aUD" = (
 /obj/effect/landmark/start/marine/tankcrewman,
 /turf/open/floor/wood,
@@ -22020,6 +22253,7 @@
 /area/almayer/hallways/exoarmor)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
 =======
 >>>>>>> Convert
@@ -22027,6 +22261,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aUT" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -23023,6 +23259,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "aXv" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -23037,6 +23274,8 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aXv" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "S"
@@ -23052,6 +23291,7 @@
 /area/almayer/hallways/exoarmor)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
 =======
 >>>>>>> Convert
@@ -23059,6 +23299,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aXw" = (
 /turf/closed/wall/almayer,
 /area/almayer/living/basketball)
@@ -23218,6 +23460,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "aXS" = (
 /obj/structure/closet,
 /obj/item/radio/intercom/general,
@@ -23230,6 +23473,8 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aXQ" = (
 /obj/structure/bed/chair{
 	dir = 8
@@ -23258,6 +23503,7 @@
 /area/almayer/hallways/hangar)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
 =======
 >>>>>>> Convert
@@ -23265,6 +23511,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aXT" = (
 /turf/open/floor/almayer{
 	dir = 4;
@@ -23613,6 +23861,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "aYI" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -23627,6 +23876,8 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aYI" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -23648,6 +23899,7 @@
 /area/almayer/hallways/hangar)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
 =======
 >>>>>>> Convert
@@ -23655,6 +23907,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "aYJ" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -24724,6 +24978,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bbe" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -24737,6 +24992,8 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "bbd" = (
 /obj/machinery/door/poddoor/almayer{
 	dir = 2;
@@ -24758,6 +25015,7 @@
 /area/almayer/hallways/exoarmor)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
 =======
 >>>>>>> Convert
@@ -24765,6 +25023,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "bbf" = (
 /turf/open/floor/almayer{
 	icon_state = "cargo"
@@ -24844,6 +25104,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bbs" = (
 /obj/structure/table/almayer,
 /obj/item/radio/intercom/general,
@@ -24856,6 +25117,8 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "bbr" = (
 /obj/structure/closet/firecloset,
 /turf/open/floor/almayer{
@@ -24876,6 +25139,7 @@
 /area/almayer/hallways/exoarmor)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
 =======
 >>>>>>> Convert
@@ -24883,6 +25147,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "bbt" = (
 /obj/structure/table/almayer,
 /obj/item/storage/box/MRE,
@@ -27692,6 +27958,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bip" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer,
@@ -27703,12 +27970,15 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "bip" = (
 /obj/machinery/vending/MarineMed{
 	req_one_access = null
 	},
 /turf/open/shuttle/dropship,
 /area/vehicle_interior/apc_1)
+<<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
@@ -27718,6 +27988,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "biq" = (
 /obj/machinery/light{
 	dir = 1
@@ -30090,6 +30362,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bnL" = (
 /obj/machinery/cryopod/right,
 /obj/item/radio/intercom/general,
@@ -30104,11 +30377,14 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "bnL" = (
 /turf/closed/wall/indestructible/vehicle{
 	icon_state = "hull1"
 	},
 /area/vehicle_interior/apc_2)
+<<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
@@ -30118,6 +30394,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "bnM" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 8
@@ -30412,6 +30690,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "boE" = (
 /obj/machinery/iv_drip,
 /obj/item/radio/intercom/general,
@@ -30427,6 +30706,8 @@
 >>>>>>> Convert
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "boD" = (
 /obj/structure/vehicle_interior/side_door,
 /turf/open/shuttle/dropship,
@@ -30437,6 +30718,7 @@
 /area/vehicle_interior/apc_2)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Return position MAP.
 =======
 >>>>>>> Convert
@@ -30444,6 +30726,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "boF" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer1{
 	dir = 4
@@ -33251,6 +33535,7 @@
 /area/almayer/living/cryo_cells)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bwv" = (
 /obj/machinery/vending/coffee,
 /obj/item/radio/intercom/general,
@@ -33260,6 +33545,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bww" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/almayer{
@@ -33280,6 +33567,7 @@
 /area/almayer/engineering/engineering_workshop)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bwz" = (
 /obj/machinery/vending/engivend,
 /obj/item/radio/intercom/general,
@@ -33289,6 +33577,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bwA" = (
 /obj/machinery/vending/tool,
 /obj/machinery/status_display{
@@ -33410,6 +33700,7 @@
 /area/almayer/engineering/engine_core)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bwM" = (
 /obj/structure/table/almayer,
 /obj/item/storage/box/syringes,
@@ -33424,6 +33715,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bwN" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -34973,6 +35266,7 @@
 /area/almayer/engineering/lower_engine_monitoring)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bBe" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -34984,6 +35278,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bBf" = (
 /turf/open/floor/almayer{
 	icon_state = "orangecorner";
@@ -35762,6 +36058,7 @@
 /area/almayer/engineering/engine_core)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bDA" = (
 /obj/machinery/door/firedoor/theseus,
 /obj/item/radio/intercom/general,
@@ -35773,6 +36070,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bDB" = (
 /obj/machinery/line_nexter{
 	id = "line2"
@@ -35819,6 +36118,7 @@
 /area/almayer/squads/req)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bDH" = (
 /obj/item/radio/intercom/general,
 /obj/structure/closet/crate/delta,
@@ -35830,6 +36130,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bDI" = (
 /obj/effect/landmark/start/marine/squadleader,
 /obj/effect/decal/warning_stripes/thin{
@@ -36017,6 +36319,7 @@
 /area/almayer/hallways/hangar)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bEq" = (
 /obj/structure/table/almayer,
 /obj/item/radio/intercom/dropship/normandy{
@@ -36048,6 +36351,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bEy" = (
 /obj/effect/decal/warning_stripes/thin{
 	dir = 5
@@ -36483,6 +36788,7 @@
 /area/almayer/medical/lower_medical)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bFU" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -36494,6 +36800,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bFV" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -36752,6 +37060,7 @@
 /area/almayer/engineering/lower_engine_monitoring)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bGz" = (
 /obj/structure/table/almayer,
 /obj/item/flashlight,
@@ -36764,6 +37073,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bGA" = (
 /obj/structure/table/almayer,
 /obj/item/book/manual/engineering_particle_accelerator,
@@ -39489,6 +39800,7 @@
 /area/almayer/hallways/port_hallway)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bOF" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer,
@@ -39497,6 +39809,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bOG" = (
 /obj/machinery/light{
 	dir = 1
@@ -39820,6 +40134,7 @@
 /area/almayer/hallways/port_hallway)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bPG" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer/mono,
@@ -39828,6 +40143,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bPH" = (
 /turf/open/floor/almayer{
 	icon_state = "emeraldcorner";
@@ -41225,6 +41542,7 @@
 /area/almayer/living/grunt_rnr)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bSE" = (
 /obj/structure/bed/chair/wood/normal{
 	icon_state = "wooden_chair";
@@ -41237,6 +41555,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bSF" = (
 /obj/structure/table/almayer,
 /obj/item/paper_bin,
@@ -41659,6 +41979,7 @@
 /area/almayer/living/port_emb)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bUl" = (
 /obj/structure/closet,
 /obj/item/radio/intercom/general,
@@ -41668,6 +41989,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bUo" = (
 /obj/structure/closet,
 /obj/machinery/status_display{
@@ -42694,6 +43017,7 @@
 /area/almayer/squads/charlie)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "bXR" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -42705,6 +43029,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "bXT" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -43896,6 +44222,7 @@
 /area/almayer/squads/delta)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "cbv" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -43906,6 +44233,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "cby" = (
 /obj/machinery/status_display{
 	pixel_y = 30
@@ -45844,6 +46173,7 @@
 /area/almayer/command/cic)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "chd" = (
 /obj/structure/closet/firecloset,
 /obj/machinery/light{
@@ -45857,6 +46187,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "che" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -46406,6 +46738,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 =======
 >>>>>>> For merge with TG
 "ciJ" = (
@@ -46448,6 +46781,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "ciN" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -47041,6 +47376,7 @@
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "ckJ" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/almayer{
@@ -47071,6 +47407,8 @@
 >>>>>>> For merge with TG
 =======
 >>>>>>> NE OBNOVLIITES BOLSHE KOGDA I DELAY MERGE BLYA
+=======
+>>>>>>> Add files via upload
 "ckL" = (
 /obj/machinery/door/poddoor/shutters/almayer{
 	dir = 4;
@@ -47424,6 +47762,7 @@
 /area/almayer/hallways/stern_hallway)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "eUu" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/grass,
@@ -47432,6 +47771,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "fhA" = (
 /obj/structure/cable,
 /obj/machinery/power/smes/preset,
@@ -47809,6 +48150,7 @@
 /area/almayer/living/officer_rnr)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "ifF" = (
 /obj/item/radio/intercom/general,
 /turf/open/floor/plating/plating_catwalk,
@@ -47817,6 +48159,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "imy" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on,
 /turf/open/floor/almayer/mono,
@@ -48263,12 +48607,15 @@
 /obj/item/tool/taperoll/engineering,
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 /obj/item/tool/extinguisher/mini,
 /obj/item/storage/toolbox/mechanical,
 =======
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 /turf/open/floor/almayer/mono,
 /area/almayer/command/cic)
 "lNO" = (
@@ -48708,6 +49055,7 @@
 /area/almayer/hallways/stern_hallway)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "pvn" = (
 /turf/open/floor/almayer{
 	icon_state = "ai_floors"
@@ -48717,6 +49065,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "pwg" = (
 /obj/machinery/light{
 	dir = 4
@@ -48789,6 +49139,7 @@
 /area/almayer/command/self_destruct)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "pQE" = (
 /obj/machinery/light{
 	dir = 1
@@ -48801,6 +49152,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "pVE" = (
 /obj/machinery/gear{
 	id = "hangarelevatorgear"
@@ -49401,6 +49754,7 @@
 /area/almayer/command/telecomms)
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
+<<<<<<< refs/remotes/tgstation/master
 "vVX" = (
 /obj/machinery/status_display/ai,
 /turf/closed/wall/almayer/white,
@@ -49409,6 +49763,8 @@
 >>>>>>> For merge.
 =======
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "vWi" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/cable{
@@ -49664,6 +50020,7 @@
 	},
 /turf/open/floor/almayer/mono,
 /area/almayer/command/cic)
+<<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 <<<<<<< refs/remotes/tgstation/master
 
@@ -191851,6 +192208,8 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 >>>>>>> Map
 =======
+=======
+>>>>>>> Add files via upload
 
 (1,1,1) = {"
 aaa
@@ -257386,5 +257745,8 @@ aaa
 aaa
 aaa
 aaa
+<<<<<<< refs/remotes/tgstation/master
 >>>>>>> Convert
+=======
+>>>>>>> Add files via upload
 "}
