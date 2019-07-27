@@ -34,7 +34,11 @@
 	if(operating)
 		return
 	icon_state = density ? base_state : "[base_state]open"
-
+	switch(dir)
+		if(SOUTH)
+			layer = 4.1
+		if(NORTH)
+			layer = 2.7
 
 /obj/machinery/door/window/proc/open_and_close()
 	open()

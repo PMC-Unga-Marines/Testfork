@@ -393,6 +393,13 @@
 	max_integrity = 40
 	reinf = TRUE
 
+/obj/structure/window/reinforced/update_icon()
+	switch(dir)
+		if(SOUTH)
+			layer = 4.1
+		if(NORTH)
+			layer = 2.7
+
 /obj/structure/window/reinforced/toughened
 	name = "safety glass"
 	desc = "A very tough looking glass window with a special rod matrice, probably bullet proof."
