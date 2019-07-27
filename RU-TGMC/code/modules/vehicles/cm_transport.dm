@@ -291,7 +291,7 @@ var/list/apc_dmg_distributions = list(
 		to_chat(usr, "<span class='notice'>You reload the [HP.name].</span>")
 	else
 		to_chat(usr, "<span class='notice'>You empty the [HP.name].</span>")
-	playsound(src, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+	playsound(src, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 
 /obj/vehicle/multitile/root/cm_transport/proc/get_activatable_hardpoints()
 	var/list/slots = list()

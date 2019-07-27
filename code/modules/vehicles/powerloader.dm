@@ -56,7 +56,7 @@
 		var/obj/item/powerloader_clamp/PC = I
 		if(PC.linked_powerloader != src)
 			return
-		
+
 		unbuckle() //clicking the powerloader with its own clamp unbuckles the pilot.
 		playsound(loc, 'sound/mecha/powerloader_unbuckle.ogg', 25)
 		return TRUE
@@ -290,8 +290,5 @@
 		X.visible_message("<span class='danger'>[X] slashes [src].</span>", "<span class='danger'>We slash [src].</span>")
 		take_damage(rand(X.xeno_caste.melee_damage_lower, X.xeno_caste.melee_damage_upper))
 	else
-<<<<<<< refs/remotes/tgstation/master
 		attack_hand(X)
-=======
-		attack_hand(X)*/
->>>>>>> Commit Powerloader
+*/

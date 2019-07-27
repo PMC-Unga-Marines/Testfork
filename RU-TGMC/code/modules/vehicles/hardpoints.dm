@@ -114,11 +114,11 @@ All of the hardpoints, for the tank and APC
 	if(cur_clips >= max_clips)
 		to_chat(user, "<span class='warning'>The reloader is full.</span>")
 		return 0
-	
+
 	if(!istype(src, A.gun_type))
 		to_chat(user, "<span class='warning'>That is the wrong ammo type.</span>")
 		return 0
-	
+
 	to_chat(user, "<span class='notice'>Loading \the [A] in \the [owner].</span>")
 
 	if(!do_after(user, 10, TRUE))
@@ -130,7 +130,7 @@ All of the hardpoints, for the tank and APC
 		"<span class='notice'>You install \the [A] in \the [owner].</span>")
 	if (cur_clips == 0)
 		user.visible_message("<span class='notice'>You hear clanking as \the [A] is getting automatically loaded into \the weapon.</span>")
-		playsound(src, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+		playsound(src, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 	else
 		playsound(src, 'sound/machines/hydraulics_1.ogg', 40, 1)
 
@@ -202,7 +202,7 @@ All of the hardpoints, for the tank and APC
 		list_mag_type.Remove(A)
 		clips[mag_type] = list_mag_type
 		cur_clips--
-		playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+		playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 
 	change_ammo(var/type_choice, var/mob/user)
 
@@ -253,7 +253,7 @@ All of the hardpoints, for the tank and APC
 		list_mag_type.Remove(A)
 		clips[mag_type] = list_mag_type
 		cur_clips--
-		playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+		playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 
 	change_ammo(var/type_choice, var/mob/user)
 
@@ -329,10 +329,10 @@ All of the hardpoints, for the tank and APC
 		owner.cooldowns["primary"] = 200
 		owner.accuracies["primary"] = 0.97
 		owner.tower_delay += 10
-	
+
 	remove_buff()
 		owner.tower_delay -= 10
-	
+
 	is_ready()
 		if(world.time < next_use)
 			var/CD = round(next_use - world.time) / 10
@@ -355,7 +355,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), pick('sound/weapons/tank_cannon_fire1.ogg', 'sound/weapons/tank_cannon_fire2.ogg'), 60, 1)
+		playsound(get_turf(src), pick('sound/weapons/guns/fire/tank_cannon1.ogg', 'sound/weapons/guns/fire/tank_cannon2.ogg'), 60, 1)
 		A.current_rounds--
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading magazine.</span>")
@@ -365,7 +365,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/primary/autocannon
@@ -394,10 +394,10 @@ All of the hardpoints, for the tank and APC
 		owner.cooldowns["primary"] = 5
 		owner.accuracies["primary"] = 0.97
 		owner.tower_delay += 5
-	
+
 	remove_buff()
 		owner.tower_delay -= 5
-	
+
 	is_ready()
 		if(world.time < next_use)
 			to_chat(usr, "<span class='warning'>This module is not ready to be used yet.</span>")
@@ -429,7 +429,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/primary/minigun
@@ -473,7 +473,7 @@ All of the hardpoints, for the tank and APC
 		owner.cooldowns["primary"] = 60 //will be overridden, please ignore
 		owner.accuracies["primary"] = 0.33
 		owner.tower_delay += 15
-	
+
 	remove_buff()
 		owner.tower_delay -= 15
 
@@ -492,15 +492,15 @@ All of the hardpoints, for the tank and APC
 			to_chat(usr, "<span class='warning'>This module does not have any ammo.</span>")
 			return
 
-		var/S = 'sound/weapons/tank_minigun_start.ogg'
+		var/S = 'sound/weapons/guns/fire/tank_minigun_start.ogg'
 		if(world.time - next_use <= 5)
 			chained++ //minigun spins up, minigun spins down
-			S = 'sound/weapons/tank_minigun_loop.ogg'
+			S = 'sound/weapons/guns/fire/tank_minigun_loop.ogg'
 		else if(world.time - next_use >= 15) //Too long of a delay, they restart the chain
 			chained = 1
 		else //In between 5 and 15 it slows down but doesn't stop
 			chained--
-			S = 'sound/weapons/tank_minigun_stop.ogg'
+			S = 'sound/weapons/guns/fire/tank_minigun_stop.ogg'
 		if(chained <= 0) chained = 1
 
 		next_use = world.time + (chained > length(chain_delays) ? 0.5 : chain_delays[chained]) * owner.misc_ratios["prim_cool"]
@@ -520,7 +520,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 
@@ -549,7 +549,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), pick('sound/weapons/tank_cannon_fire1.ogg', 'sound/weapons/tank_cannon_fire2.ogg'), 60, 1)
+		playsound(get_turf(src), pick('sound/weapons/guns/fire/tank_cannon1.ogg', 'sound/weapons/guns/fire/tank_cannon2.ogg'), 60, 1)
 		A.current_rounds--
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading magazine.</span>")
@@ -559,7 +559,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/primary/autocannon/upp
@@ -592,7 +592,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 
@@ -629,7 +629,7 @@ All of the hardpoints, for the tank and APC
 		owner.cooldowns["secondary"] = 20
 		owner.accuracies["secondary"] = 0.5
 		owner.tower_delay += 5
-	
+
 	remove_buff()
 		owner.tower_delay -= 5
 
@@ -657,7 +657,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/tank_flamethrower.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/fire/tank_flamethrower.ogg', 60, 1)
 		A.current_rounds--
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Fuel tank emptied, unloading fuel tank.</span>")
@@ -667,7 +667,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/secondary/towlauncher
@@ -694,7 +694,7 @@ All of the hardpoints, for the tank and APC
 		owner.cooldowns["secondary"] = 150
 		owner.accuracies["secondary"] = 0.97
 		owner.tower_delay += 10
-	
+
 	remove_buff()
 		owner.tower_delay -= 10
 
@@ -730,7 +730,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/secondary/m56cupola
@@ -759,7 +759,7 @@ All of the hardpoints, for the tank and APC
 		owner.cooldowns["secondary"] = 8
 		owner.accuracies["secondary"] = 0.8
 		owner.tower_delay += 10
-	
+
 	remove_buff()
 		owner.tower_delay -= 10
 
@@ -791,7 +791,7 @@ All of the hardpoints, for the tank and APC
 			var/obj/item/projectile/P = new
 			P.generate_bullet(new A.default_ammo)
 			P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-			playsound(get_turf(src), pick(list('sound/weapons/gun_smartgun1.ogg', 'sound/weapons/gun_smartgun2.ogg', 'sound/weapons/gun_smartgun3.ogg')), 60, 1)
+			playsound(get_turf(src), pick(list('sound/weapons/guns/fire/smartgun1.ogg', 'sound/weapons/guns/fire/smartgun2.ogg', 'sound/weapons/guns/fire/smartgun3.ogg')), 60, 1)
 			sleep(2)
 		A.current_rounds -= bullets_fired
 
@@ -803,7 +803,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/secondary/grenade_launcher
@@ -830,7 +830,7 @@ All of the hardpoints, for the tank and APC
 		owner.cooldowns["secondary"] = 7
 		owner.accuracies["secondary"] = 0.8
 		owner.tower_delay += 10
-	
+
 	remove_buff()
 		owner.tower_delay -= 10
 
@@ -857,7 +857,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/gun_m92_attachable.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/interact/m92_cocked.ogg', 60, 1)
 		A.current_rounds--
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
@@ -867,7 +867,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /////////////////////
@@ -897,7 +897,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/tank_flamethrower.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/fire/tank_flamethrower.ogg', 60, 1)
 		A.current_rounds--
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Fuel tank emptied, unloading fuel tank.</span>")
@@ -907,7 +907,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/secondary/towlauncher/upp
@@ -940,7 +940,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/secondary/m56cupola/upp
@@ -964,7 +964,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), pick(list('sound/weapons/gun_smartgun1.ogg', 'sound/weapons/gun_smartgun2.ogg', 'sound/weapons/gun_smartgun3.ogg')), 60, 1)
+		playsound(get_turf(src), pick(list('sound/weapons/guns/fire/smartgun1.ogg', 'sound/weapons/guns/fire/smartgun2.ogg', 'sound/weapons/guns/fire/smartgun3.ogg')), 60, 1)
 		A.current_rounds--
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
@@ -974,7 +974,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /obj/item/hardpoint/tank/secondary/grenade_launcher/upp
@@ -997,7 +997,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/gun_m92_attachable.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/interact/m92_cocked.ogg', 60, 1)
 		A.current_rounds--
 		if(!A.current_rounds)
 			to_chat(usr, "<span class='notice'>Magazine emptied, unloading tank.</span>")
@@ -1007,7 +1007,7 @@ All of the hardpoints, for the tank and APC
 			var/list/list_cur_type = clips[cur_ammo_type]
 			list_cur_type.Remove(A)
 			cur_clips--
-			playsound(owner, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+			playsound(owner, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 			change_ammo_left(usr)
 
 /////////////////////
@@ -1067,7 +1067,7 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/tank_smokelauncher_fire.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/fire/tank_smokelauncher.ogg', 60, 1)
 		A.current_rounds--
 
 	get_icon_image(var/x_offset, var/y_offset, var/new_dir)
@@ -1823,7 +1823,7 @@ All of the hardpoints, for the tank and APC
 		"<span class='notice'>You install \the [A] in \the [owner].</span>")
 	if (length(clips) == 0)
 		user.visible_message("<span class='notice'>You hear clanking as \the [A] is getting automatically loaded into \the weapon.</span>")
-		playsound(src, 'sound/weapons/gun_mortar_unpack.ogg', 40, 1)
+		playsound(src, 'sound/weapons/guns/interact/mortar_unpack.ogg', 40, 1)
 	else
 		playsound(src, 'sound/machines/hydraulics_1.ogg', 40, 1)
 	clips += A
@@ -2034,7 +2034,7 @@ All of the hardpoints, for the tank and APC
 			var/obj/item/projectile/P = new
 			P.generate_bullet(new A.default_ammo)
 			P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-			playsound(get_turf(src), pick(list('sound/weapons/gun_smartgun1.ogg', 'sound/weapons/gun_smartgun2.ogg', 'sound/weapons/gun_smartgun3.ogg')), 60, 1)
+			playsound(get_turf(src), pick(list('sound/weapons/guns/fire/smartgun1.ogg', 'sound/weapons/guns/fire/smartgun2.ogg', 'sound/weapons/guns/fire/smartgun3.ogg')), 60, 1)
 			sleep(2)
 		A.current_rounds -= bullets_fired
 /////////////////////
@@ -2071,7 +2071,7 @@ All of the hardpoints, for the tank and APC
 			var/obj/item/projectile/P = new
 			P.generate_bullet(new A.default_ammo)
 			P.fire_at(T, owner, src, P.ammo.max_range, P.ammo.shell_speed)
-			playsound(get_turf(src), pick(list('sound/weapons/gun_smartgun1.ogg', 'sound/weapons/gun_smartgun2.ogg', 'sound/weapons/gun_smartgun3.ogg')), 60, 1)
+			playsound(get_turf(src), pick(list('sound/weapons/guns/fire/smartgun1.ogg', 'sound/weapons/guns/fire/smartgun2.ogg', 'sound/weapons/guns/fire/smartgun3.ogg')), 60, 1)
 			sleep(2)
 		A.current_rounds -= bullets_fired
 /////////////////////
@@ -2148,13 +2148,13 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(F, owner, src, 8, P.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/gun_flare.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/fire/flare.ogg', 60, 1)
 		A.current_rounds--
 		sleep (10)
 		var/obj/item/projectile/G = new
 		G.generate_bullet(new A.default_ammo)
 		G.fire_at(S, owner, src, 8, G.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/gun_flare.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/fire/flare.ogg', 60, 1)
 		A.current_rounds--
 
 	get_icon_image(var/x_offset, var/y_offset, var/new_dir)
@@ -2222,13 +2222,13 @@ All of the hardpoints, for the tank and APC
 		var/obj/item/projectile/P = new
 		P.generate_bullet(new A.default_ammo)
 		P.fire_at(F, owner, src, 8, P.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/gun_flare.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/fire/flare.ogg', 60, 1)
 		A.current_rounds--
 		sleep (10)
 		var/obj/item/projectile/G = new
 		G.generate_bullet(new A.default_ammo)
 		G.fire_at(S, owner, src, 8, G.ammo.shell_speed)
-		playsound(get_turf(src), 'sound/weapons/gun_flare.ogg', 60, 1)
+		playsound(get_turf(src), 'sound/weapons/guns/fire/flare.ogg', 60, 1)
 		A.current_rounds--
 
 ///////////////////
@@ -2532,7 +2532,7 @@ All of the hardpoints, for the tank and APC
 	desc = "High-caliber machine gun firing small bursts of AP bullets, tearing into shreds unfortunate fellas on its way."
 	icon_state = "mecha_machinegun"
 	equip_state = "mech-gatt"
-	fire_sound = 'sound/weapons/gun_minigun.ogg'
+	fire_sound = 'sound/weapons/guns/fire/minigun.ogg'
 	magazine_type = /obj/item/ammo_magazine/walker/hmg
 	fire_delay = 20
 	burst = 3
@@ -2542,7 +2542,7 @@ All of the hardpoints, for the tank and APC
 	desc = "Powerful flamethower, that can send any unprotected target straight to hell."
 	icon_state = "mecha_flamer"
 	equip_state = "mech-flam"
-	fire_sound = 'sound/weapons/gun_flamethrower2.ogg'
+	fire_sound = 'sound/weapons/guns/fire/flamethrower2.ogg'
 	magazine_type = /obj/item/ammo_magazine/walker/flamer
 	var/burnlevel = 50
 	var/burntime = 27
