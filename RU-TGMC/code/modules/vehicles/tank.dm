@@ -176,6 +176,10 @@
 	set src = usr.loc
 
 	if(usr != gunner) return
+	if(tower_fixed)
+		to_chat(usr,"You unfix tower.")
+	else
+		to_chat(usr,"You fix tower.")
 	tower_fixed = !tower_fixed
 
 //megaphone proc. Simply adding megaphone to tank and activate it doesn't work, so writing new Megaphone code for tank
@@ -190,7 +194,7 @@
 		to_chat(user, "\red \The megaphone needs to recharge!")
 		return
 
-	var/message = copytext(sanitize(input(user, "Shout a message?", "Megaphone", null)  as text),1,MAX_MESSAGE_LEN)
+	var/message = copytext(sanitize(sanitize_ru(input(user, "Shout a message?", "Megaphone", null)  as text)),1,MAX_MESSAGE_LEN)
 	if(!message)
 		return
 	message = capitalize(message)

@@ -696,20 +696,9 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 			else
 				return 1
 
-/obj/vehicle/multitile/root/cm_armored/update_icon()
-
-	overlays.Cut()
-	if(!tower_fixed && last_dir != dir)
-		var/K = get_dir_tower(last_dir)
-		rotate_tower(K, FALSE)
-	last_dir = dir
-
-	//Assuming 3x3 with half block overlaps in the tank's direction
-	if(dir in list(NORTH, SOUTH))
-		pixel_x = -32
-		pixel_y = -48
-		icon = 'RU-TGMC/icons/obj/vehicles/tank_NS.dmi'
-		if (dir == NORTH)
+/obj/vehicle/multitile/root/cm_armored/proc/update_icon_tower()
+	switch(dir)
+		if (NORTH)
 			switch(tower_dir)
 				if(EAST)
 					pixel_x_tower = 15
@@ -723,7 +712,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 				if(NORTH)
 					pixel_x_tower = -24
 					pixel_y_tower = 20
-		else
+		if(SOUTH)
 			switch(tower_dir)
 				if(EAST)
 					pixel_x_tower = 15
@@ -737,12 +726,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 				if(NORTH)
 					pixel_x_tower = -24
 					pixel_y_tower = 70
-
-	else if(dir in list(EAST, WEST))
-		pixel_x = -48
-		pixel_y = -32
-		icon = 'RU-TGMC/icons/obj/vehicles/tank_EW.dmi'
-		if (dir == EAST)
+		if (EAST)
 			switch(tower_dir)
 				if(EAST)
 					pixel_x_tower = 0
@@ -756,7 +740,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 				if(NORTH)
 					pixel_x_tower = -30
 					pixel_y_tower = 25
-		else
+		if (WEST)
 			switch(tower_dir)
 				if(EAST)
 					pixel_x_tower = 70
@@ -770,23 +754,41 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 				if(NORTH)
 					pixel_x_tower = 30
 					pixel_y_tower = 25
-
-	//Tower tank
+	
 	var/image/I = image(icon = icon_tower, icon_state = icon_state_tower, dir = tower_dir, pixel_x = pixel_x_tower, pixel_y = pixel_y_tower)
 	overlays += I
 
+/obj/vehicle/multitile/root/cm_armored/update_icon()
+
+	overlays.Cut()
+	if(!tower_fixed && last_dir != dir)
+		var/K = get_dir_tower(last_dir)
+		rotate_tower(K, FALSE)
+	last_dir = dir
+
+	//Assuming 3x3 with half block overlaps in the tank's direction
+	if(dir in list(NORTH, SOUTH))
+		pixel_x = -32
+		pixel_y = -48
+		icon = 'RU-TGMC/icons/obj/vehicles/tank_NS.dmi'
+
+	else if(dir in list(EAST, WEST))
+		pixel_x = -48
+		pixel_y = -32
+		icon = 'RU-TGMC/icons/obj/vehicles/tank_EW.dmi'
+	update_icon_tower()
 	//Basic iteration that snags the overlay from the hardpoint module object
 	var/i
 	for(i in hardpoints)
 		var/obj/item/hardpoint/tank/H = hardpoints[i]
 
 		if(i == HDPT_TREADS && (!H || !H.obj_integrity)) //Treads not installed or broken
-			I = image(icon, icon_state = "damaged_hardpt_[i]")
+			var/image/I = image(icon, icon_state = "damaged_hardpt_[i]")
 			overlays += I
 			continue
 
 		if(H && !(i in list(HDPT_PRIMARY, HDPT_SECDGUN)))
-			I = H.get_icon_image(0, 0, dir)
+			var/image/I = H.get_icon_image(0, 0, dir)
 			overlays += I
 
 		if(H && i in list(HDPT_PRIMARY, HDPT_SECDGUN, HDPT_ARMOR))
@@ -794,18 +796,18 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 			var/icon_state_module = H.disp_icon_state
 			if(H.obj_integrity <= 0)
 				icon_state_suffix = "1"
-			I = image(icon = icon_tower, icon_state = "[icon_state_module]_[icon_state_suffix]", dir = tower_dir, pixel_x = pixel_x_tower, pixel_y = pixel_y_tower)
+			var/image/I = image(icon = icon_tower, icon_state = "[icon_state_module]_[icon_state_suffix]", dir = tower_dir, pixel_x = pixel_x_tower, pixel_y = pixel_y_tower)
 			overlays += I
 
-		if(damaged_hps.Find(i) && (i in list(HDPT_PRIMARY, HDPT_SECDGUN)))
-			I = image(icon_tower, icon_state = "damaged_hardpt_[i]", dir = tower_dir)
+		if(damaged_hps.Find(i) && i in list(HDPT_PRIMARY, HDPT_SECDGUN))
+			var/image/I = image(icon_tower, icon_state = "damaged_hardpt_[i]", dir = tower_dir)
 			I.pixel_x = pixel_x_tower
 			I.pixel_y = pixel_y_tower
 			overlays += I
 			continue
 
 		if(damaged_hps.Find(i))
-			I = image(icon, icon_state = "damaged_hardpt_[i]")
+			var/image/I = image(icon, icon_state = "damaged_hardpt_[i]")
 			overlays += I
 
 //Hitboxes but with new names
