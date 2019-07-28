@@ -83,7 +83,7 @@
 		message_admins("[M]([M.client ? M.client.ckey : "disconnected"]) took a ride on Garage elevator towards their death.")
 
 	for(var/turf/T in range(2,Center))
-		new /turf/open/floor/almayer/empty(T)
+		new /turf/open/floor/mainship/empty(T)
 
 	flick("supply_elevator_lowering", src)
 	sleep(20)

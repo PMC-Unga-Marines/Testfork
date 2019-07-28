@@ -705,7 +705,7 @@ var/list/apc_dmg_distributions = list(
 		FD.visible_message("<span class='danger'>[root] crushes through[FD]!</span>")
 		new /obj/item/stack/sheet/metal(FD.loc, 2)
 		qdel(FD)
-	else if(istype(A, /obj/machinery/door/airlock) && !istype(A, /obj/machinery/door/airlock/multi_tile/almayer/dropshiprear/ds1) && !istype(A, /obj/machinery/door/airlock/multi_tile/almayer/dropshiprear/ds2))
+	else if(istype(A, /obj/machinery/door/airlock) && !istype(A, /obj/machinery/door/airlock/multi_tile/mainship/dropshiprear/ds1) && !istype(A, /obj/machinery/door/airlock/multi_tile/mainship/dropshiprear/ds2))
 		var/obj/machinery/door/airlock/AR = A
 		CA.take_damage_type(20, "blunt", AR)
 		if(world.time > lastsound + 10)
@@ -714,8 +714,8 @@ var/list/apc_dmg_distributions = list(
 		AR.visible_message("<span class='danger'>[root] crushes through[AR]!</span>")
 		new /obj/item/stack/sheet/metal(AR.loc, 2)
 		qdel(AR)
-	else if(istype(A, /obj/machinery/door/airlock/multi_tile/almayer/dropshiprear/ds1) || istype(A, /obj/machinery/door/airlock/multi_tile/almayer/dropshiprear/ds2))
-		var/obj/machinery/door/airlock/multi_tile/almayer/dropshiprear/DR = A
+	else if(istype(A, /obj/machinery/door/airlock/multi_tile/mainship/dropshiprear/ds1) || istype(A, /obj/machinery/door/airlock/multi_tile/mainship/dropshiprear/ds2))
+		var/obj/machinery/door/airlock/multi_tile/mainship/dropshiprear/DR = A
 		if(DR.locked)
 			if(z == 4)
 				return
@@ -741,8 +741,8 @@ var/list/apc_dmg_distributions = list(
 		MES.manual_unbuckle()
 		new /obj/item/roller/medevac(MES.loc)
 		qdel(MES)
-	else if(istype(A, /obj/machinery/door/poddoor/shutters) && !istype(A, /obj/machinery/door/poddoor/shutters/transit) && !istype(A, /obj/machinery/door/poddoor/shutters/almayer/pressure))
-		var/obj/machinery/door/poddoor/almayer/SH = A
+	else if(istype(A, /obj/machinery/door/poddoor/shutters) && !istype(A, /obj/machinery/door/poddoor/shutters/transit) && !istype(A, /obj/machinery/door/poddoor/shutters/mainship/pressure))
+		var/obj/machinery/door/poddoor/mainship/SH = A
 		CA.take_damage_type(30, "blunt", SH)
 		playsound(SH, 'sound/effects/metal_crash.ogg', 35)
 		SH.visible_message("<span class='danger'>[root] crushes through[SH]!</span>")

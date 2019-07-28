@@ -847,6 +847,22 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 /atom/proc/tank_collision(obj/vehicle/multitile/hitbox/cm_armored/C, facing, turf/T, turf/temp)
 	return
 
+/obj/machinery/door/airlock/multi_tile/mainship/dropshiprear/tank_collision(obj/vehicle/multitile/hitbox/cm_armored/C, facing, turf/T, turf/temp)
+	var/obj/vehicle/multitile/root/cm_armored/CA = C.root
+	if(locked)
+		if(z == 4)
+			return
+		else
+			CA.take_damage_type(25, "blunt", src)
+			if(world.time > C.lastsound + 10)
+				playsound(src, 'sound/effects/metal_crash.ogg', 35)
+				C.lastsound = world.time
+			visible_message("<span class='danger'>[C.root] crushes through[src]!</span>")
+			new /obj/item/stack/sheet/metal(src.loc, 2)
+			qdel(src)
+	else
+		open()	//2/3 rounds TCs destroy reardoor in firstdeployment, this should fix it
+
 /mob/living/tank_collision(obj/vehicle/multitile/hitbox/cm_armored/C, facing, turf/T, turf/temp)
 	var/obj/vehicle/multitile/root/cm_armored/CA = C.root
 	if(isxeno(src))

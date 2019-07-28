@@ -8,7 +8,7 @@
 /obj/structure/vehicle_interior/side_door
 	name = "Side Door"
 	desc = "It opens and closes."
-	icon = 'icons/obj/doors/almayer/dropship2_pilot.dmi'
+	icon = 'icons/obj/doors/mainship/dropship2_pilot.dmi'
 	icon_state = "door_closed"
 	density = TRUE
 	opacity = 1
@@ -219,7 +219,7 @@
 /obj/structure/vehicle_interior/cabin_door
 	name = "Cabin Door"
 	desc = "It opens and closes."
-	icon = 'icons/obj/doors/almayer/dropship2_side.dmi'
+	icon = 'icons/obj/doors/mainship/dropship2_side.dmi'
 	icon_state = "door_closed"
 	density = TRUE
 	opacity = 1

@@ -699,7 +699,7 @@ var/list/free_modules = list("Medical Modification", "Supply Modification")
 						camera.network.Add("apc_1")
 
 						interior_area = locate(/area/vehicle_interior/apc_1)
-						var/obj/machinery/camera/cam = locate(/obj/machinery/camera/autoname/almayer) in interior_area
+						var/obj/machinery/camera/cam = locate(/obj/machinery/camera/autoname/mainship) in interior_area
 						cam.c_tag = camera.c_tag + " Interior Camera"
 						cam.network.Add("almayer","apc_1")
 						multitile_interior_exit = locate(/obj/effect/landmark/multitile_interior_exit) in interior_area
@@ -708,7 +708,7 @@ var/list/free_modules = list("Medical Modification", "Supply Modification")
 						interior_side_door.master = src
 						interior_cabin_door = locate(/obj/structure/vehicle_interior/cabin_door) in interior_area
 						interior_cabin_door.master = src
-						interior_cam = locate(/obj/machinery/camera/autoname/almayer) in interior_area
+						interior_cam = locate(/obj/machinery/camera/autoname/mainship) in interior_area
 						passengers_max = 8
 						module_role = "Doctor"
 
@@ -719,7 +719,7 @@ var/list/free_modules = list("Medical Modification", "Supply Modification")
 						camera.network.Add("apc_2")
 
 						interior_area = locate(/area/vehicle_interior/apc_2)
-						var/obj/machinery/camera/cam = locate(/obj/machinery/camera/autoname/almayer) in interior_area
+						var/obj/machinery/camera/cam = locate(/obj/machinery/camera/autoname/mainship) in interior_area
 						cam.c_tag = camera.c_tag + " Interior Camera"
 						cam.network.Add("almayer","apc_2")
 						multitile_interior_exit = locate(/obj/effect/landmark/multitile_interior_exit) in interior_area
@@ -728,7 +728,7 @@ var/list/free_modules = list("Medical Modification", "Supply Modification")
 						interior_side_door.master = src
 						interior_cabin_door = locate(/obj/structure/vehicle_interior/cabin_door) in interior_area
 						interior_cabin_door.master = src
-						interior_cam = locate(/obj/machinery/camera/autoname/almayer) in interior_area
+						interior_cam = locate(/obj/machinery/camera/autoname/mainship) in interior_area
 						var/obj/structure/vehicle_interior/supply_receiver/receiver = locate(/obj/structure/vehicle_interior/supply_receiver) in interior_area
 						receiver.master = src
 						var/turf/T = locate(156, 61, 3)
@@ -747,7 +747,7 @@ var/list/free_modules = list("Medical Modification", "Supply Modification")
 						camera.network.Add("apc_3")
 
 						interior_area = locate(/area/vehicle_interior/apc_3)
-						var/obj/machinery/camera/cam = locate(/obj/machinery/camera/autoname/almayer) in interior_area
+						var/obj/machinery/camera/cam = locate(/obj/machinery/camera/autoname/mainship) in interior_area
 						cam.c_tag = camera.c_tag + " Interior Camera"
 						cam.network.Add("almayer","apc_3")
 						multitile_interior_exit = locate(/obj/effect/landmark/multitile_interior_exit) in interior_area
@@ -759,7 +759,7 @@ var/list/free_modules = list("Medical Modification", "Supply Modification")
 						interior_tcomms = locate(/obj/machinery/vehicle_interior/tcomms_receiver) in interior_area
 						interior_tcomms.sidekick = locate(/obj/structure/vehicle_interior/tcomms_hub) in interior_area
 						interior_tcomms.master = src
-						interior_cam = locate(/obj/machinery/camera/autoname/almayer) in interior_area
+						interior_cam = locate(/obj/machinery/camera/autoname/mainship) in interior_area
 						switch(SSmapping.configs[GROUND_MAP].map_name)
 							if(MAP_BIG_RED)
 								var/turf/T = get_turf(locate(16,202,1))
