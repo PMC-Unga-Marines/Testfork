@@ -697,7 +697,7 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 			switch(dir)
 				if(WEST)
 					return 0
-				if(ESAST)
+				if(EAST)
 					return 1
 
 /obj/vehicle/multitile/root/cm_armored/proc/update_icon_tower()
