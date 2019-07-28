@@ -676,25 +676,29 @@ GLOBAL_LIST_INIT(armorvic_dmg_distributions, list(
 /obj/vehicle/multitile/root/cm_armored/proc/get_dir_tower(last_dir)
 	switch(last_dir)
 		if(EAST)
-			if(dir == NORTH)
-				return 0
-			else
-				return 1
+			switch(dir)
+				if(NORTH)
+					return 0
+				if(SOUTH)
+					return 1
 		if(WEST)
-			if(dir == SOUTH)
-				return 0
-			else
-				return 1
+			switch(dir)
+				if(SOUTH)
+					return 0
+				if(NORTH)
+					return 1
 		if(SOUTH)
-			if(dir == EAST)
-				return 0
-			else
-				return 1
+			switch(dir)
+				if(EAST)
+					return 0
+				if(WEST)
+					return 1
 		if(NORTH)
-			if(dir == WEST)
-				return 0
-			else
-				return 1
+			switch(dir)
+				if(WEST)
+					return 0
+				if(ESAST)
+					return 1
 
 /obj/vehicle/multitile/root/cm_armored/proc/update_icon_tower()
 	switch(dir)
