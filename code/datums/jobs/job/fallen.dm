@@ -38,6 +38,27 @@
 
 /datum/job/fallen/marine/standard
 
+/datum/job/fallen/marine/combat_robot
+	title = SQUAD_ROBOT
+	access = list(ACCESS_MARINE_ROBO)
+	minimal_access = list(ACCESS_MARINE_PREP, ACCESS_MARINE_DROPSHIP)
+	outfit = /datum/outfit/job/marine/robo
+
+/datum/job/fallen/marine/combat_robot/get_special_name(client/preference_source)
+	return preference_source.prefs.synthetic_name
+
+/datum/job/fallen/marine/combat_robot/return_spawn_type(datum/preferences/prefs)
+	switch(prefs?.robot_type)
+		if("Hammerhead")
+			return /mob/living/carbon/human/species/robot/alpharii
+		if("Chilvaris")
+			return /mob/living/carbon/human/species/robot/charlit
+		if("Ratcher")
+			return /mob/living/carbon/human/species/robot/deltad
+		if("Sterling")
+			return /mob/living/carbon/human/species/robot/bravada
+	return /mob/living/carbon/human/species/robot
+
 /datum/job/fallen/marine/engineer
 	title = ROLE_FALLEN(SQUAD_ENGINEER)
 	skills_type = /datum/skills/combat_engineer
@@ -71,7 +92,7 @@
 	skills_type = /datum/skills/mech_pilot
 	access = list(ACCESS_MARINE_WO, ACCESS_MARINE_PREP, ACCESS_MARINE_MECH, ACCESS_CIVILIAN_PUBLIC)
 	minimal_access = list(ACCESS_MARINE_WO, ACCESS_MARINE_PREP, ACCESS_MARINE_MECH, ACCESS_CIVILIAN_PUBLIC, ACCESS_MARINE_BRIDGE, ACCESS_MARINE_DROPSHIP, ACCESS_MARINE_LOGISTICS, ACCESS_MARINE_CARGO)
-	outfit = /datum/outfit/job/command/mech_pilot/fallen
+	outfit = /datum/outfit/job/command/mech_pilot
 
 /datum/job/fallen/marine/fieldcommander
 	title = ROLE_FALLEN(FIELD_COMMANDER)
@@ -107,4 +128,3 @@
 
 /datum/job/fallen/xenomorph
 	title = ROLE_FALLEN(ROLE_XENOMORPH)
-	faction = FACTION_XENO

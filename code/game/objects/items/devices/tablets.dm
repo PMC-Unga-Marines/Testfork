@@ -1,17 +1,23 @@
 /obj/item/hud_tablet
 	name = "hud tablet"
 	desc = "A tablet with a live feed to a number of headset cameras"
+	icon = 'icons/Marine/marine-navigation.dmi'
 	icon_state = "req_tablet_off"
 	req_access = list(ACCESS_NT_CORPORATE)
-	equip_slot_flags = ITEM_SLOT_POCKET
+	flags_equip_slot = ITEM_SLOT_POCKET
 	w_class = WEIGHT_CLASS_SMALL
+
 	interaction_flags = INTERACT_MACHINE_TGUI
+
+
 	/// How far can these tablets see around the cameras
 	var/max_view_dist = 3
+
 	var/obj/machinery/camera/active_camera
 	/// Used to keep a cache of the last location visible on the camera
 	var/turf/last_turf
 	var/list/network = list("marine")
+
 	// Stuff needed to render the map
 	var/map_name
 	var/const/default_map_size = 15
@@ -44,11 +50,6 @@
 							dat += " delta"
 							network = list("delta")
 							req_access = list(ACCESS_MARINE_LEADER, ACCESS_MARINE_DELTA)
-						else
-							var/lowername = lowertext(squad.name)
-							dat = dat + " " + lowername
-							network = list(lowername)
-							req_access = list(ACCESS_MARINE_LEADER)
 				dat += " squad leader's"
 			if(/datum/job/terragov/command/captain)
 				dat += " captain's"
@@ -180,7 +181,7 @@
 		var/list/cameras = get_available_cameras()
 		var/obj/machinery/camera/selected_camera = cameras[c_tag]
 		active_camera = selected_camera
-		playsound(src, SFX_TERMINAL_TYPE, 25, FALSE)
+		playsound(src, get_sfx("terminal_type"), 25, FALSE)
 
 		if(!selected_camera)
 			return TRUE

@@ -11,7 +11,7 @@
 	name = "stool"
 	desc = "Uh-hoh, bar is heating up."
 	icon = 'icons/obj/objects.dmi'
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/weapons/melee_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/weapons/melee_right.dmi',
 	)

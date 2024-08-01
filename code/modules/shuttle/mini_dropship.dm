@@ -24,7 +24,7 @@
 	shuttleId = SHUTTLE_TADPOLE
 	lock_override = CAMERA_LOCK_GROUND
 	shuttlePortId = "minidropship_custom"
-	view_range = "26x26"
+	view_range = "25x25"
 	x_offset = 0
 	y_offset = 0
 	open_prompt = FALSE
@@ -99,15 +99,6 @@
 		land_action.give_action(user)
 		actions += land_action
 
-	if(istype(shuttle_port, /obj/docking_port/mobile/marine_dropship))
-		var/obj/docking_port/mobile/marine_dropship/shuttle = shuttle_port
-		for(var/obj/structure/dropship_equipment/shuttle/rappel_system/system in shuttle.equipments)
-			var/datum/action/innate/rappel_designate/rappel_action = new
-			rappel_action.origin = system
-			rappel_action.target = user
-			rappel_action.give_action(user)
-			actions += rappel_action
-
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/shuttle_arrived()
 	if(fly_state == next_fly_state)
 		return
@@ -169,7 +160,7 @@
 		return
 	nvg_vision_mode = !nvg_vision_mode
 
-/obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount, damage_type, damage_flag, effects, armor_penetration, isrightclick)
 	. = ..()
 	if(machine_stat & BROKEN)
 		return
@@ -214,34 +205,6 @@
 		return
 	return ..()
 
-/obj/machinery/computer/attackby(obj/item/I, mob/user, params)
-	. = ..()
-	if(.)
-		return
-	if(!istype(I,/obj/item/circuitboard/tadpole))
-		return
-	var/repair_time = 30 SECONDS
-	if(!(machine_stat & BROKEN))
-		to_chat(user,span_notice("The circuits don't need replacing"))
-		return
-	playsound(loc, 'sound/items/ratchet.ogg', 25, 1)
-	if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_EXPERT)
-		user.visible_message(span_notice("[user] fumbles around figuring out how to replace the electronics."),
-		span_notice("You fumble around figuring out how to replace the electronics."))
-		repair_time += 5 SECONDS * ( SKILL_ENGINEER_EXPERT - user.skills.getRating(SKILL_ENGINEER) )
-		if(!do_after(user, repair_time, NONE, src, BUSY_ICON_UNSKILLED))
-			return
-	else
-		user.visible_message(span_notice("[user] begins replacing the electronics"),
-		span_notice("You begin replacing the electronics"))
-		if(!do_after(user,repair_time,NONE,src,BUSY_ICON_GENERIC))
-			return
-	user.visible_message(span_notice("[user] replaces the electronics."),
-	span_notice("You replace the electronics"))
-	playsound(loc, 'sound/items/ratchet.ogg', 25, 1)
-	repair()
-	qdel(I)
-
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/ui_state(mob/user)
 	return GLOB.dropship_state
 
@@ -284,7 +247,6 @@
 		var/obj/structure/dropship_equipment/E = X
 		.["equipment_data"] += list(list("name"= sanitize(copytext(E.name,1,MAX_MESSAGE_LEN)), "eqp_tag" = element_nbr, "is_weapon" = (E.dropship_equipment_flags & IS_WEAPON), "is_interactable" = (E.dropship_equipment_flags & IS_INTERACTABLE)))
 		element_nbr++
-
 
 /obj/machinery/computer/camera_advanced/shuttle_docker/minidropship/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()

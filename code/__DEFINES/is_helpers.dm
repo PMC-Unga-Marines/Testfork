@@ -10,15 +10,6 @@
 
 #define isweakref(D) (istype(D, /datum/weakref))
 
-#define isimage(thing) (istype(thing, /image))
-
-GLOBAL_VAR_INIT(magic_appearance_detecting_image, new /image) // appearances are awful to detect safely, but this seems to be the best way ~ninjanomnom
-#define isappearance(thing) (!isimage(thing) && !ispath(thing) && istype(GLOB.magic_appearance_detecting_image, thing))
-
-// The filters list has the same ref type id as a filter, but isnt one and also isnt a list, so we have to check if the thing has Cut() instead
-GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
-#define isfilter(thing) (!hascall(thing, "Cut") && TYPEID(thing) == GLOB.refid_filter)
-
 #define isgenerator(A) (istype(A, /generator))
 
 //Turfs
@@ -35,6 +26,8 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 #define iswater(A) (istype(A, /turf/open/liquid/water))
 
 #define isbasalt(A) (istype(A, /turf/open/lavaland/basalt))
+
+#define islavacatwalk(A) (istype(A, /turf/open/lavaland/catwalk))
 
 #define isfloorturf(A) (istype(A, /turf/open/floor))
 
@@ -66,6 +59,7 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 #define issectoid(H) (is_species(H, /datum/species/sectoid))
 #define ishumanbasic(H) (is_species(H, /datum/species/human))
 #define iszombie(H) (is_species(H, /datum/species/zombie))
+#define isnecoarc(H) (is_species(H, /datum/species/necoarc))
 
 //Monkey species and subtypes
 #define ismonkey(H) (is_species(H, /datum/species/monkey))
@@ -108,7 +102,6 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 #define isxenopraetorian(A) (istype(A, /mob/living/carbon/xenomorph/praetorian))
 #define isxenoravager(A) (istype(A, /mob/living/carbon/xenomorph/ravager))
 #define isxenorunner(A) (istype(A, /mob/living/carbon/xenomorph/runner))
-#define isxenobaneling(A) (istype(A, /mob/living/carbon/xenomorph/baneling))
 #define isxenospitter(A) (istype(A, /mob/living/carbon/xenomorph/spitter))
 #define isxenosentinel(A) (istype(A, /mob/living/carbon/xenomorph/sentinel))
 #define isxenowarrior(A) (istype(A, /mob/living/carbon/xenomorph/warrior))
@@ -118,11 +111,11 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 #define isxenodefiler(A) (istype(A, /mob/living/carbon/xenomorph/defiler))
 #define isxenobull(A) (istype(A, /mob/living/carbon/xenomorph/bull))
 #define isxenohivemind(A) (istype(A, /mob/living/carbon/xenomorph/hivemind))
-#define isxenowraith(A) (istype(A, /mob/living/carbon/xenomorph/wraith))
-#define isxenowidow(A) (istype(A, /mob/living/carbon/xenomorph/widow))
 #define isxenowarlock(A) (istype(A, /mob/living/carbon/xenomorph/warlock))
 #define isxenoking(A) (istype(A, /mob/living/carbon/xenomorph/king))
 #define isxenobehemoth(A) (istype(A, /mob/living/carbon/xenomorph/behemoth))
+#define isxenopanther(A) (istype(A, /mob/living/carbon/xenomorph/panther))
+#define isxenofacehugger(A) (istype(A, /mob/living/carbon/xenomorph/facehugger))
 
 //Silicon mobs
 #define issilicon(A) (istype(A, /mob/living/silicon))
@@ -133,6 +126,8 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 //Simple animals
 #define isanimal(A) (istype(A, /mob/living/simple_animal))
+
+#define isshade(A) (istype(A, /mob/living/simple_animal/shade))
 
 #define ismouse(A) (istype(A, /mob/living/simple_animal/mouse))
 
@@ -147,6 +142,10 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 #define isbear(A) (istype(A, /mob/living/simple_animal/hostile/bear))
 
 #define iscarp(A) (istype(A, /mob/living/simple_animal/hostile/carp))
+
+#define isconstruct(A) (istype(A, /mob/living/simple_animal/construct))
+
+#define isclown(A) (istype(A, /mob/living/simple_animal/hostile/retaliate/clown))
 
 //Misc mobs
 #define isobserver(A) (istype(A, /mob/dead/observer))
@@ -176,9 +175,7 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 #define isgrenade(A) (istype(A, /obj/item/explosive/grenade))
 
-#define isdatumstorage(A) (istype(A, /datum/storage))
-
-#define isstorageobj(A) (istype(A, /obj/item/storage))
+#define isstorage(A) (istype(A, /obj/item/storage))
 
 #define isitemstack(A) (istype(A, /obj/item/stack))
 
@@ -220,11 +217,7 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 #define iscrowbar(I) (istype(I, /obj/item/tool/crowbar))
 
-#define isplasmacutter(I) istype(I, /obj/item/tool/pickaxe/plasmacutter)
-
 #define iscell(I) (istype(I, /obj/item/cell))
-
-#define islascell(I) (istype(I, /obj/item/cell/lasgun))
 
 #define isfactorypart(I) (istype(I, /obj/item/factory_part))
 
@@ -268,18 +261,6 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 #define isearthpillar(A) (istype(A, /obj/structure/earth_pillar))
 
-#define isbarricade(A) (istype(A, /obj/structure/barricade))
-
-#define isfire(A) istype(A, /obj/fire)
-
-#define is_reagent_container(O) (istype(O, /obj/item/reagent_containers))
-
-#define isimplant(A) (istype(A, /obj/item/implant))
-
-#define isdoorkey(A) istype(A, /obj/item/key/door)
-
-#define islock(A) istype(A, /obj/item/lock)
-
 //Assemblies
 #define isassembly(O) (istype(O, /obj/item/assembly))
 
@@ -303,6 +284,7 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 #define iscombatpatrolgamemode(O) (istype(O, /datum/game_mode/hvh/combat_patrol))
 #define issensorcapturegamemode(O) (istype(O, /datum/game_mode/hvh/combat_patrol/sensor_capture))
 #define iscampaigngamemode(O) (istype(O, /datum/game_mode/hvh/campaign))
+#define isdistressgamemode(O) (istype(O, /datum/game_mode/infestation/distress))
 
 #define isxenoresearcharea(A) (istype(A, /area/mainship/medical/medical_science))
 
@@ -318,8 +300,7 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 
 // Xeno hives
 #define isnormalhive(hive) (istype(hive, /datum/hive_status/normal))
-#define isxenohive(A) ((A == XENO_HIVE_NONE) || (A == XENO_HIVE_NORMAL) || (A == XENO_HIVE_CORRUPTED) || (A == XENO_HIVE_ALPHA) || (A == XENO_HIVE_BETA) || (A == XENO_HIVE_ZETA) || (A == XENO_HIVE_ADMEME)) || (A == XENO_HIVE_FALLEN)
-
+#define isxenohive(A) ((A == XENO_HIVE_NONE) || (A == XENO_HIVE_NORMAL) || (A == XENO_HIVE_CORRUPTED) || (A == XENO_HIVE_ALPHA) || (A == XENO_HIVE_BETA) || (A == XENO_HIVE_ZETA) || (A == XENO_HIVE_ADMEME)) || (A == XENO_HIVE_FALLEN) || (A == XENO_HIVE_FORSAKEN) || (A == XENO_HIVE_YAUTJA)
 // Slot helpers
 #define ishandslot(A) ((A == SLOT_L_HAND) || (A == SLOT_R_HAND))
 
@@ -327,3 +308,15 @@ GLOBAL_VAR_INIT(refid_filter, TYPEID(filter(type="angular_blur")))
 #define ismaroonobjective(O) (istype(O, /datum/objective/maroon))
 #define isstealobjective(O) (istype(O, /datum/objective/steal))
 #define isassassinateobjective(O) (istype(O, /datum/objective/assassinate))
+
+#define isresearcher(A) (ishuman(A) && A.job.title == "Medical Researcher")
+#define isyautja(H) (is_species(H, /datum/species/yautja))
+
+#define ispredatorjob(J) (istype(J, /datum/job/predator))
+
+#define ispredalien(A) (istype(A, /mob/living/carbon/xenomorph/predalien))
+#define isxenopredalienlarva(A) (istype(A, /mob/living/carbon/xenomorph/larva/predalien))
+#define isxenohellhound(A) (istype(A, /mob/living/carbon/xenomorph/hellhound))
+
+//Objects
+#define iscontainmentshutter(A) (istype(A, /obj/machinery/door/poddoor/timed_late/containment/landing_zone))

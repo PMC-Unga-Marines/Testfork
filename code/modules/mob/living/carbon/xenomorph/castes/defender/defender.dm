@@ -1,5 +1,5 @@
 /mob/living/carbon/xenomorph/defender
-	caste_base_type = /datum/xeno_caste/defender
+	caste_base_type = /mob/living/carbon/xenomorph/defender
 	name = "Defender"
 	desc = "An alien with an armored head crest."
 	icon = 'icons/Xeno/castes/defender.dmi'
@@ -9,6 +9,7 @@
 	maxHealth = 200
 	plasma_stored = 50
 	pixel_x = -16
+	old_x = -16
 	tier = XENO_TIER_ONE
 	upgrade = XENO_UPGRADE_NORMAL
 	pull_speed = -2
@@ -18,10 +19,10 @@
 // ***************************************
 /mob/living/carbon/xenomorph/defender/handle_special_state()
 	if(fortify)
-		icon_state = "[xeno_caste.caste_name][(xeno_flags & XENO_ROUNY) ? " rouny" : ""] Fortify"
+		icon_state = "[xeno_caste.caste_name][is_a_rouny ? " rouny" : ""] Fortify"
 		return TRUE
 	if(crest_defense)
-		icon_state = "[xeno_caste.caste_name][(xeno_flags & XENO_ROUNY) ? " rouny" : ""] Crest"
+		icon_state = "[xeno_caste.caste_name][is_a_rouny ? " rouny" : ""] Crest"
 		return TRUE
 	return FALSE
 

@@ -2,13 +2,6 @@
 	category = CATEGORY_MECHA
 	weight = WEIGHT_MOB
 
-/datum/keybinding/mecha/mech_toggle_internals
-	name = "mech_toggle_internals"
-	full_name = "Toggle Internals"
-	description = "Toggle the internal ventilation on your mecha"
-	keybind_signal = COMSIG_MECHABILITY_TOGGLE_INTERNALS
-	hotkey_keys = list("I")
-
 /datum/keybinding/mecha/mech_toggle_strafe
 	name = "mech_toggle_strafe"
 	full_name = "Toggle Strafe"
@@ -50,16 +43,3 @@
 	description = "Bombard an area with rockets"
 	keybind_signal = COMSIG_MECHABILITY_STRIKE
 	hotkey_keys = list("F")
-
-/datum/keybinding/mecha/mech_reload_weapons
-	name = "mech_reload_weapons"
-	full_name = "Mech Reload Weapons"
-	description = "Reload any equipped weapons"
-	keybind_signal = COMSIG_MECHABILITY_RELOAD
-	hotkey_keys = list("R")
-/datum/keybinding/mecha/mech_toggle_actuators
-	name = "mech_toggle_actuators"
-	full_name = "Mecha Toggle Actuators"
-	description = "Toggle leg actuator overload for your mecha"
-	keybind_signal = COMSIG_MECHABILITY_TOGGLE_ACTUATORS
-	hotkey_keys = list("X")

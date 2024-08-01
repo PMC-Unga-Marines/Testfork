@@ -159,7 +159,6 @@
 	. = ..()
 	user.client?.prefs.save_loadout_list(loadouts_data, CURRENT_LOADOUT_VERSION)
 
-///Recursive function to update attachment lists.
 /datum/loadout_manager/proc/update_attachments(list/datum/item_representation/armor_module/attachments, version)
 	for(var/datum/item_representation/armor_module/module AS in attachments)
 		if(version < 13)
@@ -176,7 +175,7 @@
 			attachments.Add(new_module)
 		if(version < 14)
 			if(ispath(module.item_type, /obj/item/armor_module/armor/cape))
-				module.variant = NORMAL
+				module.variant = CAPE_LONG
 				if(module.item_type == /obj/item/armor_module/armor/cape/kama)
 					module.variant = CAPE_KAMA
 				else if(module.item_type != /obj/item/armor_module/armor/cape)
@@ -184,15 +183,6 @@
 					new_cape.item_type = /obj/item/armor_module/armor/cape
 					new_cape.attachments = module.attachments
 					new_cape.colors = module.colors
-					switch(module.item_type)
-						if(/obj/item/armor_module/armor/cape/half)
-							new_cape.variant = CAPE_HALF
-						if(/obj/item/armor_module/armor/cape/scarf)
-							new_cape.variant = CAPE_SCARF
-						if(/obj/item/armor_module/armor/cape/short)
-							new_cape.variant = CAPE_SHORT
-						if(/obj/item/armor_module/armor/cape/short/classic)
-							new_cape.variant = CAPE_SHORT_OLD
 					attachments.Remove(module)
 					attachments.Add(new_cape)
 			if(ispath(module.item_type, /obj/item/armor_module/armor/cape_highlight))
@@ -205,11 +195,6 @@
 					new_highlight.attachments = module.attachments
 					new_highlight.colors = module.colors
 					new_highlight.variant = CAPE_HIGHLIGHT_NONE
-					switch(module.item_type)
-						if(/obj/item/armor_module/armor/cape_highlight/half)
-							new_highlight.variant = CAPE_HALF
-						if(/obj/item/armor_module/armor/cape_highlight/scarf)
-							new_highlight.variant = CAPE_SCARF
 					attachments.Remove(module)
 					attachments.Add(new_highlight)
 			if(ispath(module.item_type, /obj/item/armor_module/armor/visor/marine/eva/skull))

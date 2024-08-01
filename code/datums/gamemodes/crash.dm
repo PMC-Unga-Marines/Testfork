@@ -1,8 +1,8 @@
 /datum/game_mode/infestation/crash
 	name = "Crash"
 	config_tag = "Crash"
-	round_type_flags = MODE_INFESTATION|MODE_XENO_SPAWN_PROTECT|MODE_DEAD_GRAB_FORBIDDEN|MODE_DISALLOW_RAILGUN
-	xeno_abilities_flags = ABILITY_CRASH
+	flags_round_type = MODE_INFESTATION|MODE_XENO_SPAWN_PROTECT|MODE_DEAD_GRAB_FORBIDDEN|MODE_DISALLOW_RAILGUN
+	flags_xeno_abilities = ABILITY_CRASH
 	valid_job_types = list(
 		/datum/job/terragov/squad/standard = -1,
 		/datum/job/terragov/squad/engineer = 1,
@@ -10,6 +10,7 @@
 		/datum/job/terragov/squad/smartgunner = 1,
 		/datum/job/terragov/squad/leader = 1,
 		/datum/job/terragov/medical/professor = 1,
+		/datum/job/terragov/medical/medicalofficer = 1,
 		/datum/job/terragov/silicon/synthetic = 1,
 		/datum/job/terragov/command/fieldcommander = 1,
 		/datum/job/xenomorph = FREE_XENO_AT_START
@@ -74,12 +75,20 @@
 	SSshuttle.moveShuttleToDock(shuttle.id, actual_crash_site, TRUE) // FALSE = instant arrival
 	addtimer(CALLBACK(src, PROC_REF(crash_shuttle), actual_crash_site), 10 MINUTES)
 
+	GLOB.start_squad_landmarks_list = null
+
 
 /datum/game_mode/infestation/crash/post_setup()
 	. = ..()
 	for(var/i in GLOB.xeno_resin_silo_turfs)
+		//RUTGMC EDIT BEGIN
+		/* //ORIGINAL
 		new /obj/structure/xeno/silo(i)
 		new /obj/structure/xeno/pherotower(i)
+		*/
+		new /obj/structure/xeno/silo/crash(i)
+		new /obj/structure/xeno/pherotower/crash(i)
+		//RUTGMC EDIT END
 
 	for(var/obj/effect/landmark/corpsespawner/corpse AS in GLOB.corpse_landmarks_list)
 		corpse.create_mob()
@@ -99,26 +108,17 @@
 	RegisterSignal(SSdcs, COMSIG_GLOB_NUKE_DIFFUSED, PROC_REF(on_nuclear_diffuse))
 	RegisterSignal(SSdcs, COMSIG_GLOB_NUKE_START, PROC_REF(on_nuke_started))
 
-	if(!(round_type_flags & MODE_INFESTATION))
+	if(!(flags_round_type & MODE_INFESTATION))
 		return
 
 	for(var/i in GLOB.alive_xeno_list_hive[XENO_HIVE_NORMAL])
 		if(isxenolarva(i)) // Larva
 			var/mob/living/carbon/xenomorph/larva/X = i
 			X.evolution_stored = X.xeno_caste.evolution_threshold //Immediate roundstart evo for larva.
-		else // Handles Shrike etc
-			var/mob/living/carbon/xenomorph/X = i
-			X.upgrade_stored = X.xeno_caste.upgrade_threshold
-
 
 /datum/game_mode/infestation/crash/announce()
 	to_chat(world, span_round_header("The current map is - [SSmapping.configs[GROUND_MAP].map_name]!"))
-	priority_announce(
-		message = "Scheduled for landing in T-10 Minutes. Prepare for landing. Known hostiles near LZ. Detonation Protocol Active, planet disposable. Marines disposable.",
-		title = "Good morning, marines.",
-		type = ANNOUNCEMENT_PRIORITY,
-		color_override = "red"
-	)
+	priority_announce("Scheduled for landing in T-10 Minutes. Prepare for landing. Known hostiles near LZ. Detonation Protocol Active, planet disposable. Marines disposable.", type = ANNOUNCEMENT_PRIORITY)
 	playsound(shuttle, 'sound/machines/warning-buzzer.ogg', 75, 0, 30)
 
 

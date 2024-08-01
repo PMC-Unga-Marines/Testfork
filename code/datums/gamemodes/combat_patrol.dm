@@ -1,7 +1,7 @@
 /datum/game_mode/hvh/combat_patrol
 	name = "Combat Patrol"
 	config_tag = "Combat Patrol"
-	round_type_flags = MODE_LATE_OPENING_SHUTTER_TIMER|MODE_TWO_HUMAN_FACTIONS|MODE_HUMAN_ONLY
+	flags_round_type = MODE_LATE_OPENING_SHUTTER_TIMER|MODE_TWO_HUMAN_FACTIONS|MODE_HUMAN_ONLY
 	shutters_drop_time = 3 MINUTES
 	whitelist_ship_maps = list(MAP_COMBAT_PATROL_BASE)
 	blacklist_ship_maps = null
@@ -115,23 +115,9 @@
 
 /datum/game_mode/hvh/combat_patrol/declare_completion()
 	. = ..()
+	to_chat(world, span_round_header("|[round_finished]|"))
 	log_game("[round_finished]\nGame mode: [name]\nRound time: [duration2text()]\nEnd round player population: [length(GLOB.clients)]\nTotal TGMC spawned: [GLOB.round_statistics.total_humans_created[FACTION_TERRAGOV]]\nTotal SOM spawned: [GLOB.round_statistics.total_humans_created[FACTION_SOM]]")
-
-/datum/game_mode/hvh/combat_patrol/end_round_fluff()
-	send_ooc_announcement(
-		sender_override = "Round Concluded",
-		title = round_finished,
-		text = "Thus ends the story of the brave men and women of the TerraGov Marine Corps and Sons of Mars, and their struggle on [SSmapping.configs[GROUND_MAP].map_name].",
-		play_sound = FALSE,
-		style = "game"
-	)
-
-/datum/game_mode/hvh/combat_patrol/get_deploy_point_message(mob/living/user)
-	switch(user.faction)
-		if(FACTION_TERRAGOV)
-			. = "Eliminate all hostile forces in the AO, good luck team."
-		if(FACTION_SOM)
-			. = "Eliminate the TerraGov imperialists in the AO, glory to Mars!"
+	to_chat(world, span_round_body("Thus ends the story of the brave men and women of both the TGMC and SOM, and their struggle on [SSmapping.configs[GROUND_MAP].map_name]."))
 
 ///round timer
 /datum/game_mode/hvh/combat_patrol/proc/set_game_timer()

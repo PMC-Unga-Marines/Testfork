@@ -1,17 +1,6 @@
 import { useBackend } from '../../backend';
-import {
-  Button,
-  ColorBox,
-  LabeledList,
-  Section,
-  Stack,
-} from '../../components';
-import {
-  LoopingSelectionPreference,
-  SelectFieldPreference,
-  TextFieldPreference,
-  ToggleFieldPreference,
-} from './FieldPreferences';
+import { Button, Section, LabeledList, Stack, ColorBox } from '../../components';
+import { ToggleFieldPreference, TextFieldPreference, SelectFieldPreference, LoopingSelectionPreference } from './FieldPreferences';
 
 const ParallaxNumToString = (integer) => {
   let returnval = '';
@@ -37,8 +26,8 @@ const ParallaxNumToString = (integer) => {
   return returnval;
 };
 
-export const GameSettings = (props) => {
-  const { act, data } = useBackend<GameSettingData>();
+export const GameSettings = (props, context) => {
+  const { act, data } = useBackend<GameSettingData>(context);
   const { ui_style_color, scaling_method, pixel_size, parallax, is_admin } =
     data;
   return (
@@ -214,15 +203,6 @@ export const GameSettings = (props) => {
                 rightValue={1}
                 rightLabel={'Disabled'}
               />
-              <ToggleFieldPreference
-                label="Show xeno rank"
-                value="show_xeno_rank"
-                action="show_xeno_rank"
-                leftValue={1}
-                leftLabel={'Enabled'}
-                rightValue={0}
-                rightLabel={'Disabled'}
-              />
             </LabeledList>
           </Section>
         </Stack.Item>
@@ -258,6 +238,11 @@ export const GameSettings = (props) => {
                 action="widescreenpref"
                 leftLabel={'Enabled'}
                 rightLabel={'Disabled'}
+              />
+              <SelectFieldPreference
+                label={'Widescreen resolution'}
+                value={'screen_resolution'}
+                action={'screen_resolution'}
               />
               <ToggleFieldPreference
                 label="Radial medical wheel"
@@ -298,54 +283,6 @@ export const GameSettings = (props) => {
             </LabeledList>
           </Section>
         </Stack.Item>
-        <Stack.Item grow>
-          <Section title="Sound settings">
-            <LabeledList>
-              <ToggleFieldPreference
-                label="Toggle admin music"
-                value="toggle_admin_music"
-                action="toggle_admin_music"
-                leftLabel={'Enabled'}
-                rightLabel={'Disabled'}
-              />
-              <ToggleFieldPreference
-                label="Toggle ambience sound"
-                value="toggle_ambience_sound"
-                action="toggle_ambience_sound"
-                leftLabel={'Enabled'}
-                rightLabel={'Disabled'}
-              />
-              <ToggleFieldPreference
-                label="Toggle lobby music"
-                value="toggle_lobby_music"
-                action="toggle_lobby_music"
-                leftLabel={'Enabled'}
-                rightLabel={'Disabled'}
-              />
-              <ToggleFieldPreference
-                label="Toggle instruments sound"
-                value="toggle_instruments_sound"
-                action="toggle_instruments_sound"
-                leftLabel={'Enabled'}
-                rightLabel={'Disabled'}
-              />
-              <ToggleFieldPreference
-                label="Toggle weather sound"
-                value="toggle_weather_sound"
-                action="toggle_weather_sound"
-                leftLabel={'Enabled'}
-                rightLabel={'Disabled'}
-              />
-              <ToggleFieldPreference
-                label="Toggle round end sounds"
-                value="toggle_round_end_sounds"
-                action="toggle_round_end_sounds"
-                leftLabel={'Enabled'}
-                rightLabel={'Disabled'}
-              />
-            </LabeledList>
-          </Section>
-        </Stack.Item>
       </Stack>
       {!!is_admin && (
         <Stack>
@@ -363,13 +300,6 @@ export const GameSettings = (props) => {
                   label="Split admin tabs"
                   value="split_admin_tabs"
                   action="split_admin_tabs"
-                  leftLabel={'Enabled'}
-                  rightLabel={'Disabled'}
-                />
-                <ToggleFieldPreference
-                  label="Toggle adminhelp sound"
-                  value="toggle_adminhelp_sound"
-                  action="toggle_adminhelp_sound"
                   leftLabel={'Enabled'}
                   rightLabel={'Disabled'}
                 />

@@ -4,14 +4,13 @@
 	icon_state = "boom_vest"
 	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 0, ACID = 0)
 	slowdown = 0
-	item_map_variant_flags = NONE
-	armor_features_flags = NONE
+	flags_item_map_variant = NONE
+	flags_armor_features = NONE
+	species_exception = list(/datum/species/robot)
 	///Warcry to yell upon detonation
 	var/bomb_message
 	///List of warcries that are not allowed.
 	var/bad_warcries_regex = "allahu ackbar|allah|ackbar"
-	///Time it takes to detonate
-	var/detonate_time = 2 SECONDS
 
 /obj/item/clothing/suit/storage/marine/boomvest/equipped(mob/user, slot)
 	. = ..()
@@ -27,29 +26,31 @@
 	TIMER_COOLDOWN_START(src, COOLDOWN_BOMBVEST_SHIELD_DROP, 5 SECONDS)
 
 ///Overwrites the parent function for activating a light. Instead it now detonates the bomb.
-/obj/item/clothing/suit/storage/marine/boomvest/attack_self(mob/user)
-	var/mob/living/carbon/human/activator = user
+/obj/item/clothing/suit/storage/marine/boomvest/attack_self(mob/living/carbon/human/activator)
 	if(issynth(activator) && !CONFIG_GET(flag/allow_synthetic_gun_use))
-		balloon_alert(user, "Can't wear this")
+		balloon_alert(activator, "Can't wear this")
 		return TRUE
-	if(user.alpha != 255)
-		balloon_alert(user, "Can't, your cloak prevents you")
+	if(activator.alpha != 255)
+		balloon_alert(activator, "Can't, your cloak prevents you")
 		return TRUE
 	if(activator.wear_suit != src)
-		balloon_alert(user, "Can only be detonated while worn")
+		balloon_alert(activator, "Can only be detonated while worn")
 		return FALSE
 	if(istype(activator.l_hand, /obj/item/weapon/shield/riot) || istype(activator.r_hand, /obj/item/weapon/shield/riot) || istype(activator.back, /obj/item/weapon/shield/riot))
-		balloon_alert(user, "Can't, your shield prevents you")
+		balloon_alert(activator, "Can't, your shield prevents you")
 		return FALSE
 	if(TIMER_COOLDOWN_CHECK(src, COOLDOWN_BOMBVEST_SHIELD_DROP))
-		balloon_alert(user, "Can't, dropped shield too recently")
+		balloon_alert(activator, "Can't, dropped shield too recently")
 		return FALSE
-	if(LAZYACCESS(user.do_actions, src))
+	if(LAZYACCESS(activator.do_actions, src))
 		return
 	if(bomb_message)
 		activator.say("[bomb_message]!!")
-	if(!do_after(user, detonate_time, IGNORE_USER_LOC_CHANGE, src, BUSY_ICON_DANGER))
+	if(!do_after(activator, 0.5 SECONDS, IGNORE_USER_LOC_CHANGE, src, BUSY_ICON_DANGER))
 		return FALSE
+	boom(activator)
+
+/obj/item/clothing/suit/storage/marine/boomvest/proc/boom(mob/living/carbon/human/activator)
 	var/turf/target = get_turf(loc)
 	if(bomb_message) //Checks for a non null bomb message.
 		message_admins("[activator] has detonated an explosive vest with the warcry \"[bomb_message]\" at [ADMIN_VERBOSEJMP(target)]") //Incase disputes show up about marines killing themselves and others.
@@ -58,13 +59,11 @@
 		message_admins("[activator] has detonated an explosive vest with no warcry at [ADMIN_VERBOSEJMP(target)]")
 		log_game("[activator] has detonated an explosive vest with no warcry at [AREACOORD(target)]")
 
-	activator.record_tactical_unalive()
+	cell_explosion(target, 275, 65)
+	flame_radius(5, target)
 
-	for(var/datum/limb/appendage AS in activator.limbs) //Oops we blew all our limbs off
-		if(istype(appendage, /datum/limb/chest) || istype(appendage, /datum/limb/groin) || istype(appendage, /datum/limb/head))
-			continue
-		appendage.droplimb()
-	explosion(target, 2, 2, 6, 7, 5, 5)
+	activator.ex_act(500)
+	activator.record_tactical_unalive()
 	qdel(src)
 
 /obj/item/clothing/suit/storage/marine/boomvest/attack_hand_alternate(mob/living/user)
@@ -93,28 +92,24 @@
 /obj/item/clothing/suit/storage/marine/boomvest/ob_vest
 	name = "orbital bombardment vest"
 	desc = "This is your lieutenant speaking, I know exactly what those coordinates are for."
-	detonate_time = 1 SECONDS
 
-/obj/item/clothing/suit/storage/marine/boomvest/ob_vest/attack_self(mob/user)
-	var/mob/living/carbon/human/activator = user
+/obj/item/clothing/suit/storage/marine/boomvest/ob_vest/attack_self(mob/living/carbon/human/activator)
 	if(activator.wear_suit != src)
-		balloon_alert(user, "Can only be detonated while worn")
+		balloon_alert(activator, "Can only be detonated while worn")
 		return FALSE
-	if(LAZYACCESS(user.do_actions, src))
+	if(LAZYACCESS(activator.do_actions, src))
 		return
-	if(!do_after(user, detonate_time, IGNORE_USER_LOC_CHANGE, src, BUSY_ICON_DANGER))
+	if(!do_after(activator, 1 SECONDS, IGNORE_USER_LOC_CHANGE, src, BUSY_ICON_DANGER))
 		return FALSE
+	boom(activator)
+
+/obj/item/clothing/suit/storage/marine/boomvest/ob_vest/boom(mob/living/carbon/human/activator)
 	var/turf/target = get_turf(loc)
 	activator.say("I'M FIRING IT AS AN OB!!")
 	message_admins("[activator] has detonated an Orbital Bombardment vest at [ADMIN_VERBOSEJMP(target)]")
 	log_game("[activator] has detonated an Orbital Bombardment vest at [AREACOORD(target)]")
 
-	for(var/datum/limb/appendage AS in activator.limbs) //Oops we blew all our limbs off
-		if(istype(appendage, /datum/limb/chest) || istype(appendage, /datum/limb/groin) || istype(appendage, /datum/limb/head))
-			continue
-		appendage.droplimb()
-	explosion(target, 15, 0, 0, 0, 15, 15)
+	activator.ex_act(1500)
+	cell_explosion(target, 750, 50)
+	flame_radius(15, target)
 	qdel(src)
-
-/obj/item/clothing/suit/storage/marine/boomvest/fast
-	detonate_time = 0.5 SECONDS

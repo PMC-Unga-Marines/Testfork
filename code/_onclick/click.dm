@@ -18,18 +18,18 @@
 	Note that this proc can be overridden, and is in the case of screen objects.
 */
 /atom/Click(location, control, params)
-	if(atom_flags & INITIALIZED)
+	if(flags_atom & INITIALIZED)
 		SEND_SIGNAL(src, COMSIG_CLICK, location, control, params, usr)
 		usr.ClickOn(src, location, params)
 
 
 /atom/DblClick(location, control, params)
-	if(atom_flags & INITIALIZED)
+	if(flags_atom & INITIALIZED)
 		usr.DblClickOn(src, params)
 
 
 /atom/MouseWheel(delta_x, delta_y, location, control, params)
-	if(atom_flags & INITIALIZED)
+	if(flags_atom & INITIALIZED)
 		usr.MouseWheelOn(src, delta_x, delta_y, params)
 
 
@@ -113,18 +113,13 @@
 		return
 
 	if(in_throw_mode)
-		if(throw_item(A))
-			changeNext_move(CLICK_CD_THROWING)
+		throw_item(A)
 		return
 
 	var/obj/item/W = get_active_held_item()
 
 	if(W == A)
-		if(modifiers["right"])
-			W.attack_self_alternate(src)
-		else
-			W.attack_self(src)
-
+		W.attack_self(src)
 		update_inv_l_hand()
 		update_inv_r_hand()
 		return
@@ -153,19 +148,17 @@
 			var/proximity = A.Adjacent(src)
 			if(!proximity || !A.attackby(W, src, params))
 				W.afterattack(A, src, proximity, params)
-				RangedAttack(A, params)
 		else
 			if(A.Adjacent(src))
 				A.attack_hand(src)
-			else
-				RangedAttack(A, params)
+
+	if(!A.Adjacent(src))
+		RangedAttack(A, params)
 
 
-/**
- * A backwards depth-limited breadth-first-search to see if the target is
- * logically "in" anything adjacent to us.
- */
 /atom/movable/proc/CanReach(atom/ultimate_target, obj/item/tool, view_only = FALSE)
+	// A backwards depth-limited breadth-first-search to see if the target is
+	// logically "in" anything adjacent to us.
 	var/list/direct_access = DirectAccess()
 	var/depth = 1 + (view_only ? STORAGE_VIEW_DEPTH : INVENTORY_DEPTH)
 
@@ -212,14 +205,14 @@
 	if(!T)
 		return FALSE
 	for(var/atom/movable/AM AS in T)
-		if(AM.atom_flags & PREVENT_CLICK_UNDER && AM.density && AM.layer > layer)
+		if(AM.flags_atom & PREVENT_CLICK_UNDER && AM.density && AM.layer > layer)
 			return TRUE
 	return FALSE
 
 
 /turf/IsObscured()
 	for(var/atom/movable/AM AS in src)
-		if(AM.atom_flags & PREVENT_CLICK_UNDER && AM.density)
+		if(AM.flags_atom & PREVENT_CLICK_UNDER && AM.density)
 			return TRUE
 	return FALSE
 
@@ -359,7 +352,6 @@ if(selected_ability.target_flags & flagname && !istype(A, typepath)){\
 			return FALSE
 		if(COMSIG_MOB_CLICK_HANDLED)
 			return TRUE
-
 	return A.RightClick(src)
 
 /mob/living/carbon/human/RightClickOn(atom/A)
@@ -417,13 +409,8 @@ if(selected_ability.target_flags & flagname && !istype(A, typepath)){\
 /mob/living/carbon/human/ShiftClickOn(atom/A)
 	if(client.prefs.toggles_gameplay & MIDDLESHIFTCLICKING)
 		return ..()
-	if(selected_ability)
-		A = ability_target(A)
-		if(selected_ability.can_use_ability(A))
-			selected_ability.use_ability(A)
-		return TRUE
-
 	var/obj/item/held_thing = get_active_held_item()
+
 	if(held_thing && SEND_SIGNAL(held_thing, COMSIG_ITEM_SHIFTCLICKON, A, src) & COMPONENT_ITEM_CLICKON_BYPASS)
 		return FALSE
 	return ..()
@@ -441,7 +428,6 @@ if(selected_ability.target_flags & flagname && !istype(A, typepath)){\
 /atom/proc/ShiftClick(mob/user)
 	SHOULD_CALL_PARENT(TRUE)
 	SEND_SIGNAL(src, COMSIG_CLICK_SHIFT, user)
-	user.examinate(src)
 	return TRUE
 
 /*

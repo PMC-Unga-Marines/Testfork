@@ -15,12 +15,12 @@
 	. = ..()
 	var/turf/current_turf = get_turf(src)
 	if(anchored && current_turf && density)
-		current_turf.atom_flags |= AI_BLOCKED
+		current_turf.flags_atom |= AI_BLOCKED
 
 /obj/machinery/door/poddoor/Destroy()
 	var/turf/current_turf = get_turf(src)
 	if(anchored && current_turf && density)
-		current_turf.atom_flags &= ~AI_BLOCKED
+		current_turf.flags_atom &= ~AI_BLOCKED
 	return ..()
 
 /obj/machinery/door/poddoor/bumpopen(mob/user)
@@ -30,13 +30,13 @@
 	. = ..()
 	var/turf/current_turf = get_turf(src)
 	if(anchored && current_turf && density)
-		current_turf.atom_flags &= ~AI_BLOCKED
+		current_turf.flags_atom &= ~AI_BLOCKED
 
 /obj/machinery/door/poddoor/close()
 	. = ..()
 	var/turf/current_turf = get_turf(src)
 	if(anchored && current_turf && density)
-		current_turf.atom_flags |= AI_BLOCKED
+		current_turf.flags_atom |= AI_BLOCKED
 
 /obj/machinery/door/poddoor/Bumped(atom/AM)
 	if(!density)
@@ -99,6 +99,7 @@
 /obj/machinery/door/poddoor/telecomms
 	name = "Telecomms Emergency Window"
 	id = "tcomwind"
+	opacity = FALSE
 
 /obj/machinery/door/poddoor/two_tile_hor
 	icon = 'icons/obj/doors/1x2blast_hor.dmi'
@@ -225,11 +226,6 @@
 	id = "mech_shutters"
 	resistance_flags = PLASMACUTTER_IMMUNE
 
-/obj/machinery/door/poddoor/mainship/vehicle
-	name = "\improper Vehicle Bay Shutters"
-	id = "vehicle_shutters"
-	resistance_flags = PLASMACUTTER_IMMUNE
-
 /obj/machinery/door/poddoor/mainship/umbilical
 	name = "Umbilical Airlock"
 	resistance_flags = RESIST_ALL
@@ -271,14 +267,17 @@
 	. = ..()
 	if(mapload)
 		var/area/ourarea = get_area(src)
-		ENABLE_BITFIELD(ourarea.area_flags, DISALLOW_WEEDING)
-		ENABLE_BITFIELD(ourarea.area_flags, NEAR_FOB)
+		ENABLE_BITFIELD(ourarea.flags_area, DISALLOW_WEEDING)
+		ENABLE_BITFIELD(ourarea.flags_area, NEAR_FOB)
 
 
 /obj/machinery/door/poddoor/timed_late/containment/landing_zone/open()
 	. = ..()
 	var/area/ourarea = get_area(src)
-	DISABLE_BITFIELD(ourarea.area_flags, DISALLOW_WEEDING)
+	DISABLE_BITFIELD(ourarea.flags_area, DISALLOW_WEEDING)
+
+/obj/machinery/door/poddoor/timed_late/containment/landing_zone/get_explosion_resistance()
+	return density ? 5000 : 0
 
 /obj/machinery/door/poddoor/timed_late/containment/landing_zone
 	id = "landing_zone"

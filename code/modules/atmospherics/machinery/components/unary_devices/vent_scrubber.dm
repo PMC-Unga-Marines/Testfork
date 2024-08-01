@@ -2,10 +2,10 @@
 #define SCRUBBING 1
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber
-	icon_state = "scrub_map-2"
-
 	name = "air scrubber"
 	desc = "Has a valve and pump attached to it."
+	icon_state = "scrub_map-2"
+	base_icon_state = "scrub"
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 10
 	active_power_usage = 60
@@ -13,9 +13,8 @@
 	welded = FALSE
 	level = 1
 	layer = ATMOS_DEVICE_LAYER
-	atom_flags = SHUTTLE_IMMUNE
+	flags_atom = SHUTTLE_IMMUNE
 	var/scrubbing = SCRUBBING //0 = siphoning, 1 = scrubbing
-
 	var/filter_types = list()///datum/gas/carbon_dioxide)
 	var/volume_rate = 200
 	var/widenet = 0 //is this scrubber acting on the 3x3 area around it.
@@ -46,18 +45,18 @@
 		add_overlay(cap)
 
 	if(welded)
-		icon_state = "scrub_welded"
+		icon_state = "[base_icon_state]_welded"
 		return
 
 	if(!nodes[1] || !on || !is_operational())
-		icon_state = "scrub_off"
+		icon_state = "[base_icon_state]_off"
 		return
 
 	if(scrubbing & SCRUBBING)
 		if(widenet)
 			icon_state = "scrub_wide"
 		else
-			icon_state = "scrub_on"
+			icon_state = "[base_icon_state]_on"
 	else //scrubbing == SIPHONING
 		icon_state = "scrub_purge"
 
@@ -66,7 +65,7 @@
 	update_icon_nopipes()
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/weld_cut_act(mob/living/user, obj/item/W)
-	if(isplasmacutter(W))
+	if(istype(W, /obj/item/tool/pickaxe/plasmacutter))
 		var/obj/item/tool/pickaxe/plasmacutter/P = W
 
 		if(!welded)
@@ -119,15 +118,27 @@
 		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
 		return FALSE
 
+/obj/machinery/atmospherics/components/unary/vent_scrubber/attack_facehugger(mob/living/carbon/xenomorph/facehugger/F, damage_amount = F.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
+	if(F.status_flags & INCORPOREAL)
+		return
+	if(!welded || !(do_after(F, 3 SECONDS, IGNORE_HELD_ITEM, src, BUSY_ICON_HOSTILE)))
+		return
+	F.visible_message("[F] furiously claws at [src]!", "We manage to clear away the stuff blocking the scrubber.", "You hear loud scraping noises.")
+	welded = FALSE
+	update_icon()
+	pipe_vision_img = image(src, loc, layer = ABOVE_HUD_LAYER, dir = dir)
+	pipe_vision_img.plane = ABOVE_HUD_PLANE
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 100, 1)
+
 /obj/machinery/atmospherics/components/unary/vent_scrubber/examine(mob/user)
 	. = ..()
 	if(welded)
-		. += "It seems welded shut."
+		. += span_notice("It seems welded shut.")
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/can_crawl_through()
 	return !welded
 
-/obj/machinery/atmospherics/components/unary/vent_scrubber/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/atmospherics/components/unary/vent_scrubber/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return
 	if(!welded || !(do_after(xeno_attacker, 2 SECONDS, IGNORE_HELD_ITEM, src, BUSY_ICON_HOSTILE)))
@@ -139,7 +150,6 @@
 	pipe_vision_img.plane = ABOVE_HUD_PLANE
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 100, 1)
 
-
 /obj/machinery/atmospherics/components/unary/vent_scrubber/AltClick(mob/user)
 	if(!isliving(user))
 		return
@@ -149,7 +159,6 @@
 		return
 	var/mob/living/living_user = user
 	living_user.handle_ventcrawl(src)
-
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on
 	on = TRUE
@@ -162,6 +171,12 @@
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/Destroy()
 	. = ..()
 	GLOB.atmospumps -= src
+
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/alt
+	icon = 'icons/obj/atmospherics/components/unary_devices.dmi'
+	icon_state = "alt_scrub_map_on-2"
+	base_icon_state = "alt_scrub"
+	piping_layer = 3
 
 #undef SIPHONING
 #undef SCRUBBING

@@ -12,7 +12,11 @@
 	using.alpha = ui_alpha
 	infodisplay += using
 
-	healths = new /atom/movable/screen/healths/alien(null, src)
+	alien_evolve_display = new /atom/movable/screen/alien/evolvehud()
+	alien_evolve_display.alpha = ui_alpha
+	infodisplay += alien_evolve_display
+
+	healths = new /atom/movable/screen/healths/alien/larva(null, src)
 	healths.alpha = ui_alpha
 	infodisplay += healths
 

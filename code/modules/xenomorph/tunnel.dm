@@ -1,7 +1,3 @@
-
-/*
-TUNNEL
-*/
 /obj/structure/xeno/tunnel
 	name = "tunnel"
 	desc = "A tunnel entrance. Looks like it was dug by some kind of clawed beast."
@@ -11,12 +7,11 @@ TUNNEL
 	density = FALSE
 	opacity = FALSE
 	anchored = TRUE
-	resistance_flags = UNACIDABLE|BANISH_IMMUNE
+	resistance_flags = UNACIDABLE
 	layer = RESIN_STRUCTURE_LAYER
 
 	max_integrity = 140
 
-	hud_possible = list(XENO_TACTICAL_HUD)
 	xeno_structure_flags = IGNORE_WEED_REMOVAL
 	///Description added by the hivelord.
 	var/tunnel_desc = ""
@@ -26,13 +21,7 @@ TUNNEL
 /obj/structure/xeno/tunnel/Initialize(mapload, _hivenumber)
 	. = ..()
 	LAZYADDASSOC(GLOB.xeno_tunnels_by_hive, hivenumber, src)
-	prepare_huds()
-	for(var/datum/atom_hud/xeno_tactical/xeno_tac_hud in GLOB.huds) //Add to the xeno tachud
-		xeno_tac_hud.add_to_hud(src)
-	SSminimaps.add_marker(src, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, "xenotunnel", VERY_HIGH_FLOAT_LAYER))
-	var/area/tunnel_area = get_area(src)
-	if(tunnel_area.area_flavor == AREA_FLAVOR_URBAN && !SSticker.HasRoundStarted())
-		icon_state = "manhole_open[rand(1,3)]"
+	SSminimaps.add_marker(src, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, "xenotunnel", HIGH_FLOAT_LAYER)) // RU TGMC edit - map blips
 
 /obj/structure/xeno/tunnel/Destroy()
 	var/turf/drop_loc = get_turf(src)
@@ -76,7 +65,7 @@ TUNNEL
 		return ..()
 	attack_alien(user)
 
-/obj/structure/xeno/tunnel/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/structure/xeno/tunnel/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(!istype(xeno_attacker) || xeno_attacker.stat || xeno_attacker.lying_angle || xeno_attacker.status_flags & INCORPOREAL)
 		return
 
@@ -133,20 +122,18 @@ TUNNEL
 	var/atom/movable/screen/minimap/map = SSminimaps.fetch_minimap_object(z, MINIMAP_FLAG_XENO)
 	M.client.screen += map
 	var/list/polled_coords = map.get_coords_from_click(M)
-	M?.client?.screen -= map
+	M.client.screen -= map
 	if(!polled_coords)
 		return
 	var/turf/clicked_turf = locate(polled_coords[1], polled_coords[2], z)
 
 	///We find the tunnel, looking within 10 tiles of where the user clicked, excluding src
 	var/obj/structure/xeno/tunnel/targettunnel = cheap_get_atom(clicked_turf, /obj/structure/xeno/tunnel, 10, GLOB.xeno_tunnels_by_hive[hivenumber] - src)
-
 	if(QDELETED(src)) //Make sure we still exist in the event the player keeps the interface open
 		return
 	if(!M.Adjacent(src) && M.loc != src) //Make sure we're close enough to our tunnel; either adjacent to or in one
 		return
 	if(QDELETED(targettunnel)) //Make sure our target destination still exists in the event the player keeps the interface open
-		balloon_alert(M, "Tunnel no longer exists")
 		if(M.loc == src) //If we're in the tunnel and cancelling out, spit us out.
 			M.forceMove(loc)
 		return
@@ -189,3 +176,6 @@ TUNNEL
 	M.forceMove(targettunnel.loc)
 	M.visible_message(span_xenonotice("\The [M] pops out of \the [src].") , \
 	span_xenonotice("We pop out through the other side!") )
+
+/obj/structure/xeno/tunnel/attack_facehugger(mob/living/carbon/xenomorph/facehugger/F, isrightclick = FALSE)
+	attack_alien(F)

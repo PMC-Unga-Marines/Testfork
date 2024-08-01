@@ -13,6 +13,15 @@
  * where they target the "dangerous" modules
  */
 
+/// returns a number for the damage multiplier for this relative angle/dir
+/obj/vehicle/sealed/mecha/proc/get_armour_facing(relative_dir)
+	switch(relative_dir)
+		if(180) // BACKSTAB!
+			return facing_modifiers[MECHA_BACK_ARMOUR]
+		if(0, 45) // direct or 45 degrees off
+			return facing_modifiers[MECHA_FRONT_ARMOUR]
+	return facing_modifiers[MECHA_SIDE_ARMOUR] //if its not a front hit or back hit then assume its from the side
+
 ///tries to deal internal damaget depending on the damage amount
 /obj/vehicle/sealed/mecha/proc/try_deal_internal_damage(damage)
 	if(damage < internal_damage_threshold)
@@ -41,10 +50,6 @@
 	switch(flag)
 		if(MECHA_INT_FIRE)
 			return "activating internal fire supression..."
-		if(MECHA_INT_TEMP_CONTROL)
-			return "resetting temperature module..."
-		if(MECHA_INT_TANK_BREACH)
-			return "activating tank sealant..."
 		if(MECHA_INT_CONTROL_LOST)
 			return "recalibrating coordination system..."
 
@@ -53,10 +58,6 @@
 	switch(flag)
 		if(MECHA_INT_FIRE)
 			return "internal fire supressed"
-		if(MECHA_INT_TEMP_CONTROL)
-			return "temperature chip reactivated"
-		if(MECHA_INT_TANK_BREACH)
-			return "air tank sealed"
 		if(MECHA_INT_CONTROL_LOST)
 			return "coordination re-established"
 
@@ -65,10 +66,6 @@
 	switch(flag)
 		if(MECHA_INT_FIRE)
 			return "fire supression canceled"
-		if(MECHA_INT_TEMP_CONTROL)
-			return "reset aborted"
-		if(MECHA_INT_TANK_BREACH)
-			return "sealant deactivated"
 		if(MECHA_INT_CONTROL_LOST)
 			return "recalibration failed"
 
@@ -79,13 +76,7 @@
 	diag_hud_set_mechstat()
 
 /obj/vehicle/sealed/mecha/proc/clear_internal_damage(int_dam_flag)
-	if(internal_damage & int_dam_flag)
-		switch(int_dam_flag)
-			if(MECHA_INT_TEMP_CONTROL)
-				to_chat(occupants, "[icon2html(src, occupants)][span_boldnotice("Life support system reactivated.")]")
-			if(MECHA_INT_FIRE)
-				to_chat(occupants, "[icon2html(src, occupants)][span_boldnotice("Internal fire extinguished.")]")
-			if(MECHA_INT_TANK_BREACH)
-				to_chat(occupants, "[icon2html(src, occupants)][span_boldnotice("Damaged internal tank has been sealed.")]")
+	if(internal_damage & int_dam_flag && int_dam_flag == MECHA_INT_FIRE)
+		to_chat(occupants, "[icon2html(src, occupants)][span_boldnotice("Internal fire extinguished.")]")
 	internal_damage &= ~int_dam_flag
 	diag_hud_set_mechstat()

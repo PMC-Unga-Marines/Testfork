@@ -5,7 +5,7 @@
 	earliest_start = 60 MINUTES
 	max_occurrences = 1
 
-	gamemode_blacklist = list("Crash", "Combat Patrol", "Sensor Capture", "Campaign")
+	gamemode_blacklist = list("Crash")
 
 /datum/round_event_control/ion_storm/can_spawn_event(players_amt, gamemode)
 	return ..()

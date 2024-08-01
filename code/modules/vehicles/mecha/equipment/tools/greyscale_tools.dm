@@ -20,13 +20,13 @@
 
 /obj/item/mecha_parts/mecha_equipment/armor/explosive
 	name = "explosive armor booster"
-	desc = "Increases armor against explosions by 25%."
+	desc = "Increases armor against explosions by 50%."
 	icon_state = "armor_explosive"
 	iconstate_name = "armor_explosive"
 	protect_name = "Explosive Armor"
 	mech_flags = EXOSUIT_MODULE_GREYSCALE
 	slowdown = 0.3
-	armor_mod = list(BOMB = 25)
+	armor_mod = list(BOMB = 50)
 
 
 /obj/item/mecha_parts/mecha_equipment/generator/greyscale

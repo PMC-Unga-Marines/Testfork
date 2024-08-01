@@ -23,7 +23,6 @@
 
 	return INITIALIZE_HINT_LATELOAD
 
-
 /obj/structure/ladder/LateInitialize()
 	. = ..()
 	for(var/obj/structure/ladder/L AS in GLOB.ladder_list)
@@ -66,7 +65,7 @@
 	else	//wtf make your ladders properly assholes
 		icon_state = "ladder00"
 
-/obj/structure/ladder/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/structure/ladder/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	return attack_hand(xeno_attacker)
 
 /obj/structure/ladder/attack_larva(mob/living/carbon/xenomorph/larva/X)
@@ -112,7 +111,6 @@
 	user.visible_message(span_notice("[user] climbs [ladder_dir_name] [src]."),
 	span_notice("You climb [ladder_dir_name] [src]."))
 
-
 /obj/structure/ladder/attack_ghost(mob/dead/observer/user)
 	. = ..()
 	if(.)
@@ -132,7 +130,6 @@
 	else if(down)
 		user.forceMove(get_turf(down))
 
-
 /obj/structure/ladder/check_eye(mob/user)
 	//Are we capable of looking?
 	if(user.incapacitated() || get_dist(user, src) > 1 || is_blind(user) || user.lying_angle || !user.client)
@@ -146,8 +143,6 @@
 		if (!up || !up.cam || !up.cam.can_use()) //Camera doesn't work or is gone
 			user.unset_interaction()
 
-
-
 /obj/structure/ladder/on_set_interaction(mob/user)
 	if (is_watching == 1)
 		if (down || down.cam || down.cam.can_use()) //Camera works
@@ -159,8 +154,6 @@
 			return
 
 	user.unset_interaction() //No usable cam, we stop interacting right away
-
-
 
 /obj/structure/ladder/on_unset_interaction(mob/user)
 	..()
@@ -206,12 +199,9 @@
 			is_watching = 1
 			usr.set_interaction(src)
 
-
 //Throwing Shiet
 /obj/structure/ladder/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/explosive/grenade))
 		var/obj/item/explosive/grenade/G = I
@@ -294,3 +284,6 @@
 
 	else
 		return attack_hand(user)
+
+/obj/structure/ladder/attack_facehugger(mob/living/carbon/xenomorph/facehugger/F, isrightclick = FALSE)
+	return attack_hand(F)

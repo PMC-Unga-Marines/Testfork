@@ -12,7 +12,7 @@
 	name = "equipment attach point"
 	desc = "A place where heavy equipment can be installed with a powerloader."
 	anchored = TRUE
-	icon = 'icons/obj/structures/prop/mainship.dmi'
+	icon = 'icons/Marine/mainship_props.dmi'
 	icon_state = "equip_base"
 	layer = ABOVE_OBJ_LAYER
 	dir = NORTH
@@ -87,7 +87,7 @@
 
 /obj/effect/attach_point/weapon/cas
 	ship_tag = SHUTTLE_CAS_DOCK
-	icon = 'icons/turf/cas.dmi'
+	icon = 'icons/Marine/casship.dmi'
 	icon_state = "15"
 
 /obj/effect/attach_point/weapon/cas/left
@@ -104,11 +104,10 @@
 	pixel_y = 32
 
 /obj/effect/attach_point/crew_weapon
-	name = "interior attach point"
+	name = "rear attach point"
 	base_category = DROPSHIP_CREW_WEAPON
 	density = FALSE
-	layer = HOLOPAD_LAYER //Keeps xenos from hiding under them
-	plane = FLOOR_PLANE //Doesn't layer under weeds unless it has this
+	layer = BELOW_OBJ_LAYER
 
 /obj/effect/attach_point/crew_weapon/dropship1
 	ship_tag = SHUTTLE_ALAMO
@@ -138,7 +137,7 @@
 
 /obj/effect/attach_point/fuel
 	name = "engine system attach point"
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	icon_state = "fuel_base"
 	base_category = DROPSHIP_FUEL_EQP
 
@@ -166,7 +165,7 @@
 /obj/structure/dropship_equipment
 	density = TRUE
 	anchored = TRUE
-	icon = 'icons/obj/structures/prop/mainship.dmi'
+	icon = 'icons/Marine/mainship_props.dmi'
 	climbable = TRUE
 	layer = ABOVE_OBJ_LAYER //so they always appear above attach points when installed
 	resistance_flags = XENO_DAMAGEABLE
@@ -249,29 +248,31 @@
 	if(dropship_equipment_flags & IS_NOT_REMOVABLE)
 		to_chat(user, span_notice("You cannot remove [src]!"))
 		return
-	if(get_self_acid())
-		to_chat(user, span_notice("You cannot touch [src] with the [attached_clamp] due to the acid on [src]."))
-	playsound(loc, 'sound/machines/hydraulics_2.ogg', 40, 1)
-	var/duration_time = ship_base ? 70 : 10 //uninstalling equipment takes more time
-	if(!do_after(user, duration_time, IGNORE_HELD_ITEM, src, BUSY_ICON_BUILD))
-		return
-	if(attached_clamp.loaded || !LAZYLEN(attached_clamp.linked_powerloader?.buckled_mobs) || attached_clamp.linked_powerloader.buckled_mobs[1] != user)
-		return
-	forceMove(attached_clamp.linked_powerloader)
-	attached_clamp.loaded = src
-	SEND_SIGNAL(src, COMSIG_DROPSHIP_EQUIPMENT_UNEQUIPPED)
-	playsound(src, 'sound/machines/hydraulics_1.ogg', 40, 1)
-	attached_clamp.update_icon()
-	to_chat(user, span_notice("You've [ship_base ? "uninstalled" : "grabbed"] [attached_clamp.loaded] with [attached_clamp]."))
-	if(ship_base)
-		ship_base.installed_equipment = null
-		ship_base = null
-		if(linked_shuttle)
-			linked_shuttle.equipments -= src
-			linked_shuttle = null
-			if(linked_console?.selected_equipment == src)
-				linked_console.selected_equipment = null
-	update_equipment()
+	if(!current_acid)
+		playsound(loc, 'sound/machines/hydraulics_2.ogg', 40, 1)
+		var/duration_time = ship_base ? 70 : 10 //uninstalling equipment takes more time
+		if(!do_after(user, duration_time, IGNORE_HELD_ITEM, src, BUSY_ICON_BUILD))
+			return
+		if(attached_clamp.loaded || !LAZYLEN(attached_clamp.linked_powerloader?.buckled_mobs) || attached_clamp.linked_powerloader.buckled_mobs[1] != user)
+			return
+		forceMove(attached_clamp.linked_powerloader)
+		attached_clamp.loaded = src
+		SEND_SIGNAL(src, COMSIG_DROPSHIP_EQUIPMENT_UNEQUIPPED)
+		playsound(src, 'sound/machines/hydraulics_1.ogg', 40, 1)
+		attached_clamp.update_icon()
+		to_chat(user, span_notice("You've [ship_base ? "uninstalled" : "grabbed"] [attached_clamp.loaded] with [attached_clamp]."))
+		if(ship_base)
+			ship_base.installed_equipment = null
+			ship_base = null
+			if(linked_shuttle)
+				linked_shuttle.equipments -= src
+				linked_shuttle = null
+				if(linked_console?.selected_equipment == src)
+					linked_console.selected_equipment = null
+		update_equipment()
+		return //removed or uninstalled equipment
+	to_chat(user, span_notice("You cannot touch [src] with the [attached_clamp] due to the acid on [src]."))
+
 
 /obj/structure/dropship_equipment/beforeShuttleMove(turf/newT, rotation, move_mode, obj/docking_port/mobile/moving_dock)
 	. = ..()
@@ -323,8 +324,6 @@
 
 /obj/structure/dropship_equipment/shuttle/flare_launcher/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(istype(I, /obj/item/explosive/grenade/flare) && stored_amount < max_amount)
 		stored_amount++
 		user.balloon_alert(user, "You insert a flare, remaining flares [stored_amount].")
@@ -363,7 +362,6 @@
 	icon_state = "sentry_system"
 	dropship_equipment_flags = IS_INTERACTABLE
 	point_cost = 500
-	pixel_y = 32
 	var/deployment_cooldown
 	var/obj/machinery/deployable/mounted/sentry/deployed_turret
 	var/sentry_type = /obj/item/weapon/gun/sentry/big_sentry/dropship
@@ -522,10 +520,10 @@
 
 /obj/structure/dropship_equipment/shuttle/weapon_holder/machinegun
 	name = "machinegun deployment system"
-	desc = "A box that deploys a modified HSG-102 crewserved machine gun. Fits on the crewserved weapon attach points of dropships. You need a powerloader to lift it."
+	desc = "A box that deploys a modified M56D crewserved machine gun. Fits on the crewserved weapon attach points of dropships. You need a powerloader to lift it."
 	icon_state = "mg_system"
 	point_cost = 300
-	deployable_type = /obj/item/weapon/gun/hsg_102/hsg_nest
+	deployable_type = /obj/item/weapon/gun/tl102/hsg_nest
 
 /obj/structure/dropship_equipment/shuttle/weapon_holder/minigun
 	name = "minigun deployment system"
@@ -553,7 +551,7 @@
 ////////////////////////////////// FUEL EQUIPMENT /////////////////////////////////
 
 /obj/structure/dropship_equipment/fuel
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	equip_category = DROPSHIP_FUEL_EQP
 
 
@@ -640,18 +638,15 @@
 
 /obj/structure/dropship_equipment/cas/weapon
 	name = "abstract weapon"
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	equip_category = DROPSHIP_WEAPON
 	bound_width = 32
 	bound_height = 64
 	dropship_equipment_flags = USES_AMMO|IS_WEAPON|IS_INTERACTABLE|FIRE_MISSION_ONLY
 	screen_mode = 1
-	///used for weapon cooldown after use
-	COOLDOWN_DECLARE(last_fired)
-	///primary firing sound on the plane
+	COOLDOWN_DECLARE(last_fired) //used for weapon cooldown after use.
 	var/firing_sound
-	///delay between firing.
-	var/firing_delay = 2 SECONDS
+	var/firing_delay = 20 //delay between firing. 2 seconds by default
 
 /obj/structure/dropship_equipment/cas/weapon/update_equipment()
 	if(ship_base)
@@ -688,17 +683,12 @@
 /obj/structure/dropship_equipment/cas/weapon/proc/open_fire(obj/selected_target, attackdir)
 	var/turf/target_turf = get_turf(selected_target)
 	if(firing_sound)
-		playsound(loc, firing_sound, 70, TRUE)
+		playsound(loc, firing_sound, 70, 1)
 	var/obj/structure/ship_ammo/SA = ammo_equipped //necessary because we nullify ammo_equipped when firing big rockets
 	var/ammo_travelling_time = SA.travelling_time //how long the rockets/bullets take to reach the ground target.
 	var/ammo_warn_sound = SA.warning_sound
 	deplete_ammo()
 	COOLDOWN_START(src, last_fired, firing_delay)
-
-	if((SA.max_ammo_count > 1) && (SA.ammo_count <= 0))
-		playsound(loc, 'sound/voice/plane_vws/ammunition_zero.ogg', 70, FALSE)
-	else if(SA.firing_voiceline)
-		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(playsound), loc, SA.firing_voiceline, 80, FALSE), 5)
 
 	if(ammo_warn_sound)
 		playsound(target_turf, ammo_warn_sound, 70, 1)
@@ -718,7 +708,7 @@
 
 /obj/structure/dropship_equipment/cas/weapon/heavygun
 	name = "\improper GAU-21 30mm cannon"
-	desc = "A dismounted GAU-21 'Rattler' 30mm rotary cannon. Capable of firing 5200 rounds a minute, feared by many for its power. Earned the nickname 'Rattler' from the vibrations it would cause on ships in its inital production run. Moving this will require some sort of lifter."
+	desc = "A dismounted GAU-21 'Rattler' 30mm rotary cannon. It seems to be missing its feed links and has exposed connection wires. Capable of firing 5200 rounds a minute, feared by many for its power. Earned the nickname 'Rattler' from the vibrations it would cause on dropships in its inital production run. Moving this will require some sort of lifter."
 	icon_state = "30mm_cannon"
 	firing_sound = 'sound/weapons/gunship_chaingun.ogg'
 	point_cost = 300
@@ -772,7 +762,7 @@
 	name = "minirocket pod"
 	icon_state = "minirocket_pod"
 	desc = "A mini rocket pod capable of launching six laser-guided mini rockets. Moving this will require some sort of lifter."
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	firing_sound = 'sound/weapons/gunship_rocketpod.ogg'
 	firing_delay = 10 //1 seconds
 	point_cost = 450
@@ -797,7 +787,7 @@
 	name = "laser beam gun"
 	icon_state = "laser_beam"
 	desc = "State of the art technology recently acquired by the TGMC, it fires a battery-fed pulsed laser beam at near lightspeed setting on fire everything it touches. Moving this will require some sort of lifter."
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	firing_sound = 'sound/weapons/gunship_laser.ogg'
 	firing_delay = 50 //5 seconds
 	point_cost = 800
@@ -820,7 +810,7 @@
 	name = "launch bay"
 	icon_state = "launch_bay"
 	desc = "A launch bay to drop special ordnance. Fits inside the dropship's crew weapon emplacement. Moving this will require some sort of lifter."
-	icon = 'icons/obj/structures/prop/mainship.dmi'
+	icon = 'icons/Marine/mainship_props.dmi'
 	firing_sound = 'sound/weapons/guns/fire/gunshot.ogg'
 	firing_delay = 10 //1 seconds
 	equip_category = DROPSHIP_CREW_WEAPON //fits inside the central spot of the dropship
@@ -879,7 +869,7 @@
 	name = "bomblet pod"
 	icon_state = "bomblet_pod"
 	desc = "A pnuematic thrower machine capable of up to 40 smaller bombs, generally  called 'bomblets'. Moving this will require some sort of lifter."
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	firing_sound = 'sound/weapons/gunship_rocketpod.ogg'
 	firing_delay = 0.5 SECONDS
 	point_cost = 450
@@ -899,7 +889,7 @@
 	name = "bomb pod"
 	icon_state = "bomb_pod"
 	desc = "A bomb pod capable of launching several large bombs. Moving this will require some sort of lifter."
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	firing_sound = 'sound/weapons/gunship_rocketpod.ogg'
 	firing_delay = 2 SECONDS
 	point_cost = 450

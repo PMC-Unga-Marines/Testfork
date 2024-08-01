@@ -1,7 +1,7 @@
 /datum/game_mode/extended
 	name = "Extended"
 	config_tag = "Extended"
-	xeno_abilities_flags = ABILITY_NUCLEARWAR
+	flags_xeno_abilities = ABILITY_NUCLEARWAR
 	valid_job_types = list(
 		/datum/job/terragov/command/captain = 1,
 		/datum/job/terragov/command/fieldcommander = 1,
@@ -24,7 +24,8 @@
 		/datum/job/terragov/squad/corpsman = 8,
 		/datum/job/terragov/squad/smartgunner = 4,
 		/datum/job/terragov/squad/leader = 4,
-		/datum/job/terragov/squad/standard = -1
+		/datum/job/terragov/squad/standard = -1,
+		/datum/job/terragov/squad/combat_robot = -1,
 	)
 	enable_fun_tads = TRUE
 	xenorespawn_time = 1 MINUTES
@@ -40,9 +41,8 @@
 
 /datum/game_mode/extended/declare_completion()
 	. = ..()
-	log_game("[round_finished]\nGame mode: [name]\nRound time: [duration2text()]\nEnd round player population: [length(GLOB.clients)]\nTotal xenos spawned: [GLOB.round_statistics.total_xenos_created]\nTotal humans spawned: [GLOB.round_statistics.total_humans_created]")
-
-/datum/game_mode/extended/end_round_fluff()
 	to_chat(world, span_round_header("|[round_finished]|"))
 	var/sound/S = sound(pick('sound/theme/neutral_hopeful1.ogg','sound/theme/neutral_hopeful2.ogg'), channel = CHANNEL_CINEMATIC)
 	SEND_SOUND(world, S)
+
+	log_game("[round_finished]\nGame mode: [name]\nRound time: [duration2text()]\nEnd round player population: [length(GLOB.clients)]\nTotal xenos spawned: [GLOB.round_statistics.total_xenos_created]\nTotal humans spawned: [GLOB.round_statistics.total_humans_created]")

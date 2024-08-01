@@ -3,13 +3,13 @@
 	desc = "A device used to project your voice. Loudly."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "megaphone"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/tools_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/tools_right.dmi',
 	)
-	worn_icon_state = "radio"
+	item_state = "radio"
 	w_class = WEIGHT_CLASS_SMALL
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	var/spamcheck = 0
 	var/list/voicespan = list(SPAN_COMMAND)
 

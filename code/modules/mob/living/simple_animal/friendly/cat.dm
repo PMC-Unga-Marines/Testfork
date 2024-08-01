@@ -112,8 +112,6 @@
 
 /mob/living/simple_animal/cat/MouseDrop(atom/over_object)
 	. = ..()
-	if(!.)
-		return
 
 	if(!ishuman(over_object))
 		return
@@ -139,13 +137,14 @@
 	desc = "Kitty!!"
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "cat2"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/animals_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/animals_right.dmi',
 	)
-	armor_features_flags = ARMOR_NO_DECAP
+	flags_armor_features = ARMOR_NO_DECAP
 	soft_armor = list(MELEE = 25, BULLET = 25, LASER = 25, ENERGY = 25, BOMB = 10, BIO = 5, FIRE = 50, ACID = 50)
 	var/mob/living/simple_animal/cat/cat
+	species_exception = list(/datum/species/robot)
 
 /obj/item/clothing/head/cat/Destroy()
 	if(cat)

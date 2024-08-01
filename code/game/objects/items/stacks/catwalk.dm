@@ -9,5 +9,5 @@
 	throwforce = 8
 	throw_speed = 3
 	throw_range = 6
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	max_amount = 60

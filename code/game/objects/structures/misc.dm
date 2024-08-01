@@ -33,12 +33,8 @@
 	icon_state = "mulebot0"
 
 /obj/structure/showcase/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if(prob(50))
-				qdel(src)
+	if(prob(severity / 4))
+		qdel(src)
 
 /obj/structure/showcase/yaut
 	name = "alien sarcophagus"
@@ -73,8 +69,6 @@
 
 /obj/structure/mopbucket/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/tool/mop))
 		if(reagents.total_volume < 1)
@@ -133,7 +127,7 @@
 	max_integrity = 100
 	resistance_flags = UNACIDABLE
 	hit_sound = 'sound/effects/Glasshit.ogg'
-	destroy_sound = SFX_SHATTER
+	destroy_sound = "shatter"
 	///Whatever is contained in the tank
 	var/obj/occupant
 	///What this tank is replaced by when broken
@@ -152,15 +146,7 @@
 	return ..()
 
 /obj/structure/xenoautopsy/tank/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			take_damage(100, BRUTE, BOMB)
-		if(EXPLODE_LIGHT)
-			take_damage(50, BRUTE, BOMB)
-		if(EXPLODE_WEAK)
-			take_damage(25, BRUTE, BOMB)
+	take_damage(severity / 2, BRUTE, BOMB)
 
 ///Releases whatever is inside the tank
 /obj/structure/xenoautopsy/tank/proc/release_occupant()
@@ -187,10 +173,11 @@
 	icon_state = "tank_hugger"
 	desc = "There is something spider-like inside..."
 	occupant = /obj/item/clothing/mask/facehugger
+	var/mob/living/carbon/xenomorph/facehugger/mob_occupant =  /mob/living/carbon/xenomorph/facehugger/ai
 
 /obj/structure/xenoautopsy/tank/hugger/release_occupant()
-	var/obj/item/clothing/mask/facehugger/hugger = new occupant(loc)
-	hugger.go_active()
+	if(mob_occupant)
+		new mob_occupant(loc)
 
 /obj/structure/xenoautopsy/tank/larva
 	icon_state = "tank_larva"
@@ -232,8 +219,8 @@
 	update_icon()
 
 	var/static/list/connections = list(
-		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override),
-		COMSIG_TURF_CHECK_COVERED = TYPE_PROC_REF(/atom/movable, turf_cover_check),
+		COMSIG_FIND_FOOTSTEP_SOUND = PROC_REF(footstep_override),
+		COMSIG_TURF_CHECK_COVERED = PROC_REF(turf_cover_check),
 	)
 	AddElement(/datum/element/connect_loc, connections)
 
@@ -359,15 +346,8 @@
 	return ..()
 
 /obj/structure/plasticflaps/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if (prob(50))
-				qdel(src)
-		if(EXPLODE_LIGHT, EXPLODE_WEAK)
-			if (prob(5))
-				qdel(src)
+	if(prob(severity / 4))
+		qdel(src)
 
 /obj/structure/plasticflaps/mining //A specific type for mining that doesn't allow airflow because of them damn crates
 	name = "\improper Airtight plastic flaps"
@@ -384,7 +364,7 @@
 /obj/structure/cryopods
 	name = "hypersleep chamber"
 	icon = 'icons/obj/machines/cryogenics.dmi'
-	icon_state = "body_scanner"
+	icon_state = "body_scanner_0"
 	desc = "A large automated capsule with LED displays intended to put anyone inside into 'hypersleep'."
 	density = TRUE
 	anchored = TRUE
@@ -428,3 +408,18 @@
 /obj/structure/tankholder/emergencyoxygentwo
 	icon_state = "holder_emergency_engi"
 
+/obj/structure/stairs/seamless/pred
+	icon_state = "staircorners_seamless"
+	color = "#6b675e"
+
+/obj/structure/showcase/yautja
+	name = "Radar Console"
+	desc = "A console equipped with a radar used by the Hunters to detect gear and good hunting grounds."
+	icon = 'icons/obj/machines/yautja_machines.dmi'
+	icon_state = "terminal"
+
+/obj/structure/showcase/yautja/alt
+	name = "alien sarcophagus"
+	icon = 'icons/obj/stationobjs.dmi'
+	desc = "An ancient, dusty tomb with strange alien writing. It's best not to touch it."
+	icon_state = "yaut"

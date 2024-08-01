@@ -3,7 +3,6 @@
 	name = "bookcase"
 	icon = 'icons/obj/structures/structures.dmi'
 	icon_state = "book-0"
-	max_integrity = 200
 	resistance_flags = XENO_DAMAGEABLE
 	anchored = TRUE
 	density = TRUE
@@ -19,8 +18,6 @@
 
 /obj/structure/bookcase/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/book))
 		user.drop_held_item()
@@ -51,23 +48,13 @@
 			update_icon()
 
 /obj/structure/bookcase/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			for(var/obj/item/book/b in contents)
-				qdel(b)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			for(var/obj/item/book/b in contents)
-				if(prob(50))
-					b.forceMove(get_turf(src))
-				else
-					qdel(b)
-			qdel(src)
-		if(EXPLODE_LIGHT)
-			if (prob(50))
-				for(var/obj/item/book/b in contents)
-					b.forceMove(get_turf(src))
-				qdel(src)
+	if(prob(severity / 3))
+		for(var/obj/item/book/our_book in contents)
+			if(prob(severity / 2))
+				qdel(our_book)
+			else
+				our_book.forceMove(get_turf(src))
+		qdel(src)
 
 
 /obj/structure/bookcase/update_icon_state()

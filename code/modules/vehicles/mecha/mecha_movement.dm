@@ -11,13 +11,6 @@
 		return
 	playsound(src, stepsound, 40, TRUE)
 
-///Disconnects air tank- air port connection on mecha move
-/obj/vehicle/sealed/mecha/proc/disconnect_air()
-	SIGNAL_HANDLER
-	if(internal_tank.disconnect()) // Something moved us and broke connection
-		to_chat(occupants, "[icon2html(src, occupants)][span_warning("Air port connection has been severed!")]")
-		log_message("Lost connection to gas port.", LOG_MECHA)
-
 /obj/vehicle/sealed/mecha/relaymove(mob/living/user, direction)
 	. = TRUE
 	if(!canmove || !(user in return_drivers()))
@@ -31,11 +24,6 @@
 	if(completely_disabled)
 		return FALSE
 	if(!direction)
-		return FALSE
-	if(internal_tank?.connected_port)
-		if(!TIMER_COOLDOWN_CHECK(src, COOLDOWN_MECHA_MESSAGE))
-			to_chat(occupants, "[icon2html(src, occupants)][span_warning("Unable to move while connected to the air system port!")]")
-			TIMER_COOLDOWN_START(src, COOLDOWN_MECHA_MESSAGE, 2 SECONDS)
 		return FALSE
 	if(construction_state)
 		if(!TIMER_COOLDOWN_CHECK(src, COOLDOWN_MECHA_MESSAGE))
@@ -114,6 +102,3 @@
 			COOLDOWN_START(src, mecha_bump_smash, smashcooldown)
 			if(!obstacle || obstacle.CanPass(src, get_dir(obstacle, src) || dir)) // The else is in case the obstacle is in the same turf.
 				step(src, dir)
-
-/obj/vehicle/sealed/mecha/set_submerge_level(turf/new_loc, turf/old_loc, submerge_icon = 'icons/turf/alpha_128.dmi', submerge_icon_state = "liquid_alpha", duration = move_delay)
-	return ..()

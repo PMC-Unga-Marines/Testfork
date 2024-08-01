@@ -69,6 +69,32 @@
 			data["h_style"] = h_style
 			data["grad_style"] = grad_style
 			data["f_style"] = f_style
+//RUTGMC EDIT
+		if(PRED_CHARACTER_CUSTOMIZATION)
+			data["has_wl"] = GLOB.roles_whitelist[user.ckey] & WHITELIST_PREDATOR
+			data["legacy"] = GLOB.roles_whitelist[user.ckey] & WHITELIST_YAUTJA_LEGACY
+			data["predator_name"] = predator_name
+			data["predator_gender"] = predator_gender
+			data["predator_age"] = predator_age
+			data["predator_h_style"] = predator_h_style
+			data["predator_skin_color"] = predator_skin_color
+			data["predator_use_legacy"] = predator_use_legacy
+			data["predator_translator_type"] = predator_translator_type
+			data["predator_mask_type"] = predator_mask_type
+			data["predator_armor_type"] = predator_armor_type
+			data["predator_boot_type"] = predator_boot_type
+			data["predator_armor_material"] = predator_armor_material
+			data["predator_mask_material"] = predator_mask_material
+			data["predator_greave_material"] = predator_greave_material
+			data["predator_caster_material"] = predator_caster_material
+			data["predator_cape_type"] = predator_cape_type
+			data["predator_cape_color"] = predator_cape_color
+			data["predator_flavor_text"] = predator_flavor_text
+			data["pred_r_eyes"] = pred_r_eyes
+			data["pred_g_eyes"] = pred_g_eyes
+			data["pred_b_eyes"] = pred_b_eyes
+			data["yautja_status"] = yautja_status
+//RUTGMC EDIT
 		if(BACKGROUND_INFORMATION)
 			data["slot"] = default_slot
 			data["flavor_text"] = flavor_text
@@ -118,17 +144,10 @@
 			data["see_rc_emotes"] = see_rc_emotes
 			data["mute_others_combat_messages"] = mute_others_combat_messages
 			data["mute_self_combat_messages"] = mute_self_combat_messages
-			data["show_xeno_rank"] = show_xeno_rank
 			data["show_typing"] = show_typing
-			data["toggle_adminhelp_sound"] = !!(toggles_sound & SOUND_ADMINHELP)
-			data["toggle_admin_music"] = !!(toggles_sound & SOUND_MIDI)
-			data["toggle_ambience_sound"] = !!(toggles_sound & SOUND_AMBIENCE)
-			data["toggle_lobby_music"] = !!(toggles_sound & SOUND_LOBBY)
-			data["toggle_instruments_sound"] = !(toggles_sound & SOUND_INSTRUMENTS_OFF)
-			data["toggle_weather_sound"] = !!(toggles_sound & SOUND_WEATHER)
-			data["toggle_round_end_sounds"] = !(toggles_sound & SOUND_NOENDOFROUND)
 			data["tooltips"] = tooltips
 			data["widescreenpref"] = widescreenpref
+			data["screen_resolution"] = screen_resolution
 			data["radialmedicalpref"] = !!(toggles_gameplay & RADIAL_MEDICAL)
 			data["radialstackspref"] = !!(toggles_gameplay & RADIAL_STACKS)
 			data["radiallasersgunpref"] = !!(toggles_gameplay & RADIAL_LASERGUNS)
@@ -168,6 +187,11 @@
 		if(CHARACTER_CUSTOMIZATION)
 			update_preview_icon()
 			.["mapRef"] = "player_pref_map"
+//RUTGMC EDIT
+		if(PRED_CHARACTER_CUSTOMIZATION)
+			update_preview_icon(SSjob.GetJobType(/datum/job/predator), DUMMY_PRED_SLOT_PREFERENCES)
+			.["mapRef"] = "player_pref_map"
+//RUTGMC EDIT
 		if(GEAR_CUSTOMIZATION)
 			.["clothing"] = list(
 				"underwear" = list(
@@ -201,6 +225,7 @@
 					"description" = job.html_description,
 					"banned" = is_banned_from(user.ckey, rank),
 					"playtime_req" = job.required_playtime_remaining(user.client),
+					"exp_string" = "[get_exp_format(text2num(user.client.calc_exp_type(job.get_exp_req_type())))] / [get_exp_format(job.get_exp_req_amount())] as [job.get_exp_req_type()]", // RUTGMC ADDITION
 					"account_age_req" = !job.player_old_enough(user.client),
 					"flags" = list(
 						"bold" = (job.job_flags & JOB_FLAG_BOLD_NAME_ON_SELECTION) ? TRUE : FALSE
@@ -237,7 +262,6 @@
 				random_character()
 				real_name = random_unique_name(gender)
 				save_character()
-				update_preview_icon()
 
 		if("tab_change")
 			tab_index = params["tabIndex"]
@@ -246,7 +270,6 @@
 		if("random")
 			randomize_appearance_for()
 			save_character()
-			update_preview_icon()
 
 		if("name_real")
 			var/newValue = params["newValue"]
@@ -265,7 +288,6 @@
 
 		if("randomize_appearance")
 			randomize_appearance_for()
-			update_preview_icon()
 
 		if("synthetic_name")
 			var/newValue = params["newValue"]
@@ -280,14 +302,138 @@
 			if(!choice)
 				return
 			synthetic_type = choice
-			update_preview_icon()
+
+		//RUTGMC EDIT ADDITION BEGIN - Preds
+		if("predator_name")
+			var/raw_name = input(user, "Choose your Predator's name:", "Character Preference")  as text|null
+			if(raw_name) // Check to ensure that the user entered text (rather than cancel.)
+				var/new_name = reject_bad_name(raw_name)
+				if(new_name) predator_name = new_name
+				else to_chat(user, "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>")
+
+		if("predator_gender")
+			predator_gender = predator_gender == MALE ? FEMALE : MALE
+
+		if("predator_age")
+			var/new_predator_age = tgui_input_number(user, "Choose your Predator's age(20 to 10000):", "Character Preference", 1234, 10000, 20)
+			if(new_predator_age) predator_age = max(min( round(text2num(new_predator_age)), 10000),20)
+
+		if("predator_use_legacy")
+			var/legacy_choice = tgui_input_list(user, "What legacy set do you wish to use?", "Legacy Set", PRED_LEGACIES)
+			if(!legacy_choice)
+				return
+			predator_use_legacy = legacy_choice
+
+		if("predator_translator_type")
+			var/new_translator_type = tgui_input_list(user, "Choose your translator type.", "Translator Type", PRED_TRANSLATORS)
+			if(!new_translator_type)
+				return
+			predator_translator_type = new_translator_type
+
+		if("predator_mask_type")
+			var/new_predator_mask_type = tgui_input_number(user, "Choose your mask type:\n(1-12)", "Mask Selection", 1, 12, 1)
+			if(new_predator_mask_type) predator_mask_type = round(text2num(new_predator_mask_type))
+
+		if("predator_armor_type")
+			var/new_predator_armor_type = tgui_input_number(user, "Choose your armor type:\n(1-7)", "Armor Selection", 1, 7, 1)
+			if(new_predator_armor_type) predator_armor_type = round(text2num(new_predator_armor_type))
+
+		if("predator_boot_type")
+			var/new_predator_boot_type = tgui_input_number(user, "Choose your greaves type:\n(1-4)", "Greave Selection", 1, 4, 1)
+			if(new_predator_boot_type) predator_boot_type = round(text2num(new_predator_boot_type))
+
+		if("predator_mask_material")
+			var/new_pred_mask_mat = tgui_input_list(user, "Choose your mask material:", "Mask Material", PRED_MATERIALS)
+			if(!new_pred_mask_mat)
+				return
+			predator_mask_material = new_pred_mask_mat
+
+		if("predator_armor_material")
+			var/new_pred_armor_mat = tgui_input_list(user, "Choose your armor material:", "Armor Material", PRED_MATERIALS)
+			if(!new_pred_armor_mat)
+				return
+			predator_armor_material = new_pred_armor_mat
+
+		if("predator_greave_material")
+			var/new_pred_greave_mat = tgui_input_list(user, "Choose your greave material:", "Greave Material", PRED_MATERIALS)
+			if(!new_pred_greave_mat)
+				return
+			predator_greave_material = new_pred_greave_mat
+
+		if("predator_caster_material")
+			var/new_pred_caster_mat = tgui_input_list(user, "Choose your caster material:", "Caster Material", PRED_MATERIALS + "retro")
+			if(!new_pred_caster_mat)
+				return
+			predator_caster_material = new_pred_caster_mat
+
+		if("predator_cape_type")
+			var/datum/job/J = SSjob.GetJobType(/datum/job/predator)
+			var/whitelist_status = GLOB.clan_ranks_ordered[J.get_whitelist_status(GLOB.roles_whitelist, current_client)]
+
+			var/list/options = list("None", "Default")
+			for(var/cape_name in GLOB.all_yautja_capes)
+				var/obj/item/clothing/yautja_cape/cape = GLOB.all_yautja_capes[cape_name]
+				if(whitelist_status >= initial(cape.clan_rank_required) || (initial(cape.councillor_override) && (GLOB.roles_whitelist[user.ckey] & (WHITELIST_YAUTJA_COUNCIL|WHITELIST_YAUTJA_COUNCIL_LEGACY))))
+					options += cape_name
+
+			var/new_cape = tgui_input_list(user, "Choose your cape type:", "Cape Type", options)
+			if(!new_cape)
+				return
+			predator_cape_type = new_cape
+
+		if("predator_cape_color")
+			var/new_cape_color = input(user, "Choose your cape color:", "Cape Color") as null|color
+			if(!new_cape_color)
+				return
+			predator_cape_color = new_cape_color
+
+		if("predator_h_style")
+			var/new_h_style = input(user, "Choose your quill style:", "Quill Style") as null|anything in GLOB.yautja_hair_styles_list
+			if(!new_h_style)
+				return
+			predator_h_style = new_h_style
+
+		if("predator_skin_color")
+			var/new_skin_color = tgui_input_list(user, "Choose your skin color:", "Skin Color", PRED_SKIN_COLOR)
+			if(!new_skin_color)
+				return
+			predator_skin_color = new_skin_color
+
+		if("predator_flavor_text")
+			var/pred_flv_raw = input(user, "Choose your Predator's flavor text:", "Flavor Text", predator_flavor_text) as message
+			if(!pred_flv_raw)
+				predator_flavor_text = "None"
+				return
+			predator_flavor_text = strip_html(pred_flv_raw, MAX_MESSAGE_LEN)
+
+		if("pred_eyecolor")
+			var/eyecolor = input(user, "Choose your character's eye colour:", "Character Preference") as null|color
+			if(!eyecolor)
+				return
+			pred_r_eyes = hex2num(copytext_char(eyecolor, 2, 4))
+			pred_g_eyes = hex2num(copytext_char(eyecolor, 4, 6))
+			pred_b_eyes = hex2num(copytext_char(eyecolor, 6, 8))
+
+		if("yautja_status")
+			var/list/options = list("Normal" = WHITELIST_NORMAL)
+
+			if(GLOB.roles_whitelist[user.ckey] & (WHITELIST_YAUTJA_COUNCIL|WHITELIST_YAUTJA_COUNCIL_LEGACY))
+				options += list("Council" = WHITELIST_COUNCIL)
+			if(GLOB.roles_whitelist[user.ckey] & WHITELIST_YAUTJA_LEADER)
+				options += list("Leader" = WHITELIST_LEADER)
+
+			var/new_yautja_status = tgui_input_list(user, "Choose your new Yautja Whitelist Status.", "Yautja Status", options)
+			if(!new_yautja_status)
+				return
+
+			yautja_status = options[new_yautja_status]
+//RUTGMC EDIT ADDITION END
 
 		if("robot_type")
 			var/choice = tgui_input_list(ui.user, "What model of robot do you want to play with?", "Robot model choice", ROBOT_TYPES)
 			if(!choice)
 				return
 			robot_type = choice
-			update_preview_icon()
 
 		if("xeno_name")
 			var/newValue = params["newValue"]
@@ -324,15 +470,13 @@
 				f_style = "Shaved"
 			else
 				underwear = 1
-			update_preview_icon()
 
 
 		if("ethnicity")
-			var/choice = tgui_input_list(ui.user, "What ethnicity do you want to play with?", "Ethnicity choice", GLOB.ethnicities_list)
+			var/choice = tgui_input_list(ui.user, "What ethnicity do you want to play with?", "Ethnicity choice", GLOB.human_ethnicities_list)
 			if(!choice)
 				return
 			ethnicity = choice
-			update_preview_icon()
 
 		if("species")
 			var/choice = tgui_input_list(ui.user, "What species do you want to play with?", "Species choice", get_playable_species())
@@ -341,7 +485,6 @@
 			species = choice
 			var/datum/species/S = GLOB.all_species[species]
 			real_name = S.random_name(gender)
-			update_preview_icon()
 
 		if("toggle_eyesight")
 			good_eyesight = !good_eyesight
@@ -352,7 +495,6 @@
 
 		if("jobselect")
 			UpdateJobPreference(user, params["job"], text2num(params["level"]))
-			update_preview_icon()
 
 		if("jobalternative")
 			var/newValue = text2num(params["newValue"])
@@ -363,7 +505,6 @@
 			preferred_squad = "None"
 			preferred_squad_som = "None"
 			alternate_option = 2 // return to lobby
-			update_preview_icon()
 
 		if("underwear")
 			var/list/underwear_options
@@ -376,7 +517,6 @@
 			if(!new_underwear)
 				return
 			underwear = new_underwear
-			update_preview_icon()
 
 		if("undershirt")
 			var/list/undershirt_options
@@ -389,14 +529,12 @@
 			if(!new_undershirt)
 				return
 			undershirt = new_undershirt
-			update_preview_icon()
 
 		if("backpack")
 			var/new_backpack = GLOB.backpacklist.Find(params["newValue"])
 			if(!new_backpack)
 				return
 			backpack = new_backpack
-			update_preview_icon()
 
 		if("loadoutadd")
 			var/choice = params["gear"]
@@ -465,7 +603,6 @@
 			if(!choice)
 				return
 			h_style = choice
-			update_preview_icon()
 
 		if("haircolor")
 			var/new_color = input(user, "Choose your character's hair colour:", "Hair Color") as null|color
@@ -482,7 +619,6 @@
 			r_grad = hex2num(copytext(new_grad, 2, 4))
 			g_grad = hex2num(copytext(new_grad, 4, 6))
 			b_grad = hex2num(copytext(new_grad, 6, 8))
-			update_preview_icon()
 
 		if("grad_style")
 			var/list/valid_grads = list()
@@ -496,7 +632,6 @@
 			var/choice = tgui_input_list(ui.user, "What hair grad style do you want?", "Hair grad style choice", valid_grads)
 			if(choice)
 				grad_style = choice
-			update_preview_icon()
 
 		if("facial_style")
 			var/list/valid_facialhairstyles = list()
@@ -513,7 +648,6 @@
 			if(!choice)
 				return
 			f_style = choice
-			update_preview_icon()
 
 		if("facialcolor")
 			var/facial_color = input(user, "Choose your character's facial-hair colour:", "Facial Hair Color") as null|color
@@ -522,7 +656,6 @@
 			r_facial = hex2num(copytext(facial_color, 2, 4))
 			g_facial = hex2num(copytext(facial_color, 4, 6))
 			b_facial = hex2num(copytext(facial_color, 6, 8))
-			update_preview_icon()
 
 		if("eyecolor")
 			var/eyecolor = input(user, "Choose your character's eye colour:", "Character Preference") as null|color
@@ -531,7 +664,6 @@
 			r_eyes = hex2num(copytext(eyecolor, 2, 4))
 			g_eyes = hex2num(copytext(eyecolor, 4, 6))
 			b_eyes = hex2num(copytext(eyecolor, 6, 8))
-			update_preview_icon()
 
 		if("citizenship")
 			var/choice = tgui_input_list(ui.user, "Where do you hail from?", "Place of Origin", CITIZENSHIP_CHOICES)
@@ -679,9 +811,6 @@
 		if("mute_others_combat_messages")
 			mute_others_combat_messages = !mute_others_combat_messages
 
-		if("show_xeno_rank")
-			show_xeno_rank = !show_xeno_rank
-
 		if("change_quick_equip")
 			var/editing_slot = params["selection"]
 			var/slot = tgui_input_list(usr, "Which slot would you like to draw/equip from?", "Preferred Slot", SLOT_FLUFF_DRAW)
@@ -722,37 +851,6 @@
 				closeToolTip(usr)
 			else if(!current_client.tooltips && tooltips)
 				current_client.tooltips = new /datum/tooltip(current_client)
-
-		if("toggle_adminhelp_sound")
-			toggles_sound ^= SOUND_ADMINHELP
-
-		if("toggle_admin_music")
-			toggles_sound ^= SOUND_MIDI
-			if(!(toggles_sound & SOUND_MIDI))
-				user.stop_sound_channel(CHANNEL_MIDI)
-
-		if("toggle_ambience_sound")
-			toggles_sound ^= SOUND_AMBIENCE
-			current_client.update_ambience_pref()
-			if(!(toggles_sound & SOUND_AMBIENCE))
-				user.stop_sound_channel(CHANNEL_AMBIENCE)
-
-		if("toggle_lobby_music")
-			toggles_sound ^= SOUND_LOBBY
-			if(isnewplayer(user)) // can't do early return here, because buttons won't update properly outside of lobby
-				if(toggles_sound & SOUND_LOBBY)
-					current_client.play_title_music()
-				else
-					user.stop_sound_channel(CHANNEL_LOBBYMUSIC)
-
-		if("toggle_instruments_sound")
-			toggles_sound ^= SOUND_INSTRUMENTS_OFF
-
-		if("toggle_weather_sound")
-			toggles_sound ^= SOUND_WEATHER
-
-		if("toggle_round_end_sounds")
-			toggles_sound ^= SOUND_NOENDOFROUND
 
 		if("fullscreen_mode")
 			fullscreen_mode = !fullscreen_mode
@@ -851,9 +949,19 @@
 				expires = " The ban is for [DisplayTimeText(text2num(ban_details["duration"]) MINUTES)] and expires on [ban_details["expiration_time"]] (server time)."
 			to_chat(user, span_danger("You, or another user of this computer or connection ([ban_details["key"]]) is banned from playing [params["role"]].<br>The ban reason is: [ban_details["reason"]]<br>This ban (BanID #[ban_details["id"]]) was applied by [ban_details["admin_key"]] on [ban_details["bantime"]] during round ID [ban_details["round_id"]].<br>[expires]"))
 
+		if("update-character-preview")
+			update_preview_icon()
+
 		if("widescreenpref")
 			widescreenpref = !widescreenpref
-			user.client.view_size.set_default(get_screen_size(widescreenpref))
+			user.client.view_size.set_default(get_screen_size(widescreenpref, screen_resolution))
+
+		if("screen_resolution")
+			var/choice = tgui_input_list(ui.user, "Choose widescreen resolution", "Resolutions", WIDESCREEN_RESOLUTIONS)
+			if(choice)
+				screen_resolution = choice
+				if(widescreenpref)
+					user.client.view_size.set_default(get_screen_size(widescreenpref, screen_resolution))
 
 		if("radialmedicalpref")
 			toggles_gameplay ^= RADIAL_MEDICAL
@@ -914,6 +1022,13 @@
 	save_preferences()
 	save_character()
 	save_keybinds()
+//RUTGMC EDIT
+	switch(tab_index)
+		if(CHARACTER_CUSTOMIZATION)
+			update_preview_icon()
+		if(PRED_CHARACTER_CUSTOMIZATION)
+			update_preview_icon(SSjob.GetJobType(/datum/job/predator), DUMMY_PRED_SLOT_PREFERENCES)
+//RUTGMC EDIT
 	ui_interact(user, ui)
 	SEND_SIGNAL(current_client, COMSIG_CLIENT_PREFERENCES_UIACTED)
 	return TRUE

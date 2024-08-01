@@ -29,7 +29,7 @@
 	if(iscarbon(affected_mob))
 		var/mob/living/carbon/C = affected_mob
 		C.med_hud_set_status()
-	RegisterSignal(affected_mob, COMSIG_HUMAN_SET_UNDEFIBBABLE, PROC_REF(on_host_dnr))
+
 
 /obj/item/alien_embryo/Destroy()
 	if(affected_mob)
@@ -66,24 +66,25 @@
 
 	process_growth()
 
-///Kills larva when host goes DNR
-/obj/item/alien_embryo/proc/on_host_dnr(datum/source)
-	SIGNAL_HANDLER
-	qdel(src)
 
 /obj/item/alien_embryo/proc/process_growth()
+	if(CHECK_BITFIELD(affected_mob.restrained_flags, RESTRAINED_XENO_NEST)) //Hosts who are nested in resin nests provide an ideal setting, larva grows faster.
+		counter += 1 + max(0, (0.03 * affected_mob.health)) //Up to +300% faster, depending on the health of the host.
 
 	if(stage <= 4)
-		counter += 2.5 //Free burst time in ~7/8 min.
+		counter += 4 //Free burst time in ~5 min.
 
 	if(affected_mob.reagents.get_reagent_amount(/datum/reagent/consumable/larvajelly))
 		counter += 10 //Accelerates larval growth massively. Voluntarily drinking larval jelly while infected is straight-up suicide. Larva hits Stage 5 in exactly ONE minute.
 
 	if(affected_mob.reagents.get_reagent_amount(/datum/reagent/medicine/larvaway))
-		counter -= 1 //Halves larval growth progress, for some tradeoffs. Larval toxin purges this
+		counter -= 3 //Halves larval growth progress, for some tradeoffs. Larval toxin purges this
+
+	if(affected_mob.reagents.get_reagent_amount(/datum/reagent/medicine/spaceacillin))
+		counter -= 1
 
 	if(boost_timer)
-		counter += 2.5 //Doubles larval growth progress. Burst time in ~4 min.
+		counter += 2.5 //Doubles larval growth progress. Burst time in ~3 min.
 		adjust_boost_timer(-1)
 
 	if(stage < 5 && counter >= 120)
@@ -125,7 +126,6 @@
 				var/mob/living/carbon/xenomorph/larva/L = locate() in affected_mob
 				L?.initiate_burst(affected_mob)
 
-
 //We look for a candidate. If found, we spawn the candidate as a larva.
 //Order of priority is bursted individual (if xeno is enabled), then random candidate, and then it's up for grabs and spawns braindead.
 /obj/item/alien_embryo/proc/become_larva()
@@ -146,7 +146,14 @@
 	//Spawn the larva.
 	var/mob/living/carbon/xenomorph/larva/new_xeno
 
-	new_xeno = new(affected_mob)
+//RUTGMC EDIT ADDITION BEGIN - Preds
+	if(isyautja(affected_mob))
+		new_xeno = new /mob/living/carbon/xenomorph/larva/predalien(affected_mob)
+		yautja_announcement(span_yautjaboldbig("WARNING!\n\nAn abomination has been detected at [get_area_name(new_xeno)]. It is a stain upon our purity and is unfit for life. Exterminate it immediately.\n\nHeavy Armory unlocked."))
+		SEND_GLOBAL_SIGNAL(COMSIG_GLOB_YAUTJA_ARMORY_OPENED)
+	else
+		new_xeno = new(affected_mob)
+//RUTGMC EDIT ADDITION END
 
 	new_xeno.transfer_to_hive(hivenumber)
 	new_xeno.update_icons()
@@ -155,16 +162,16 @@
 	if(picked)
 		picked.mind.transfer_to(new_xeno, TRUE)
 		to_chat(new_xeno, span_xenoannounce("We are a xenomorph larva inside a host! Move to burst out of it!"))
-		new_xeno << sound('sound/effects/alien/new_larva.ogg')
+		new_xeno << sound('sound/effects/alien/newlarva.ogg')
 
 	stage = 6
 
 
-/mob/living/carbon/xenomorph/larva/proc/initiate_burst(mob/living/carbon/human/victim)
+/mob/living/carbon/xenomorph/larva/proc/initiate_burst(mob/living/carbon/victim)
 	if(victim.chestburst || loc != victim)
 		return
 
-	victim.chestburst = CARBON_IS_CHEST_BURSTING
+	victim.chestburst = 1
 	ADD_TRAIT(victim, TRAIT_PSY_DRAINED, TRAIT_PSY_DRAINED)
 	to_chat(src, span_danger("We start bursting out of [victim]'s chest!"))
 
@@ -177,13 +184,22 @@
 
 	addtimer(CALLBACK(src, PROC_REF(burst), victim), 3 SECONDS)
 
+	var/nestburst_message = pick("You feel hive's psychic power getting stronger, after host [victim.name] gave birth on a nest!", "You feel hive's psychic power getting stronger, after breeding host [victim.name] on a nest!")
+	if(CHECK_BITFIELD(victim.restrained_flags, RESTRAINED_XENO_NEST))
+		if(victim.job == null)
+			SSpoints.add_psy_points(hivenumber, 10)
+		else if(victim.job.type == /datum/job/survivor/rambo)
+			SSpoints.add_psy_points(hivenumber, 50)
+		else
+			SSpoints.add_psy_points(hivenumber, 200)
+		xeno_message(nestburst_message, "xenoannounce", 5, hivenumber)
 
-/mob/living/carbon/xenomorph/larva/proc/burst(mob/living/carbon/human/victim)
+/mob/living/carbon/xenomorph/larva/proc/burst(mob/living/carbon/victim)
 	if(QDELETED(victim))
 		return
 
 	if(loc != victim)
-		victim.chestburst = CARBON_NO_CHEST_BURST
+		victim.chestburst = 0
 		return
 
 	victim.update_burst()
@@ -201,22 +217,24 @@
 	if(AE)
 		qdel(AE)
 
-	victim.apply_damage(200, BRUTE, victim.get_limb("chest"), updating_health = TRUE) //lethal armor ignoring brute damage
-	var/datum/internal_organ/O
-	for(var/i in list(ORGAN_SLOT_HEART, ORGAN_SLOT_LUNGS, ORGAN_SLOT_LIVER, ORGAN_SLOT_KIDNEYS, ORGAN_SLOT_APPENDIX)) //Bruise all torso internal organs
-		O = victim.get_organ_slot(i)
+	if(ishuman(victim))
+		var/mob/living/carbon/human/H = victim
+		H.apply_damage(200, BRUTE, H.get_limb("chest"), updating_health = TRUE) //lethal armor ignoring brute damage
+		var/datum/internal_organ/O
+		for(var/i in list(ORGAN_SLOT_HEART, ORGAN_SLOT_LUNGS, ORGAN_SLOT_LIVER, ORGAN_SLOT_KIDNEYS, ORGAN_SLOT_APPENDIX)) //Bruise all torso internal organs
+			O = H.get_organ_slot(i)
 
-		if(!victim.mind && !victim.client) //If we have no client or mind, permadeath time; remove the organs. Mainly for the NPC colonist bodies
-			victim.remove_organ_slot(i)
-		else
-			O.take_damage(O.min_bruised_damage, TRUE)
+			if(!H.mind && !H.client) //If we have no client or mind, permadeath time; remove the organs. Mainly for the NPC colonist bodies
+				H.remove_organ_slot(O)
+			else
+				O.take_damage(O.min_bruised_damage, TRUE)
 
-	var/datum/limb/chest = victim.get_limb("chest")
-	new /datum/wound/internal_bleeding(15, chest) //Apply internal bleeding to chest
-	chest.fracture()
+		var/datum/limb/chest = H.get_limb("chest")
+		new /datum/wound/internal_bleeding(15, chest) //Apply internal bleeding to chest
+		chest.fracture()
 
 
-	victim.chestburst = CARBON_CHEST_BURSTED
+	victim.chestburst = 2
 	victim.update_burst()
 	log_combat(src, null, "chestbursted as a larva.")
 	log_game("[key_name(src)] chestbursted as a larva at [AREACOORD(src)].")

@@ -128,7 +128,7 @@
 
 /datum/outfit/job/clf/standard/fanatic
 	head = /obj/item/clothing/head/headband/rambo
-	wear_suit = /obj/item/clothing/suit/storage/marine/boomvest/fast
+	wear_suit = /obj/item/clothing/suit/storage/marine/boomvest
 	belt = /obj/item/weapon/gun/shotgun/double/sawn
 	suit_store = /obj/item/weapon/gun/smg/skorpion/mag_harness
 
@@ -281,6 +281,11 @@
 
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/handful/buckshot, SLOT_IN_R_POUCH)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/handful/buckshot, SLOT_IN_R_POUCH)
+	// RUTGMC ADDON
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/handful/buckshot, SLOT_IN_R_POUCH)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/handful/flechette, SLOT_IN_R_POUCH)
+	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/handful/flechette, SLOT_IN_R_POUCH)
+	// RUTGMC ADDON END
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/handful/flechette, SLOT_IN_R_POUCH)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/handful/flechette, SLOT_IN_R_POUCH)
 
@@ -293,7 +298,6 @@
 	outfits = list(
 		/datum/outfit/job/clf/specialist/dpm,
 		/datum/outfit/job/clf/specialist/clf_heavyrifle,
-		/datum/outfit/job/clf/specialist/clf_heavymachinegun,
 	)
 
 //The base loadout for all CLF Specialists
@@ -359,23 +363,6 @@
 
 /datum/outfit/job/clf/specialist/clf_heavyrifle/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
-
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/stick, SLOT_IN_ACCESSORY)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/stick, SLOT_IN_ACCESSORY)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/stick, SLOT_IN_ACCESSORY)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/stick, SLOT_IN_ACCESSORY)
-	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/smokebomb, SLOT_IN_ACCESSORY)
-
-/datum/outfit/job/clf/specialist/clf_heavymachinegun
-	suit_store = /obj/item/weapon/gun/icc_hmg
-	belt = /obj/item/storage/belt/sparepouch
-	back = /obj/item/storage/backpack/lightpack
-
-/datum/outfit/job/clf/specialist/clf_heavymachinegun/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	. = ..()
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/icc_hmg, SLOT_IN_BELT)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/icc_hmg, SLOT_IN_BELT)
-	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/icc_hmg, SLOT_IN_BELT)
 
 	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/stick, SLOT_IN_ACCESSORY)
 	H.equip_to_slot_or_del(new /obj/item/explosive/grenade/stick, SLOT_IN_ACCESSORY)

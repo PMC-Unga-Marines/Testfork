@@ -11,14 +11,14 @@ Stepping directly on the mine will also blow it up
 /obj/item/explosive/mine
 	name = "\improper M20 Claymore anti-personnel mine"
 	desc = "The M20 Claymore is a directional proximity triggered anti-personnel mine designed by Armat Systems for use by the TerraGov Marine Corps."
-	icon = 'icons/obj/items/mines.dmi'
+	icon = 'icons/obj/items/grenade.dmi'
 	icon_state = "m20"
 	force = 5
 	w_class = WEIGHT_CLASS_SMALL
 	throwforce = 5
 	throw_range = 6
 	throw_speed = 3
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	///Trigger flags for this mine
 	var/target_mode = MINE_LIVING_ONLY
 	/// IFF signal - used to determine friendly units
@@ -29,6 +29,8 @@ Stepping directly on the mine will also blow it up
 	var/armed = FALSE
 	/// Tripwire holds reference to the tripwire obj that is used to trigger an explosion
 	var/obj/effect/mine_tripwire/tripwire
+
+	var/tripwire_triggered = FALSE
 
 /obj/item/explosive/mine/Initialize(mapload)
 	. = ..()
@@ -47,7 +49,7 @@ Stepping directly on the mine will also blow it up
 	icon_state = "[initial(icon_state)][armed ? "_armed" : ""]"
 
 /// On explosion mines trigger their own explosion, assuming there were not deleted straight away (larger explosions or probability)
-/obj/item/explosive/mine/ex_act(severity)
+/obj/item/explosive/mine/ex_act()
 	. = ..()
 	if(!QDELETED(src))
 		INVOKE_ASYNC(src, PROC_REF(trigger_explosion))
@@ -58,7 +60,7 @@ Stepping directly on the mine will also blow it up
 	INVOKE_ASYNC(src, PROC_REF(trigger_explosion))
 
 /// Flamer fire will cause mines to trigger their explosion
-/obj/item/explosive/mine/fire_act(burn_level)
+/obj/item/explosive/mine/flamer_fire_act(burnlevel)
 	. = ..()
 	INVOKE_ASYNC(src, PROC_REF(trigger_explosion))
 
@@ -102,8 +104,6 @@ Stepping directly on the mine will also blow it up
 /// Supports diarming a mine
 /obj/item/explosive/mine/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(!ismultitool(I) || !anchored)
 		return
@@ -140,16 +140,11 @@ Stepping directly on the mine will also blow it up
 	var/mob/living/living_victim
 	if((target_mode & MINE_LIVING_ONLY) && isliving(victim))
 		living_victim = victim
-	else if(target_mode & MINE_VEHICLE_ONLY)
-		if(ishitbox(victim))
-			var/obj/hitbox/hitbox = victim
-			victim = hitbox.root
-		if(isvehicle(victim))
-			var/obj/vehicle/vehicle_victim = victim
-			var/list/driver_list = vehicle_victim.return_drivers()
-			if(!length(driver_list))
-				return FALSE
-			living_victim = driver_list[1]
+	else if((target_mode & MINE_VEHICLE_ONLY) && isvehicle(victim))
+		var/obj/vehicle/vehicle_victim = victim
+		if(!length(vehicle_victim.occupants))
+			return FALSE
+		living_victim = vehicle_victim.occupants[1]
 
 	if(!living_victim)
 		return FALSE
@@ -170,7 +165,7 @@ Stepping directly on the mine will also blow it up
 	return TRUE
 
 /// Alien attacks trigger the explosive to instantly detonate
-/obj/item/explosive/mine/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/item/explosive/mine/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 	if(triggered) //Mine is already set to go off
@@ -188,7 +183,8 @@ Stepping directly on the mine will also blow it up
 	if(triggered)
 		return
 	triggered = TRUE
-	explosion(tripwire ? tripwire.loc : loc, light_impact_range = 3)
+	create_shrapnel(tripwire_triggered ? tripwire.loc : loc, 8, dir, shrapnel_type = /datum/ammo/bullet/shrapnel/metal, on_hit_coefficient = 45)
+	cell_explosion(tripwire_triggered ? tripwire.loc : loc, 50, 20)
 	QDEL_NULL(tripwire)
 	qdel(src)
 
@@ -230,6 +226,7 @@ Stepping directly on the mine will also blow it up
 
 	if(!isliving(AM) && !(isvehicle(AM)))
 		return
+	linked_mine.tripwire_triggered = TRUE
 	linked_mine.trip_mine(AM)
 
 /// PMC specific mine, with IFF for PMC units
@@ -244,10 +241,6 @@ Stepping directly on the mine will also blow it up
 	icon_state = "m92"
 	target_mode = MINE_VEHICLE_ONLY
 
-/obj/item/explosive/mine/anti_tank/update_icon(updates=ALL)
-	. = ..()
-	alpha = armed ? 50 : 255
-
 /obj/item/explosive/mine/anti_tank/trigger_explosion()
 	if(triggered)
 		return
@@ -256,30 +249,5 @@ Stepping directly on the mine will also blow it up
 	QDEL_NULL(tripwire)
 	qdel(src)
 
-/obj/item/explosive/mine/anti_tank/emp_act()
-	return
-
-/obj/item/explosive/mine/anti_tank/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			take_damage(INFINITY, BRUTE, BOMB, 0)
-			return
-		if(EXPLODE_HEAVY)
-			take_damage(rand(100, 250), BRUTE, BOMB, 0)
-			if(prob(25))
-				return
-		if(EXPLODE_LIGHT)
-			take_damage(rand(10, 90), BRUTE, BOMB, 0)
-			if(prob(50))
-				return
-		if(EXPLODE_WEAK)
-			take_damage(rand(5, 45), BRUTE, BOMB, 0)
-			return //not strong enough to detonate
-	if(QDELETED(src))
-		return
-	if(!armed)
-		return
-	INVOKE_ASYNC(src, PROC_REF(trigger_explosion))
-
-/obj/item/explosive/mine/anti_tank/fire_act(burn_level)
-	return //its highly exploitable if fire detonates these
+/obj/item/explosive/mine/anti_tank/ex_act()
+	qdel(src)

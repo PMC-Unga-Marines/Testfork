@@ -4,13 +4,12 @@
 	gender = PLURAL
 	icon = 'icons/obj/items/items.dmi'
 	icon_state = "handcuff"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	throwforce = 5
 	w_class = WEIGHT_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 5
-	var/dispenser = 0
 	breakouttime = 2 MINUTES
 	var/single_use = 0 //determines if handcuffs will be deleted on removal
 	var/cuff_sound = 'sound/weapons/handcuffs.ogg'
@@ -63,7 +62,7 @@
 	. = ..()
 	if(!.)
 		return
-	item_flags |= DELONDROP
+	flags_item |= DELONDROP
 
 
 
@@ -100,8 +99,6 @@
 
 /obj/item/restraints/handcuffs/cable/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = I
@@ -113,25 +110,3 @@
 		to_chat(user, span_notice("You wrap the cable restraint around the top of the rod."))
 		qdel(src)
 		update_icon()
-
-
-/obj/item/restraints/handcuffs/cyborg
-	dispenser = 1
-
-/obj/item/restraints/handcuffs/cyborg/attack(mob/living/carbon/C as mob, mob/user as mob)
-	if(!C.handcuffed)
-		var/turf/p_loc = user.loc
-		var/turf/p_loc_m = C.loc
-		playsound(src.loc, cuff_sound, 25, 1, 4)
-		user.visible_message(span_danger("[user] is trying to put handcuffs on [C]!"))
-
-		if (ishuman(C))
-			var/mob/living/carbon/human/H = C
-			if (!H.has_limb_for_slot(SLOT_HANDCUFFED))
-				to_chat(user, span_warning("\The [H] needs at least two wrists before you can cuff them together!"))
-				return
-
-		spawn(30)
-			if(!C)	return
-			if(p_loc == user.loc && p_loc_m == C.loc)
-				C.update_handcuffed(new /obj/item/restraints/handcuffs(C))

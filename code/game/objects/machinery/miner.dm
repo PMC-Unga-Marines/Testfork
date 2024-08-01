@@ -47,6 +47,8 @@
 	///What faction secured that miner
 	var/faction = FACTION_TERRAGOV
 
+	var/obj/machinery/camera/miner/camera
+
 /obj/machinery/miner/damaged	//mapping and all that shebang
 	miner_status = MINER_DESTROYED
 	icon_state = "mining_drill_error"
@@ -64,6 +66,7 @@
 	init_marker()
 	start_processing()
 	RegisterSignal(SSdcs, COMSIG_GLOB_DROPSHIP_HIJACKED, PROC_REF(disable_on_hijack))
+	camera = new /obj/machinery/camera/miner(src)
 
 /**
  * This proc is called during Initialize() and should be used to initially setup the minimap marker of a functional miner.
@@ -71,7 +74,7 @@
  **/
 /obj/machinery/miner/proc/init_marker()
 	var/marker_icon = "miner_[mineral_value >= PLATINUM_CRATE_SELL_AMOUNT ? "platinum" : "phoron"]_on"
-	SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('icons/UI_icons/map_blips.dmi', null, marker_icon))
+	SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('icons/UI_icons/map_blips.dmi', null, marker_icon)) //RU TGMC edit
 
 /obj/machinery/miner/update_icon_state()
 	. = ..()
@@ -128,8 +131,6 @@
 
 /obj/machinery/miner/attackby(obj/item/I,mob/user,params)
 	. = ..()
-	if(.)
-		return
 	if(istype(I, /obj/item/minerupgrade))
 		var/obj/item/minerupgrade/upgrade = I
 		if(!(miner_status == MINER_RUNNING))
@@ -176,13 +177,13 @@
 		user.visible_message(span_notice("[user] fumbles around figuring out [src]'s internals."),
 		span_notice("You fumble around figuring out [src]'s internals."))
 		var/fumbling_time = 10 SECONDS - 2 SECONDS * user.skills.getRating(SKILL_ENGINEER)
-		if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED, extra_checks = CALLBACK(weldingtool, TYPE_PROC_REF(/obj/item/tool/weldingtool, isOn))))
+		if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED, extra_checks = CALLBACK(weldingtool, /obj/item/tool/weldingtool/proc/isOn)))
 			return FALSE
 	playsound(loc, 'sound/items/weldingtool_weld.ogg', 25)
 	user.visible_message(span_notice("[user] starts welding [src]'s internal damage."),
 	span_notice("You start welding [src]'s internal damage."))
 	add_overlay(GLOB.welding_sparks)
-	if(!do_after(user, 200, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(weldingtool, TYPE_PROC_REF(/obj/item/tool/weldingtool, isOn))))
+	if(!do_after(user, 200, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(weldingtool, /obj/item/tool/weldingtool/proc/isOn)))
 		cut_overlay(GLOB.welding_sparks)
 		return FALSE
 	if(miner_status != MINER_DESTROYED )
@@ -249,7 +250,7 @@
 
 /obj/machinery/miner/examine(mob/user)
 	. = ..()
-	if(!ishuman(user) && !isobserver(user))
+	if(!ishuman(user))
 		return
 	if(!miner_upgrade_type)
 		. += span_info("[src]'s module sockets seem empty, an upgrade could be installed.")
@@ -316,7 +317,7 @@
 	else
 		add_tick += 1
 
-/obj/machinery/miner/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/miner/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL) //Incorporeal xenos cannot attack physically.
 		return
 	if(miner_upgrade_type == MINER_RESISTANT && !(xeno_attacker.mob_size == MOB_SIZE_BIG || xeno_attacker.xeno_caste.caste_flags & CASTE_IS_STRONG))
@@ -331,7 +332,7 @@
 		xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_CLAW)
 		xeno_attacker.visible_message(span_danger("[xeno_attacker] slashes \the [src]!"), \
 		span_danger("We slash \the [src]!"), null, 5)
-		playsound(loc, SFX_ALIEN_CLAW_METAL, 25, TRUE)
+		playsound(loc, "alien_claw_metal", 25, TRUE)
 		miner_integrity -= 25
 		set_miner_status()
 		if(miner_status == MINER_DESTROYED && xeno_attacker.client)
@@ -344,6 +345,7 @@
 		if(-INFINITY to 0)
 			miner_status = MINER_DESTROYED
 			stored_mineral = 0
+			camera.toggle_cam(null, FALSE)
 		if(1 to 50)
 			stored_mineral = 0
 			miner_status = MINER_MEDIUM_DAMAGE
@@ -356,7 +358,17 @@
 			var/marker_icon = "miner_[mineral_value >= PLATINUM_CRATE_SELL_AMOUNT ? "platinum" : "phoron"]_on"
 			SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('icons/UI_icons/map_blips.dmi', null, marker_icon))
 			miner_status = MINER_RUNNING
+			if(!camera.status)
+				camera.toggle_cam(null, FALSE)
 	update_icon()
+
+/obj/machinery/miner/Destroy()
+	qdel(camera)
+	camera = null
+	return ..()
+
+/obj/machinery/miner/attack_ai(mob/user)
+	return attack_hand(user)
 
 ///Called via global signal to prevent perpetual mining
 /obj/machinery/miner/proc/disable_on_hijack()

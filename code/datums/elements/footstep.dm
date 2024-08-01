@@ -30,7 +30,7 @@
 			if(!ishuman(target))
 				return ELEMENT_INCOMPATIBLE
 			RegisterSignal(target, COMSIG_MOVABLE_MOVED, PROC_REF(humanstep_wrapper)) //we don't want the movement signal args
-			RegisterSignals(target, list(COMSIG_ELEMENT_JUMP_ENDED, COMSIG_MOVABLE_PATROL_DEPLOYED), PROC_REF(play_humanstep))
+			RegisterSignal(target, COMSIG_ELEMENT_JUMP_ENDED, PROC_REF(play_humanstep))
 			steps_for_living[target] = 0
 			return
 		if(FOOTSTEP_MOB_SHOE)
@@ -41,12 +41,18 @@
 			footstep_sounds = GLOB.xenomediumstep
 		if(FOOTSTEP_XENO_HEAVY)
 			footstep_sounds = GLOB.xenoheavystep
+		//RUTGMC EDIT ADDITION BEGIN - XENO_STOMP
+		if(FOOTSTEP_XENO_STOMPY)
+			footstep_sounds = GLOB.xenostompy
+		if(FOOTSTEP_PREDALIEN_STOMPY)
+			footstep_sounds = GLOB.predalienstompy
+		//RUTGMC EDIT ADDITION END
 	RegisterSignal(target, COMSIG_MOVABLE_MOVED, PROC_REF(simplestep_wrapper))
-	RegisterSignals(target, list(COMSIG_ELEMENT_JUMP_ENDED, COMSIG_MOVABLE_PATROL_DEPLOYED), PROC_REF(play_simplestep))
+	RegisterSignal(target, COMSIG_ELEMENT_JUMP_ENDED, PROC_REF(play_simplestep))
 	steps_for_living[target] = 0
 
 /datum/element/footstep/Detach(atom/movable/source)
-	UnregisterSignal(source, list(COMSIG_MOVABLE_MOVED, COMSIG_ELEMENT_JUMP_ENDED, COMSIG_MOVABLE_PATROL_DEPLOYED))
+	UnregisterSignal(source, list(COMSIG_MOVABLE_MOVED, COMSIG_ELEMENT_JUMP_ENDED))
 	steps_for_living -= source
 	return ..()
 
@@ -137,6 +143,12 @@
 			turf_footstep = source_loc.barefootstep
 		if(FOOTSTEP_MOB_SHOE)
 			turf_footstep = source_loc.shoefootstep
+		//RUTGMC EDIT ADDITION BEGIN - XENO_STOMP
+		if(FOOTSTEP_XENO_STOMPY)
+			turf_footstep = source_loc.mediumxenofootstep
+		if(FOOTSTEP_PREDALIEN_STOMPY)
+			turf_footstep = source_loc.mediumxenofootstep
+		//RUTGMC EDIT ADDITION END
 	if(!turf_footstep)
 		return
 	playsound(
@@ -177,7 +189,7 @@
 	var/override_sound = source_loc.get_footstep_override()
 	var/footstep_type
 
-	if((source.wear_suit?.armor_protection_flags | source.w_uniform?.armor_protection_flags | source.shoes?.armor_protection_flags) & FEET) //We are not disgusting barefoot bandits
+	if((source.wear_suit?.flags_armor_protection | source.w_uniform?.flags_armor_protection | source.shoes?.flags_armor_protection) & FEET) //We are not disgusting barefoot bandits
 		var/static/list/footstep_sounds = GLOB.shoefootstep //static is faster
 		footstep_type = override_sound ? override_sound : source_loc.shoefootstep
 		playsound(

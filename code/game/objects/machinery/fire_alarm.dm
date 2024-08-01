@@ -1,9 +1,3 @@
-
-
-
-/*
-FIRE ALARM
-*/
 /obj/machinery/firealarm
 	name = "fire alarm"
 	desc = "<i>\"Pull this in case of emergency\"</i>. Thus, keep pulling it forever."
@@ -56,7 +50,7 @@ FIRE ALARM
 		return
 
 	var/area/A = get_area(src)
-	if(A.alarm_state_flags & ALARM_WARNING_FIRE)
+	if(A.flags_alarm_state & ALARM_WARNING_FIRE)
 		set_light_color(LIGHT_COLOR_EMISSIVE_ORANGE)
 	else
 		switch(GLOB.marine_main_ship.get_security_level())
@@ -74,7 +68,7 @@ FIRE ALARM
 /obj/machinery/firealarm/update_icon_state()
 	. = ..()
 	var/area/A = get_area(src)
-	icon_state = "fire[!CHECK_BITFIELD(A.alarm_state_flags, ALARM_WARNING_FIRE)]"
+	icon_state = "fire[!CHECK_BITFIELD(A.flags_alarm_state, ALARM_WARNING_FIRE)]"
 
 /obj/machinery/firealarm/update_overlays()
 	. = ..()
@@ -86,23 +80,20 @@ FIRE ALARM
 	. += emissive_appearance(icon, "fire_o[(is_mainship_level(z)) ? GLOB.marine_main_ship.get_security_level() : "green"]")
 	. += mutable_appearance(icon, "fire_o[(is_mainship_level(z)) ? GLOB.marine_main_ship.get_security_level() : "green"]")
 	var/area/A = get_area(src)
-	if(A.alarm_state_flags & ALARM_WARNING_FIRE)
+	if(A.flags_alarm_state & ALARM_WARNING_FIRE)
 		. += mutable_appearance(icon, "fire_o1")
 
-/obj/machinery/firealarm/fire_act(burn_level)
-	if(!detecting)
-		return
-	alarm()
+/obj/machinery/firealarm/fire_act(temperature, volume)
+	if(detecting && (temperature > T0C+200))
+		alarm()			// added check of detector status here
 
 /obj/machinery/firealarm/emp_act(severity)
-	. = ..()
 	if(prob(50/severity))
 		alarm()
+	return ..()
 
 /obj/machinery/firealarm/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(isscrewdriver(I) && buildstage == 2)
 		wiresexposed = !wiresexposed
@@ -158,7 +149,6 @@ FIRE ALARM
 				playsound(loc, 'sound/items/ratchet.ogg', 25, 1)
 				qdel(src)
 
-
 /obj/machinery/firealarm/can_interact(mob/user)
 	. = ..()
 	if(!.)
@@ -169,7 +159,6 @@ FIRE ALARM
 
 	return TRUE
 
-
 /obj/machinery/firealarm/interact(mob/user)
 	. = ..()
 	if(.)
@@ -179,7 +168,7 @@ FIRE ALARM
 	var/d1
 	var/d2
 
-	if (A.alarm_state_flags & ALARM_WARNING_FIRE)
+	if (A.flags_alarm_state & ALARM_WARNING_FIRE)
 		d1 = "<A href='?src=[text_ref(src)];reset=1'>Reset - Lockdown</A>"
 	else
 		d1 = "<A href='?src=[text_ref(src)];alarm=1'>Alarm - Lockdown</A>"
@@ -194,7 +183,6 @@ FIRE ALARM
 	var/datum/browser/popup = new(user, "firealarm", "<div align='center'>Fire alarm</div>")
 	popup.set_content(dat)
 	popup.open()
-
 
 /obj/machinery/firealarm/Topic(href, href_list)
 	. = ..()
@@ -218,7 +206,6 @@ FIRE ALARM
 
 	updateUsrDialog()
 
-
 /obj/machinery/firealarm/proc/reset()
 	if (!working)
 		return
@@ -232,5 +219,4 @@ FIRE ALARM
 	var/area/A = get_area(src)
 	A?.firealert()
 	update_icon()
-	//playsound(src.loc, 'sound/ambience/signal.ogg', 50, 0)
-
+	playsound(src.loc, 'sound/ambience/signal.ogg', 50, 0)

@@ -6,27 +6,22 @@
 #define span_alert(str) ("<span class='alert'>" + str + "</span>")
 #define span_alertalien(str) ("<span class='alertalien'>" + str + "</span>")
 #define span_alien(str) ("<span class='alien'>" + str + "</span>")
-#define span_announce_body(str) ("<span class='announce_body'>" + str + "</span>")
-#define span_announce_header(str) ("<span class='announce_header'>" + str + "</span>")
 #define span_attack(str) ("<span class='attack'>" + str + "</span>")
 #define span_avoidharm(str) ("<span class='avoidharms'>" + str + "</span>")
 #define span_bad(str) ("<span class='bad'>" + str + "</span>")
 #define span_big(str) ("<span class='big'>" + str + "</span>")
-#define span_bigdeadsay(str) ("<span class='bigdeadsay'>" + str + "</span>")
 #define span_binarysay(str) ("<span class='binarysay'>" + str + "</span>")
 #define span_bold(str) ("<span class='bold'>" + str + "</span>")
 #define span_boldannounce(str) ("<span class='boldannounce'>" + str + "</span>")
 #define span_boldnotice(str) ("<span class='boldnotice'>" + str + "</span>")
 #define span_boldwarning(str) ("<span class='boldwarning'>" + str + "</span>")
-#define span_center(str) ("<span class='center'>" + str + "</span>")
 #define span_centerbold(str) ("<span class='centerbold'>" + str + "</span>")
 #define span_danger(str) ("<span class='danger'>" + str + "</span>")
 #define span_deadsay(str) ("<span class='deadsay'>" + str + "</span>")
 #define span_disarm(str) ("<span class='disarm'>" + str + "</span>")
-#define span_debuginfo(str) ("<span class='debuginfo'>" + str + "</span>")
 #define span_event_announcement(str) ("<span class='event_announcement'>" + str + "</span>")
 #define span_game(str) ("<span class='game'>" + str + "</span>")
-#define span_green(str) ("<span class='green'>" + str + "</span>")
+#define span_good(str) ("<span class='good'>" + str + "</span>")
 #define span_greenteamradio(str) ("<span class='greenteamradio'>" + str + "</span>")
 #define span_greentext(str) ("<span class='greentext'>" + str + "</span>")
 #define span_grippy(str) ("<span class='grippy'>" + str + "</span>")
@@ -50,10 +45,7 @@
 #define span_narsie(str) ("<span class='narsie'>" + str + "</span>")
 #define span_narsiesmall(str) ("<span class='narsiesmall'>" + str + "</span>")
 #define span_nopositions(str) ("<span class='nopositions'>" + str + "</span>")
-#define span_nicegreen(str) ("<span class='nicegreen'>" + str + "</span>")
 #define span_notice(str) ("<span class='notice'>" + str + "</span>")
-#define span_tinydeadsay(str) ("<span class='tinydeadsay'>" + str + "</span>")
-#define span_tinynotice(str) ("<span class='tinynotice'>" + str + "</span>")
 #define span_ooc(str) ("<span class='ooc'>" + str + "</span>")
 #define span_ordercic(str) ("<span class='ordercic'>" + str + "</span>")
 #define span_prefix(str) ("<span class='prefix'>" + str + "</span>")
@@ -83,6 +75,17 @@
 #define span_xenowarning(str) ("<span class='xenowarning'>" + str + "</span>")
 #define span_yell(str) ("<span class='yell'>" + str + "</span>")
 #define span_deptradio(str) ("<span class='deptradio'>" + str + "</span>")
+#define span_yautjabold(str) "<span class='yautjabold'>" + str + "</span>"
+#define span_yautjaboldbig(str) "<span class='yautjaboldbig'>" + str + "</span>"
+
+// Colors
+#define span_blue(str) "<span class='blue'>" + str + "</span>"
+#define span_green(str) ("<span class='green'>" + str + "</span>")
+#define span_red(str) ("<span class='red'>" + str + "</span>")
+#define span_orange(str) ("<span class='orange'>" + str + "</span>")
+
+#define font_size_huge(str) "<span class='huge'>" + str + "</span>"
+#define font_size_xl(str) "<span class='extra_large'>" + str + "</span>"
 
 // Spans that use embedded tgui components:
 // Sorted alphabetically

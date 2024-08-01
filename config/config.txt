@@ -212,7 +212,9 @@ IS_AUTOMATIC_BALANCE_ON
 ##  15x15 would be the standard square view. 21x15 is what goonstation uses for widescreen.
 ##  Setting this to something different from DEFAULT_VIEW_SQUARE will enable widescreen toggles
 ##	Do note that changing this value will affect the title screen. The title screen will have to be updated manually if this is changed.
-DEFAULT_VIEW 19x15
+DEFAULT_VIEW1 17x15
+DEFAULT_VIEW2 19x15
+DEFAULT_VIEW3 21x15
 
 ##Default view size, in tiles. Should *always* be square.
 ## The alternative square viewport size if you're using a widescreen view size
@@ -230,9 +232,9 @@ DEFAULT_VIEW_SQUARE 15x15
 
 AI_ANTI_STUCK_LAG_TIME_DILATION_THRESHOLD 20
 
-## Assets can opt-in to caching their results into `cache/`.
+## Assets can opt-in to caching their results into `tmp`.
 ## This is important, as preferences assets take upwards of 30 seconds (without sleeps) to collect.
-## The cache is assumed to be cleared by TGS recompiling, which deletes `cache/`.
+## The cache is assumed to be cleared by TGS recompiling, which deletes `tmp`.
 ## This should be disabled (through `CACHE_ASSETS 0`) on development,
 ## but enabled on production (the default).
 CACHE_ASSETS 0
@@ -242,7 +244,6 @@ CACHE_ASSETS 0
 ## Will only seek to waste disk space if ran on production.
 #SAVE_SPRITESHEETS
 
-## If enabled, then when the database is disabled, all players will get tutorials.
-## This is primarily useful for developing tutorials. If you have a proper DB setup, you
-## don't need (or want) this.
-#GIVE_TUTORIALS_WITHOUT_DB
+## If this is uncommented TGS bot will send specific spam messages to discord or wherever
+#TGS_EVENT_APPROVAL_MESSAGING
+#TGS_ADMINLESS_MESSAGING

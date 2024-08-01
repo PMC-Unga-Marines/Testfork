@@ -1,8 +1,6 @@
-import { useState } from 'react';
-
-import { useBackend } from '../backend';
-import { Button, Section, Stack } from '../components';
+import { Stack, Button, Section } from '../components';
 import { Window } from '../layouts';
+import { useBackend, useLocalState } from '../backend';
 
 type SquadSelectorData = {
   active_squads?: SquadEntry[];
@@ -16,14 +14,23 @@ type SquadEntry = {
   members?: string[];
 };
 
-export const SquadTransfer = (props) => {
-  const { act, data } = useBackend<SquadSelectorData>();
+export const SquadTransfer = (props, context) => {
+  const { act, data } = useBackend<SquadSelectorData>(context);
   const { active_squads } = data;
-  const [selectedSquad, setSelectedSquad] = useState('');
-  const [selectedMember, setSelectedMember] = useState('');
+  const [selectedSquad, setSelectedSquad] = useLocalState<string>(
+    context,
+    'selectedSquad',
+    ''
+  );
+
+  const [selectedMember, setSelectedMember] = useLocalState<string>(
+    context,
+    'selectedMember',
+    ''
+  );
 
   const selectedSquadEntry = active_squads?.find(
-    (i) => i.name === selectedSquad,
+    (i) => i.name === selectedSquad
   );
 
   return (
@@ -41,8 +48,7 @@ export const SquadTransfer = (props) => {
                       backgroundColor={
                         selectedSquad === squad.name ? null : squad.color
                       }
-                      selected={selectedSquad === squad.name}
-                    >
+                      selected={selectedSquad === squad.name}>
                       {squad.name}
                     </Button>
                   </Stack.Item>
@@ -55,16 +61,15 @@ export const SquadTransfer = (props) => {
               <Stack vertical>
                 {selectedSquadEntry?.members
                   ? Object.keys(selectedSquadEntry.members).map((name) => (
-                      <Stack.Item key={name}>
-                        <Button
-                          width={'110px'}
-                          onClick={() => setSelectedMember(name)}
-                          selected={selectedMember === name}
-                        >
-                          {name}
-                        </Button>
-                      </Stack.Item>
-                    ))
+                    <Stack.Item key={name}>
+                      <Button
+                        width={'110px'}
+                        onClick={() => setSelectedMember(name)}
+                        selected={selectedMember === name}>
+                        {name}
+                      </Button>
+                    </Stack.Item>
+                  ))
                   : null}
               </Stack>
             </Section>
@@ -86,8 +91,7 @@ export const SquadTransfer = (props) => {
                       backgroundColor={
                         selectedSquad === squad.name ? null : squad.color
                       }
-                      disabled={selectedSquad === squad.name}
-                    >
+                      disabled={selectedSquad === squad.name}>
                       {squad.name}
                     </Button>
                   </Stack.Item>

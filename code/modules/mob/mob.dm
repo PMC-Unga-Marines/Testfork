@@ -11,6 +11,7 @@
 	ghostize()
 	clear_fullscreens()
 	if(mind)
+		stack_trace("Found a reference to an undeleted mind in mob/Destroy(). Mind name: [mind.name]. Mind mob: [mind.current]")
 		mind = null
 	if(hud_used)
 		QDEL_NULL(hud_used)
@@ -21,6 +22,10 @@
 		var/datum/action/action_to_remove = a
 		action_to_remove.remove_action(src)
 	set_focus(null)
+//RUTGMC EDIT ADDITION BEGIN - Preds
+	if(hunter_data)
+		hunter_data.clean_data()
+//RUTGMC EDIT ADDITION END
 	return ..()
 
 /mob/Initialize(mapload)
@@ -45,6 +50,11 @@
 	update_movespeed(TRUE)
 	log_mob_tag("\[[tag]\] CREATED: [key_name(src)]")
 	become_hearing_sensitive()
+//RUTGMC EDIT ADDITION BEGIN - Preds
+	if(!hunter_data)
+		hunter_data = new /datum/huntdata(src)
+	hud_set_hunter()
+//RUTGMC EDIT ADDITION END
 
 /mob/proc/show_message(msg, type, alt_msg, alt_type, avoid_highlight)
 	if(!client)
@@ -138,6 +148,18 @@
 
 		M.show_message(msg, EMOTE_VISIBLE, blind_message, EMOTE_AUDIBLE)
 
+// Shows three different messages depending on who does it to who and how does it look like to outsiders
+// message_mob: "You do something to X!"
+// message_affected: "Y does something to you!"
+// message_viewer: "X does something to Y!"
+// pred shitcode
+/mob/proc/affected_message(mob/affected, message_mob, message_affected, message_viewer)
+	src.show_message(message_mob, EMOTE_VISIBLE)
+	if(src != affected)
+		affected.show_message(message_affected, EMOTE_VISIBLE)
+	for(var/mob/V in viewers(7, src))
+		if(V != src && V != affected)
+			V.show_message(message_viewer, EMOTE_VISIBLE)
 
 ///Returns the client runechat visible messages preference according to the message type.
 /atom/proc/rc_vc_msg_prefs_check(mob/target, visible_message_flags = NONE)
@@ -216,33 +238,33 @@
 
 /**
  * This is a SAFE proc. Use this instead of equip_to_splot()!
- * set del_on_fail to have it delete item_to_equip if it fails to equip
+ * set del_on_fail to have it delete W if it fails to equip
  * unset redraw_mob to prevent the mob from being redrawn at the end.
  */
-/mob/proc/equip_to_slot_if_possible(obj/item/item_to_equip, slot, ignore_delay = TRUE, del_on_fail = FALSE, warning = TRUE, redraw_mob = TRUE, override_nodrop = FALSE)
-	if(!istype(item_to_equip) || QDELETED(item_to_equip)) //This qdeleted is to prevent stupid behavior with things that qdel during init, like say stacks
+/mob/proc/equip_to_slot_if_possible(obj/item/W, slot, ignore_delay = TRUE, del_on_fail = FALSE, warning = TRUE, redraw_mob = TRUE, override_nodrop = FALSE)
+	if(!istype(W) || QDELETED(W)) //This qdeleted is to prevent stupid behavior with things that qdel during init, like say stacks
 		return FALSE
-	if(!item_to_equip.mob_can_equip(src, slot, warning, override_nodrop))
+	if(!W.mob_can_equip(src, slot, warning, override_nodrop))
 		if(del_on_fail)
-			qdel(item_to_equip)
+			qdel(W)
 			return FALSE
 		if(warning)
 			to_chat(src, span_warning("You are unable to equip that."))
 		return FALSE
-	if(item_to_equip.equip_delay_self && !ignore_delay)
-		if(!do_after(src, item_to_equip.equip_delay_self, NONE, item_to_equip, BUSY_ICON_FRIENDLY))
-			to_chat(src, "You stop putting on \the [item_to_equip]")
+	if(W.equip_delay_self && !ignore_delay)
+		if(!do_after(src, W.equip_delay_self, NONE, W, BUSY_ICON_FRIENDLY))
+			to_chat(src, "You stop putting on \the [W]")
 			return FALSE
-		equip_to_slot(item_to_equip, slot) //This proc should not ever fail.
+		equip_to_slot(W, slot) //This proc should not ever fail.
 		//This will unwield items -without- triggering lights.
-		if(CHECK_BITFIELD(item_to_equip.item_flags, TWOHANDED))
-			item_to_equip.unwield(src)
+		if(CHECK_BITFIELD(W.flags_item, TWOHANDED))
+			W.unwield(src)
 		return TRUE
 	else
-		equip_to_slot(item_to_equip, slot) //This proc should not ever fail.
+		equip_to_slot(W, slot) //This proc should not ever fail.
 		//This will unwield items -without- triggering lights.
-		if(CHECK_BITFIELD(item_to_equip.item_flags, TWOHANDED))
-			item_to_equip.unwield(src)
+		if(CHECK_BITFIELD(W.flags_item, TWOHANDED))
+			W.unwield(src)
 		return TRUE
 
 /**
@@ -298,20 +320,11 @@
 	if(slot == SLOT_IN_R_POUCH && (!(istype(I, /obj/item/storage/holster) || istype(I, /obj/item/weapon) || istype(I, /obj/item/storage/pouch/pistol))))
 		return FALSE
 
-	//Sends quick equip signal, if our signal is not handled/blocked we continue to the normal behaviour
-	var/return_value = SEND_SIGNAL(I, COMSIG_ITEM_QUICK_EQUIP, src)
-	switch(return_value)
-		if(COMSIG_QUICK_EQUIP_HANDLED)
-			return TRUE
-		if(COMSIG_QUICK_EQUIP_BLOCKED)
-			return FALSE
-
 	//calls on the item to return a suitable item to be equipped
-	//Realistically only would get called on an item that has no storage/storage didnt fail signal
 	var/obj/item/found = I.do_quick_equip(src)
 	if(!found)
 		return FALSE
-	if(CHECK_BITFIELD(found.inventory_flags, NOQUICKEQUIP))
+	if(CHECK_BITFIELD(found.flags_inventory, NOQUICKEQUIP))
 		return FALSE
 	temporarilyRemoveItemFromInventory(found)
 	put_in_hands(found)
@@ -321,37 +334,6 @@
 	. = ..()
 	. += "---"
 	.["Player Panel"] = "?_src_=vars;[HrefToken()];playerpanel=[REF(src)]"
-
-/mob/vv_edit_var(var_name, var_value)
-	switch(var_name)
-		if(NAMEOF(src, control_object))
-			var/obj/O = var_value
-			if(!istype(O) || (O.obj_flags & DANGEROUS_POSSESSION))
-				return FALSE
-		if(NAMEOF(src, machine))
-			set_machine(var_value)
-			. = TRUE
-		if(NAMEOF(src, focus))
-			set_focus(var_value)
-			. = TRUE
-		if(NAMEOF(src, stat))
-			set_stat(var_value)
-			. = TRUE
-
-	if(!isnull(.))
-		datum_flags |= DF_VAR_EDITED
-		return
-
-	var/slowdown_edit = (var_name == NAMEOF(src, cached_multiplicative_slowdown))
-	var/diff
-	if(slowdown_edit && isnum(cached_multiplicative_slowdown) && isnum(var_value))
-		remove_movespeed_modifier(MOVESPEED_ID_ADMIN_VAREDIT)
-		diff = var_value - cached_multiplicative_slowdown
-
-	. = ..()
-
-	if(. && slowdown_edit && isnum(diff))
-		update_movespeed()
 
 
 /client/verb/changes()
@@ -403,6 +385,11 @@
 		if(!suppress_message)
 			to_chat(src, span_warning("Cannot grab, lacking free hands to do so!"))
 		return FALSE
+
+//RUTGMC EDIT ADDITION BEGIN - Preds
+	if(SEND_SIGNAL(AM, COMSIG_ATTEMPT_MOB_PULL) & COMPONENT_CANCEL_MOB_PULL)
+		return FALSE
+//RUTGMC EDIT ADDITION END
 
 	AM.add_fingerprint(src, "pull")
 
@@ -819,7 +806,6 @@
 		//This would go on on_revive() but that is a mob/living proc
 		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[ckey]
 		personal_statistics.times_revived++
-		personal_statistics.mission_times_revived++
 	SEND_SIGNAL(src, COMSIG_MOB_STAT_CHANGED, ., new_stat)
 
 /// Cleanup proc that's called when a mob loses a client, either through client destroy or logout

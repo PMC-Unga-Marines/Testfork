@@ -56,7 +56,6 @@
 			hud_type.add_to_hud(src)
 		else
 			hud_type.remove_from_hud(src)
-	faction = newoccupant.faction //we do not unset when exiting, last occupant is the owner
 
 	if(!internal_damage)
 		SEND_SOUND(newoccupant, sound('sound/mecha/nominal.ogg',volume=50))
@@ -94,8 +93,8 @@
 
 /obj/vehicle/sealed/mecha/remove_occupant(mob/M)
 	//tgmc addition start
-	M?.hud_used?.remove_ammo_hud(equip_by_category[MECHA_R_ARM])
-	M?.hud_used?.remove_ammo_hud(equip_by_category[MECHA_L_ARM])
+	M.hud_used.remove_ammo_hud(equip_by_category[MECHA_R_ARM])
+	M.hud_used.remove_ammo_hud(equip_by_category[MECHA_L_ARM])
 	//tgmc addition end
 	UnregisterSignal(M, COMSIG_MOB_DEATH)
 	UnregisterSignal(M, COMSIG_MOB_MOUSEDOWN)

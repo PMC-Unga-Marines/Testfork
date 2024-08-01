@@ -372,8 +372,6 @@
 			client << link(href_list["url"])
 		if("cacheReloaded")
 			reinitialize()
-		if("chat/resend")
-			SSchat.handle_resend(client, payload)
 
 /datum/tgui_window/vv_edit_var(var_name, var_value)
 	return var_name != NAMEOF(src, id) && ..()

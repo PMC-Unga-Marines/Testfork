@@ -37,6 +37,11 @@
 		holed_wall = null
 	return ..()
 
+
+/obj/effect/acid_hole/fire_act()
+	return
+
+
 /obj/effect/acid_hole/MouseDrop_T(mob/M, mob/user)
 	. = ..()
 	if(!holed_wall)
@@ -45,7 +50,7 @@
 		use_wall_hole(user)
 
 
-/obj/effect/acid_hole/CtrlClick(mob/living/carbon/user)
+/obj/effect/acid_hole/specialclick(mob/living/carbon/user)
 	if(!isxeno(user))
 		return
 	if(!user.CanReach(src))
@@ -120,8 +125,6 @@
 //Throwing Shiet
 /obj/effect/acid_hole/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	var/mob_dir = get_dir(user, src)
 	var/crawl_dir = dir & mob_dir

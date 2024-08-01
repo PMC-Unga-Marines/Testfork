@@ -1,5 +1,3 @@
-GLOBAL_DATUM_INIT(squad_selector, /datum/squad_selector, new)
-
 /obj/machinery/computer/squad_selector
 	name = "squad selection console"
 	desc = "A console for squad management. Allows users to join a squad."
@@ -10,21 +8,12 @@ GLOBAL_DATUM_INIT(squad_selector, /datum/squad_selector, new)
 	interaction_flags = INTERACT_OBJ_UI
 
 /obj/machinery/computer/squad_selector/ui_interact(mob/user, datum/tgui/ui)
-	return GLOB.squad_selector.ui_interact(arglist(args))
-
-/datum/squad_selector
-	interaction_flags = INTERACT_UI_INTERACT
-
-/datum/squad_selector/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "SquadSelector", "Squad Selection")
+		ui = new(user, src, "SquadSelector", name)
 		ui.open()
 
-/datum/squad_selector/ui_state(mob/user)
-	return GLOB.conscious_state
-
-/datum/squad_selector/ui_data(mob/user)
+/obj/machinery/computer/squad_selector/ui_data(mob/user)
 	var/list/data = list()
 	if(!SSjob.active_squads[user.faction])
 		return data
@@ -35,7 +24,7 @@ GLOBAL_DATUM_INIT(squad_selector, /datum/squad_selector, new)
 	data["active_squads"] = squad_data
 	return data
 
-/datum/squad_selector/ui_act(action, list/params)
+/obj/machinery/computer/squad_selector/ui_act(action, list/params)
 	. = ..()
 	if(.)
 		return
@@ -48,4 +37,3 @@ GLOBAL_DATUM_INIT(squad_selector, /datum/squad_selector, new)
 		if(new_squad == user.assigned_squad)
 			return
 		user.change_squad(new_squad_id)
-		SStgui.close_user_uis(usr, src)

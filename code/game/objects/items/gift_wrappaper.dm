@@ -3,7 +3,7 @@
 	desc = "Presents!"
 	icon = 'icons/obj/items/items.dmi'
 	icon_state = "gift1"
-	worn_icon_state = "gift1"
+	item_state = "gift1"
 
 	var/list/gift_types = list(
 		/obj/item/storage/wallet,
@@ -52,8 +52,10 @@
 	pixel_y = rand(-10, 10)
 
 
+/* RUTGMC DELETION
 /obj/item/gift/ex_act()
 	qdel(src)
+*/
 
 
 /obj/item/gift/attack_self(mob/user)
@@ -68,7 +70,7 @@
 	desc = "One, standard issue TGMC Present"
 	icon = 'icons/obj/items/items.dmi'
 	icon_state = "gift1"
-	worn_icon_state = "gift1"
+	item_state = "gift1"
 
 	var/fancy_chance = 0
 	var/fancy_type = 0
@@ -115,7 +117,7 @@
 			gift_type = pick(
 			/obj/item/weapon/gun/revolver/mateba,
 			/obj/item/weapon/gun/pistol/heavy,
-			/obj/item/weapon/sword,
+			/obj/item/weapon/claymore,
 			/obj/item/weapon/energy/sword/green,
 			/obj/item/weapon/energy/sword/red,
 			/obj/item/attachable/heavy_barrel,
@@ -130,7 +132,7 @@
 
 
 /obj/item/weapon/gun/launcher/rocket/m57a4/xmas
-	gun_features_flags = NONE
+	flags_gun_features = NONE
 
 
 /obj/item/weapon/gun/launcher/rocket/m57a4/xmas/able_to_fire(mob/living/user)
@@ -142,7 +144,7 @@
 
 
 /obj/item/weapon/gun/rifle/sniper/elite/xmas
-	gun_features_flags = NONE
+	flags_gun_features = NONE
 
 
 /obj/item/weapon/gun/rifle/sniper/elite/xmas/able_to_fire(mob/living/user)
@@ -157,8 +159,6 @@
 
 /obj/effect/spresent/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(!iswirecutter(I))
 		to_chat(user, span_notice("You need wirecutters for that."))
@@ -186,8 +186,6 @@
 
 /obj/item/wrapping_paper/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	var/a_used = 2 ** (w_class - 1)
 

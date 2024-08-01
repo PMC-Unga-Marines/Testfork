@@ -211,9 +211,10 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 /obj/item/supplytablet
 	name = "ASRS tablet"
 	desc = "A tablet for an Automated Storage and Retrieval System"
+	icon = 'icons/Marine/marine-navigation.dmi'
 	icon_state = "req_tablet_off"
 	req_access = list(ACCESS_MARINE_CARGO)
-	equip_slot_flags = ITEM_SLOT_POCKET
+	flags_equip_slot = ITEM_SLOT_POCKET
 	w_class = WEIGHT_CLASS_NORMAL
 	var/datum/supply_ui/SU
 	///Id of the shuttle controlled
@@ -324,6 +325,7 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 /datum/supply_ui/ui_data(mob/living/user)
 	. = list()
 	.["currentpoints"] = round(SSpoints.supply_points[user.faction])
+	.["personalpoints"] = round(SSpoints.personal_supply_points[user.ckey])
 	.["requests"] = list()
 	for(var/key in SSpoints.requestlist)
 		var/datum/supply_order/SO = SSpoints.requestlist[key]
@@ -445,6 +447,7 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 				.["elevator_dir"] = "up"
 	else
 		.["elevator"] = "MISSING!"
+	.["beacon"] = length(GLOB.supply_beacon) ? TRUE : FALSE
 
 /datum/supply_ui/proc/get_shopping_cart(mob/user)
 	return SSpoints.shopping_cart
@@ -533,6 +536,15 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 			var/list/shopping_cart = get_shopping_cart(ui.user)
 			shopping_cart.Cut()
 			. = TRUE
+		if("buypersonal")
+			SSpoints.buy_using_psp(ui.user)
+			. = TRUE
+		if("delivery")
+			var/datum/supply_order/O = SSpoints.shoppinglist[faction]["[params["id"]]"]
+			if(!O)
+				return
+			SSpoints.fast_delivery(O, ui.user)
+			. = TRUE
 
 /datum/supply_ui/requests
 	tgui_name = "CargoRequest"
@@ -547,6 +559,7 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 /datum/supply_ui/requests/ui_data(mob/living/user)
 	. = list()
 	.["currentpoints"] = round(SSpoints.supply_points[user.faction])
+	.["personalpoints"] = round(SSpoints.personal_supply_points[user.ckey])
 	.["requests"] = list()
 	for(var/i in SSpoints.requestlist)
 		var/datum/supply_order/SO = SSpoints.requestlist[i]
@@ -592,6 +605,17 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 				packs[SP.type] = 1
 			cost += SP.cost
 		.["approvedrequests"] += list(list("id" = SO.id, "orderer" = SO.orderer, "orderer_rank" = SO.orderer_rank, "reason" = SO.reason, "cost" = cost, "packs" = packs, "authed_by" = SO.authorised_by))
+	.["awaiting_delivery"] = list()
+	.["awaiting_delivery_orders"] = 0
+	for(var/key in SSpoints.shoppinglist[faction])
+		//only own orders
+		var/datum/supply_order/SO = LAZYACCESSASSOC(SSpoints.shoppinglist, faction, key)
+		if(user.real_name == SO.orderer)
+			.["awaiting_delivery_orders"]++
+			var/list/packs = list()
+			for(var/datum/supply_packs/SP AS in SO.pack)
+				packs += SP.type
+			.["awaiting_delivery"] += list(list("id" = SO.id, "orderer" = SO.orderer, "orderer_rank" = SO.orderer_rank, "reason" = SO.reason, "packs" = packs, "authed_by" = SO.authorised_by))
 	if(!SSpoints.request_shopping_cart[user.ckey])
 		SSpoints.request_shopping_cart[user.ckey] = list()
 	.["shopping_list_cost"] = 0
@@ -602,6 +626,7 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 		.["shopping_list_items"] += SSpoints.request_shopping_cart[user.ckey][i]
 		.["shopping_list_cost"] += SP.cost * SSpoints.request_shopping_cart[user.ckey][SP.type]
 		.["shopping_list"][SP.type] = list("count" = SSpoints.request_shopping_cart[user.ckey][SP.type])
+	.["beacon"] = length(GLOB.supply_beacon) ? TRUE : FALSE
 
 /datum/supply_ui/requests/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()
@@ -638,17 +663,22 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	name = "\improper TGMC radio operator backpack"
 	desc = "A backpack that resembles the ones old-age radio operator marines would use. It has a supply ordering console installed on it, and a retractable antenna to receive supply drops."
 	icon_state = "radiopack"
-	worn_icon_state = "radiopack"
+	item_state = "radiopack"
 	///Var for the window pop-up
 	var/datum/supply_ui/requests/supply_interface
+	/// Reference to the datum used by the supply drop console
+	var/datum/supply_beacon/beacon_datum
 
-/obj/item/storage/backpack/marine/radiopack/Initialize(mapload, ...)
-	. = ..()
-	AddComponent(/datum/component/beacon, FALSE, 0, icon_state + "_active")
+/obj/item/storage/backpack/marine/radiopack/Destroy()
+	if(beacon_datum)
+		UnregisterSignal(beacon_datum, COMSIG_QDELETING)
+		QDEL_NULL(beacon_datum)
+	return ..()
 
 /obj/item/storage/backpack/marine/radiopack/examine(mob/user)
 	. = ..()
 	. += span_notice("Right-Click with empty hand to open requisitions interface.")
+	. += span_notice("Activate in hand to create a supply beacon signal.")
 
 /obj/item/storage/backpack/marine/radiopack/attack_hand_alternate(mob/living/user)
 	if(!allowed(user))
@@ -656,6 +686,31 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	if(!supply_interface)
 		supply_interface = new(src)
 	return supply_interface.interact(user)
+
+/obj/item/storage/backpack/marine/radiopack/attack_self(mob/living/user)
+	if(beacon_datum)
+		UnregisterSignal(beacon_datum, COMSIG_QDELETING)
+		QDEL_NULL(beacon_datum)
+		user.show_message(span_warning("The [src] beeps and states, \"Your last position is no longer accessible by the supply console"), EMOTE_AUDIBLE, span_notice("The [src] vibrates but you can not hear it!"))
+		return
+	if(!is_ground_level(user.z))
+		to_chat(user, span_warning("You have to be on the planet to use this or it won't transmit."))
+		return FALSE
+	var/turf/location = get_turf(src)
+	beacon_datum = new /datum/supply_beacon(user.name, user.loc, user.faction, 4 MINUTES)
+	RegisterSignal(beacon_datum, COMSIG_QDELETING, PROC_REF(clean_beacon_datum))
+	user.show_message(span_notice("The [src] beeps and states, \"Your current coordinates were registered by the supply console. LONGITUDE [location.x]. LATITUDE [location.y]. Area ID: [get_area(src)]\""), EMOTE_AUDIBLE, span_notice("The [src] vibrates but you can not hear it!"))
+	addtimer(CALLBACK(src, PROC_REF(update_beacon_location)), 5 SECONDS)
+
+/obj/item/storage/backpack/marine/radiopack/proc/update_beacon_location()
+	if(beacon_datum)
+		beacon_datum.drop_location = get_turf(src)
+		addtimer(CALLBACK(src, PROC_REF(update_beacon_location), beacon_datum), 5 SECONDS)
+
+/// Signal handler to nullify beacon datum
+/obj/item/storage/backpack/marine/radiopack/proc/clean_beacon_datum()
+	SIGNAL_HANDLER
+	beacon_datum = null
 
 /obj/docking_port/mobile/supply/vehicle
 	railing_gear_name = "vehicle"
@@ -667,7 +722,7 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	if(!veh_ui || !veh_ui.current_veh_type)
 		return
 	var/obj/vehicle/sealed/armored/tanktype = veh_ui.current_veh_type
-	var/is_assault = initial(tanktype.armored_flags) & ARMORED_PURCHASABLE_ASSAULT
+	var/is_assault = initial(tanktype.flags_armored) & ARMORED_PURCHASABLE_ASSAULT
 	if(GLOB.purchased_tanks[user.faction]?["[is_assault]"])
 		to_chat(usr, span_danger("A vehicle of this type has already been purchased!"))
 		return
@@ -715,27 +770,12 @@ GLOBAL_LIST_EMPTY(purchased_tanks)
 	. = list()
 	for(var/obj/vehicle/sealed/armored/vehtype AS in typesof(/obj/vehicle/sealed/armored))
 		vehtype = new vehtype
-
-		GLOB.armored_modtypes[vehtype.type] = list()
-		for(var/obj/item/tank_module/module AS in vehtype.permitted_mods)
-			if(module::tank_mod_flags & TANK_MOD_NOT_FABRICABLE)
-				continue
-			GLOB.armored_modtypes[vehtype.type] += module
-
-		.[vehtype.type] = list()
-		for(var/obj/item/armored_weapon/weapon AS in vehtype.permitted_weapons)
-			if(weapon::armored_weapon_flags & MODULE_NOT_FABRICABLE)
-				continue
-			.[vehtype.type] += weapon
+		GLOB.armored_modtypes[vehtype.type] = vehtype.permitted_mods
+		.[vehtype.type] = vehtype.permitted_weapons
 		qdel(vehtype)
-
 	for(var/obj/item/armored_weapon/gun AS in typesof(/obj/item/armored_weapon))
 		gun = new gun
-		GLOB.armored_gunammo[gun.type] = list()
-		for(var/obj/item/ammo_magazine/magazine AS in gun.accepted_ammo)
-			if(magazine::magazine_flags & MAGAZINE_NOT_FABRICABLE)
-				continue
-			GLOB.armored_gunammo[gun.type] += magazine
+		GLOB.armored_gunammo[gun.type] = gun.accepted_ammo
 		qdel(gun)
 
 /datum/supply_ui/vehicles
@@ -760,7 +800,7 @@ GLOBAL_LIST_EMPTY(purchased_tanks)
 /datum/supply_ui/vehicles/ui_static_data(mob/user)
 	var/list/data = list()
 	for(var/obj/vehicle/sealed/armored/vehtype AS in typesof(/obj/vehicle/sealed/armored))
-		var/flags = vehtype::armored_flags
+		var/flags = vehtype::flags_armored
 
 		if(flags & ARMORED_PURCHASABLE_TRANSPORT)
 			if(user.skills.getRating(SKILL_LARGE_VEHICLE) < SKILL_LARGE_VEHICLE_EXPERIENCED)
@@ -777,7 +817,7 @@ GLOBAL_LIST_EMPTY(purchased_tanks)
 		for(var/obj/item/armored_weapon/gun AS in GLOB.armored_guntypes[vehtype])
 			var/primary_selected = (current_primary == gun)
 			var/secondary_selected = (current_secondary == gun)
-			if(initial(gun.armored_weapon_flags) & MODULE_PRIMARY)
+			if(initial(gun.weapon_slot) & MODULE_PRIMARY)
 				data["primaryWeapons"] += list(list(
 					"name" = initial(gun.name),
 					"desc" = initial(gun.desc),
@@ -793,7 +833,7 @@ GLOBAL_LIST_EMPTY(purchased_tanks)
 							"max" = DEFAULT_MAX_ARMORED_AMMO, //TODO make vehicle ammo dynamic instead of fixed number
 						))
 
-			if(initial(gun.armored_weapon_flags) & MODULE_SECONDARY)
+			if(initial(gun.weapon_slot) & MODULE_SECONDARY)
 				data["secondaryWeapons"] += list(list(
 					"name" = initial(gun.name),
 					"desc" = initial(gun.desc),
@@ -868,7 +908,7 @@ GLOBAL_LIST_EMPTY(purchased_tanks)
 			if(!ispath(newtype, /obj/vehicle/sealed/armored))
 				return
 			var/obj/vehicle/sealed/armored/tank_type = newtype
-			var/is_assault = initial(tank_type.armored_flags) & ARMORED_PURCHASABLE_ASSAULT
+			var/is_assault = initial(tank_type.flags_armored) & ARMORED_PURCHASABLE_ASSAULT
 			if(GLOB.purchased_tanks[usr.faction]?["[is_assault]"])
 				to_chat(usr, span_danger("A vehicle of this type has already been purchased!"))
 				return
@@ -963,13 +1003,6 @@ GLOBAL_LIST_EMPTY(purchased_tanks)
 			supply_shuttle.buy(usr, src)
 			ui_act("send", params, ui, state)
 			SStgui.close_user_uis(usr, src)
-			current_veh_type = null
-			current_primary = null
-			current_secondary = null
-			current_driver_mod = null
-			current_gunner_mod = null
-			primary_ammo = list()
-			secondary_ammo = list()
 
 	if(.)
 		update_static_data(usr)

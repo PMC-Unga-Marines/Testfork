@@ -14,11 +14,11 @@ GLOBAL_VAR_INIT(custom_info, "")
 GLOBAL_VAR_INIT(motd, "")
 
 ///Regex for detecting non-ASCII symbols
-GLOBAL_VAR_INIT(non_ascii_regex, regex(@"[^\x00-\x7F]"))
+GLOBAL_VAR_INIT(non_ascii_regex, regex(@"[^\x00-\x7F\u0401\u0451]"))
 GLOBAL_PROTECT(non_ascii_regex)
 
 ///Returns true if this contains text that is not ASCII
-#define NON_ASCII_CHECK(text) (findtext(text, GLOB.non_ascii_regex))
+#define NON_ASCII_CHECK(text) (findtext(convert_ru_string_to_en_string(text), GLOB.non_ascii_regex))
 
 GLOBAL_LIST_EMPTY(custom_loadouts)
 
@@ -35,19 +35,3 @@ GLOBAL_PROTECT(admin_ranks)
 
 GLOBAL_LIST_EMPTY(protected_ranks)
 GLOBAL_PROTECT(protected_ranks)
-
-// A list of all the special byond lists that need to be handled different by vv
-GLOBAL_LIST_INIT(vv_special_lists, init_special_list_names())
-
-/proc/init_special_list_names()
-	var/list/output = list()
-	var/obj/sacrifice = new
-	for(var/varname in sacrifice.vars)
-		var/value = sacrifice.vars[varname]
-		if(!islist(value))
-			if(!isdatum(value) && hascall(value, "Cut"))
-				output += varname
-			continue
-		if(isnull(locate(REF(value))))
-			output += varname
-	return output

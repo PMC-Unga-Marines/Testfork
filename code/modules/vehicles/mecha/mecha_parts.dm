@@ -1,7 +1,3 @@
-/////////////////////////
-////// Mecha Parts //////
-/////////////////////////
-
 /obj/item/mecha_parts
 	name = "mecha part"
 	icon = 'icons/mecha/mech_construct.dmi'

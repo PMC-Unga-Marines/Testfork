@@ -7,21 +7,16 @@
 	density = TRUE
 	anchored = FALSE
 
-
 /obj/effect/beam
 	name = "beam"
 	var/def_zone
 	allow_pass_flags = PASS_LOW_STRUCTURE
-
 
 /obj/effect/begin
 	name = "begin"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "begin"
 	anchored = TRUE
-
-
-
 
 /obj/effect/list_container
 	name = "list container"
@@ -45,46 +40,18 @@
 	opacity = FALSE
 	icon_state = "speaker"
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	///The sound we want to loop
-	var/datum/looping_sound/loop_sound
-	///The typepath of our looping sound datum
-	var/sound_type
-	///Do we start immediately
-	var/start_on_init = TRUE
+	var/datum/looping_sound/alarm_loop/deltalarm
 
 /obj/effect/soundplayer/Initialize(mapload)
 	. = ..()
-	if(!sound_type)
-		return INITIALIZE_HINT_QDEL
+	deltalarm = new(null, FALSE)
+	GLOB.ship_alarms += src
 	icon_state = ""
-	loop_sound = new sound_type(null, FALSE)
-	if(start_on_init)
-		loop_sound.start(src)
 
 /obj/effect/soundplayer/Destroy()
 	. = ..()
-	QDEL_NULL(loop_sound)
-
-/obj/effect/soundplayer/deltaplayer
-	sound_type = /datum/looping_sound/alarm_loop
-	start_on_init = FALSE
-
-/obj/effect/soundplayer/deltaplayer/Initialize(mapload)
-	. = ..()
-	GLOB.ship_alarms += src
-
-/obj/effect/soundplayer/deltaplayer/Destroy()
-	. = ..()
+	QDEL_NULL(deltalarm)
 	GLOB.ship_alarms -= src
-
-/obj/effect/soundplayer/riverplayer
-	sound_type = /datum/looping_sound/river_loop
-
-/obj/effect/soundplayer/dripplayer
-	sound_type = /datum/looping_sound/drip_loop
-
-/obj/effect/soundplayer/waterreservoirplayer
-	sound_type = /datum/looping_sound/water_res_loop
 
 /obj/effect/forcefield
 	anchored = TRUE
@@ -99,8 +66,8 @@
 	if(icon_state == "blocker")
 		icon_state = ""
 
-/obj/effect/forcefield/allow_bullet_travel
-	resistance_flags = RESIST_ALL | PROJECTILE_IMMUNE
+/obj/effect/forcefield/get_explosion_resistance()
+	return EXPLOSION_MAX_POWER
 
 /obj/effect/forcefield/fog
 	name = "dense fog"
@@ -118,19 +85,15 @@
 	GLOB.fog_blockers -= src
 	return ..()
 
-
 /obj/effect/forcefield/fog/attack_hand(mob/living/user)
 	to_chat(user, span_notice("You peer through the fog, but it's impossible to tell what's on the other side..."))
 	return TRUE
 
-
-/obj/effect/forcefield/fog/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/effect/forcefield/fog/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	return attack_hand(xeno_attacker)
 
-
-/obj/effect/forcefield/fog/attack_animal(M)
-	return attack_hand(M)
-
+/obj/effect/forcefield/fog/attack_animal(animal_attacker)
+	return attack_hand(animal_attacker)
 
 /obj/effect/forcefield/fog/CanAllowThrough(atom/movable/mover, turf/target)
 	. = ..()
@@ -199,7 +162,6 @@
 	icon_state = "supplypod_selector"
 	layer = FLY_LAYER
 
-
 /obj/effect/dummy/lighting_obj
 	name = "lighting fx obj"
 	desc = "Tell a coder if you're seeing this."
@@ -221,16 +183,13 @@
 	if(_duration)
 		QDEL_IN(src, _duration)
 
-
 /obj/effect/dummy/lighting_obj/moblight
 	name = "mob lighting fx"
-
 
 /obj/effect/dummy/lighting_obj/moblight/Initialize(mapload, _color, _range, _power, _duration)
 	. = ..()
 	if(!ismob(loc))
 		return INITIALIZE_HINT_QDEL
-
 
 //Makes a tile fully lit no matter what
 /obj/effect/fullbright

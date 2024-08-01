@@ -1,14 +1,14 @@
 /obj/item/robot_parts
 	name = "robot parts"
 	icon = 'icons/obj/items/robot_parts.dmi'
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/engineering_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/engineering_right.dmi',
 	)
-	worn_icon_state = "buildpipe"
+	item_state = "buildpipe"
 	icon_state = "blank"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	var/list/part
 
 /obj/item/robot_parts/l_arm
@@ -53,7 +53,7 @@
 /obj/item/robot_parts/biotic
 	name = "biotic limbs"
 	icon = 'icons/mob/human_races/r_human.dmi'
-	atom_flags = NONE
+	flags_atom = NONE
 
 /obj/item/robot_parts/biotic/l_arm
 	name = "biotic left arm"

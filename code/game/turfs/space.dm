@@ -6,7 +6,6 @@
 	icon_state = "0"
 	can_bloody = FALSE
 	light_power = 0.25
-	allow_construction = FALSE
 	///What type of debuff do we apply when someone walks through this tile?
 	var/debuff_type = /datum/status_effect/spacefreeze
 
@@ -34,9 +33,9 @@
  */
 /turf/open/space/Initialize(mapload, ...)
 	SHOULD_CALL_PARENT(FALSE) //prevent laggies
-	if(atom_flags & INITIALIZED)
+	if(flags_atom & INITIALIZED)
 		stack_trace("Warning: [src]([type]) initialized multiple times!")
-	ENABLE_BITFIELD(atom_flags, INITIALIZED)
+	ENABLE_BITFIELD(flags_atom, INITIALIZED)
 	icon_state = SPACE_ICON_STATE(x, y, z)
 
 	return INITIALIZE_HINT_NORMAL
@@ -56,8 +55,6 @@
 
 /turf/open/space/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/stack/rods))
 		var/obj/structure/lattice/L = locate(/obj/structure/lattice) in src
@@ -85,11 +82,15 @@
 		S.build(src)
 		S.use(1)
 
-
 /turf/open/space/Entered(atom/movable/arrived, atom/old_loc, list/atom/old_locs)
 	. = ..()
 	if(isliving(arrived))
 		var/mob/living/spaceman = arrived
+		if(isxenohivemind(spaceman))
+			var/mob/living/carbon/xenomorph/hivemind/hivemind = spaceman
+			to_chat(hivemind, span_xenonotice("We returned to our core to avoid damaging ourselves."))
+			hivemind.return_to_core()
+			return
 		if(!spaceman.has_status_effect(debuff_type))
 			spaceman.apply_status_effect(debuff_type)
 

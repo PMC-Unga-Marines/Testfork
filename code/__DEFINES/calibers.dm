@@ -13,7 +13,6 @@
 #define CALIBER_50AE ".50 AE"
 #define CALIBER_41RIM ".41 Rimfire" //Derringer
 #define CALIBER_70MANKEY ".70 Mankey" //Don't ask
-#define CALIBER_41AE ".41 AE"
 
 // Revolvers
 #define CALIBER_44 ".44 Magnum"
@@ -21,6 +20,8 @@
 #define CALIBER_454 ".454 Casull" //Mateba
 #define CALIBER_762X38 "7.62x38mm Rimmed" //UPP
 #define CALIBER_12x7 "12.7 Magnum"
+#define CALIBER_44LS ".44 Long Special"
+#define CALIBER_500 ".500 Nigro Express"
 
 // SMGs
 #define CALIBER_46X30 "4.6x30mm"
@@ -75,6 +76,7 @@
 #define CALIBER_FUEL_THICK "UT-Napthal Fuel"
 #define CALIBER_WATER "Water"
 #define CALIBER_10X28 "10x28mm" //Sentry, OG Smartgun and SR-26 Sniper?
+#define CALIBER_86 "86mm" //MBT Main Cannon
 #define CALIBER_PEPPERBALL "SAN Ball " //Pepperball gun
 #define CALIBER_10G_RAIL "10 gauge rail"
 
@@ -84,6 +86,5 @@
 #define CALIBER_10X30 "10x30mm caseless"
 #define CALIBER_20 "20mm" //Dualcannon
 
-/// Vehicles
+///Unmanned vehicles
 #define CALIBER_11X35 "11x35mm"
-#define CALIBER_105MM "105mm" //MBT Main Cannon

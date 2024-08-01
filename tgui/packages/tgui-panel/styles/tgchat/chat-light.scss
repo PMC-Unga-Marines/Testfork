@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-@use 'sass:map';
-@use 'sass:color';
-
 html,
 body {
   padding: 0;
@@ -419,33 +416,25 @@ em {
 .deadsay {
   color: #5c00e6;
 }
-.bigdeadsay {
-  color: #5c00e6;
-  font-size: 140%;
-}
-.tinydeadsay {
-  color: #5c00e6;
-  font-size: 85%;
-}
 
 .radio {
   color: #158c15;
 }
 
 .deptradio {
-  color: #b21ab2;
+  color: #993399;
 }
 .comradio {
-  color: #517ac5;
+  color: #004080;
 }
 .syndradio {
-  color: #7f4648;
+  color: #6d3f40;
 }
 .centradio {
-  color: #636399;
+  color: #5c5c8a;
 }
 .airadio {
-  color: #b21ab2;
+  color: #ff00ff;
 }
 
 .casradio {
@@ -458,10 +447,10 @@ em {
   color: #008160;
 }
 .sciradio {
-  color: #993599;
+  color: #993399;
 }
 .supradio {
-  color: #a8732b;
+  color: #5f4519;
 }
 
 .alpharadio {
@@ -488,6 +477,10 @@ em {
 }
 .whiskeyradio {
   color: #cc00cc;
+}
+
+.yautjaradio {
+  color: #b33d3d;
 }
 
 .binarysay {
@@ -549,16 +542,11 @@ h2.alert {
   color: #0000cc;
 }
 .debuginfo {
-  color: #33cc33;
-  font-weight: bold;
+  color: #493d26;
   font-style: italic;
 }
 .notice {
   color: #000099;
-}
-.tinynotice {
-  color: #000099;
-  font-size: 85%;
 }
 .xenonotice {
   color: #2a623d;
@@ -575,10 +563,68 @@ h2.alert {
   color: #2a623d;
   font-style: italic;
 }
-.boldwarning {
-  color: #ff0000;
-  font-style: italic;
+.yautjabold {
+  color: #800080;
   font-weight: bold;
+}
+.yautjaboldbig {
+  color: #800080;
+  font-weight: bold;
+  font-size: 120%;
+}
+.extra_large {
+  font-size: 130%;
+}
+.huge {
+  font-size: 150%;
+}
+.blue {
+  color: #215cff;
+}
+.green {
+  color: #059223;
+}
+.red {
+  color: #ff0000;
+}
+.orange {
+  color: #eca100;
+}
+
+.retro_translator {
+  font-weight: bold;
+}
+
+.yautja_translator {
+  color: #aa0000;
+  font-weight: bold;
+
+  /*Animation*/
+  animation: glitch 0.5s infinite;
+}
+
+/*Keyframes*/
+
+@keyframes glitch {
+  25% {
+    color: #aa0000;
+    transform: translate(-2px, -1px);
+  }
+
+  50% {
+    color: #be0000;
+    transform: translate(1px, -2px);
+  }
+
+  75% {
+    color: #8d0000;
+    transform: translate(-1px, 2px);
+  }
+
+  100% {
+    color: #830000;
+    transform: translate(1px, 1px);
+  }
 }
 .danger {
   color: #ff0000;
@@ -587,7 +633,7 @@ h2.alert {
 .userdanger {
   color: #ff0000;
   font-weight: bold;
-  font-size: 185%;
+  font-size: 3em;
 }
 .xenodanger {
   color: #2a623d;
@@ -600,7 +646,7 @@ h2.alert {
 .highdanger {
   color: #ff0000;
   font-weight: bold;
-  font-size: 185%;
+  font-size: 1.5em;
 }
 .xenohighdanger {
   color: #2a623d;
@@ -614,6 +660,20 @@ h2.alert {
   font-style: italic;
   font-size: 1.5em;
 }
+.xenobanishtitleannonce {
+  color: #7575f3;
+  font-family: book-antiqua;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+} // RUTGMC EDIT ADDITION
+.xenobanishannonce {
+  color: #ff0000;
+  font-family: book-antiqua;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.2em;
+} // RUTGMC EDIT ADDITION
 .hivemind {
   color: purple;
 }
@@ -642,14 +702,15 @@ h2.alert {
 }
 
 .role_header {
-  color: #000000;
+  color: #db0000;
   display: block;
   text-align: center;
   font-weight: bold;
+  font-family: trebuchet-ms;
   font-size: 1.5em;
 }
 .role_body {
-  color: #db0000;
+  color: #000099;
   display: block;
   text-align: center;
 }
@@ -662,6 +723,7 @@ h2.alert {
   color: #db0000;
   display: block;
   text-align: center;
+  font-family: courier;
   font-weight: bold;
   font-size: 2em;
 }
@@ -669,6 +731,7 @@ h2.alert {
   color: #001427;
   display: block;
   text-align: center;
+  font-family: trebuchet-ms;
   font-weight: bold;
   font-size: 1.5em;
 }
@@ -684,17 +747,6 @@ h2.alert {
 }
 .season_additional_info {
   color: #283747;
-}
-
-.announce_header {
-  color: #000000;
-  font-weight: bold;
-  font-size: 150%;
-}
-.announce_body {
-  color: #ff0000;
-  font-weight: normal;
-  font-size: 125%;
 }
 
 .centerbold {
@@ -717,7 +769,7 @@ h2.alert {
 }
 
 .green {
-  color: #14a833;
+  color: #29b245;
 }
 
 .nicegreen {
@@ -997,15 +1049,6 @@ h2.alert {
   font-size: 80%;
 }
 
-.upside_down {
-  display: inline;
-  -moz-transform: scale(-1, -1);
-  -webkit-transform: scale(-1, -1);
-  -o-transform: scale(-1, -1);
-  -ms-transform: scale(-1, -1);
-  transform: scale(-1, -1);
-}
-
 .connectionClosed,
 .fatalError {
   background: red;
@@ -1047,168 +1090,13 @@ h2.alert {
 }
 
 .examine_block {
-  background: rgba(0, 0, 0, 0.1);
+  background: #f2f7fa;
   border: 1px solid #111a27;
-  margin: 7px 4px;
-  padding: 8px 12px;
+  margin: 0.5em;
+  padding: 0.5em 0.75em;
 }
 
-.examine_block hr {
-  border: none;
-  background: #333;
-  height: 1px;
-  margin: 8px 16px 8px 16px;
-}
-
-$ooc_alert_bg_colors: (
-  'ooc': #bdc8ff,
-  'game': #ffbbb3,
-);
-
-$ooc_alert_border_colors: (
-  'ooc': #002eb8,
-  'game': #b60000,
-);
-
-$ooc_alert_text_colors: (
-  'ooc': #002eb8,
-  'game': #b60000,
-);
-
-@each $color-type, $color in $ooc_alert_text_colors {
-  .ooc_alert_#{$color-type} {
-    background: map.get($ooc_alert_bg_colors, $color-type);
-    border: 1px solid map.get($ooc_alert_border_colors, $color-type);
-    margin: 0.5em;
-    padding: 0.5em 0.5em 0.5em 0.2em;
-    color: #000000;
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .ooc_alert_#{$color-type} .ooc_announcement_text {
-    color: map.get($ooc_alert_text_colors, $color-type);
-    padding: 0.5em 0 0 0.35em;
-  }
-}
-
-$alert-stripe-colors: (
-  'default': #c6ccec,
-  'green': #ceebc2,
-  'blue': #c6ccec,
-  'pink': #ecc6d9,
-  'yellow': #fff3b3,
-  'orange': #ffe2b3,
-  'red': #ffbbb3,
-  'purple': #e6d1f0,
-  'grey': #e3e3e3,
-);
-
-$alert-stripe-alternate-colors: (
-  'default': #ced3ef,
-  'green': #d8efce,
-  'blue': #ced3ef,
-  'pink': #f0d1e1,
-  'yellow': #fff5c2,
-  'orange': #ffe8c2,
-  'red': #ffc8c2,
-  'purple': #ead9f2,
-  'grey': #ebebeb,
-);
-
-$alert-major-header-colors: (
-  'default': #003061,
-  'green': #1f440e,
-  'blue': #003061,
-  'pink': #602040,
-  'yellow': #990f00,
-  'orange': #b14810,
-  'red': #a80e00,
-  'purple': #5b2673,
-  'grey': #a80e00,
-);
-
-$alert-subheader-header-colors: (
-  'default': #991200,
-  'green': #002c85,
-  'blue': #991200,
-  'pink': #002c85,
-  'yellow': #214164,
-  'orange': #002c85,
-  'red': #483c3c,
-  'purple': #991200,
-  'grey': #002c85,
-);
-
-$border-width: 4;
-
-$border-width-px: $border-width * 1px;
-
-.faction_alert_text {
-  color: #202020;
-  background: #eaeaea;
-  padding: 0.5rem 0.5rem;
-}
-.faction_alert_subtitle {
-  padding: 0 0.5rem;
-  padding-top: 0.25rem;
-  font-size: 125%;
-}
-.faction_alert_title {
-  padding: 0 0.5rem;
-  font-size: 185%;
-}
-.faction_alert_minortitle {
-  padding: 0 0.5rem;
-  font-size: 150%;
-}
-.alert_header {
-  padding: 0.5rem 0;
-  display: flex;
-  flex-direction: column;
-}
-
-@each $color-name, $color-value in $alert-stripe-colors {
-  .faction_alert_#{$color-name} {
-    color: #ffffff;
-    box-shadow: none;
-    font-weight: bold;
-    margin: 1rem 0 1rem 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    border-image: repeating-linear-gradient(
-      -45deg,
-      map.get($alert-stripe-alternate-colors, $color-name),
-      map.get($alert-stripe-alternate-colors, $color-name) 10px,
-      $color-value 10px,
-      $color-value 20px
-    );
-    border-image-slice: $border-width fill;
-    border-width: $border-width-px;
-    border-image-width: $border-width-px;
-    border-image-outset: 0 0 0 0;
-    border-image-repeat: repeat repeat;
-    border-style: solid;
-  }
-
-  .faction_alert_#{$color-name} .faction_alert_title {
-    color: map.get($alert-major-header-colors, $color-name);
-  }
-
-  .faction_alert_#{$color-name} .faction_alert_minortitle {
-    color: map.get($alert-major-header-colors, $color-name);
-  }
-
-  .faction_alert_#{$color-name} .faction_alert_subtitle {
-    color: map.get($alert-subheader-header-colors, $color-name);
-  }
-
-  .faction_alert_#{$color-name} .faction_alert_text {
-    background-color: lighten(
-      map.get($alert-stripe-alternate-colors, $color-name),
-      5
-    );
-  }
+.tooltip {
+  font-style: italic;
+  border-bottom: 1px dashed #000;
 }

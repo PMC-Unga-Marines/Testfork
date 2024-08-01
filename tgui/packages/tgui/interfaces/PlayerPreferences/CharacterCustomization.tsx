@@ -1,23 +1,11 @@
-import { capitalize } from 'common/string';
-
 import { useBackend } from '../../backend';
-import {
-  Box,
-  Button,
-  ColorBox,
-  Flex,
-  LabeledList,
-  Section,
-} from '../../components';
-import {
-  SelectFieldPreference,
-  TextFieldPreference,
-  ToggleFieldPreference,
-} from './FieldPreferences';
+import { capitalize } from 'common/string';
+import { Button, Section, Flex, LabeledList, Box, ColorBox } from '../../components';
+import { TextFieldPreference, ToggleFieldPreference, SelectFieldPreference } from './FieldPreferences';
 import { ProfilePicture } from './ProfilePicture';
 
-export const CharacterCustomization = (props) => {
-  const { act, data } = useBackend<CharacterCustomizationData>();
+export const CharacterCustomization = (props, context) => {
+  const { act, data } = useBackend<CharacterCustomizationData>(context);
   const {
     random_name,
     r_hair,
@@ -43,10 +31,10 @@ export const CharacterCustomization = (props) => {
   };
   const genders = ['male', 'female', 'plural', 'neuter'];
   const genderToName = {
-    male: 'Male',
-    female: 'Female',
-    neuter: 'Object',
-    plural: 'Other',
+    'male': 'Male',
+    'female': 'Female',
+    'neuter': 'Object',
+    'plural': 'Other',
   };
   return (
     <>
@@ -91,8 +79,7 @@ export const CharacterCustomization = (props) => {
           <Button color="bad" icon="power-off" onClick={() => act('random')}>
             Randomize everything
           </Button>
-        }
-      >
+        }>
         <Flex>
           <Flex.Item>
             <LabeledList>
@@ -213,12 +200,6 @@ export const CharacterCustomization = (props) => {
                 value={'religion'}
                 action={'religion'}
               />
-              <SelectFieldPreference
-                label={'TTS voice'}
-                value={'tts_voice'}
-                action={'tts_voice'}
-              />
-              <TextFieldPreference label={'TTS pitch'} value={'tts_pitch'} />
             </LabeledList>
           </Flex.Item>
         </Flex>

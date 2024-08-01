@@ -31,8 +31,6 @@
 
 /obj/item/stack/flag/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(upright && istype(I, type))
 		return attack_hand(user)

@@ -1,3 +1,4 @@
+
 /obj/vehicle/ridden/powerloader
 	name = "\improper RPL-Y Cargo Loader"
 	icon = 'icons/obj/powerloader.dmi'
@@ -16,7 +17,9 @@
 	max_integrity = 200
 	var/list/move_sounds = list('sound/mecha/powerloader_step.ogg', 'sound/mecha/powerloader_step2.ogg')
 	var/list/change_dir_sounds = list('sound/mecha/powerloader_turn.ogg', 'sound/mecha/powerloader_turn2.ogg')
+	var/panel_open = FALSE
 	var/light_range_on = 4
+
 
 /obj/vehicle/ridden/powerloader/Initialize(mapload)
 	. = ..()
@@ -41,6 +44,16 @@
 		return
 	return user_unbuckle_mob(user, user) //clicking the powerloader with its own clamp unbuckles the pilot.
 
+/obj/vehicle/ridden/powerloader/attackby(obj/item/I, mob/user, params)
+	. = ..()
+
+	if(!isscrewdriver(I))
+		return
+	to_chat(user, span_notice("You screw the panel [panel_open ? "closed" : "open"]."))
+	playsound(loc, 'sound/items/screwdriver.ogg', 25, 1)
+	panel_open = !panel_open
+
+
 /obj/vehicle/ridden/powerloader/user_unbuckle_mob(mob/living/buckled_mob, mob/user, silent)
 	if(!LAZYLEN(buckled_mobs) || buckled_mob.buckled != src)
 		return FALSE
@@ -60,6 +73,7 @@
 	if(.)
 		playsound(loc, 'sound/mecha/powerloader_unbuckle.ogg', 25)
 		set_light(0)
+
 
 /obj/vehicle/ridden/powerloader/post_buckle_mob(mob/buckling_mob)
 	. = ..()
@@ -86,8 +100,6 @@
 	icon_state = "powerloader_open"
 	buckled_mob.drop_all_held_items() //drop the clamp when unbuckling
 
-/obj/vehicle/ridden/powerloader/welder_act(mob/living/user, obj/item/I)
-	return welder_repair_act(user, I, 10, 2 SECONDS, fuel_req = 1)
 
 /obj/vehicle/ridden/powerloader/user_buckle_mob(mob/living/buckling_mob, mob/user, check_loc = FALSE, silent) //check_loc needs to be FALSE here.
 	if(buckling_mob != user)
@@ -127,9 +139,10 @@
 	force = 20
 	// ITEM_ABSTRACT to prevent placing the item on a table/closet.
 	// DELONDROP to prevent giving the clamp to others.
-	item_flags = ITEM_ABSTRACT|DELONDROP
+	flags_item = ITEM_ABSTRACT|DELONDROP
 	var/obj/vehicle/ridden/powerloader/linked_powerloader
 	var/obj/loaded
+
 
 /obj/item/powerloader_clamp/dropped(mob/user)
 	// Don't call ..() so it's not deleted
@@ -139,6 +152,7 @@
 		return
 	forceMove(linked_powerloader)
 	linked_powerloader.unbuckle_mob(user)
+
 
 /obj/item/powerloader_clamp/attack(mob/living/victim, mob/living/user, def_zone)
 	if(victim in linked_powerloader.buckled_mobs)
@@ -152,6 +166,7 @@
 		user.visible_message(span_notice("[user] grabs [loaded] with [src]."),
 			span_notice("You grab [loaded] with [src]."))
 	return ..()
+
 
 /obj/item/powerloader_clamp/afterattack(atom/target, mob/user, proximity)
 	. = ..()

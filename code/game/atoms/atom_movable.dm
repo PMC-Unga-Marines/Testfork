@@ -24,8 +24,9 @@
 	var/atom/movable/pulling
 	var/atom/movable/moving_from_pull		//attempt to resume grab after moving instead of before.
 	var/glide_modifier_flags = NONE
-
+/* RU TGMC EDIT
 	var/status_flags = CANSTUN|CANKNOCKDOWN|CANKNOCKOUT|CANPUSH|CANUNCONSCIOUS|CANCONFUSE	//bitflags defining which status effects can be inflicted (replaces canweaken, canstun, etc)
+RU TGMC EDIT */
 	var/generic_canpass = TRUE
 	///What things this atom can move past, if it has the corrosponding flag
 	var/pass_flags = NONE
@@ -104,6 +105,7 @@
 		AddElement(/datum/element/light_blocking)
 	if(light_system == MOVABLE_LIGHT)
 		AddComponent(/datum/component/overlay_lighting)
+
 
 /atom/movable/Destroy()
 	QDEL_NULL(proximity_monitor)
@@ -229,7 +231,7 @@
 	var/can_pass_diagonally = NONE
 	if (direction & (direction - 1)) //Check if the first part of the diagonal move is possible
 		moving_diagonally = TRUE
-		if(!(atom_flags & DIRLOCK))
+		if(!(flags_atom & DIRLOCK))
 			setDir(direction) //We first set the direction to prevent going through dir sensible object
 		if((direction & NORTH) && loc.Exit(src, NORTH) && get_step(loc, NORTH).Enter(src))
 			can_pass_diagonally = NORTH
@@ -245,13 +247,13 @@
 		moving_diagonally = FALSE
 		if(!get_step(loc, can_pass_diagonally)?.Exit(src, direction & ~can_pass_diagonally))
 			return Move(get_step(loc, can_pass_diagonally), can_pass_diagonally)
-		if(!(atom_flags & DIRLOCK)) //We want to set the direction to be the one of the "second" diagonal move, aka not can_pass_diagonally
+		if(!(flags_atom & DIRLOCK)) //We want to set the direction to be the one of the "second" diagonal move, aka not can_pass_diagonally
 			setDir(direction &~ can_pass_diagonally)
 
 	else
 		if(!loc.Exit(src, direction))
 			return
-		if(!(atom_flags & DIRLOCK))
+		if(!(flags_atom & DIRLOCK))
 			setDir(direction)
 
 	var/enter_return_value = newloc.Enter(src)
@@ -372,12 +374,12 @@
 
 
 /atom/movable/proc/Moved(atom/old_loc, movement_dir, forced = FALSE, list/old_locs)
-	SEND_SIGNAL(src, COMSIG_MOVABLE_MOVED, old_loc, movement_dir, forced, old_locs)
+	SEND_SIGNAL(src, COMSIG_MOVABLE_MOVED, old_loc, movement_dir, forced, locs)
 	if(client_mobs_in_contents)
 		update_parallax_contents()
 
 	if(pulledby)
-		SEND_SIGNAL(src, COMSIG_MOVABLE_PULL_MOVED, old_loc, movement_dir, forced, old_locs)
+		SEND_SIGNAL(src, COMSIG_MOVABLE_PULL_MOVED, old_loc, movement_dir, forced, locs)
 	//Cycle through the light sources on this atom and tell them to update.
 	for(var/datum/dynamic_light_source/light AS in hybrid_light_sources)
 		light.source_atom.update_light()
@@ -421,9 +423,6 @@
 /atom/movable/proc/doMove(atom/destination)
 	. = FALSE
 	var/atom/oldloc = loc
-	var/list/old_locs
-	if(length(locs) > 1)
-		old_locs = locs
 	if(destination)
 		if(pulledby)
 			pulledby.stop_pulling()
@@ -461,7 +460,7 @@
 			if(old_area)
 				old_area.Exited(src, NONE)
 
-	Moved(oldloc, NONE, TRUE, old_locs)
+	Moved(oldloc, NONE, TRUE)
 
 /atom/movable/Exited(atom/movable/gone, direction)
 	. = ..()
@@ -481,10 +480,10 @@
 
 ///called when src is thrown into hit_atom
 /atom/movable/proc/throw_impact(atom/hit_atom, speed, bounce = TRUE)
+	if(!hit_atom) // RUTGMC ADDITION
+		return
 	var/hit_successful
 	var/old_throw_source = throw_source
-	if(QDELETED(hit_atom))
-		return FALSE
 	hit_successful = hit_atom.hitby(src, speed)
 	if(hit_successful)
 		SEND_SIGNAL(src, COMSIG_MOVABLE_IMPACT, hit_atom, speed)
@@ -496,11 +495,9 @@
 /atom/movable/proc/throw_bounce(atom/hit_atom, turf/old_throw_source)
 	if(QDELETED(src))
 		return
-	if(QDELETED(hit_atom))
-		return
 	if(!isturf(loc))
 		return
-	var/dir_to_proj = angle_to_cardinal_dir(Get_Angle(hit_atom, old_throw_source))
+	var/dir_to_proj = get_dir(hit_atom, old_throw_source)
 	if(ISDIAGONALDIR(dir_to_proj))
 		var/list/cardinals = list(turn(dir_to_proj, 45), turn(dir_to_proj, -45))
 		for(var/direction in cardinals)
@@ -509,8 +506,10 @@
 				cardinals -= direction
 		dir_to_proj = pick(cardinals)
 
-	var/perpendicular_angle = Get_Angle(hit_atom, get_step(hit_atom, ISDIAGONALDIR(dir_to_proj) ? get_dir(hit_atom, old_throw_source) - dir_to_proj : dir_to_proj))
-	var/new_angle = (perpendicular_angle + (perpendicular_angle - Get_Angle(old_throw_source, (loc == old_throw_source ? hit_atom : src)) - 180) + rand(-10, 10))
+	var/perpendicular_angle = 0
+	if(dir_to_proj != 0)
+		perpendicular_angle = Get_Angle(hit_atom, get_step(hit_atom, dir_to_proj))
+	var/new_angle = (perpendicular_angle + (perpendicular_angle - Get_Angle(old_throw_source, src) - 180) + rand(-10, 10))
 
 	if(new_angle < -360)
 		new_angle += 720 //north is 0 instead of 360
@@ -551,10 +550,10 @@
 	if(flying)
 		set_flying(TRUE, FLY_LAYER)
 
-	var/originally_dir_locked = atom_flags & DIRLOCK
+	var/originally_dir_locked = flags_atom & DIRLOCK
 	if(!originally_dir_locked)
 		setDir(get_dir(src, target))
-		atom_flags |= DIRLOCK
+		flags_atom |= DIRLOCK
 
 	throw_source = get_turf(src)	//store the origin turf
 
@@ -630,16 +629,16 @@
 
 	//done throwing, either because it hit something or it finished moving
 	if(!originally_dir_locked)
-		atom_flags &= ~DIRLOCK
+		flags_atom &= ~DIRLOCK
 	if(isobj(src) && throwing)
 		throw_impact(get_turf(src), speed)
-	stop_throw(flying, original_layer)
-
-///Clean up all throw vars
-/atom/movable/proc/stop_throw(flying = FALSE, original_layer)
-	SEND_SIGNAL(src, COMSIG_MOVABLE_POST_THROW)
 	if(loc)
+		stop_throw(flying, original_layer)
 		SEND_SIGNAL(loc, COMSIG_TURF_THROW_ENDED_HERE, src)
+	SEND_SIGNAL(src, COMSIG_MOVABLE_POST_THROW)
+
+/// Annul all throw var to ensure a clean exit out of throw state
+/atom/movable/proc/stop_throw(flying = FALSE, original_layer)
 	set_throwing(FALSE)
 	if(flying)
 		set_flying(FALSE, original_layer)
@@ -744,135 +743,17 @@
 	// And animate the attack!
 	animate(I, alpha = 175, pixel_x = 0, pixel_y = 0, pixel_z = 0, time = 3)
 
+
 /atom/movable/vv_get_dropdown()
 	. = ..()
-	VV_DROPDOWN_OPTION("", "---------")
-	VV_DROPDOWN_OPTION(VV_HK_FOLLOW, "Follow")
-	VV_DROPDOWN_OPTION(VV_HK_GET, "Get")
-	VV_DROPDOWN_OPTION(VV_HK_SEND, "Send")
-	VV_DROPDOWN_OPTION(VV_HK_DELETE_ALL_INSTANCES, "Delete All Instances")
-	VV_DROPDOWN_OPTION(VV_HK_UPDATE_ICONS, "Update Icon")
-	VV_DROPDOWN_OPTION(VV_HK_EDIT_PARTICLES, "Edit Particles")
+	. += "---"
+	.["Follow"] = "?_src_=holder;[HrefToken()];observefollow=[REF(src)]"
+	.["Get"] = "?_src_=vars;[HrefToken()];getatom=[REF(src)]"
+	.["Send"] = "?_src_=vars;[HrefToken()];sendatom=[REF(src)]"
+	.["Delete All Instances"] = "?_src_=vars;[HrefToken()];delall=[REF(src)]"
+	.["Update Icon"] = "?_src_=vars;[HrefToken()];updateicon=[REF(src)]"
+	.["Edit Particles"] = "?_src_=vars;[HrefToken()];modify_particles=[REF(src)]"
 
-/atom/movable/vv_do_topic(list/href_list)
-	. = ..()
-
-	if(!.)
-		return
-
-	if(href_list[VV_HK_FOLLOW])
-		if(!check_rights(NONE))
-			return
-		var/client/C = usr.client
-		if(isnewplayer(C.mob) || isnewplayer(src))
-			return
-		var/message
-		if(!isobserver(C.mob))
-			usr.client.holder.admin_ghost()
-			message = TRUE
-		var/mob/dead/observer/O = C.mob
-		O.ManualFollow(src)
-		if(message)
-			log_admin("[key_name(O)] jumped to follow [key_name(src)].")
-			message_admins("[ADMIN_TPMONTY(O)] jumped to follow [ADMIN_TPMONTY(src)].")
-
-	if(href_list[VV_HK_GET])
-		if(!check_rights(R_DEBUG))
-			return
-		if(!istype(src))
-			return
-		var/turf/T = get_turf(usr)
-		if(!istype(T))
-			return
-		forceMove(T)
-		log_admin("[key_name(usr)] has sent atom [src] to themselves.")
-		message_admins("[ADMIN_TPMONTY(usr)] has sent atom [src] to themselves.")
-
-	if(href_list[VV_HK_SEND])
-		if(!check_rights(R_DEBUG))
-			return
-		if(!istype(src))
-			return
-		var/atom/target
-		switch(input("Where do you want to send it to?", "Send Mob") as null|anything in list("Area", "Mob", "Key", "Coords"))
-			if("Area")
-				var/area/AR = input("Pick an area.", "Pick an area") as null|anything in GLOB.sorted_areas
-				if(!AR || !src)
-					return
-				target = pick(get_area_turfs(AR))
-			if("Mob")
-				var/mob/N = input("Pick a mob.", "Pick a mob") as null|anything in sortList(GLOB.mob_list)
-				if(!N || !src)
-					return
-				target = get_turf(N)
-			if("Key")
-				var/client/C = input("Pick a key.", "Pick a key") as null|anything in sortKey(GLOB.clients)
-				if(!C || !src)
-					return
-				target = get_turf(C.mob)
-			if("Coords")
-				var/X = input("Select coordinate X", "Coordinate X") as null|num
-				var/Y = input("Select coordinate Y", "Coordinate Y") as null|num
-				var/Z = input("Select coordinate Z", "Coordinate Z") as null|num
-				if(isnull(X) || isnull(Y) || isnull(Z) || !src)
-					return
-				target = locate(X, Y, Z)
-		if(!target)
-			return
-		forceMove(target)
-		log_admin("[key_name(usr)] has sent atom [src] to [AREACOORD(target)].")
-		message_admins("[ADMIN_TPMONTY(usr)] has sent atom [src] to [ADMIN_VERBOSEJMP(target)].")
-
-	if(href_list[VV_HK_DELETE_ALL_INSTANCES])
-		if(!check_rights(R_DEBUG|R_SERVER))
-			return
-		var/obj/O = src
-		if(!isobj(O))
-			return
-		var/action_type = alert("Strict type ([O.type]) or type and all subtypes?", "Type", "Strict type", "Type and subtypes", "Cancel")
-		if(action_type == "Cancel" || !action_type)
-			return
-		if(alert("Are you really sure you want to delete all objects of type [O.type]?", "Warning", "Yes", "No") != "Yes")
-			return
-		if(alert("Second confirmation required. Delete?", "Warning", "Yes", "No") != "Yes")
-			return
-		var/O_type = O.type
-		var/i = 0
-		var/strict
-		switch(action_type)
-			if("Strict type")
-				strict = TRUE
-				for(var/obj/Obj in world)
-					if(Obj.type == O_type)
-						i++
-						qdel(Obj)
-					CHECK_TICK
-				if(!i)
-					to_chat(usr, "No objects of this type exist")
-					return
-			if("Type and subtypes")
-				for(var/obj/Obj in world)
-					if(istype(Obj,O_type))
-						i++
-						qdel(Obj)
-					CHECK_TICK
-				if(!i)
-					to_chat(usr, "No objects of this type exist")
-					return
-		log_admin("[key_name(usr)] deleted all objects of type[strict ? "" : " and subtypes"] of [O_type] ([i] objects deleted).")
-		message_admins("[ADMIN_TPMONTY(usr)] deleted all objects of type[strict ? "" : " and subtypes"] of [O_type] ([i] objects deleted).")
-
-	if(href_list[VV_HK_UPDATE_ICONS])
-		if(!check_rights(R_DEBUG))
-			return
-		update_icon()
-		log_admin("[key_name(usr)] updated the icon of [src].")
-
-	if(href_list[VV_HK_EDIT_PARTICLES])
-		if(!check_rights(R_VAREDIT))
-			return
-		var/client/C = usr.client
-		C?.open_particle_editor(src)
 
 /atom/movable/proc/get_language_holder(shadow = TRUE)
 	if(language_holder)
@@ -980,7 +861,7 @@
 
 
 /atom/movable/proc/safe_throw_at(atom/target, range, speed, mob/thrower, spin = TRUE, force = MOVE_FORCE_STRONG)
-	if(anchored || (force < (move_resist * MOVE_FORCE_THROW_RATIO)) || (move_resist == INFINITY))
+	if((force < (move_resist * MOVE_FORCE_THROW_RATIO)) || (move_resist == INFINITY))
 		return
 	return throw_at(target, range, speed, thrower, spin)
 
@@ -1190,7 +1071,10 @@
 	grab_state = newstate
 
 ///Toggles AM between throwing states
-/atom/movable/proc/set_throwing(new_throwing)
+/atom/movable/proc/set_throwing(new_throwing, flying)
+	if(new_throwing == throwing)
+		return
+	. = throwing
 	throwing = new_throwing
 	if(throwing)
 		pass_flags |= PASS_THROW
@@ -1316,62 +1200,5 @@
 	return
 
 //Throws AM away from something
-/atom/movable/proc/knockback(source, distance, speed, dir, knockback_force = MOVE_FORCE_EXTREMELY_STRONG)
-	safe_throw_at(get_ranged_target_turf(src, dir ? dir : get_dir(source, src), distance), distance, speed, source, FALSE, knockback_force)
-
-///List of all filter removal timers. Glob to avoid an AM level var
-GLOBAL_LIST_EMPTY(submerge_filter_timer_list)
-
-///Sets the submerged level of an AM based on its turf
-/atom/movable/proc/set_submerge_level(turf/new_loc, turf/old_loc, submerge_icon, submerge_icon_state, duration = 0)
-	if(!submerge_icon) //catch all in case so people don't need to make child types just to specify a return
-		return
-	var/old_height = istype(old_loc) ? old_loc.get_submerge_height() : 0
-	var/new_height = istype(new_loc) ? new_loc.get_submerge_height() : 0
-	var/height_diff = new_height - old_height
-
-	var/old_depth = istype(old_loc) ? old_loc.get_submerge_depth() : 0
-	var/new_depth = istype(new_loc) ? new_loc.get_submerge_depth() : 0
-	var/depth_diff = new_depth - old_depth
-
-	if(!height_diff && !depth_diff)
-		return
-
-	var/icon/AM_icon = icon(icon)
-	var/height_to_use = (64 - AM_icon.Height()) * 0.5 //gives us the right height based on AM's icon height relative to the 64 high alpha mask
-
-	if(!new_height && !new_depth)
-		GLOB.submerge_filter_timer_list[ref(src)] = addtimer(CALLBACK(src, TYPE_PROC_REF(/datum, remove_filter), AM_SUBMERGE_MASK), duration, TIMER_STOPPABLE)
-		REMOVE_TRAIT(src, TRAIT_SUBMERGED, SUBMERGED_TRAIT)
-	else if(!HAS_TRAIT(src, TRAIT_SUBMERGED)) //we use a trait to avoid some edge cases if things are moving fast or unusually
-		if(GLOB.submerge_filter_timer_list[ref(src)])
-			deltimer(GLOB.submerge_filter_timer_list[ref(src)])
-		//The mask is spawned below the AM, then the animate() raises it up, giving the illusion of dropping into water, combining with the animate to actual drop the pixel_y into the water
-		add_filter(AM_SUBMERGE_MASK, 1, alpha_mask_filter(0, height_to_use - AM_SUBMERGE_MASK_HEIGHT, icon(submerge_icon, submerge_icon_state), null, MASK_INVERSE))
-		ADD_TRAIT(src, TRAIT_SUBMERGED, SUBMERGED_TRAIT)
-
-	transition_filter(AM_SUBMERGE_MASK, list(y = height_to_use - (AM_SUBMERGE_MASK_HEIGHT - new_height)), duration)
-	animate(src, pixel_y = depth_diff, time = duration, flags = ANIMATION_PARALLEL|ANIMATION_RELATIVE)
-
-///overrides the turf's normal footstep sound
-/atom/movable/proc/footstep_override(atom/movable/source, list/footstep_overrides)
-	SIGNAL_HANDLER
-	return //override as required with the specific footstep sound
-
-///returns that src is covering its turf. Used to prevent turf interactions such as water
-/atom/movable/proc/turf_cover_check(atom/movable/source)
-	SIGNAL_HANDLER
-	return TRUE
-
-///Wrapper for setting the submerge trait. This trait should ALWAYS be set via this proc so we can listen for the trait removal in all cases
-/atom/movable/proc/add_nosubmerge_trait(trait_source = TRAIT_GENERIC)
-	if(HAS_TRAIT(src, TRAIT_SUBMERGED))
-		set_submerge_level(old_loc = loc, duration = 0.1)
-	ADD_TRAIT(src, TRAIT_NOSUBMERGE, trait_source)
-	RegisterSignal(src, SIGNAL_REMOVETRAIT(TRAIT_NOSUBMERGE), PROC_REF(_do_submerge), override = TRUE) //we can get this trait from multiple sources, but sig is only sent when we lose the trait entirely
-
-///Adds submerge effects to the AM. Should never be called directly
-/atom/movable/proc/_do_submerge(atom/movable/source)
-	SIGNAL_HANDLER
-	UnregisterSignal(src, SIGNAL_REMOVETRAIT(TRAIT_NOSUBMERGE))
-	set_submerge_level(loc, duration = 0.1)
+/atom/movable/proc/knockback(source, distance, speed, dir)
+	throw_at(get_ranged_target_turf(src, dir ? dir : get_dir(source, src), distance), distance, speed, source)

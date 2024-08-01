@@ -4,9 +4,9 @@
 /obj/item/clothing/suit/modular/jaeger
 	name = "\improper Jaeger Infantry medium exoskeleton"
 	desc = "A Infantry-pattern Jaeger combat exoskeleton made to work with modular attachments for the ability to function in many enviroments. This one seems to have a moderate amount of armor plating. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
-	soft_armor = MARINE_ARMOR_MEDIUM
+	soft_armor = list(MELEE = 45, BULLET = 65, LASER = 65, ENERGY = 55, BOMB = 45, BIO = 50, FIRE = 50, ACID = 50)
 	icon_state = "chest"
-	worn_icon_state = "chest"
+	item_state = "chest"
 	slowdown = SLOWDOWN_ARMOR_MEDIUM
 
 	attachments_allowed = list(
@@ -35,12 +35,12 @@
 		/obj/item/armor_module/armor/badge,
 	)
 
-	item_map_variant_flags = ITEM_JUNGLE_VARIANT|ITEM_ICE_VARIANT|ITEM_DESERT_VARIANT
+	flags_item_map_variant = ITEM_JUNGLE_VARIANT|ITEM_ICE_VARIANT|ITEM_DESERT_VARIANT
 
 	greyscale_config = /datum/greyscale_config/armor_mk2/infantry
 	colorable_allowed = PRESET_COLORS_ALLOWED
 	colorable_colors = ARMOR_PALETTES_LIST
-	greyscale_colors = ARMOR_PALETTE_BLACK
+	greyscale_colors = ARMOR_PALETTE_DRAB
 
 
 	allowed_uniform_type = /obj/item/clothing/under
@@ -60,13 +60,18 @@
 	desc = "A Ranger-pattern Jaeger combat exoskeleton made to work with modular attachments for the ability to function in many enviroments. This one seems to have a moderate amount of armor plating. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
 	greyscale_config = /datum/greyscale_config/armor_mk2/ranger
 
+/obj/item/clothing/suit/modular/jaeger/hotaru
+	name = "\improper Style Pattern Hotaru medium exoskeleton"
+	desc = "A Ranger-pattern Hotaru combat exoskeleton made to work with modular attachments for the ability to function in many enviroments. This one seems to have a moderate amount of armor plating. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
+	greyscale_config = /datum/greyscale_config/armor_mk2/hotaru
+
 // Light
 
 /obj/item/clothing/suit/modular/jaeger/light
 	name = "\improper Jaeger Scout light exoskeleton"
 	desc = "A Scout-pattern Jaeger combat exoskeleton made to work with modular attachments for the ability to function in many enviroments. This one seems to have a light amount of armor plating. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
-	soft_armor = MARINE_ARMOR_LIGHT
-	slowdown = SLOWDOWN_ARMOR_LIGHT
+	soft_armor = list(MELEE = 35, BULLET = 55, LASER = 55, ENERGY = 50, BOMB = 40, BIO = 45, FIRE = 45, ACID = 45)
+	slowdown = SLOWDOWN_ARMOR_VERY_LIGHT
 	greyscale_config = /datum/greyscale_config/armor_mk2/scout
 
 /obj/item/clothing/suit/modular/jaeger/light/skirmisher
@@ -83,8 +88,8 @@
 /obj/item/clothing/suit/modular/jaeger/heavy
 	name = "\improper Jaeger Gungnir heavy exoskeleton"
 	desc = "A Gungnir-pattern Jaeger combat exoskeleton made to work with modular attachments for the ability to function in many enviroments. This one seems to have a high amount of armor plating. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
-	soft_armor = MARINE_ARMOR_HEAVY
-	slowdown = SLOWDOWN_ARMOR_HEAVY
+	soft_armor = list(MELEE = 55, BULLET = 70, LASER = 70, ENERGY = 60, BOMB = 50, BIO = 50, FIRE = 50, ACID = 60)
+	slowdown = SLOWDOWN_ARMOR_VERY_HEAVY
 	greyscale_config = /datum/greyscale_config/armor_mk2/gugnir
 
 /obj/item/clothing/suit/modular/jaeger/heavy/assault
@@ -101,17 +106,17 @@
 /obj/item/clothing/head/modular/marine
 	name = "Jaeger Pattern Infantry Helmet"
 	desc = "Usually paired with the Jaeger Combat Exoskeleton. Can mount utility functions on the helmet hard points. Has Infantry markings."
-	worn_icon_list = list(
-		slot_l_hand_str = 'icons/mob/inhands/items/items_left.dmi',
-		slot_r_hand_str = 'icons/mob/inhands/items/items_right.dmi',
+	item_icons = list(
+		slot_l_hand_str = 'icons/mob/items_lefthand_1.dmi',
+		slot_r_hand_str = 'icons/mob/items_righthand_1.dmi',
 	)
 	icon_state = "helmet"
-	worn_icon_state = "helmet"
+	item_state = "helmet"
 	icon_override = null
-	soft_armor = MARINE_ARMOR_HEAVY
+	soft_armor = list(MELEE = 45, BULLET = 65, LASER = 65, ENERGY = 55, BOMB = 45, BIO = 50, FIRE = 50, ACID = 50)
 
 	greyscale_colors = ARMOR_PALETTE_DRAB
-	colorable_allowed = PRESET_COLORS_ALLOWED
+	colorable_allowed = PRESET_COLORS_ALLOWED|HAIR_CONCEALING_CHANGE_ALLOWED
 	colorable_colors = ARMOR_PALETTES_LIST
 	greyscale_config = /datum/greyscale_config/armor_mk2/infantry
 
@@ -142,16 +147,22 @@
 		/obj/item/armor_module/armor/visor/marine/helljumper,
 		/obj/item/armor_module/armor/visor/marine/ranger,
 		/obj/item/armor_module/armor/visor/marine/traditional,
-		/obj/item/armor_module/armor/visor/marine/mjolnir_open,
 		/obj/item/armor_module/armor/visor/marine/trooper,
+		/obj/item/armor_module/armor/visor/marine/kabuto,
+		/obj/item/armor_module/armor/visor/marine/hotaru,
+		/obj/item/armor_module/armor/visor/marine/dashe,
 		/obj/item/armor_module/armor/visor/marine/fourvisor,
 		/obj/item/armor_module/armor/visor/marine/foureyevisor,
 		/obj/item/armor_module/armor/visor/marine/markonevisor,
+		/obj/item/armor_module/armor/secondary_color/helm,
+		//RUTGMC EDIT ADDITION  BEGIN - MOTION_DETECTOR
+		/obj/item/armor_module/module/motion_detector,
+		//RUTGMC EDIT ADDITION  END
 	)
 
 	starting_attachments = list(/obj/item/armor_module/armor/visor/marine, /obj/item/armor_module/storage/helmet)
 
-	item_map_variant_flags = ITEM_JUNGLE_VARIANT|ITEM_ICE_VARIANT|ITEM_DESERT_VARIANT
+	flags_item_map_variant = ITEM_JUNGLE_VARIANT|ITEM_ICE_VARIANT|ITEM_DESERT_VARIANT
 
 /obj/item/clothing/head/modular/marine/eva
 	name = "Jaeger Pattern EVA Helmet"
@@ -218,11 +229,23 @@
 	starting_attachments = list(/obj/item/armor_module/armor/visor/marine/trooper, /obj/item/armor_module/storage/helmet)
 	greyscale_config = /datum/greyscale_config/armor_mk2/trooper
 
-/obj/item/clothing/head/modular/marine/mjolnir_open
-	name = "Jaeger Mk.I Pattern Open Mjolnir Helmet"
-	desc = "Usually paired with the Jaeger Combat Exoskeleton. Can mount utility functions on the helmet hard points. Has Mjolnir markings but explosing the lower jaw."
-	starting_attachments = list(/obj/item/armor_module/armor/visor/marine/mjolnir_open, /obj/item/armor_module/storage/helmet)
-	greyscale_config = /datum/greyscale_config/armor_mk2/mjolnir_open
+/obj/item/clothing/head/modular/marine/kabuto
+	name = "Style Pattern Kabuto Helmet"
+	desc = "Usually paired with the Jaeger Combat Exoskeleton. Can mount utility functions on the helmet hard points. Has Kabuto markings"
+	starting_attachments = list(/obj/item/armor_module/armor/visor/marine/kabuto, /obj/item/armor_module/storage/helmet)
+	greyscale_config = /datum/greyscale_config/armor_mk1/kabuto
+
+/obj/item/clothing/head/modular/marine/hotaru
+	name = "Style Pattern Hotaru Helmet"
+	desc = "Usually paired with the Jaeger Combat Exoskeleton. Can mount utility functions on the helmet hard points. Has Hotaru markings"
+	starting_attachments = list(/obj/item/armor_module/armor/visor/marine/hotaru, /obj/item/armor_module/storage/helmet)
+	greyscale_config = /datum/greyscale_config/armor_mk1/hotaru
+
+/obj/item/clothing/head/modular/marine/dashe
+	name = "Style Pattern Dashe Helmet"
+	desc = "Usually paired with the Jaeger Combat Exoskeleton. Can mount utility functions on the helmet hard points. Has Dashe markings"
+	starting_attachments = list(/obj/item/armor_module/armor/visor/marine/dashe, /obj/item/armor_module/storage/helmet)
+	greyscale_config = /datum/greyscale_config/armor_mk1/dashe
 
 // Hardsuit Helmets
 
@@ -231,6 +254,13 @@
 	desc = "Usually paired with the FleckTex WY-01 modular exoskeleton. Can mount utility functions on the helmet hard points. Has Base markings"
 	greyscale_config = /datum/greyscale_config/hardsuit_variant
 	starting_attachments = list(/obj/item/armor_module/armor/visor/marine, /obj/item/armor_module/storage/helmet, /obj/item/armor_module/armor/secondary_color/helm)
+	attachments_by_slot = list(
+		ATTACHMENT_SLOT_VISOR,
+		ATTACHMENT_SLOT_STORAGE,
+		ATTACHMENT_SLOT_HEAD_MODULE,
+		ATTACHMENT_SLOT_BADGE,
+		ATTACHMENT_SLOT_HELM_SECONDARY_COLOR,
+	)
 
 /obj/item/clothing/head/modular/marine/hardsuit_helm/markfive
 	name = "FleckTex Mark V Breacher Helmet"

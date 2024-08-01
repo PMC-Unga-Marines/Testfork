@@ -15,6 +15,9 @@
 	resistance_flags = RESIST_ALL
 	layer = WINDOW_LAYER
 
+/obj/structure/shuttle/window/fire_act(exposed_temperature, exposed_volume)
+	return
+
 /obj/structure/shuttle/engine
 	name = "engine"
 	density = TRUE

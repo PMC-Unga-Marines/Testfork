@@ -1,7 +1,6 @@
 #define WARHEAD_FLY_TIME 1 SECONDS
 #define RG_FLY_TIME 1 SECONDS
 #define WARHEAD_FALLING_SOUND_RANGE 15
-#define WARHEAD_FUEL_REQUIREMENT 6
 
 /obj/structure/orbital_cannon
 	name = "\improper Orbital Cannon"
@@ -26,6 +25,14 @@
 	if(!GLOB.marine_main_ship.orbital_cannon)
 		GLOB.marine_main_ship.orbital_cannon = src
 
+	if(!GLOB.marine_main_ship.ob_type_fuel_requirements)
+		GLOB.marine_main_ship.ob_type_fuel_requirements = list()
+		var/list/L = list(3,4,5,6)
+		var/amt
+		for(var/i in 1 to 4)
+			amt = pick_n_take(L)
+			GLOB.marine_main_ship?.ob_type_fuel_requirements += amt
+
 	var/turf/T = locate(x+1,y+1,z)
 	var/obj/structure/orbital_tray/O = new(T)
 	tray = O
@@ -35,9 +42,6 @@
 	if(tray)
 		tray.linked_ob = null
 		tray = null
-	if(GLOB.marine_main_ship.orbital_cannon == src)
-		GLOB.marine_main_ship.orbital_cannon = null
-	QDEL_NULL(tray)
 	return ..()
 
 /obj/structure/orbital_cannon/update_icon_state()
@@ -168,13 +172,6 @@
 /// Handles the playing of the Orbital Bombardment incoming sound and other visual and auditory effects of the cannon, usually a spiraling whistle noise but can be overridden.
 /obj/structure/orbital_cannon/proc/handle_ob_firing_effects(target, ob_sound = 'sound/effects/OB_incoming.ogg')
 	flick("OBC_firing",src)
-	for(var/mob/living/current_mob AS in GLOB.mob_living_list)
-		if(!current_mob || !is_mainship_level(current_mob.z))
-			continue
-		if(get_dist(src, current_mob) > 20)
-			current_mob.playsound_local(current_mob, 'sound/effects/obalarm.ogg', 25)
-		shake_camera(current_mob, 0.7 SECONDS)
-		to_chat(current_mob, span_warning("The deck of the [SSmapping.configs[SHIP_MAP].map_name] shudders as her orbital cannon opens fire."))
 	playsound(loc, 'sound/effects/obfire.ogg', 100, FALSE, 20, 4)
 	for(var/mob/M AS in hearers(WARHEAD_FALLING_SOUND_RANGE, target))
 		M.playsound_local(target, ob_sound, falloff = 2)
@@ -193,28 +190,22 @@
 	ob_cannon_busy = TRUE
 
 	var/inaccurate_fuel = 0
-	inaccurate_fuel = abs(WARHEAD_FUEL_REQUIREMENT - tray.fuel_amt)
 
-	// Give marines a warning if misfuelled.
-	var/fuel_warning = "Warhead fuel level: safe."
-	if(inaccurate_fuel > 0)
-		fuel_warning = "Warhead fuel level: incorrect.<br>Warhead may be inaccurate."
+	switch(tray.warhead.warhead_kind)
+		if("explosive")
+			inaccurate_fuel = abs(GLOB.marine_main_ship?.ob_type_fuel_requirements[1] - tray.fuel_amt)
+		if("incendiary")
+			inaccurate_fuel = abs(GLOB.marine_main_ship?.ob_type_fuel_requirements[2] - tray.fuel_amt)
+		if("cluster")
+			inaccurate_fuel = abs(GLOB.marine_main_ship?.ob_type_fuel_requirements[3] - tray.fuel_amt)
+		if("plasma")
+			inaccurate_fuel = abs(GLOB.marine_main_ship?.ob_type_fuel_requirements[4] - tray.fuel_amt)
 
 	var/turf/target = locate(T.x + inaccurate_fuel * pick(-1,1),T.y + inaccurate_fuel * pick(-1,1),T.z)
-	GLOB.round_statistics.obs_fired++
-	SSblackbox.record_feedback("tally", "round_statistics", 1, "obs_fired")
-	priority_announce(
-		message = "Evacuate the impact zone immediately!<br><br>Warhead type: [tray.warhead.warhead_kind].<br>[fuel_warning]<br>Estimated location of impact: [get_area(T)].",
-		title = "Orbital bombardment launch command detected!",
-		type = ANNOUNCEMENT_PRIORITY,
-		sound = 'sound/effects/OB_warning_announce.ogg',
-		channel_override = SSsounds.random_available_channel(), // This way, we can't have it be cut off by other sounds.
-		color_override = "red"
-	)
-	var/list/receivers = (GLOB.alive_human_list + GLOB.ai_list + GLOB.observer_list)
-	for(var/mob/living/screentext_receiver AS in receivers)
-		screentext_receiver.play_screen_text("<span class='maptext' style=font-size:36pt;text-align:center valign='top'><u><b>ORBITAL STRIKE IMMINENT</b></u></span><br>TYPE: [uppertext(tray.warhead.warhead_kind)]", /atom/movable/screen/text/screen_text/command_order)
+
+	playsound_z_humans(target.z, 'sound/effects/OB_warning_announce.ogg', 100) //for marines on ground
 	playsound(target, 'sound/effects/OB_warning_announce_novoiceover.ogg', 125, FALSE, 30, 10) //VOX-less version for xenomorphs
+	playsound_z(z, 'sound/effects/OB_warning_announce.ogg', 100) //for the ship
 
 	var/impact_time = 10 SECONDS + (WARHEAD_FLY_TIME * (GLOB.current_orbit/3))
 
@@ -226,6 +217,7 @@
 	log_game("OB fired by [user] at [AREACOORD(src)], OB type: [tray.warhead.warhead_kind], timerid to cancel: [impact_timerid]")
 	notify_ghosts("<b>[user]</b> has just fired \the <b>[src]</b> !", source = T, action = NOTIFY_JUMP)
 
+	tray.warhead.impact_message(target, impact_time) // RUTGMC ADDITION
 
 /obj/structure/orbital_cannon/proc/impact_callback(target,inaccurate_fuel)
 	tray.warhead.warhead_impact(target, inaccurate_fuel)
@@ -242,7 +234,7 @@
 /obj/structure/orbital_tray
 	name = "loading tray"
 	desc = "The orbital cannon's loading tray."
-	icon = 'icons/obj/structures/prop/mainship_64.dmi'
+	icon = 'icons/Marine/mainship_props64.dmi'
 	icon_state = "cannon_tray"
 	density = TRUE
 	anchored = TRUE
@@ -325,7 +317,7 @@
 	density = TRUE
 	anchored = TRUE
 	climbable = TRUE
-	icon = 'icons/obj/structures/prop/mainship.dmi'
+	icon = 'icons/Marine/mainship_props.dmi'
 	resistance_flags = XENO_DAMAGEABLE
 	interaction_flags = INTERACT_OBJ_DEFAULT|INTERACT_POWERLOADER_PICKUP_ALLOWED_BYPASS_ANCHOR
 	coverage = 100
@@ -336,7 +328,7 @@
 	. += "Moving this will require some sort of lifter."
 
 
-/obj/structure/ob_ammo/obj_destruction(damage_amount, damage_type, damage_flag, mob/living/blame_mob)
+/obj/structure/ob_ammo/obj_destruction(damage_amount, damage_type, damage_flag)
 	explosion(loc, light_impact_range = 2, flash_range = 3, flame_range = 2)
 	return ..()
 
@@ -349,14 +341,39 @@
 /obj/structure/ob_ammo/warhead/proc/warhead_impact()
 	return
 
+/obj/structure/ob_ammo/warhead/proc/impact_message(turf/target, impact_time = 10 SECONDS)
+	var/relative_dir
+	for(var/mob/living/our_mob in range(30, target))
+		if(get_turf(our_mob) == target)
+			relative_dir = 0
+		else
+			relative_dir = get_dir(our_mob, target)
+		our_mob.show_message(span_highdanger("The sky erupts into flames <u>[relative_dir ? ("to the " + dir2text(relative_dir)) : "right above you"]</u>!"), EMOTE_VISIBLE,
+			span_highdanger("You hear a very loud sound coming from above to the <u>[relative_dir ? ("to the " + dir2text(relative_dir)) : "right above you"]</u>!"), EMOTE_AUDIBLE)
+
+	sleep(impact_time / 3)
+	for(var/mob/living/our_mob in range(25, target))
+		if(get_turf(our_mob) == target)
+			relative_dir = 0
+		else
+			relative_dir = get_dir(our_mob, target)
+		our_mob.show_message(span_highdanger("The sky roars louder <u>[relative_dir ? ("to the " + dir2text(relative_dir)) : "right above you"]</u>!"), EMOTE_VISIBLE,
+			span_highdanger("The sound becomes louder <u>[relative_dir ? ("to the " + dir2text(relative_dir)) : "right above you"]</u>!"), EMOTE_AUDIBLE)
+
+	sleep(impact_time / 3)
+	for(var/mob/living/our_mob in range(15, target))
+		our_mob.show_message(span_highdanger("OH GOD THE SKY WILL EXPLODE!!!"), EMOTE_VISIBLE,
+			span_highdanger("YOU SHOULDN'T BE HERE!"), EMOTE_AUDIBLE)
+
 /obj/structure/ob_ammo/warhead/explosive
 	name = "\improper HE orbital warhead"
 	warhead_kind = "explosive"
 	icon_state = "ob_warhead_1"
+	var/explosion_power = 1425
+	var/explosion_falloff = 90
 
 /obj/structure/ob_ammo/warhead/explosive/warhead_impact(turf/target, inaccuracy_amt = 0)
-	. = ..()
-	explosion(target, 15 - inaccuracy_amt, 15 - inaccuracy_amt, 15 - inaccuracy_amt, 0, 15 - inaccuracy_amt)
+	cell_explosion(target, explosion_power, explosion_falloff + (inaccuracy_amt * 10)) // inaccuracy adds up fallof in result range decreases
 
 
 
@@ -364,42 +381,53 @@
 	name = "\improper Incendiary orbital warhead"
 	warhead_kind = "incendiary"
 	icon_state = "ob_warhead_2"
+	var/flame_range_num
+	var/flame_intensity = 36
+	var/flame_duration = 40
+	var/flame_colour = "blue"
+	var/smoke_radius = 17
+	var/smoke_duration = 20
 
 
 /obj/structure/ob_ammo/warhead/incendiary/warhead_impact(turf/target, inaccuracy_amt = 0)
-	. = ..()
-	var/range_num = max(15 - inaccuracy_amt, 12)
-	flame_radius(range_num, target,	burn_intensity = 46, burn_duration = 40, colour = "blue")
+	flame_range_num = max(15 - inaccuracy_amt, 12)
+	flame_radius(flame_range_num, target, flame_intensity, flame_duration, colour = flame_colour)
 	var/datum/effect_system/smoke_spread/phosphorus/warcrime = new
-	warcrime.set_up(17, target, 20)
+	warcrime.set_up(smoke_radius, target, smoke_duration)
 	warcrime.start()
 
 /obj/structure/ob_ammo/warhead/cluster
 	name = "\improper Cluster orbital warhead"
 	warhead_kind = "cluster"
 	icon_state = "ob_warhead_3"
+	var/cluster_amount = 25
+	var/cluster_power = 240
+	var/cluster_falloff = 40
+	var/cluster_range
 
 /obj/structure/ob_ammo/warhead/cluster/warhead_impact(turf/target, inaccuracy_amt = 0)
 	set waitfor = FALSE
-	. = ..()
-	var/range_num = max(9 - inaccuracy_amt, 6)
-	var/list/turf_list = RANGE_TURFS(range_num, target)
-	var/total_amt = max(25 - inaccuracy_amt, 20)
-	for(var/i = 1 to total_amt)
+	cluster_range = max(9 - inaccuracy_amt, 6)
+	var/list/turf_list = list()
+	for(var/turf/T in range(cluster_range, target))
+		turf_list += T
+	var/clusters_to_shoot = max(cluster_amount - inaccuracy_amt, cluster_amount - 5)
+	for(var/i = 1 to clusters_to_shoot)
 		var/turf/U = pick_n_take(turf_list)
-		explosion(U, 2, 4, 6, 0, 6, throw_range = 0, adminlog = FALSE) //rocket barrage
+		cell_explosion(U, cluster_power, cluster_falloff, adminlog = FALSE) //rocket barrage
 		sleep(0.1 SECONDS)
 
 /obj/structure/ob_ammo/warhead/plasmaloss
 	name = "\improper Plasma draining orbital warhead"
 	warhead_kind = "plasma"
 	icon_state = "ob_warhead_4"
+	var/smoke_radius = 25
+	var/smoke_duration = 3 SECONDS
 
 
 /obj/structure/ob_ammo/warhead/plasmaloss/warhead_impact(turf/target, inaccuracy_amt = 0)
-	. = ..()
 	var/datum/effect_system/smoke_spread/plasmaloss/smoke = new
-	smoke.set_up(25, target, 30 - (inaccuracy_amt * 2))//Vape nation
+	smoke.set_up(smoke_radius, target, smoke_duration)//Vape nation
 	smoke.start()
 
 /obj/structure/ob_ammo/ob_fuel
@@ -422,7 +450,7 @@
 	icon_state = "ob_console"
 	screen_overlay = "ob_console_screen"
 	dir = WEST
-	atom_flags = ON_BORDER|CONDUCT
+	flags_atom = ON_BORDER|CONDUCT
 	var/orbital_window_page = 0
 
 /obj/machinery/computer/orbital_cannon_console/Initialize(mapload)
@@ -461,7 +489,10 @@
 	else
 		if(orbital_window_page == 1)
 			dat += "<font size=3>Warhead Fuel Requirements:</font><BR>"
-			dat += "All orbital warheads require <b>[WARHEAD_FUEL_REQUIREMENT] Solid Fuel blocks.</b><BR>"
+			dat += "- HE Orbital Warhead: <b>[GLOB.marine_main_ship.ob_type_fuel_requirements[1]] Solid Fuel blocks.</b><BR>"
+			dat += "- Incendiary Orbital Warhead: <b>[GLOB.marine_main_ship.ob_type_fuel_requirements[2]] Solid Fuel blocks.</b><BR>"
+			dat += "- Cluster Orbital Warhead: <b>[GLOB.marine_main_ship?.ob_type_fuel_requirements[3]] Solid Fuel blocks.</b><BR>"
+			dat += "- Plasma drain Orbital Warhead: <b>[GLOB.marine_main_ship?.ob_type_fuel_requirements[4]] Solid Fuel blocks.</b><BR>"
 
 			dat += "<BR><BR><A href='?src=[text_ref(src)];back=1'><font size=3>Back</font></A><BR>"
 		else
@@ -537,12 +568,6 @@
 	rail_gun_ammo = new /obj/structure/ship_ammo/railgun(src)
 	rail_gun_ammo.max_ammo_count = 8000 //200 uses or 15 full minutes of firing.
 	rail_gun_ammo.ammo_count = 8000
-
-/obj/structure/ship_rail_gun/Destroy()
-	if(GLOB.marine_main_ship.rail_gun == src)
-		GLOB.marine_main_ship.rail_gun = null
-	QDEL_NULL(rail_gun_ammo)
-	return ..()
 
 /obj/structure/ship_rail_gun/proc/fire_rail_gun(turf/T, mob/user, ignore_cooldown = FALSE, ai_operation = FALSE)
 	if(cannon_busy && !ignore_cooldown)

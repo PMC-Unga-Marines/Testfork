@@ -59,7 +59,7 @@
 	name = "Random surgical instrument spawner"
 	icon_state = "random_surgical"
 	loot = list(
-		/obj/item/tool/surgery/scalpel/manager,
+		//obj/item/tool/surgery/scalpel/manager, RUTGMC REMOVAL
 		/obj/item/tool/surgery/scalpel,
 		/obj/item/tool/surgery/hemostat,
 		/obj/item/tool/surgery/retractor,
@@ -133,6 +133,16 @@
 	spawn_loot_chance = 35
 	loot = list(
 		/obj/item/storage/firstaid/regular = 30,
+		/obj/item/storage/firstaid/fire = 15,
+		/obj/item/storage/firstaid/o2 = 10,
+		/obj/item/storage/firstaid/toxin = 10,
+		/obj/item/storage/firstaid/adv = 5,
+	)
+
+/obj/effect/spawner/random/medical/firstaid/often
+	spawn_loot_chance = 85
+	loot = list(
+		/obj/item/storage/firstaid/regular = 25,
 		/obj/item/storage/firstaid/fire = 15,
 		/obj/item/storage/firstaid/o2 = 10,
 		/obj/item/storage/firstaid/toxin = 10,

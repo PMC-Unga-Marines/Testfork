@@ -19,8 +19,6 @@
 //attaching papers!!
 /obj/structure/noticeboard/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/paper))
 		if(notices >= 5)
@@ -75,8 +73,8 @@
 		var/obj/item/paper/P = locate(href_list["read"])
 		if((P?.loc == src))
 			if(!( ishuman(usr) ))
-				usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY><TT>[stars(P.info)]</TT></BODY></HTML>", "window=[P.name]")
+				usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY><TT>[stars(P.info)]</TT></BODY></HTML>", "window=[P.name]")
 				onclose(usr, "[P.name]")
 			else
-				usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY><TT>[P.info]</TT></BODY></HTML>", "window=[P.name]")
+				usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY><TT>[P.info]</TT></BODY></HTML>", "window=[P.name]")
 				onclose(usr, "[P.name]")

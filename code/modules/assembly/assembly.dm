@@ -10,11 +10,11 @@
 	desc = "A small electronic device that should never exist."
 	icon = 'icons/obj/assemblies/new_assemblies.dmi'
 	icon_state = ""
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/tools_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/tools_right.dmi',
 	)
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	w_class = WEIGHT_CLASS_SMALL
 	throwforce = 2
 	throw_speed = 3
@@ -95,8 +95,6 @@
 
 /obj/item/assembly/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(isassembly(I))
 		var/obj/item/assembly/A = I
 		if(!A.secured && !secured)

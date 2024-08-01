@@ -7,7 +7,6 @@
 	name = "Call of the Burrowed"
 	desc = "Attempts to summon all currently burrowed larva."
 	action_icon_state = "larva_growth"
-	action_icon = 'icons/Xeno/actions/leader.dmi'
 	ability_cost = 400
 	cooldown_duration = 2 MINUTES
 	keybinding_signals = list(
@@ -51,6 +50,65 @@
 	if(!owner.incapacitated())
 		mothers += owner //Adding them to the list.
 
+// ***************************************
+// *********** Psychic Grab
+// ***************************************
+/datum/action/ability/activable/xeno/psychic_grab
+	name = "Psychic Grab"
+	action_icon_state = "grab"
+	desc = "Attracts the target to the owner of the ability."
+	cooldown_duration = 12 SECONDS
+	ability_cost = 100
+	keybinding_signals = list(
+		KEYBINDING_NORMAL = COMSIG_XENOABILITY_PSYCHIC_GRAB,
+	)
+	target_flags = ABILITY_MOB_TARGET
+
+
+/datum/action/ability/activable/xeno/psychic_grab/on_cooldown_finish()
+	to_chat(owner, span_notice("We gather enough mental strength to grab something again."))
+	return ..()
+
+
+/datum/action/ability/activable/xeno/psychic_grab/can_use_ability(atom/target, silent = FALSE, override_flags)
+	. = ..()
+	if(!.)
+		return FALSE
+	if(QDELETED(target))
+		return FALSE
+	if(!isitem(target) && !ishuman(target) && !isdroid(target))	//only items, droids, and mobs can be flung.
+		return FALSE
+	var/max_dist = 5
+	if(!line_of_sight(owner, target, max_dist))
+		if(!silent)
+			to_chat(owner, span_warning("We must get closer to grab, our mind cannot reach this far."))
+		return FALSE
+	if(ishuman(target))
+		var/mob/living/carbon/human/victim = target
+		if(isnestedhost(victim))
+			return FALSE
+		if(!CHECK_BITFIELD(use_state_flags|override_flags, ABILITY_IGNORE_DEAD_TARGET) && victim.stat == DEAD)
+			return FALSE
+
+
+/datum/action/ability/activable/xeno/psychic_grab/use_ability(atom/target)
+	var/mob/living/victim = target
+
+	owner.visible_message(span_xenowarning("A strange and violent psychic aura is suddenly emitted from \the [owner]!"), \
+	span_xenowarning("We are rapidly attracting [victim] with the power of our mind!"))
+	victim.visible_message(span_xenowarning("[victim] is rapidly attracting away by an unseen force!"), \
+	span_xenowarning("You are rapidly attracting to the side by an unseen force!"))
+	playsound(owner,'sound/effects/magic.ogg', 75, 1)
+	playsound(victim,'sound/weapons/alien_claw_block.ogg', 75, 1)
+	succeed_activate()
+	add_cooldown()
+	if(ishuman(victim))
+		victim.apply_effects(0.4, 0.1) 	// The fling stuns you enough to remove your gun, otherwise the marine effectively isn't stunned for long.
+		shake_camera(victim, 2, 1)
+
+	var/grab_distance = (isitem(victim)) ? 5 : 4 //Objects get flung further away.
+
+	victim.throw_at(owner, grab_distance, 1, owner, TRUE)
 
 // ***************************************
 // *********** Psychic Fling
@@ -58,7 +116,6 @@
 /datum/action/ability/activable/xeno/psychic_fling
 	name = "Psychic Fling"
 	action_icon_state = "fling"
-	action_icon = 'icons/Xeno/actions/shrike.dmi'
 	desc = "Sends an enemy or an item flying. A close ranged ability."
 	cooldown_duration = 12 SECONDS
 	ability_cost = 100
@@ -105,7 +162,7 @@
 	span_xenowarning("You are violently flung to the side by an unseen force!"))
 	playsound(owner,'sound/effects/magic.ogg', 75, 1)
 	playsound(victim,'sound/weapons/alien_claw_block.ogg', 75, 1)
-
+/* RU TGMC EDIT
 		//Held facehuggers get killed for balance reasons
 	if(istype(owner.r_hand, /obj/item/clothing/mask/facehugger))
 		var/obj/item/clothing/mask/facehugger/FH = owner.r_hand
@@ -116,7 +173,7 @@
 		var/obj/item/clothing/mask/facehugger/FH = owner.l_hand
 		if(FH.stat != DEAD)
 			FH.kill_hugger()
-
+RU TGMC EDIT */
 	succeed_activate()
 	add_cooldown()
 	if(ishuman(victim))
@@ -142,9 +199,8 @@
 /datum/action/ability/activable/xeno/unrelenting_force
 	name = "Unrelenting Force"
 	action_icon_state = "screech"
-	action_icon = 'icons/Xeno/actions/queen.dmi'
 	desc = "Unleashes our raw psychic power, pushing aside anyone who stands in our path."
-	cooldown_duration = 50 SECONDS
+	cooldown_duration = 20 SECONDS
 	ability_cost = 300
 	keybind_flags = ABILITY_KEYBIND_USE_ABILITY | ABILITY_IGNORE_SELECTED_ABILITY
 	keybinding_signals = list(
@@ -157,13 +213,12 @@
 	to_chat(owner, span_notice("Our mind is ready to unleash another blast of force."))
 	return ..()
 
-
 /datum/action/ability/activable/xeno/unrelenting_force/use_ability(atom/target)
 	succeed_activate()
 	add_cooldown()
 	addtimer(CALLBACK(owner, TYPE_PROC_REF(/mob, update_icons)), 1 SECONDS)
 	var/mob/living/carbon/xenomorph/xeno = owner
-	owner.icon_state = "[xeno.xeno_caste.caste_name][(xeno.xeno_flags & XENO_ROUNY) ? " rouny" : ""] Screeching"
+	owner.icon_state = "[xeno.xeno_caste.caste_name][xeno.is_a_rouny ? " rouny" : ""] Screeching"
 	if(target) // Keybind use doesn't have a target
 		owner.face_atom(target)
 
@@ -183,44 +238,29 @@
 			lower_left = locate(owner.x + 1, owner.y - 1, owner.z)
 			upper_right = locate(owner.x + 3, owner.y + 1, owner.z)
 
-	var/list/things_to_throw = list()
-	for(var/turf/affected_tile in block(lower_left, upper_right)) //everything in the 3x3 block is found.
+	for(var/turf/affected_tile in block(lower_left, upper_right)) //everything in the 2x3 block is found.
 		affected_tile.Shake(duration = 0.5 SECONDS)
-		for(var/atom/movable/affected AS in affected_tile)
+		for(var/i in affected_tile)
+			var/atom/movable/affected = i
 			if(!ishuman(affected) && !istype(affected, /obj/item) && !isdroid(affected))
 				affected.Shake(duration = 0.5 SECONDS)
 				continue
-			if(ishuman(affected))
+			if(ishuman(affected)) //if they're human, they also should get knocked off their feet from the blast.
 				var/mob/living/carbon/human/H = affected
-				if(H.stat == DEAD)
+				if(H.stat == DEAD) //unless they are dead, then the blast mysteriously ignores them.
 					continue
-				H.apply_effects(2 SECONDS, 2 SECONDS)
+				H.apply_effects(2 SECONDS, 2 SECONDS) 	// Stun
 				shake_camera(H, 2, 1)
-			things_to_throw += affected
-
-	for(var/atom/movable/affected AS in things_to_throw)
-		var/throwlocation = affected.loc
-		for(var/x in 1 to 6)
-			throwlocation = get_step(throwlocation, owner.dir)
-		affected.throw_at(throwlocation, 6, 1, owner, TRUE)
+			var/throwlocation = affected.loc //first we get the target's location
+			for(var/x in 1 to 6)
+				throwlocation = get_step(throwlocation, owner.dir) //then we find where they're being thrown to, checking tile by tile.
+			affected.throw_at(throwlocation, 6, 1, owner, TRUE)
 
 	owner.visible_message(span_xenowarning("[owner] sends out a huge blast of psychic energy!"), \
 	span_xenowarning("We send out a huge blast of psychic energy!"))
 
 	playsound(owner,'sound/effects/bamf.ogg', 75, TRUE)
-	playsound(owner, SFX_ALIEN_ROAR, 50)
-
-			//Held facehuggers get killed for balance reasons
-	if(istype(owner.r_hand, /obj/item/clothing/mask/facehugger))
-		var/obj/item/clothing/mask/facehugger/FH = owner.r_hand
-		if(FH.stat != DEAD)
-			FH.kill_hugger()
-
-	if(istype(owner.l_hand, /obj/item/clothing/mask/facehugger))
-		var/obj/item/clothing/mask/facehugger/FH = owner.l_hand
-		if(FH.stat != DEAD)
-			FH.kill_hugger()
-
+	playsound(owner, "alien_roar", 50)
 
 // ***************************************
 // *********** Psychic Cure
@@ -228,7 +268,6 @@
 /datum/action/ability/activable/xeno/psychic_cure
 	name = "Psychic Cure"
 	action_icon_state = "heal_xeno"
-	action_icon = 'icons/Xeno/actions/drone.dmi'
 	desc = "Heal and remove debuffs from a target."
 	cooldown_duration = 1 MINUTES
 	ability_cost = 200
@@ -264,12 +303,10 @@
 /datum/action/ability/activable/xeno/psychic_cure/proc/check_distance(atom/target, silent)
 	var/dist = get_dist(owner, target)
 	if(dist > heal_range)
-		if(!silent)
-			to_chat(owner, span_warning("Too far for our reach... We need to be [dist - heal_range] steps closer!"))
+		to_chat(owner, span_warning("Too far for our reach... We need to be [dist - heal_range] steps closer!"))
 		return FALSE
 	else if(!line_of_sight(owner, target))
-		if(!silent)
-			to_chat(owner, span_warning("We can't focus properly without a clear line of sight!"))
+		to_chat(owner, span_warning("We can't focus properly without a clear line of sight!"))
 		return FALSE
 	return TRUE
 
@@ -277,9 +314,8 @@
 /datum/action/ability/activable/xeno/psychic_cure/use_ability(atom/target)
 	if(owner.do_actions)
 		return FALSE
-	if(!do_after(owner, 1 SECONDS, IGNORE_TARGET_LOC_CHANGE, target, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
-		return FALSE
-	if(!can_use_ability(target, TRUE))
+
+	if(!do_after(owner, 1 SECONDS, NONE, target, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
 		return FALSE
 
 	if(owner.client)
@@ -319,14 +355,12 @@
 /datum/action/ability/xeno_action/place_acidwell
 	name = "Place acid well"
 	action_icon_state = "place_trap"
-	action_icon = 'icons/Xeno/actions/construction.dmi'
 	desc = "Place an acid well that can put out fires."
-	ability_cost = 400
+	ability_cost = 200
 	cooldown_duration = 2 MINUTES
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_PLACE_ACID_WELL,
 	)
-	use_state_flags = ABILITY_USE_LYING
 
 /datum/action/ability/xeno_action/place_acidwell/can_use_action(silent = FALSE, override_flags)
 	. = ..()
@@ -342,7 +376,7 @@
 			to_chat(owner, span_warning("We can only shape on weeds. We must find some resin before we start building!"))
 		return FALSE
 
-	if(!T.check_alien_construction(owner, silent, /obj/structure/xeno/acidwell))
+	if(!T.check_alien_construction(owner, silent))
 		return FALSE
 
 	if(!T.check_disallow_alien_fortification(owner, silent))
@@ -352,7 +386,7 @@
 	var/turf/T = get_turf(owner)
 	succeed_activate()
 
-	playsound(T, SFX_ALIEN_RESIN_BUILD, 25)
+	playsound(T, "alien_resin_build", 25)
 	new /obj/structure/xeno/acidwell(T, owner)
 
 	to_chat(owner, span_xenonotice("We place an acid well; it can be filled with more acid."))
@@ -370,7 +404,6 @@
 /datum/action/ability/activable/xeno/psychic_vortex
 	name = "Pyschic vortex"
 	action_icon_state = "vortex"
-	action_icon = 'icons/Xeno/actions/shrike.dmi'
 	desc = "Channel a sizable vortex of psychic energy, drawing in nearby enemies."
 	ability_cost = 600
 	cooldown_duration = 2 MINUTES

@@ -6,7 +6,7 @@
 	animate_movement = SLIDE_STEPS
 	datum_flags = DF_USE_TAG
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
-	atom_flags = PREVENT_CONTENTS_EXPLOSION
+	flags_atom = PREVENT_CONTENTS_EXPLOSION
 	resistance_flags = NONE
 
 	//Mob
@@ -50,6 +50,8 @@
 	var/next_move_modifier = 1
 	var/last_move_intent
 	var/area/lastarea
+	var/old_x = 0
+	var/old_y = 0
 	var/inertia_dir = 0
 	///Can move on the shuttle.
 	var/move_on_shuttle = TRUE
@@ -75,8 +77,6 @@
 	var/list/fullscreens = list()
 	///contains /atom/movable/screen/alert only, used by alerts.dm
 	var/list/alerts = list()
-	///List of queued interactions on this mob
-	var/list/queued_interactions
 	var/list/datum/action/actions = list()
 	var/list/actions_by_path = list()
 	var/lighting_alpha = LIGHTING_PLANE_ALPHA_VISIBLE
@@ -93,8 +93,7 @@
 	var/atom/movable/remote_control
 	var/obj/item/l_hand //Living
 	var/obj/item/r_hand //Living
-	///Our mobs currently active storage
-	var/datum/storage/s_active //Carbon
+	var/obj/item/storage/s_active //Carbon
 	var/obj/item/clothing/mask/wear_mask //Carbon
 	///the current turf being examined in the stat panel
 	var/turf/listed_turf
@@ -130,3 +129,8 @@
 	/// We also need to clear this var/do other cleanup in client/Destroy, since that happens before logout
 	/// HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 	var/client/canon_client
+
+	///Slowdown from readying shields
+	var/shield_slowdown = 0
+	///Color matrices to be applied to the client window. Assoc. list.
+	var/list/client_color_matrices

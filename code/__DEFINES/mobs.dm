@@ -3,42 +3,6 @@
 ///Comment out if you don't want VOX to be enabled and have players download the voice sounds.
 #define AI_VOX
 
-// Overlay Indexes
-#define BODYPARTS_LAYER 28
-#define WOUND_LAYER 27
-#define MOTH_WINGS_LAYER 26
-#define DAMAGE_LAYER 25
-#define UNIFORM_LAYER 24
-#define ID_LAYER 23
-#define SHOES_LAYER 22
-#define GLOVES_LAYER 21
-#define BELT_LAYER 20
-#define GLASSES_LAYER 19
-#define SUIT_LAYER 18 //Possible make this an overlay of somethign required to wear a belt?
-#define HAIR_LAYER 17 //TODO: make part of head layer?
-#define EARS_LAYER 16
-#define FACEMASK_LAYER 15
-#define GOGGLES_LAYER 14	//For putting Ballistic goggles and potentially other things above masks
-#define HEAD_LAYER 13
-#define COLLAR_LAYER 12
-#define SUIT_STORE_LAYER 11
-#define BACK_LAYER 10
-#define KAMA_LAYER 9
-#define CAPE_LAYER 8
-#define HANDCUFF_LAYER 7
-#define L_HAND_LAYER 6
-#define R_HAND_LAYER 5
-#define BURST_LAYER 4 //Chestburst overlay
-#define OVERHEALTH_SHIELD_LAYER 3
-#define FIRE_LAYER 2 //If you're on fire
-#define LASER_LAYER 1 //For sniper targeting laser
-
-#define TOTAL_LAYERS 28
-
-#define MOTH_WINGS_BEHIND_LAYER 1
-
-#define TOTAL_UNDERLAYS 1
-
 //Mob movement define
 
 ///Speed mod for walk intent
@@ -46,7 +10,7 @@
 ///Speed mod for run intent
 #define MOB_RUN_MOVE_MOD 3
 ///Move mod for going diagonally
-#define DIAG_MOVEMENT_ADDED_DELAY_MULTIPLIER 1.6
+#define DIAG_MOVEMENT_ADDED_DELAY_MULTIPLIER (sqrt(2))
 
 
 //Pain or shock reduction for different reagents
@@ -93,6 +57,7 @@
 #define ALIEN_SELECT_AFK_BUFFER 1 // How many minutes that a person can be AFK before not being allowed to be an alien.
 
 //Life variables
+#define CARBON_BREATH_DELAY 2 // The interval in life ticks between breathe()
 
 ///The amount of damage you'll take per tick when you can't breath. Default value is 1
 #define CARBON_CRIT_MAX_OXYLOSS (round(SSmobs.wait/5, 0.1))
@@ -256,6 +221,16 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 #define ORGAN_EYES 6
 #define ORGAN_APPENDIX 7
 
+//organ slots
+#define ORGAN_SLOT_APPENDIX "appendix"
+#define ORGAN_SLOT_BRAIN "brain"
+#define ORGAN_SLOT_EARS "ears"
+#define ORGAN_SLOT_EYES "eyes"
+#define ORGAN_SLOT_HEART "heart"
+#define ORGAN_SLOT_LIVER "liver"
+#define ORGAN_SLOT_LUNGS "lungs"
+#define ORGAN_SLOT_KIDNEYS "kidneys"
+
 #define ORGAN_HEALTHY 0
 #define ORGAN_BRUISED 1
 #define ORGAN_BROKEN 2
@@ -365,8 +340,6 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 //How long it takes for a human to become undefibbable
 #define TIME_BEFORE_DNR 150 //In life ticks, multiply by 2 to have seconds
 
-///Default living `maxHealth`
-#define LIVING_DEFAULT_MAX_HEALTH 100
 
 //species_flags
 #define NO_BLOOD (1<<0)
@@ -400,6 +373,7 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 #define IS_MOTH (1<<3)
 #define IS_SECTOID (1<<4)
 #define IS_MONKEY (1<<5)
+#define IS_YAUTJA (1<<6)
 //=================================================
 
 //AFK status
@@ -414,79 +388,23 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 #define MOB_SIZE_XENO 2
 #define MOB_SIZE_BIG 3
 
-// Height defines
-// - They are numbers so you can compare height values (x height < y height)
-// - They do not start at 0 for futureproofing
-// - They skip numbers for futureproofing as well
-// Otherwise they are completely arbitrary
-#define MONKEY_HEIGHT_DWARF 2
-#define MONKEY_HEIGHT_MEDIUM 4
-#define MONKEY_HEIGHT_TALL HUMAN_HEIGHT_DWARF
-#define HUMAN_HEIGHT_DWARF 6
-#define HUMAN_HEIGHT_SHORTEST 8
-#define HUMAN_HEIGHT_SHORT 10
-#define HUMAN_HEIGHT_MEDIUM 12
-#define HUMAN_HEIGHT_TALL 14
-#define HUMAN_HEIGHT_TALLER 16
-#define HUMAN_HEIGHT_TALLEST 18
-
-/// Assoc list of all heights, cast to strings, to """"tuples"""""
-/// The first """tuple""" index is the upper body offset
-/// The second """tuple""" index is the lower body offset
-GLOBAL_LIST_INIT(human_heights_to_offsets, list(
-	"[MONKEY_HEIGHT_DWARF]" = list(-9, -3),
-	"[MONKEY_HEIGHT_MEDIUM]" = list(-7, -4),
-	"[HUMAN_HEIGHT_DWARF]" = list(-5, -4),
-	"[HUMAN_HEIGHT_SHORTEST]" = list(-2, -1),
-	"[HUMAN_HEIGHT_SHORT]" = list(-1, -1),
-	"[HUMAN_HEIGHT_MEDIUM]" = list(0, 0),
-	"[HUMAN_HEIGHT_TALL]" = list(1, 1),
-	"[HUMAN_HEIGHT_TALLER]" = list(2, 1),
-	"[HUMAN_HEIGHT_TALLEST]" = list(3, 2),
-))
-
-#define UPPER_BODY "upper body"
-#define LOWER_BODY "lower body"
-#define NO_MODIFY "do not modify"
-
-
-//tivi todo finish below with our used stuff
-/// Used for human height overlay adjustments
-/// Certain standing overlay layers shouldn't have a filter applied and should instead just offset by a pixel y
-/// This list contains all the layers that must offset, with its value being whether it's a part of the upper half of the body (TRUE) or not (FALSE)
-GLOBAL_LIST_INIT(layers_to_offset, list(
-	// Very tall hats will get cut off by filter
-	"[HEAD_LAYER]" = UPPER_BODY,
-	// Hair will get cut off by filter
-	"[HAIR_LAYER]" = UPPER_BODY,
-	// Long belts (sabre sheathe) will get cut off by filter
-	"[BELT_LAYER]" = LOWER_BODY,
-	// Everything below looks fine with or without a filter, so we can skip it and just offset
-	// (In practice they'd be fine if they got a filter but we can optimize a bit by not.)
-	"[GLASSES_LAYER]" = UPPER_BODY,
-	"[GLOVES_LAYER]" = LOWER_BODY,
-	"[HANDCUFF_LAYER]" = LOWER_BODY,
-	"[ID_LAYER]" = UPPER_BODY,
-	// These DO get a filter, I'm leaving them here as reference,
-	// to show how many filters are added at a glance
-	// BACK_LAYER (backpacks are big)
-	// BODYPARTS_HIGH_LAYER (arms)
-	// BODY_LAYER (body markings (full body), underwear (full body), eyes)
-	// BODY_ADJ_LAYER (external organs like wings)
-	// BODY_BEHIND_LAYER (external organs like wings)
-	// BODY_FRONT_LAYER (external organs like wings)
-	// DAMAGE_LAYER (full body)
-	// HIGHEST_LAYER (full body)
-	// UNIFORM_LAYER (full body)
-	// WOUND_LAYER (full body)
-))
-
 //taste sensitivity defines, used in mob/living/proc/taste
 #define TASTE_HYPERSENSITIVE 5 //anything below 5% is not tasted
 #define TASTE_SENSITIVE 10 //anything below 10%
 #define TASTE_NORMAL 15 //anything below 15%
 #define TASTE_DULL 30 //anything below 30%
 #define TASTE_NUMB 101 //no taste
+
+
+//defins for datum/hud
+
+#define HUD_STYLE_STANDARD 1
+#define HUD_STYLE_REDUCED 2
+#define HUD_STYLE_NOHUD 3
+#define HUD_VERSIONS 3
+#define HUD_SL_LOCATOR_COOLDOWN 0.5 SECONDS
+#define HUD_SL_LOCATOR_PROCESS_COOLDOWN 10 SECONDS
+
 
 //Blood levels
 #define BLOOD_VOLUME_MAXIMUM 600
@@ -495,6 +413,51 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define BLOOD_VOLUME_OKAY 336
 #define BLOOD_VOLUME_BAD 224
 #define BLOOD_VOLUME_SURVIVE 122
+
+#define HUMAN_MAX_PALENESS 30 //this is added to human skin tone to get value of pale_max variable
+
+
+// Overlay Indexes
+#define PRED_LASER_LAYER 32
+#define LASER_LAYER 31
+#define WOUND_LAYER 30
+#define MOTH_WINGS_LAYER 29
+#define MUTATIONS_LAYER 28
+#define DAMAGE_LAYER 27
+#define FLAY_LAYER 26
+#define UNIFORM_LAYER 25
+#define TAIL_LAYER 24 //bs12 specific. this hack is probably gonna come back to haunt me
+#define ID_LAYER 23
+#define SHOES_LAYER 22
+#define GLOVES_LAYER 21
+#define BELT_LAYER 20
+#define GLASSES_LAYER 19
+#define SUIT_LAYER 18 //Possible make this an overlay of somethign required to wear a belt?
+#define HAIR_LAYER 17 //TODO: make part of head layer?
+#define EARS_LAYER 16
+#define FACEMASK_LAYER 15
+#define GOGGLES_LAYER 14	//For putting Ballistic goggles and potentially other things above masks
+#define HEAD_LAYER 13
+#define COLLAR_LAYER 12
+#define SUIT_STORE_LAYER 11
+#define BACK_LAYER 10
+#define KAMA_LAYER 9
+#define CAPE_LAYER 8
+#define HANDCUFF_LAYER 7
+#define L_HAND_LAYER 6
+#define R_HAND_LAYER 5
+#define BURST_LAYER 4 //Chestburst overlay
+#define OVERHEALTH_SHIELD_LAYER 3
+#define TARGETED_LAYER 2 //for target sprites when held at gun point, and holo cards.
+#define FIRE_LAYER 1 //If you're on fire
+
+#define TOTAL_LAYERS 32
+
+#define MOTH_WINGS_BEHIND_LAYER 1
+
+#define TOTAL_UNDERLAYS 1
+
+#define ANTI_CHAINSTUN_TICKS 2
 
 #define BASE_GRAB_SLOWDOWN 3 //Slowdown called by /mob/setGrabState(newstate) in mob.dm when grabbing a target aggressively.
 
@@ -514,15 +477,11 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 //Xeno flags
 ///Xeno is currently performing a leap/dash attack
 #define XENO_LEAPING (1<<0)
-///Hive leader
-#define XENO_LEADER (1<<1)
-///Zoomed out
-#define XENO_ZOOMED (1<<2)
-///mobhud on
-#define XENO_MOBHUD (1<<3)
-///rouny mode
-#define XENO_ROUNY (1<<4)
 
+#define HIVE_CAN_COLLAPSE_FROM_SILO (1<<1)
+
+#define XENO_WEAK_ACID_PUDDLE_DAMAGE 8 //Weak acid damage dealt by acid puddles
+#define XENO_HIGH_ACID_PUDDLE_DAMAGE 20 //Strong acid damage dealt by acid puddles
 
 #define XENO_DEFAULT_VENT_ENTER_TIME 4.5 SECONDS //Standard time for a xeno to enter a vent.
 #define XENO_DEFAULT_VENT_EXIT_TIME 2 SECONDS //Standard time for a xeno to exit a vent.
@@ -530,6 +489,7 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define XENO_ACID_WELL_FILL_TIME 2 SECONDS //How long it takes to add a charge to an acid pool
 #define XENO_ACID_WELL_FILL_COST 150 //Cost in plasma to apply a charge to an acid pool
 #define XENO_ACID_WELL_MAX_CHARGES 5 //Maximum number of charges for the acid well
+#define XENO_ACID_CHARGE_DAMAGE 30
 
 #define HIVE_CAN_HIJACK (1<<0)
 
@@ -537,7 +497,8 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define XENO_SLOWDOWN_REGEN 0.4
 
 #define XENO_DEADHUMAN_DRAG_SLOWDOWN 2
-#define XENO_EXPLOSION_GIB_THRESHOLD 0.95 //if your effective bomb armour is less than 5, devestating explosions will gib xenos
+
+#define KING_SUMMON_TIMER_DURATION 5 MINUTES
 
 #define SPIT_UPGRADE_BONUS(Xenomorph) (Xenomorph.upgrade_as_number() ?  0.6 : 0.45 ) //Primo damage increase
 
@@ -555,13 +516,11 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define XENO_SILO_DAMAGE_POINTER_DURATION 10 SECONDS //How long the alert directional pointer lasts when silos are damaged
 #define XENO_SILO_DETECTION_COOLDOWN 1 MINUTES
 #define XENO_SILO_DETECTION_RANGE 10//How far silos can detect hostiles
-#define XENO_GARGOYLE_DETECTION_COOLDOWN 30 SECONDS
-#define XENO_GARGOYLE_DETECTION_RANGE 10//How far gargoyles can detect hostiles
-#define XENO_RESTING_COOLDOWN 2 SECONDS
-#define XENO_UNRESTING_COOLDOWN 0.5 SECONDS
-
 #define XENO_HIVEMIND_DETECTION_RANGE 10 //How far out (in tiles) can the hivemind detect hostiles
 #define XENO_HIVEMIND_DETECTION_COOLDOWN 1 MINUTES
+
+#define XENO_RESTING_COOLDOWN 2 SECONDS
+#define XENO_UNRESTING_COOLDOWN 1 SECONDS
 
 #define XENO_PARALYZE_NORMALIZATION_MULTIPLIER 5 //Multiplies an input to normalize xeno paralyze duration times.
 #define XENO_STUN_NORMALIZATION_MULTIPLIER 2 //Multiplies an input to normalize xeno stun duration times.
@@ -588,7 +547,6 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define CASTE_DO_NOT_ANNOUNCE_DEATH (1<<14) // xenos with this flag wont be announced to hive when dying
 #define CASTE_STAGGER_RESISTANT (1<<15) //Resistant to some forms of stagger, such as projectiles
 #define CASTE_HAS_WOUND_MASK (1<<16) //uses an alpha mask for wounded states
-#define CASTE_EXCLUDE_STRAINS (1<<17) // denotes castes/basetypes that should be excluded from being evoable as a strain
 
 // Xeno defines that affect evolution, considering making a new var for these
 #define CASTE_LEADER_TYPE (1<<16) //Whether we are a leader type caste, such as the queen, shrike or ?king?, and is affected by queen ban and playtime restrictions
@@ -650,7 +608,7 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 
 #define RAVAGER_ENDURE_DURATION				10 SECONDS
 #define RAVAGER_ENDURE_DURATION_WARNING		0.7
-#define RAVAGER_ENDURE_HP_LIMIT				-100
+#define RAVAGER_ENDURE_HP_LIMIT				-125
 
 #define RAVAGER_RAGE_DURATION							10 SECONDS
 #define RAVAGER_RAGE_WARNING							0.7
@@ -674,8 +632,11 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define GORGER_DRAIN_HEAL 40 // overheal gained each time the target is drained
 #define GORGER_DRAIN_BLOOD_DRAIN 20 // amount of plasma drained when feeding on something
 #define GORGER_TRANSFUSION_HEAL 0.3 // in %
-#define GORGER_OPPOSE_COST 100
-#define GORGER_OPPOSE_HEAL 0.2 // in %
+#define GORGER_REJUVENATE_DURATION -1
+#define GORGER_REJUVENATE_COST 20
+#define GORGER_REJUVENATE_SLOWDOWN 6
+#define GORGER_REJUVENATE_HEAL 0.05 //in %
+#define GORGER_REJUVENATE_THRESHOLD 0.10 //in %
 #define GORGER_PSYCHIC_LINK_CHANNEL 10 SECONDS
 #define GORGER_PSYCHIC_LINK_RANGE 15
 #define GORGER_PSYCHIC_LINK_REDIRECT 0.5 //in %
@@ -703,58 +664,6 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define DEFILER_SANGUINAL_SMOKE_MULTIPLIER 0.03 //Amount the defile power is multiplied by which determines sanguinal smoke strength/size
 #define TENTACLE_ABILITY_RANGE 5
 
-// Pyrogen defines
-/// Damage per melting fire stack
-#define PYROGEN_DAMAGE_PER_STACK 2.5
-/// Amount of ticks of fire removed when helped by another human to extinguish
-#define PYROGEN_ASSIST_REMOVAL_STRENGTH 2
-/// How fast the pyrogen moves when charging using fire charge
-#define PYROGEN_CHARGESPEED 3
-/// Maximum charge distance.
-#define PYROGEN_CHARGEDISTANCE 5
-/// Damage on hitting a mob using fire charge
-#define PYROGEN_FIRECHARGE_DAMAGE 10
-/// Bonus damage per fire stack
-#define PYROGEN_FIRECHARGE_DAMAGE_PER_STACK 5
-/// Bonus damage for directly hitting someone
-#define PYROGEN_FIREBALL_DIRECT_DAMAGE 30
-/// Damage in a 3x3 AOE when we hit anything
-#define PYROGEN_FIREBALL_AOE_DAMAGE 20
-/// Damage in a 3x3 AOE when we hit a vehicle
-#define PYROGEN_FIREBALL_VEHICLE_AOE_DAMAGE 10
-/// Fire stacks on FIREBALL burst in the 3x3 AOE
-#define PYROGEN_FIREBALL_MELTING_STACKS 2
-/// How many turfs can our fireball move
-#define PYROGEN_FIREBALL_MAXDIST 8
-/// How fast the fireball moves
-#define PYROGEN_FIREBALL_SPEED 1
-/// How much damage the fire does per tick or cross.
-#define PYROGEN_MELTING_FIRE_DAMAGE 10
-/// How many melting fire effect stacks we give per tick or cross
-#define PYROGEN_MELTING_FIRE_EFFECT_STACK 2
-/// How many  tornadoes we unleash when using the firestorm
-#define PYROGEN_FIRESTORM_TORNADE_COUNT 3
-/// Damage on fire tornado hit
-#define PYROGEN_TORNADE_HIT_DAMAGE 15
-/// melting fire stacks on fire tornado hit
-#define PYROGEN_TORNADO_MELTING_FIRE_STACKS 2
-/// damage on direct hit with the heatray
-#define PYROGEN_HEATRAY_HIT_DAMAGE 50
-/// damage on vehicles with the heatray
-#define PYROGEN_HEATRAY_VEHICLE_HIT_DAMAGE 30
-/// damage per melting fire stack
-#define PYROGEN_HEATRAY_BONUS_DAMAGE_PER_MELTING_STACK 10
-/// Range for the heatray
-#define PYROGEN_HEATRAY_RANGE 7
-/// Time before the beam fires
-#define PYROGEN_HEATRAY_CHARGEUP 1 SECONDS
-/// Max duration of the heatray
-#define PYROGEN_HEATRAY_MAXDURATION 3 SECONDS
-/// Time between each refire of the pyrogen heatray (in 3 seconds it will fire 3 times)
-#define PYROGEN_HEATRAY_REFIRE_TIME 1 SECONDS
-/// Amount of stacks removed per resist.
-#define PYROGEN_MELTING_FIRE_STACKS_PER_RESIST 4
-
 //Drone defines
 #define DRONE_HEAL_RANGE 1
 #define AUTO_WEEDING_MIN_DIST 4 //How far the xeno must be from the last spot to auto weed
@@ -762,6 +671,8 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define RESIN_OTHER_TIME 1 SECONDS //Time it takes to apply resin jelly to other xenos
 
 //Boiler defines
+#define BOILER_GAS_DELAY 0.5 SECONDS
+#define BOILER_DUMP_SPEED -1.5
 #define BOILER_LUMINOSITY_BASE 0
 #define BOILER_LUMINOSITY_BASE_COLOR LIGHT_COLOR_GREEN
 #define BOILER_LUMINOSITY_AMMO 0.5 //don't set this to 0. How much each 'piece' of ammo in reserve glows by.
@@ -769,6 +680,12 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define BOILER_LUMINOSITY_AMMO_CORROSIVE_COLOR LIGHT_COLOR_GREEN
 #define BOILER_BOMBARD_COOLDOWN_REDUCTION 1.5 //Amount of seconds each glob stored reduces bombard cooldown by
 #define	BOILER_LUMINOSITY_THRESHOLD 2 //Amount of ammo needed to start glowing
+
+//Panther defines
+#define PANTHER_EVASION_COOLDOWN 2.5 SECONDS // how close a nearby human has to be in order to be targeted
+#define PANTHER_EVASION_PLASMADRAIN 3
+#define PANTHER_EVASION_LOW_PLASMADRAIN 1.5
+#define PANTHER_TEARING_TAIL_REAGENT_AMOUNT 5
 
 //Hivelord defines
 #define HIVELORD_TUNNEL_DISMANTLE_TIME 3 SECONDS
@@ -796,11 +713,6 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 //Defender defines
 #define DEFENDER_CHARGE_RANGE 4
 
-//Baneling defines
-/// Not specified in seconds because it causes smoke to last almost four times as long if done so
-#define BANELING_SMOKE_DURATION 4
-#define BANELING_SMOKE_RANGE 4
-
 //Sentinel defines
 #define SENTINEL_TOXIC_SPIT_STACKS_PER 2 //Amount of debuff stacks to be applied per spit.
 #define SENTINEL_TOXIC_SLASH_COUNT 3 //Amount of slashes before the buff runs out
@@ -815,34 +727,16 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define SENTINEL_INTOXICATED_RESIST_REDUCTION 8 //Amount of stacks removed every time the Intoxicated debuff is Resisted against.
 #define SENTINEL_INTOXICATED_SANGUINAL_INCREASE 3 //Amount of debuff stacks applied for every tick of Sanguinal.
 
-//Wraith defines
-
-#define WRAITH_BLINK_DRAG_NONFRIENDLY_MULTIPLIER 20 //The amount we multiply the cooldown by when we teleport while dragging a non-friendly target
-#define WRAITH_BLINK_DRAG_FRIENDLY_MULTIPLIER 4 //The amount we multiply the cooldown by when we teleport while dragging a friendly target
-#define WRAITH_BLINK_RANGE 3
-
-#define WRAITH_BANISH_BASE_DURATION 10 SECONDS
-#define WRAITH_BANISH_NONFRIENDLY_LIVING_MULTIPLIER 0.5
-#define WRAITH_BANISH_VERY_SHORT_MULTIPLIER 0.3
-
-#define WRAITH_TELEPORT_DEBUFF_STAGGER_STACKS 2 SECONDS //Stagger and slow stacks applied to adjacent living hostiles before/after a teleport
-#define WRAITH_TELEPORT_DEBUFF_SLOWDOWN_STACKS 3 //Stagger and slow stacks applied to adjacent living hostiles before/after a teleport
-
 //Larva defines
 #define LARVA_VENT_CRAWL_TIME 1 SECONDS //Larva can crawl into vents fast
 
-//Widow Defines
-#define WIDOW_SPEED_BONUS 1 // How much faster widow moves while she has wall_speedup element
-#define WIDOW_WEB_HOOK_RANGE 10 // how far the web hook can reach
-#define WIDOW_WEB_HOOK_MIN_RANGE 3 // the minimum range that the hook must travel to use the ability
-#define WIDOW_WEB_HOOK_SPEED 3 // how fast widow yeets herself when using web hook
-
-//Spiderling defines
-#define TIME_TO_DISSOLVE 5 SECONDS
-#define SPIDERLING_RAGE_RANGE 10 // how close a nearby human has to be in order to be targeted
-
 //Praetorian defines
-#define PRAE_CHARGEDISTANCE 5
+#define PRAE_CHARGEDISTANCE 6
+
+// Chimera defines
+//Stagger and slowdown stacks applied to adjacent living hostiles before/after a teleport
+#define CHIMERA_TELEPORT_DEBUFF_STAGGER_STACKS 2 SECONDS
+#define CHIMERA_TELEPORT_DEBUFF_SLOWDOWN_STACKS 3
 
 //misc
 
@@ -913,8 +807,6 @@ GLOBAL_LIST_INIT(human_body_parts, list(BODY_ZONE_HEAD,
 #define GRAB_PIXEL_SHIFT_NECK 16
 
 #define HUMAN_CARRY_SLOWDOWN 0.35
-#define HUMAN_EXPLOSION_GIB_THRESHOLD 0.1
-
 
 // =============================
 // Hallucinations - health hud screws for carbon mobs
@@ -937,18 +829,11 @@ GLOBAL_LIST_INIT(human_body_parts, list(BODY_ZONE_HEAD,
 
 #define IGNORE_LOC_CHANGE (IGNORE_USER_LOC_CHANGE|IGNORE_TARGET_LOC_CHANGE)
 
-#define TIER_ONE_THRESHOLD 420
-
-#define TIER_TWO_THRESHOLD 840
-
-#define TIER_THREE_THRESHOLD 1750
-
-
 // Pheromones and buff orders
 
-#define AURA_XENO_RECOVERY "recovery"
-#define AURA_XENO_WARDING "warding"
-#define AURA_XENO_FRENZY "frenzy"
+#define AURA_XENO_RECOVERY "Recovery"
+#define AURA_XENO_WARDING "Warding"
+#define AURA_XENO_FRENZY "Frenzy"
 
 #define AURA_HUMAN_MOVE "move"
 #define AURA_HUMAN_HOLD "hold"
@@ -968,7 +853,8 @@ GLOBAL_LIST_INIT(human_body_parts, list(BODY_ZONE_HEAD,
 #define BOILER_WATER_SLOWDOWN 0
 ///Slowdown for warlocks moving through liquid
 #define WARLOCK_WATER_SLOWDOWN 0
-
+///Slowdown for favehuggers moving through liquid
+#define FACEHUGGER_WATER_SLOWDOWN 1.6
 
 //Species defines
 
@@ -986,10 +872,27 @@ GLOBAL_LIST_INIT(human_body_parts, list(BODY_ZONE_HEAD,
 ///Default damage for slamming a mob against another mob
 #define BASE_MOB_SLAM_DAMAGE 8
 
-//chest burst defines
-#define CARBON_NO_CHEST_BURST 0
-#define CARBON_IS_CHEST_BURSTING 1
-#define CARBON_CHEST_BURSTED 2
+// Yautja defines
 
-///Pixel_y offset when lying down
-#define CARBON_LYING_Y_OFFSET -6
+//Gear select defines
+#define YAUTJA_GEAR_GLAIVE "The Lumbering Glaive"
+#define YAUTJA_GEAR_WHIP "The Rending Chain-Whip"
+#define YAUTJA_GEAR_SWORD "The Piercing Hunting Sword"
+#define YAUTJA_GEAR_SCYTHE "The Cleaving War-Scythe"
+#define YAUTJA_GEAR_STICK "The Adaptive Combi-Stick"
+#define YAUTJA_GEAR_SPEAR "The Nimble Spear"
+#define YAUTJA_GEAR_SCIMS "The Fearsome Scimitars"
+#define YAUTJA_GEAR_LAUNCHER "The Fleeting Spike Launcher"
+#define YAUTJA_GEAR_PISTOL "The Swift Plasma Pistol"
+#define YAUTJA_GEAR_DISC "The Purifying Smart-Disc"
+#define YAUTJA_GEAR_FULL_ARMOR "The Formidable Plate Armor"
+#define YAUTJA_GEAR_SHIELD "The Steadfast Shield"
+#define YAUTJA_GEAR_DRONE "The Agile Drone"
+
+#define YAUTJA_GEAR_GLAIVE_ALT "The Imposing Glaive"
+#define YAUTJA_GEAR_SCYTHE_ALT "The Ripping War-Scythe"
+
+#define YAUTJA_THRALL_GEAR_MACHETE "The Swift Machete"
+#define YAUTJA_THRALL_GEAR_RAPIER "The Dancing Rapier"
+#define YAUTJA_THRALL_GEAR_CLAYMORE "The Broad Claymore"
+#define YAUTJA_THRALL_GEAR_FIREAXE "The Purposeful Fireaxe"

@@ -106,10 +106,10 @@
 	return ..()
 
 
-/datum/component/simple_rotation/proc/ExamineMessage(datum/source, mob/user, list/examine_list)
+/datum/component/simple_rotation/proc/ExamineMessage(datum/source, mob/user)
 	SIGNAL_HANDLER
 	if(rotation_flags & ROTATION_ALTCLICK)
-		examine_list += span_notice("Alt-click to rotate it clockwise.")
+		. += span_notice("Alt-click to rotate it clockwise.")
 
 
 /datum/component/simple_rotation/proc/HandRot(datum/source, mob/user, rotation = default_rotation_direction)
@@ -159,7 +159,7 @@
 
 /atom/movable/proc/simple_rotate_clockwise()
 	set name = "Rotate Clockwise"
-	set category = "Object"
+	set category = "Object.Rotate"
 	set src in oview(1)
 	var/datum/component/simple_rotation/rotcomp = GetComponent(/datum/component/simple_rotation)
 	if(rotcomp)
@@ -168,7 +168,7 @@
 
 /atom/movable/proc/simple_rotate_counterclockwise()
 	set name = "Rotate Counter-Clockwise"
-	set category = "Object"
+	set category = "Object.Rotate"
 	set src in oview(1)
 	var/datum/component/simple_rotation/rotcomp = GetComponent(/datum/component/simple_rotation)
 	if(rotcomp)
@@ -177,7 +177,7 @@
 
 /atom/movable/proc/simple_rotate_flip()
 	set name = "Flip"
-	set category = "Object"
+	set category = "Object.Rotate"
 	set src in oview(1)
 	var/datum/component/simple_rotation/rotcomp = GetComponent(/datum/component/simple_rotation)
 	if(rotcomp)

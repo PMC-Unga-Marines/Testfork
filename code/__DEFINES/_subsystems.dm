@@ -1,7 +1,7 @@
 //Update this whenever the db schema changes
 //make sure you add an update to the schema_version stable in the db changelog
 #define DB_MAJOR_VERSION 2
-#define DB_MINOR_VERSION 2
+#define DB_MINOR_VERSION 1
 
 //Timing subsystem
 //Don't run if there is an identical unique timer active
@@ -47,7 +47,7 @@
 //type and all subtypes should always call Initialize in New()
 #define INITIALIZE_IMMEDIATE(X) ##X/New(loc, ...){\
 	..();\
-	if(!(atom_flags & INITIALIZED)) {\
+	if(!(flags_atom & INITIALIZED)) {\
 		args[1] = TRUE;\
 		SSatoms.InitAtom(src, FALSE, args);\
 	}\
@@ -110,7 +110,7 @@
 #define INIT_ORDER_LIGHTING -20
 #define INIT_ORDER_SHUTTLE -21
 #define INIT_ORDER_PATH -50
-#define INIT_ORDER_EXPLOSIONS -69
+//#define INIT_ORDER_EXPLOSIONS -69 // RUTGMC DELETION
 #define INIT_ORDER_EXCAVATION -78
 #define INIT_ORDER_STATPANELS -97
 #define INIT_ORDER_CHAT -100 //Should be last to ensure chat remains smooth during init.
@@ -152,7 +152,8 @@
 #define FIRE_PRIORITY_TTS 425
 #define FIRE_PRIORITY_AUTOFIRE 450
 #define FIRE_PRIORITY_OVERLAYS 500
-#define FIRE_PRIORITY_EXPLOSIONS 666
+#define FIRE_PRIORITY_EXPLOSIONS 666 // ORIGINAL
+#define FIRE_PRIORITY_CELLAUTO 666 //RUTGMC EDIT
 #define FIRE_PRIORITY_TIMER 700
 #define FIRE_PRIORITY_SPEECH_CONTROLLER 900
 #define FIRE_PRIORITY_INPUT 1000 // This must always always be the max highest priority. Player input must never be lost.

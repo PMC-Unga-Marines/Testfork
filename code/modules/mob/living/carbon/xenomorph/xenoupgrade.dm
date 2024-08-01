@@ -1,7 +1,7 @@
 
 /mob/living/carbon/xenomorph/proc/upgrade_xeno(newlevel, silent = FALSE)
 	if(!(newlevel in (GLOB.xenoupgradetiers - XENO_UPGRADE_INVALID)))
-		return FALSE
+		return
 	hive.upgrade_xeno(src, upgrade, newlevel)
 	upgrade = newlevel
 	if(!silent)
@@ -25,7 +25,7 @@
 		if(found)
 			continue
 		var/datum/action/ability/xeno_action/action = new allowed_action_path()
-		if(!SSticker.mode || (SSticker.mode.xeno_abilities_flags & action.gamemode_flags))
+		if(!SSticker.mode || (SSticker.mode.flags_xeno_abilities & action.gamemode_flags))
 			action.give_action(src)
 
 	for(var/datum/action/ability/xeno_action/action_already_added AS in actions_already_added)
@@ -39,7 +39,7 @@
 			activable_ability.select()
 			break
 
-	if(xeno_flags & XENO_LEADER)
+	if(queen_chosen_lead)
 		give_rally_abilities() //Give them back their rally hive ability
 
 	if(current_aura) //Updates pheromone strength
@@ -70,11 +70,11 @@
 
 	hud_set_plasma()
 	med_hud_set_health()
+	hud_update_primo()
 
 	hud_set_queen_overwatch() //update the upgrade level insignia on our xeno hud.
 
 	update_spits() //Update spits to new/better ones
-	return TRUE
 
 //Tiered spawns.
 
@@ -82,7 +82,6 @@
 
 /mob/living/carbon/xenomorph/runner/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_ONE_THRESHOLD
 
 //-----RUNNER END-----//
 //================//
@@ -90,7 +89,6 @@
 
 /mob/living/carbon/xenomorph/bull/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
 
 //-----BULL END-----//
 //================//
@@ -98,7 +96,6 @@
 
 /mob/living/carbon/xenomorph/drone/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_ONE_THRESHOLD
 
 //-----DRONE END-----//
 //================//
@@ -127,7 +124,6 @@
 
 /mob/living/carbon/xenomorph/carrier/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
 
 //-----CARRIER END-----//
 //================//
@@ -138,7 +134,6 @@
 
 /mob/living/carbon/xenomorph/hivelord/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
 
 //----HIVELORD END----//
 //================//
@@ -151,7 +146,6 @@
 
 /mob/living/carbon/xenomorph/praetorian/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //----PRAETORIAN END----//
 //================//
@@ -162,7 +156,6 @@
 
 /mob/living/carbon/xenomorph/ravager/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //----RAVAGER END----//
 //================//
@@ -189,11 +182,6 @@
 
 /mob/living/carbon/xenomorph/sentinel/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_ONE_THRESHOLD
-
-/mob/living/carbon/xenomorph/sentinel/retrograde/primordial
-	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_ONE_THRESHOLD
 
 //----SENTINEL END----//
 //================//
@@ -204,7 +192,6 @@
 
 /mob/living/carbon/xenomorph/spitter/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
 
 //-----SPITTER END-----//
 //================//
@@ -231,7 +218,6 @@
 
 /mob/living/carbon/xenomorph/hunter/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
 
 //----HUNTER END----//
 //================//
@@ -258,7 +244,6 @@
 
 /mob/living/carbon/xenomorph/queen/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //----QUEEN END----//
 //============//
@@ -269,7 +254,6 @@
 
 /mob/living/carbon/xenomorph/king/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //----KING END----//
 //============//
@@ -280,7 +264,6 @@
 
 /mob/living/carbon/xenomorph/crusher/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //---CRUSHER END---//
 //============//
@@ -291,7 +274,6 @@
 
 /mob/living/carbon/xenomorph/gorger/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //---GORGER END---//
 //============//
@@ -302,7 +284,6 @@
 
 /mob/living/carbon/xenomorph/boiler/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //---BOILER END---//
 //============//
@@ -313,7 +294,6 @@
 
 /mob/living/carbon/xenomorph/defender/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_ONE_THRESHOLD
 
 //---DEFENDER END---//
 //============//
@@ -324,7 +304,6 @@
 
 /mob/living/carbon/xenomorph/warrior/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
 
 //----WARRIOR END----//
 //============//
@@ -335,7 +314,6 @@
 
 /mob/living/carbon/xenomorph/defiler/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //----DEFILER END----//
 //============//
@@ -346,32 +324,9 @@
 
 /mob/living/carbon/xenomorph/shrike/primordial
 	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
 
 //----SHRIKE END----//
-//============//
-//----WRAITH START----//
 
-/mob/living/carbon/xenomorph/wraith
-	upgrade = XENO_UPGRADE_NORMAL
-
-/mob/living/carbon/xenomorph/wraith/primordial
-	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
-
-//----WRAITH END----//
-//============//
-//----WIDOW START----//
-
-/mob/living/carbon/xenomorph/widow
-	upgrade = XENO_UPGRADE_NORMAL
-
-/mob/living/carbon/xenomorph/widow/primordial
-	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_THREE_THRESHOLD
-
-//----WIDOW END----//
-//============//
 //----WARLOCK START----//
 
 /mob/living/carbon/xenomorph/warlock
@@ -382,15 +337,7 @@
 
 //----WARLOCK END----//
 //============//
-//----PUPPETEER START----//
-/mob/living/carbon/xenomorph/puppeteer
-	upgrade = XENO_UPGRADE_NORMAL
 
-/mob/living/carbon/xenomorph/puppeteer/primordial
-	upgrade = XENO_UPGRADE_PRIMO
-	upgrade_stored = TIER_TWO_THRESHOLD
-
-//----PUPPETEER END----//
 //============//
 //----BEHEMOTH START----//
 
@@ -402,3 +349,16 @@
 
 //----BEHEMOTH END----//
 //============//
+
+//----PANTHER START----//
+/mob/living/carbon/xenomorph/panther/primordial
+	upgrade = XENO_UPGRADE_PRIMO
+
+//----PANTHER END----//
+//================//
+//----CHIMERA START----//
+
+/mob/living/carbon/xenomorph/chimera/primordial
+	upgrade = XENO_UPGRADE_PRIMO
+
+//----CHIMERA END----//

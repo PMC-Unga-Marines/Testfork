@@ -45,8 +45,6 @@
 
 /obj/item/book/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/tool/pen))
 		if(unique)

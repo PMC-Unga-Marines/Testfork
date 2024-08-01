@@ -258,6 +258,10 @@
 	dir = 8
 	},
 /area/bigredv2/outside/nanotrasen_lab/inside)
+"Av" = (
+/obj/machinery/miner/damaged/platinum,
+/turf/open/floor/plating/ground/mars/random/cave,
+/area/bigredv2/caves/south)
 "Ay" = (
 /obj/structure/closet/toolcloset,
 /turf/open/floor/plating,
@@ -2099,7 +2103,7 @@ WV
 WV
 WV
 WV
-WV
+Av
 WV
 tq
 WV

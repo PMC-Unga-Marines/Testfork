@@ -242,6 +242,7 @@
 	var/visible_icon = 0
 	var/image/user_image = null
 
+
 /mob/camera/aiEye/remote/update_remote_sight(mob/living/user)
 	user.see_invisible = SEE_INVISIBLE_LIVING
 	user.sight = SEE_SELF|SEE_MOBS|SEE_OBJS|SEE_TURFS|SEE_BLACKNESS
@@ -369,8 +370,8 @@
 		return
 	holder.overlays.Cut()
 	for(var/aura_type in current_aura_list)
-		holder.overlays += image('icons/mob/hud/aura.dmi', src, "[aura_type]")
-		holder.overlays += image('icons/mob/hud/aura.dmi', src, "[aura_type]_aura")
+		holder.overlays += image('icons/mob/hud.dmi', src, "hud[aura_type]")
+		holder.overlays += image('icons/mob/hud.dmi', src, "hud[aura_type]aura")
 
 /datum/action/innate/camera_off
 	name = "End Camera View"
@@ -425,7 +426,7 @@
 	playsound(origin, 'sound/machines/terminal_prompt.ogg', 25, 0)
 	var/camera = tgui_input_list(owner, "Choose which camera you want to view?", "Cameras", T)
 	var/obj/machinery/camera/C = T[camera]
-	playsound(src, SFX_TERMINAL_TYPE, 25, 0)
+	playsound(src, "terminal_type", 25, 0)
 
 	if(!C)
 		playsound(origin, 'sound/machines/terminal_prompt_deny.ogg', 25, 0)

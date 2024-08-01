@@ -10,6 +10,12 @@
 	set desc = "Check the status of your current hive."
 	set category = "Alien"
 
+//RUTGMC EDIT ADDITION BEGIN - Preds
+	if(interference)
+		to_chat(src, span_warning("A headhunter temporarily cut off your psychic connection!"))
+		return
+//RUTGMC EDIT ADDITION END
+
 	check_hive_status(src)
 
 /mob/living/carbon/xenomorph/verb/tunnel_list()
@@ -97,17 +103,11 @@
 
 ///returns TRUE if we are permitted to evo to the next caste FALSE otherwise
 /mob/living/carbon/xenomorph/proc/upgrade_possible()
-	if(!(upgrade in GLOB.xenoupgradetiers))
-		stack_trace("Upgrade isn't in upgrade list, incorrect define provided")
-		return FALSE
 	if(HAS_TRAIT(src, TRAIT_VALHALLA_XENO))
 		return FALSE
 	if(upgrade == XENO_UPGRADE_NORMAL)
 		return hive.purchases.upgrades_by_name[GLOB.tier_to_primo_upgrade[xeno_caste.tier]].times_bought
-	if(upgrade == XENO_UPGRADE_INVALID || upgrade == XENO_UPGRADE_PRIMO || upgrade == XENO_UPGRADE_BASETYPE)
-		return FALSE
-	stack_trace("Logic for handling this Upgrade tier wasn't written")
-	return FALSE
+	return (upgrade != XENO_UPGRADE_INVALID && upgrade != XENO_UPGRADE_PRIMO)
 
 //Adds stuff to your "Status" pane -- Specific castes can have their own, like carrier hugger count
 //Those are dealt with in their caste files.
@@ -121,27 +121,16 @@
 	else
 		. += "Evolve Progress: [evolution_stored]/[xeno_caste.evolution_threshold]"
 
-	if(upgrade_possible())
-		. += "Upgrade Progress: [upgrade_stored]/[xeno_caste.upgrade_threshold]"
-	else //Upgrade process finished or impossible
-		. += "Upgrade Progress: (FINISHED)"
-
 	. += "Health: [health]/[maxHealth][overheal ? " + [overheal]": ""]" //Changes with balance scalar, can't just use the caste
 
 	if(xeno_caste.plasma_max > 0)
 		. += "Plasma: [plasma_stored]/[xeno_caste.plasma_max]"
 
-	. += "Armor: [100-sunder]%"
+	. += "Sunder: [100-sunder]% armor left"
 
 	. += "Regeneration power: [max(regen_power * 100, 0)]%"
 
-	var/casteswap_value = ((GLOB.key_to_time_of_caste_swap[key] ? GLOB.key_to_time_of_caste_swap[key] : -INFINITY)  + 15 MINUTES - world.time) * 0.1
-	if(casteswap_value <= 0)
-		. += "Caste Swap Timer: READY"
-	else
-		. += "Caste Swap Timer: [(casteswap_value / 60) % 60]:[add_leading(num2text(casteswap_value % 60), 2, "0")]"
-
-	//Very weak <= 1.0, Weak <= 2.0, Medium < 3.0, Strong < 4.0, Very strong >= 4.0
+	//Very weak <= 1.0, weak <= 2.0, no modifier 2-3, strong <= 3.5, very strong <= 4.5
 	var/msg_holder = ""
 	if(frenzy_aura)
 		switch(frenzy_aura)
@@ -155,7 +144,7 @@
 				msg_holder = "Strong"
 			if(4.0 to INFINITY)
 				msg_holder = "Very strong"
-		. += "[AURA_XENO_FRENZY] pheromone strength: [msg_holder] ([frenzy_aura])"
+		. += "[AURA_XENO_FRENZY] pheromone strength: [msg_holder]"
 	if(warding_aura)
 		switch(warding_aura)
 			if(-INFINITY to 1.0)
@@ -168,7 +157,7 @@
 				msg_holder = "Strong"
 			if(4.0 to INFINITY)
 				msg_holder = "Very strong"
-		. += "[AURA_XENO_WARDING] pheromone strength: [msg_holder] ([warding_aura])"
+		. += "[AURA_XENO_WARDING] pheromone strength: [msg_holder]"
 	if(recovery_aura)
 		switch(recovery_aura)
 			if(-INFINITY to 1.0)
@@ -181,7 +170,7 @@
 				msg_holder = "Strong"
 			if(4.0 to INFINITY)
 				msg_holder = "Very strong"
-		. += "[AURA_XENO_RECOVERY] pheromone strength: [msg_holder] ([recovery_aura])"
+		. += "[AURA_XENO_RECOVERY] pheromone strength: [msg_holder]"
 
 //A simple handler for checking your state. Used in pretty much all the procs.
 /mob/living/carbon/xenomorph/proc/check_state()
@@ -240,25 +229,18 @@
 
 //Stealth handling
 
-
 /mob/living/carbon/xenomorph/proc/update_progression()
-	// Upgrade is increased based on marine to xeno population taking stored_larva as a modifier.
-	var/datum/job/xeno_job = SSjob.GetJobType(/datum/job/xenomorph)
-	var/stored_larva = xeno_job.total_positions - xeno_job.current_positions
-	upgrade_stored += 1 + (stored_larva/6) + hive.get_upgrade_boost() //Do this regardless of whether we can upgrade so age accrues at primo
 	if(!upgrade_possible())
-		return
-	if(upgrade_stored < xeno_caste.upgrade_threshold)
 		return
 	if(incapacitated())
 		return
+	//instant upgrade
 	upgrade_xeno(upgrade_next())
-
 
 /mob/living/carbon/xenomorph/proc/update_evolving()
 	if(evolution_stored >= xeno_caste.evolution_threshold || !(xeno_caste.caste_flags & CASTE_EVOLUTION_ALLOWED) || HAS_TRAIT(src, TRAIT_VALHALLA_XENO))
 		return
-	if(!hive.check_ruler() && caste_base_type != /datum/xeno_caste/larva) // Larva can evolve without leaders at round start.
+	if(!hive.check_ruler() && caste_base_type != /mob/living/carbon/xenomorph/larva) // Larva can evolve without leaders at round start.
 		return
 
 	// Evolution is increased based on marine to xeno population taking stored_larva as a modifier.
@@ -272,7 +254,7 @@
 
 	if(evolution_stored == xeno_caste.evolution_threshold)
 		to_chat(src, span_xenodanger("Our carapace crackles and our tendons strengthen. We are ready to evolve!"))
-		SEND_SOUND(src, sound('sound/effects/alien/evolve_ready.ogg'))
+		SEND_SOUND(src, sound('sound/effects/alien/evolveready.ogg'))
 
 
 //This deals with "throwing" xenos -- ravagers, hunters, and runners in particular. Everyone else defaults to normal
@@ -325,19 +307,20 @@
 	update_sight()
 
 
-/mob/living/carbon/xenomorph/proc/zoom_in(tileoffset = 5, viewsize = 12)
-	if(stat)
-		if(xeno_flags & XENO_ZOOMED)
+/mob/living/carbon/xenomorph/proc/zoom_in(tileoffset = 5, viewsize = 4.5) //RU TGMC EDIT
+	if(stat || resting)
+		if(is_zoomed)
+			is_zoomed = 0
 			zoom_out()
 			return
 		return
-	if(xeno_flags & XENO_ZOOMED)
+	if(is_zoomed)
 		return
 	if(!client)
 		return
 	zoom_turf = get_turf(src)
-	xeno_flags |= XENO_ZOOMED
-	client.view_size.set_view_radius_to(viewsize/2-2) //convert diameter to radius
+	is_zoomed = 1
+	client.view_size.set_view_radius_to(viewsize) //convert diameter to radius
 	var/viewoffset = 32 * tileoffset
 	switch(dir)
 		if(NORTH)
@@ -354,7 +337,7 @@
 			client.pixel_y = 0
 
 /mob/living/carbon/xenomorph/proc/zoom_out()
-	xeno_flags &= ~XENO_ZOOMED
+	is_zoomed = 0
 	zoom_turf = null
 	if(!client)
 		return
@@ -377,7 +360,7 @@
 //When the Queen's pheromones are updated, or we add/remove a leader, update leader pheromones
 /mob/living/carbon/xenomorph/proc/handle_xeno_leader_pheromones(mob/living/carbon/xenomorph/queen/Q)
 	QDEL_NULL(leader_current_aura)
-	if(QDELETED(Q) || !(xeno_flags & XENO_LEADER) || !Q.current_aura || Q.loc.z != loc.z) //We are no longer a leader, or the Queen attached to us has dropped from her ovi, disabled her pheromones or even died
+	if(QDELETED(Q) || !queen_chosen_lead || !Q.current_aura || Q.loc.z != loc.z) //We are no longer a leader, or the Queen attached to us has dropped from her ovi, disabled her pheromones or even died
 		to_chat(src, span_xenowarning("Our pheromones wane. The Queen is no longer granting us her pheromones."))
 	else
 		leader_current_aura = SSaura.add_emitter(src, Q.current_aura.aura_types.Copy(), Q.current_aura.range, Q.current_aura.strength, Q.current_aura.duration, Q.current_aura.faction, Q.current_aura.hive_number)
@@ -440,7 +423,7 @@
 /mob/living/carbon/xenomorph/acid_spray_act(mob/living/carbon/xenomorph/X)
 	ExtinguishMob()
 
-/obj/fire/flamer/acid_spray_act(mob/living/carbon/xenomorph/X)
+/obj/flamer_fire/acid_spray_act(mob/living/carbon/xenomorph/X)
 	qdel(src)
 
 /obj/hitbox/acid_spray_act(mob/living/carbon/xenomorph/X)
@@ -463,13 +446,13 @@
 	set desc = "Toggles the health and plasma hud appearing above Xenomorphs."
 	set category = "Alien"
 
-	xeno_flags ^= XENO_MOBHUD
+	xeno_mobhud = !xeno_mobhud
 	var/datum/atom_hud/H = GLOB.huds[DATA_HUD_XENO_STATUS]
-	if(xeno_flags & XENO_MOBHUD)
+	if(xeno_mobhud)
 		H.add_hud_to(src)
 	else
 		H.remove_hud_from(src)
-	to_chat(src, span_notice("You have [(xeno_flags & XENO_MOBHUD) ? "enabled" : "disabled"] the Xeno Status HUD."))
+	to_chat(src, span_notice("You have [xeno_mobhud ? "enabled" : "disabled"] the Xeno Status HUD."))
 
 
 /mob/living/carbon/xenomorph/proc/recurring_injection(mob/living/carbon/C, datum/reagent/toxin = /datum/reagent/toxin/xeno_neurotoxin, channel_time = XENO_NEURO_CHANNEL_TIME, transfer_amount = XENO_NEURO_AMOUNT_RECURRING, count = 4)
@@ -481,7 +464,7 @@
 	to_chat(C, span_danger("You feel a tiny prick."))
 	to_chat(src, span_xenowarning("Our stinger injects our victim with [initial(toxin.name)]!"))
 	playsound(C, 'sound/effects/spray3.ogg', 15, TRUE)
-	playsound(C, SFX_ALIEN_DROOL, 15, TRUE)
+	playsound(C, "alien_drool", 15, TRUE)
 	do
 		face_atom(C)
 		if(IsStaggered())
@@ -503,12 +486,17 @@
 		return TRUE
 	return FALSE
 
+/mob/living/carbon/xenomorph/proc/setup_verbs()
+	add_verb(src, /mob/living/proc/toggle_resting)
+
+/mob/living/carbon/xenomorph/hivemind/setup_verbs()
+	return
+
 /mob/living/carbon/xenomorph/adjust_sunder(adjustment)
 	. = ..()
 	if(.)
 		return
-	sunder = clamp(sunder + (adjustment > 0 ? adjustment * xeno_caste.sunder_multiplier : adjustment), 0, xeno_caste.sunder_max)
-//Applying sunder is an adjustment value above 0, healing sunder is an adjustment value below 0. Use multiplier when taking sunder, not when healing.
+	sunder = clamp(sunder + adjustment, 0, xeno_caste.sunder_max)
 
 /mob/living/carbon/xenomorph/set_sunder(new_sunder)
 	. = ..()
@@ -564,9 +552,9 @@
 		return
 
 	SSminimaps.remove_marker(src)
-	var/image/blip = image('icons/UI_icons/map_blips.dmi', null, xeno_caste.minimap_icon)
+	var/image/blip = image('icons/UI_icons/map_blips.dmi', null, xeno_caste.minimap_icon) //RUTGMC edit - icon change
 	if(makeleader)
-		blip.overlays += image('icons/UI_icons/map_blips.dmi', null, xeno_caste.minimap_leadered_overlay)
+		blip.overlays += image('icons/UI_icons/map_blips.dmi', null, xeno_caste.minimap_leadered_overlay) //RUTGMC edit - icon change
 	SSminimaps.add_marker(src, MINIMAP_FLAG_XENO, blip)
 
 ///updates the xeno's glow, based on the ability being used

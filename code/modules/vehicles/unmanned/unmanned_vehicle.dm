@@ -12,7 +12,7 @@
 	move_delay = 2.5	//set this to limit the speed of the vehicle
 	max_integrity = 150
 	hud_possible = list(MACHINE_HEALTH_HUD, MACHINE_AMMO_HUD)
-	atom_flags = BUMP_ATTACKABLE
+	flags_atom = BUMP_ATTACKABLE
 	soft_armor = list(MELEE = 25, BULLET = 85, LASER = 50, ENERGY = 100, BOMB = 50, BIO = 100, FIRE = 25, ACID = 25)
 	allow_pass_flags = PASS_AIR|PASS_LOW_STRUCTURE|PASS_THROW
 	/// Needed to keep track of any slowdowns and/or diagonal movement
@@ -36,7 +36,7 @@
 	///The currently loaded and ready to fire projectile
 	var/obj/projectile/in_chamber = null
 	///Sound file or string type for playing the shooting sound
-	var/gunnoise = SFX_GUN_SMARTGUN
+	var/gunnoise = "gun_smartgun"
 	/// Serial number of the vehicle
 	var/static/serial = 1
 	/// If the vehicle should spawn with a weapon allready installed
@@ -79,11 +79,11 @@
 	QDEL_NULL(in_chamber)
 	return ..()
 
-/obj/vehicle/unmanned/obj_destruction(damage_amount, damage_type, damage_flag, mob/living/blame_mob)
+/obj/vehicle/unmanned/obj_destruction()
 	robogibs(src)
 	return ..()
 
-/obj/vehicle/unmanned/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, effects = TRUE, attack_dir, armour_penetration = 0, mob/living/blame_mob)
+/obj/vehicle/unmanned/take_damage(damage_amount, damage_type, damage_flag, effects, attack_dir, armour_penetration)
 	. = ..()
 	hud_set_machine_health()
 
@@ -121,8 +121,6 @@
 
 /obj/vehicle/unmanned/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(istype(I, /obj/item/uav_turret) || istype(I, /obj/item/explosive/plastique))
 		return equip_turret(I, user)
 	if(istype(I, /obj/item/ammo_magazine))
@@ -269,7 +267,7 @@
 		//Shoot at the thing
 		var/angle = Get_Angle(src, target)
 		playsound(loc, gunnoise, 65, 1)
-		in_chamber.fire_at(target, user, src, ammo.max_range, ammo.shell_speed)
+		in_chamber.fire_at(target, src, null, ammo.max_range, ammo.shell_speed)
 		in_chamber = null
 		COOLDOWN_START(src, fire_cooldown, fire_delay)
 		current_rounds--
@@ -284,8 +282,11 @@
 /obj/vehicle/unmanned/proc/delete_muzzle_flash()
 	vis_contents -= flash
 
-/obj/vehicle/unmanned/fire_act(burn_level)
-	take_damage(burn_level / 2, BURN, FIRE)
+/obj/vehicle/unmanned/flamer_fire_act(burnlevel)
+	take_damage(burnlevel / 2, BURN, FIRE)
+
+/obj/vehicle/unmanned/fire_act()
+	take_damage(20, BURN, FIRE)
 
 /obj/vehicle/unmanned/welder_act(mob/living/user, obj/item/I)
 	return welder_repair_act(user, I, 35, 2 SECONDS, 0, SKILL_ENGINEER_ENGI, 1, 4 SECONDS)

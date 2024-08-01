@@ -25,7 +25,9 @@
 
 	var/health_deficiency = max(1 - (health / maxHealth) * 100, staminaloss)
 
-	if(health_deficiency >= 50)
+	//RUTGMC EDIT ADDITION BEGIN - Preds
+	if(health_deficiency >= 50 && !(species?.species_flags & PARALYSE_RESISTANT))
+//RUTGMC EDIT ADDITION END
 		add_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN, TRUE, 0, NONE, TRUE, health_deficiency / 50)
 	else
 		remove_movespeed_modifier(MOVESPEED_ID_DAMAGE_SLOWDOWN)
@@ -36,7 +38,7 @@
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
 
-	if(species?.has_organ["brain"])
+	if(species?.has_organ[ORGAN_SLOT_BRAIN])
 		var/datum/internal_organ/brain/sponge = get_organ_slot(ORGAN_SLOT_BRAIN)
 		if(sponge)
 			sponge.take_damage(amount, silent)
@@ -52,7 +54,7 @@
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
 
-	if(species?.has_organ["brain"])
+	if(species?.has_organ[ORGAN_SLOT_BRAIN])
 		var/datum/internal_organ/brain/sponge = get_organ_slot(ORGAN_SLOT_BRAIN)
 		if(sponge)
 			sponge.damage = clamp(amount, 0, MAX_BRAINLOSS)
@@ -67,7 +69,7 @@
 	if(status_flags & GODMODE)
 		return FALSE	//godmode
 
-	if(species?.has_organ["brain"])
+	if(species?.has_organ[ORGAN_SLOT_BRAIN])
 		var/datum/internal_organ/brain/sponge = get_organ_slot(ORGAN_SLOT_BRAIN)
 		if(sponge) //Make sure they actually have a brain
 			brainloss = min(sponge.damage, MAX_BRAINLOSS)
@@ -340,6 +342,11 @@ This function restores all limbs.
 /mob/living/carbon/human/apply_damage(damage = 0, damagetype = BRUTE, def_zone, blocked = 0, sharp = FALSE, edge = FALSE, updating_health = FALSE, penetration)
 	if(status_flags & (GODMODE))
 		return
+
+//RUTGMC EDIT ADDITION BEGIN - Preds
+	last_damage_source = usr //where my cause_data??? no cause_data? https://media.discordapp.net/attachments/1059662710217908245/1128315728081211412/65939r.png?width=842&height=917
+//RUTGMC EDIT ADDITION END
+
 	return species.apply_damage(damage, damagetype, def_zone, blocked, sharp, edge, updating_health, penetration, src)
 
 /mob/living/carbon/human/get_soft_armor(armor_type, proj_def_zone)

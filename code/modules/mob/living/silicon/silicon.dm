@@ -71,11 +71,10 @@
 
 
 /mob/living/silicon/contents_explosion(severity)
-	return ..()
+	return
 
 
 /mob/living/silicon/emp_act(severity)
-	. = ..()
 	switch(severity)
 		if(1)
 			Stun(rand(10 SECONDS, 20 SECONDS))
@@ -87,6 +86,7 @@
 
 	to_chat(src, span_danger("*BZZZT*"))
 	to_chat(src, span_warning("Warning: Electromagnetic pulse detected."))
+	return ..()
 
 /mob/living/silicon/apply_effect(effect = 0, effecttype = STUN, updating_health = FALSE)
 	return FALSE
@@ -161,20 +161,12 @@
 	flash_act()
 	if(stat == DEAD)
 		return
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			adjustBruteLoss(100)
-			adjustFireLoss(100)
-			if(!anchored)
-				gib()
-		if(EXPLODE_HEAVY)
-			adjustBruteLoss(60)
-			adjustFireLoss(60)
-		if(EXPLODE_LIGHT)
-			adjustBruteLoss(30)
-		if(EXPLODE_WEAK)
-			adjustBruteLoss(15)
 
+	if(severity >= EXPLODE_HEAVY && !anchored)
+		gib()
+		return
+
+	adjustBruteLoss(severity)
 	UPDATEHEALTH(src)
 
 

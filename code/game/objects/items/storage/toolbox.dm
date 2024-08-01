@@ -2,12 +2,12 @@
 	name = "toolbox"
 	desc = "Danger. Very robust."
 	icon_state = "red"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/toolboxes_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/toolboxes_right.dmi',
 	)
-	worn_icon_state = "toolbox_red"
-	atom_flags = CONDUCT
+	item_state = "toolbox_red"
+	flags_atom = CONDUCT
 	force = 5
 	throwforce = 10
 	throw_speed = 1
@@ -19,9 +19,11 @@
 /obj/item/storage/toolbox/emergency
 	name = "emergency toolbox"
 	icon_state = "red"
-	worn_icon_state = "toolbox_red"
+	item_state = "toolbox_red"
 
-/obj/item/storage/toolbox/emergency/PopulateContents()
+
+/obj/item/storage/toolbox/emergency/Initialize(mapload, ...)
+	. = ..()
 	new /obj/item/tool/crowbar/red(src)
 	new /obj/item/tool/extinguisher/mini(src)
 	if(prob(50))
@@ -29,12 +31,15 @@
 	else
 		new /obj/item/explosive/grenade/flare/civilian(src)
 
+
 /obj/item/storage/toolbox/mechanical
 	name = "mechanical toolbox"
 	icon_state = "blue"
-	worn_icon_state = "toolbox_blue"
+	item_state = "toolbox_blue"
 
-/obj/item/storage/toolbox/mechanical/PopulateContents()
+
+/obj/item/storage/toolbox/mechanical/Initialize(mapload, ...)
+	. = ..()
 	new /obj/item/tool/screwdriver(src)
 	new /obj/item/tool/wrench(src)
 	new /obj/item/tool/weldingtool(src)
@@ -42,12 +47,15 @@
 	new /obj/item/tool/analyzer(src)
 	new /obj/item/tool/wirecutters(src)
 
+
 /obj/item/storage/toolbox/electrical
 	name = "electrical toolbox"
 	icon_state = "yellow"
-	worn_icon_state = "toolbox_yellow"
+	item_state = "toolbox_yellow"
 
-/obj/item/storage/toolbox/electrical/PopulateContents()
+
+/obj/item/storage/toolbox/electrical/Initialize(mapload, ...)
+	. = ..()
 	var/color = pick("red", "yellow", "green", "blue", "pink", "orange", "cyan", "white")
 	new /obj/item/tool/screwdriver(src)
 	new /obj/item/tool/wirecutters(src)
@@ -60,13 +68,16 @@
 	else
 		new /obj/item/stack/cable_coil(src, 30, color)
 
+
 /obj/item/storage/toolbox/syndicate
 	name = "suspicious looking toolbox"
 	icon_state = "syndicate"
-	worn_icon_state = "toolbox_syndi"
+	item_state = "toolbox_syndi"
 	force = 7
 
-/obj/item/storage/toolbox/syndicate/PopulateContents()
+
+/obj/item/storage/toolbox/syndicate/Initialize(mapload, ...)
+	. = ..()
 	var/color = pick("red", "yellow", "green", "blue", "pink", "orange", "cyan", "white")
 	new /obj/item/tool/screwdriver(src)
 	new /obj/item/tool/wrench(src)

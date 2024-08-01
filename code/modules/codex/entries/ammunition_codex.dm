@@ -20,20 +20,23 @@
 		if(ammo.damage_type)
 			entry.mechanics_text += "Damage type: [ammo.damage_type]<br>"
 
-		if(ammo.ammo_behavior_flags & AMMO_INCENDIARY)
+		if(ammo.flags_ammo_behavior & AMMO_INCENDIARY)
 			entry.mechanics_text += "Secondary effect: set target on fire.<br>"
 
-		if(ammo.ammo_behavior_flags & AMMO_TARGET_TURF)
-			entry.mechanics_text += "Secondary effect: Hits the turf clicked on.<br>"
+		if(ammo.flags_ammo_behavior & AMMO_EXPLOSIVE)
+			entry.mechanics_text += "Secondary effect: explosion.<br>"
 
-		if(ammo.ammo_behavior_flags & AMMO_SPECIAL_PROCESS)
+		if(ammo.flags_ammo_behavior & AMMO_SPECIAL_PROCESS)
 			entry.mechanics_text += "Secondary effect: hits nearby targets in-flight.<br>"
 
-		if(ammo.ammo_behavior_flags & AMMO_LEAVE_TURF)
+		if(ammo.flags_ammo_behavior & AMMO_LEAVE_TURF)
 			entry.mechanics_text += "Secondary effect: affects tiles travelled through.<br>"
 
 		if(ammo.penetration)
 			entry.mechanics_text += "Armor penetration: [ammo.penetration]<br>"
+
+		if(ammo.additional_xeno_penetration)
+			entry.mechanics_text += "Xenomorph additional armor penetration: [ammo.penetration]<br>"
 
 		if(ammo.armor_type)
 			entry.mechanics_text += "Armor type: [ammo.armor_type]<br>"

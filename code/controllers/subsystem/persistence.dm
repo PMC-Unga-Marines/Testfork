@@ -42,7 +42,6 @@ SUBSYSTEM_DEF(persistence)
 		/datum/season_datum/weapons/guns/heavy_ff,
 		/datum/season_datum/weapons/guns/heavy_autorail,
 		/datum/season_datum/weapons/guns/heavy_shock,
-		/datum/season_datum/weapons/guns/heavy_explosions,
 		),
 	)
 	///The saved list of custom outfits names
@@ -211,7 +210,7 @@ SUBSYSTEM_DEF(persistence)
 		/obj/item/ammo_magazine/smg/ppsh/extended = -1,
 		/obj/item/weapon/gun/rifle/garand = -1,
 		/obj/item/ammo_magazine/rifle/garand = -1,
-		/obj/item/weapon/gun/pistol/m1911 = -1,
+		/obj/item/weapon/gun/pistol/m1911 = 5,
 		/obj/item/ammo_magazine/pistol/m1911 = -1,
 		)
 
@@ -246,14 +245,14 @@ SUBSYSTEM_DEF(persistence)
 	name = "High Noon"
 	description = "Revolvers? They are yours my friend. Bouncy, single-action, or with buckshot"
 	item_list = list(
-		/obj/item/weapon/gun/revolver/small = -1,
+		/obj/item/weapon/gun/revolver/small = 5,
 		/obj/item/ammo_magazine/revolver/small = -1,
-		/obj/item/weapon/gun/revolver/single_action/m44 = -1,
+		/obj/item/weapon/gun/revolver/single_action/m44 = 5,
 		/obj/item/ammo_magazine/revolver = -1,
-		/obj/item/weapon/gun/revolver/judge = -1,
+		/obj/item/weapon/gun/revolver/judge = 5,
 		/obj/item/ammo_magazine/revolver/judge = -1,
 		/obj/item/ammo_magazine/revolver/judge/buckshot = -1,
-		/obj/item/weapon/gun/revolver/upp = -1,
+		/obj/item/weapon/gun/revolver/upp = 5,
 		/obj/item/ammo_magazine/revolver/upp = -1,
 		)
 
@@ -261,13 +260,13 @@ SUBSYSTEM_DEF(persistence)
 	name = "G22 and high-power gats"
 	description = "Four pistols for the pistol mains."
 	item_list = list(
-		/obj/item/weapon/gun/pistol/g22 = -1,
+		/obj/item/weapon/gun/pistol/g22 = 5,
 		/obj/item/ammo_magazine/pistol/g22 = -1,
-		/obj/item/weapon/gun/pistol/vp78 = -1,
+		/obj/item/weapon/gun/pistol/vp78 = 5,
 		/obj/item/ammo_magazine/pistol/vp78 = -1,
-		/obj/item/weapon/gun/pistol/heavy = -1,
+		/obj/item/weapon/gun/pistol/heavy = 5,
 		/obj/item/ammo_magazine/pistol/heavy = -1,
-		/obj/item/weapon/gun/pistol/highpower = -1,
+		/obj/item/weapon/gun/pistol/highpower = 5,
 		/obj/item/ammo_magazine/pistol/highpower = -1,
 		)
 
@@ -282,9 +281,9 @@ SUBSYSTEM_DEF(persistence)
 		/obj/item/storage/holster/m25 = -1,
 		/obj/item/weapon/gun/smg/mp7 = -1,
 		/obj/item/ammo_magazine/smg/mp7 = -1,
-		/obj/item/weapon/gun/smg/skorpion = -1,
+		/obj/item/weapon/gun/smg/skorpion = 5,
 		/obj/item/ammo_magazine/smg/skorpion = -1,
-		/obj/item/weapon/gun/revolver/cmb = -1,
+		/obj/item/weapon/gun/revolver/cmb = 5,
 		/obj/item/ammo_magazine/revolver/cmb = -1,
 		)
 
@@ -356,20 +355,5 @@ SUBSYSTEM_DEF(persistence)
 		/obj/item/ammo_magazine/rocket/recoilless/smoke = 16,
 		/obj/item/ammo_magazine/rocket/recoilless/plasmaloss = 16,
 		/obj/structure/closet/crate/mortar_ammo/mlrs_kit = 2,
-		/obj/item/storage/box/mlrs_rockets/gas = 4,
-	)
-
-/datum/season_datum/weapons/guns/heavy_explosions
-	name = "Explosive Heavy Weapons"
-	description = "Flak cannon and Recoilless guns for roundstart vendors."
-	item_list = list(
-		/obj/structure/largecrate/supply/weapons/heavy_flakgun = 1,
-		/obj/item/ammo_magazine/heavy_isg/he = 8,
-		/obj/item/ammo_magazine/heavy_isg/sabot = 5,
-		/obj/item/storage/holster/backholster/rpg/full = 2,
-		/obj/item/ammo_magazine/rocket/recoilless = 4,
-		/obj/item/ammo_magazine/rocket/recoilless/light = 4,
-		/obj/item/ammo_magazine/rocket/recoilless/heat = 16,
-		/obj/item/ammo_magazine/rocket/recoilless/cloak = 16,
-		/obj/item/ammo_magazine/rocket/recoilless/smoke = 16,
+		/obj/item/storage/box/mlrs_rockets_gas = 4,
 	)

@@ -45,6 +45,7 @@ export const CSS_COLORS = [
   'black',
   'white',
   'red',
+  'darkred',
   'orange',
   'yellow',
   'olive',
@@ -143,7 +144,7 @@ const GASES = [
     path: '/datum/gas/nitrogen',
     name: 'Nitrogen',
     label: 'N₂',
-    color: 'yellow',
+    color: 'red',
   },
   {
     id: 'co2',
@@ -278,7 +279,7 @@ export const getGasLabel = (gasId: string, fallbackValue?: string) => {
   const gasSearchString = gasId.toLowerCase();
   const gas = GASES.find(
     (gas) =>
-      gas.id === gasSearchString || gas.name.toLowerCase() === gasSearchString,
+      gas.id === gasSearchString || gas.name.toLowerCase() === gasSearchString
   );
   return gas?.label || fallbackValue || gasId;
 };
@@ -288,7 +289,7 @@ export const getGasColor = (gasId: string) => {
   const gasSearchString = gasId.toLowerCase();
   const gas = GASES.find(
     (gas) =>
-      gas.id === gasSearchString || gas.name.toLowerCase() === gasSearchString,
+      gas.id === gasSearchString || gas.name.toLowerCase() === gasSearchString
   );
   return gas?.color;
 };
@@ -298,7 +299,7 @@ export const getGasFromId = (gasId: string): Gas | undefined => {
   const gasSearchString = gasId.toLowerCase();
   const gas = GASES.find(
     (gas) =>
-      gas.id === gasSearchString || gas.name.toLowerCase() === gasSearchString,
+      gas.id === gasSearchString || gas.name.toLowerCase() === gasSearchString
   );
   return gas;
 };

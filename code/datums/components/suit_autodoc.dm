@@ -1,5 +1,5 @@
-#define SUIT_AUTODOC_DAM_MIN 50
-#define SUIT_AUTODOC_DAM_MAX 150
+#define SUIT_AUTODOC_DAM_MIN 20 //RU TGMC EDIT
+#define SUIT_AUTODOC_DAM_MAX 300 //RU TGMC EDIT
 #define COOLDOWN_CHEM_BURN "chem_burn"
 #define COOLDOWN_CHEM_OXY "oxy_chems"
 #define COOLDOWN_CHEM_BRUTE "brute_chems"
@@ -182,8 +182,8 @@
 	UnregisterSignal(wearer, COMSIG_HUMAN_DAMAGE_TAKEN)
 	STOP_PROCESSING(SSobj, src)
 	if(!silent)
-		wearer.balloon_alert(wearer, "Automedical suite deactivates")
-		playsound(parent,'sound/voice/b18/deactivate.ogg', 15, 0, 1)
+		wearer.balloon_alert(wearer, "The automedical suite deactivates")
+		playsound(parent,'sound/machines/click.ogg', 15, 0, 1)
 
 /**
 	Enable processing and calls out to register signals from the user.
@@ -198,7 +198,7 @@
 	RegisterSignal(wearer, COMSIG_HUMAN_DAMAGE_TAKEN, PROC_REF(damage_taken))
 	START_PROCESSING(SSobj, src)
 	if(!silent)
-		wearer.balloon_alert(wearer, "Automedical suite activates")
+		wearer.balloon_alert(wearer, "The automedical suite activates")
 		playsound(parent,'sound/voice/b18/activate.ogg', 15, 0, 1)
 
 
@@ -345,6 +345,7 @@
 	<A href='byond://?src=[REF(src)];analyzer=1'>Scan Wearer</A><BR>
 	<BR>
 	<B>Damage Trigger Threshold (Max [SUIT_AUTODOC_DAM_MAX], Min [SUIT_AUTODOC_DAM_MIN]):</B><BR>
+	<A href='byond://?src=[REF(src)];automed_damage=-100'>-100</A><BR>
 	<A href='byond://?src=[REF(src)];automed_damage=-50'>-50</A>
 	<A href='byond://?src=[REF(src)];automed_damage=-10'>-10</A>
 	<A href='byond://?src=[REF(src)];automed_damage=-5'>-5</A>
@@ -352,9 +353,11 @@
 	<A href='byond://?src=[REF(src)];automed_damage=1'>+1</A>
 	<A href='byond://?src=[REF(src)];automed_damage=5'>+5</A>
 	<A href='byond://?src=[REF(src)];automed_damage=10'>+10</A>
-	<A href='byond://?src=[REF(src)];automed_damage=50'>+50</A><BR>
+	<A href='byond://?src=[REF(src)];automed_damage=50'>+50</A>
+	<A href='byond://?src=[REF(src)];automed_damage=100'>+100</A><BR>
 	<BR>
 	<B>Pain Trigger Threshold (Max [SUIT_AUTODOC_DAM_MAX], Min [SUIT_AUTODOC_DAM_MIN]):</B><BR>
+	<A href='byond://?src=[REF(src)];automed_pain=-100'>-100</A><BR>
 	<A href='byond://?src=[REF(src)];automed_pain=-50'>-50</A>
 	<A href='byond://?src=[REF(src)];automed_pain=-10'>-10</A>
 	<A href='byond://?src=[REF(src)];automed_pain=-5'>-5</A>
@@ -362,7 +365,8 @@
 	<A href='byond://?src=[REF(src)];automed_pain=1'>+1</A>
 	<A href='byond://?src=[REF(src)];automed_pain=5'>+5</A>
 	<A href='byond://?src=[REF(src)];automed_pain=10'>+10</A>
-	<A href='byond://?src=[REF(src)];automed_pain=50'>+50</A><BR>"}
+	<A href='byond://?src=[REF(src)];automed_pain=50'>+50</A>
+	<A href='byond://?src=[REF(src)];automed_pain=100'>+100</A><BR>"}
 
 	var/datum/browser/popup = new(user, "Suit Automedic")
 	popup.set_content(dat)

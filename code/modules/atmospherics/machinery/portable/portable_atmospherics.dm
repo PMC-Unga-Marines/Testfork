@@ -23,8 +23,6 @@
 
 /obj/machinery/portable_atmospherics/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(!istype(I, /obj/item/tank))
 		return
 	holding = I

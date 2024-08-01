@@ -2,8 +2,9 @@
 	name = "Nuclear War"
 	config_tag = "Nuclear War"
 	silo_scaling = 1.5
-	round_type_flags = MODE_INFESTATION|MODE_LATE_OPENING_SHUTTER_TIMER|MODE_XENO_RULER|MODE_PSY_POINTS|MODE_PSY_POINTS_ADVANCED|MODE_DEAD_GRAB_FORBIDDEN|MODE_HIJACK_POSSIBLE|MODE_SILO_RESPAWN|MODE_SILOS_SPAWN_MINIONS|MODE_ALLOW_XENO_QUICKBUILD|MODE_FORCE_CUSTOMSQUAD_UI
-	xeno_abilities_flags = ABILITY_NUCLEARWAR
+	flags_round_type = MODE_INFESTATION|MODE_LATE_OPENING_SHUTTER_TIMER|MODE_XENO_RULER|MODE_PSY_POINTS|MODE_PSY_POINTS_ADVANCED|MODE_DEAD_GRAB_FORBIDDEN|MODE_HIJACK_POSSIBLE|MODE_SILO_RESPAWN|MODE_SILOS_SPAWN_MINIONS|MODE_ALLOW_XENO_QUICKBUILD
+	flags_xeno_abilities = ABILITY_NUCLEARWAR
+	quickbuild_points_flags = MODE_GENERAL_QUICKBUILD_POINTS
 	valid_job_types = list(
 		/datum/job/terragov/command/captain = 1,
 		/datum/job/terragov/command/fieldcommander = 1,
@@ -19,7 +20,7 @@
 		/datum/job/terragov/civilian/liaison = 1,
 		/datum/job/terragov/silicon/synthetic = 1,
 		/datum/job/terragov/command/mech_pilot = 0,
-		/datum/job/terragov/command/assault_crewman = 0,
+		/datum/job/terragov/command/assault_crewman = 2,
 		/datum/job/terragov/command/transport_crewman = 1,
 		/datum/job/terragov/silicon/ai = 1,
 		/datum/job/terragov/squad/engineer = 1,
@@ -40,8 +41,7 @@
 /datum/game_mode/infestation/nuclear_war/post_setup()
 	. = ..()
 
-	SSpoints.add_strategic_psy_points(XENO_HIVE_NORMAL, 1400)
-	SSpoints.add_tactical_psy_points(XENO_HIVE_NORMAL, 300)
+	SSpoints.add_psy_points(XENO_HIVE_NORMAL, 1400)
 
 	for(var/obj/effect/landmark/corpsespawner/corpse AS in GLOB.corpse_landmarks_list)
 		corpse.create_mob()

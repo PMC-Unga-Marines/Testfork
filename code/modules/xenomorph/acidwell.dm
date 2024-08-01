@@ -1,17 +1,16 @@
-
-//Resin Water Well
 /obj/structure/xeno/acidwell
 	name = "acid well"
 	desc = "An acid well. It stores acid to put out fires."
-	icon = 'icons/Xeno/acid_well.dmi'
+	icon = 'icons/Xeno/acid_pool.dmi'
+	plane = FLOOR_PLANE
 	icon_state = "well"
 	density = FALSE
 	opacity = FALSE
 	anchored = TRUE
 	max_integrity = 5
 
-	hit_sound = SFX_ALIEN_RESIN_MOVE
-	destroy_sound = SFX_ALIEN_RESIN_MOVE
+	hit_sound = "alien_resin_move"
+	destroy_sound = "alien_resin_move"
 	///How many charges of acid this well contains
 	var/charges = 1
 	///If a xeno is charging this well
@@ -38,20 +37,14 @@
 	SIGNAL_HANDLER
 	creator = null
 
-///Ensures that no acid gas will be released when the well is crushed by a shuttle
-/obj/structure/xeno/acidwell/proc/shuttle_crush()
-	SIGNAL_HANDLER
-	qdel(src)
-
-
-/obj/structure/xeno/acidwell/obj_destruction(damage_amount, damage_type, damage_flag, mob/living/blame_mob)
+/obj/structure/xeno/acidwell/obj_destruction(damage_amount, damage_type, damage_flag)
 	if(!QDELETED(creator) && creator.stat == CONSCIOUS && creator.z == z)
 		var/area/A = get_area(src)
 		if(A)
 			to_chat(creator, span_xenoannounce("You sense your acid well at [A.name] has been destroyed!") )
 
 	if(damage_amount || damage_flag) //Spawn the gas only if we actually get destroyed by damage
-		var/datum/effect_system/smoke_spread/xeno/acid/opaque/A = new(get_turf(src))
+		var/datum/effect_system/smoke_spread/xeno/acid/A = new(get_turf(src))
 		A.set_up(clamp(CEILING(charges*0.5, 1),0,3),src) //smoke scales with charges
 		A.start()
 	return ..()
@@ -77,7 +70,10 @@
 	. += mutable_appearance(icon, "[charges]", alpha = src.alpha)
 	. += emissive_appearance(icon, "[charges]", alpha = src.alpha)
 
-/obj/structure/xeno/acidwell/fire_act(burn_level)
+/obj/structure/xeno/acidwell/flamer_fire_act(burnlevel) //Removes a charge of acid, but fire is extinguished
+	acid_well_fire_interaction()
+
+/obj/structure/xeno/acidwell/fire_act() //Removes a charge of acid, but fire is extinguished
 	acid_well_fire_interaction()
 
 ///Handles fire based interactions with the acid well. Depletes 1 charge if there are any to extinguish all fires in the turf while producing acid smoke.
@@ -89,11 +85,11 @@
 	charges--
 	update_icon()
 	var/turf/T = get_turf(src)
-	var/datum/effect_system/smoke_spread/xeno/acid/opaque/acid_smoke = new(T) //spawn acid smoke when charges are actually used
+	var/datum/effect_system/smoke_spread/xeno/acid/extuingishing/acid_smoke = new(T) //spawn acid smoke when charges are actually used
 	acid_smoke.set_up(0, src) //acid smoke in the immediate vicinity
 	acid_smoke.start()
 
-	for(var/obj/fire/flamer/F in T) //Extinguish all flames in turf
+	for(var/obj/flamer_fire/F in T) //Extinguish all flames in turf
 		qdel(F)
 
 /obj/structure/xeno/acidwell/attackby(obj/item/I, mob/user, params)
@@ -101,13 +97,13 @@
 		return ..()
 	attack_alien(user)
 
-/obj/structure/xeno/acidwell/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/structure/xeno/acidwell/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.a_intent == INTENT_HARM && (CHECK_BITFIELD(xeno_attacker.xeno_caste.caste_flags, CASTE_IS_BUILDER) || xeno_attacker == creator) ) //If we're a builder caste or the creator and we're on harm intent, deconstruct it.
 		balloon_alert(xeno_attacker, "Removing...")
 		if(!do_after(xeno_attacker, XENO_ACID_WELL_FILL_TIME, IGNORE_HELD_ITEM, src, BUSY_ICON_HOSTILE))
 			balloon_alert(xeno_attacker, "Stopped removing")
 			return
-		playsound(src, SFX_ALIEN_RESIN_BREAK, 25)
+		playsound(src, "alien_resin_break", 25)
 		deconstruct(TRUE, xeno_attacker)
 		return
 
@@ -165,7 +161,9 @@
 			break
 		if(sticky_bomb.stuck_to == stepper)
 			sticky_bomb.clean_refs()
-			sticky_bomb.forceMove(loc)
+			sticky_bomb.forceMove(loc) // i'm not sure if this is even needed, but just to prevent possible bugs
+			visible_message(span_danger("[src] sizzles as [sticky_bomb] melts down in the acid."))
+			qdel(sticky_bomb)
 			charges_used ++
 
 	if(stepper.on_fire && (charges_used < charges))
@@ -185,7 +183,8 @@
 	if(!charges_used)
 		return
 
-	var/datum/effect_system/smoke_spread/xeno/acid/opaque/acid_smoke = new(get_turf(stepper)) //spawn acid smoke when charges are actually used
+	var/datum/effect_system/smoke_spread/xeno/acid/extuingishing/acid_smoke
+	acid_smoke = new(get_turf(stepper)) //spawn acid smoke when charges are actually used
 	acid_smoke.set_up(0, src) //acid smoke in the immediate vicinity
 	acid_smoke.start()
 

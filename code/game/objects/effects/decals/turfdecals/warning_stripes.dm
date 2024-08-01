@@ -86,14 +86,26 @@
 	smoothing_groups = list(SMOOTH_GROUP_DECAL_WARNING_STRIPE)
 	canSmoothWith = list(SMOOTH_GROUP_DECAL_WARNING_STRIPE)
 
-/obj/effect/turf_decal/warning_stripes/coagulation
-	icon_state = "coag_decal"
+/obj/effect/turf_decal/warning_stripes/line
+	icon_state = "warning_line"
 
-/obj/effect/turf_decal/warning_stripes/coagulation/corner
-	icon_state = "coag_decal_corner"
+/obj/effect/turf_decal/warning_stripes/corner
+	icon_state = "warning_corner"
 
-/obj/effect/turf_decal/warning_stripes/coagulation/rustfree
-	icon_state = "coag_decal_no_rust"
+/obj/effect/turf_decal/warning_stripes/full
+	icon_state = "warning_box"
 
-/obj/effect/turf_decal/warning_stripes/coagulation/rustfree/corner
-	icon_state = "coag_decal_corner_no_rust"
+/obj/effect/turf_decal/warning_stripes/fulltile
+	icon_state = "warning_full"
+
+/obj/effect/turf_decal/warning_stripes/end
+	icon_state = "warning_end"
+
+/obj/effect/turf_decal/warning_stripes/cargo
+	icon_state = "cargo"
+
+/obj/effect/turf_decal/warning_stripes/cargo/yellow
+	icon_state = "test_floor5"
+
+/obj/effect/turf_decal/warning_stripes/cargo/arrow
+	icon_state = "cargo_arrow"

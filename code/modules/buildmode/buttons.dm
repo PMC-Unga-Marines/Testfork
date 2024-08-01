@@ -59,10 +59,10 @@
 	screen_loc = "NORTH,WEST+2"
 	name = "Change Dir"
 
+
 ///Updates the direction of the buildmode
 /atom/movable/screen/buildmode/bdir/proc/update_dir()
 	dir = bd.build_dir
-
 
 /atom/movable/screen/buildmode/bdir/Click()
 	bd.toggle_dirswitch()

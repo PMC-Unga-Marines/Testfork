@@ -1,7 +1,7 @@
 /obj/structure/razorwire
 	name = "razorwire obstacle"
 	desc = "A bundle of barbed wire supported by metal rods. Used to deny access to areas under (literal) pain of entanglement and injury. A classic fortification since the 1900s."
-	icon = 'icons/obj/structures/barricades/barbedwire.dmi'
+	icon = 'icons/obj/structures/barbedwire.dmi'
 	icon_state = "barbedwire_x"
 	base_icon_state = "barbedwire_x"
 	density = TRUE
@@ -51,8 +51,6 @@
 		return
 	if(CHECK_BITFIELD(O.pass_flags, PASS_DEFENSIVE_STRUCTURE))
 		return
-	if(HAS_TRAIT(O, TRAIT_TANK_DESANT))
-		return
 	var/mob/living/M = O
 	if(M.status_flags & INCORPOREAL)
 		return
@@ -73,7 +71,6 @@
 	span_danger("You got entangled in the barbed wire! Resist to untangle yourself after [duration * 0.1] seconds since you were entangled!"), null, null, 5)
 	do_razorwire_tangle(entangled)
 
-
 /obj/structure/razorwire/proc/do_razorwire_tangle(mob/living/entangled)
 	ADD_TRAIT(entangled, TRAIT_IMMOBILE, type)
 	ENABLE_BITFIELD(entangled.restrained_flags, RESTRAINED_RAZORWIRE)
@@ -81,7 +78,6 @@
 	RegisterSignal(entangled, COMSIG_LIVING_DO_RESIST, TYPE_PROC_REF(/atom/movable, resisted_against))
 	RegisterSignal(entangled, COMSIG_QDELETING, PROC_REF(do_razorwire_untangle))
 	RegisterSignal(entangled, COMSIG_MOVABLE_PULL_MOVED, PROC_REF(razorwire_untangle))
-
 
 /obj/structure/razorwire/resisted_against(datum/source)
 	var/mob/living/entangled = source
@@ -102,7 +98,6 @@
 	entangled.apply_damage(RAZORWIRE_BASE_DAMAGE * RAZORWIRE_MIN_DAMAGE_MULT_MED, BRUTE, def_zone, MELEE, TRUE, updating_health = TRUE) //Apply damage as we tear free
 	return TRUE
 
-
 ///This proc is used for signals, so if you plan on adding a second argument, or making it return a value, then change those RegisterSignal's referncing it first.
 /obj/structure/razorwire/proc/do_razorwire_untangle(mob/living/entangled)
 	SIGNAL_HANDLER
@@ -110,7 +105,6 @@
 	LAZYREMOVE(entangled_list, entangled)
 	DISABLE_BITFIELD(entangled.restrained_flags, RESTRAINED_RAZORWIRE)
 	REMOVE_TRAIT(entangled, TRAIT_IMMOBILE, type)
-
 
 /obj/structure/razorwire/proc/on_exited(datum/source, atom/movable/AM, direction)
 	if(!isliving(AM))
@@ -124,11 +118,8 @@
 		do_razorwire_untangle(i)
 	return ..()
 
-
 /obj/structure/razorwire/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/metal_sheets = I
@@ -146,28 +137,33 @@
 		update_icon()
 		return
 
-/obj/structure/razorwire/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_OBJ_SLAM_DAMAGE, is_sharp = FALSE)
-	if(!isliving(grab.grabbed_thing))
+	if(!istype(I, /obj/item/grab))
 		return
-	if(user.grab_state < GRAB_AGGRESSIVE)
-		to_chat(user, span_warning("You need a better grip to do that!"))
+	if(isxeno(user))//I am very tempted to remove this >:)
 		return
 
-	var/mob/living/grabbed_mob = grab.grabbed_thing
-	if(user.a_intent == INTENT_HARM && user.grab_state > GRAB_AGGRESSIVE)
+	var/obj/item/grab/G = I
+	if(!isliving(G.grabbed_thing))
+		return
+
+	var/mob/living/M = G.grabbed_thing
+	if(user.a_intent == INTENT_HARM)
+		if(user.grab_state <= GRAB_AGGRESSIVE)
+			to_chat(user, span_warning("You need a better grip to do that!"))
+			return
+
 		var/def_zone = ran_zone()
-		grabbed_mob.apply_damage(RAZORWIRE_BASE_DAMAGE, BRUTE, def_zone, MELEE, TRUE, updating_health = TRUE)
-		user.visible_message(span_danger("[user] spartas [grabbed_mob]'s into [src]!"),
-		span_danger("You sparta [grabbed_mob]'s against [src]!"))
-		log_combat(user, grabbed_mob, "spartaed", "", "against \the [src]")
+		M.apply_damage(RAZORWIRE_BASE_DAMAGE, BRUTE, def_zone, MELEE, TRUE, updating_health = TRUE)
+		user.visible_message(span_danger("[user] spartas [M]'s into [src]!"),
+		span_danger("You sparta [M]'s against [src]!"))
+		log_combat(user, M, "spartaed", "", "against \the [src]")
 		playsound(src, 'sound/effects/barbed_wire_movement.ogg', 25, 1)
-		return TRUE
 
-	grabbed_mob.forceMove(loc)
-	grabbed_mob.Paralyze(2 SECONDS)
-	user.visible_message(span_danger("[user] throws [grabbed_mob] on [src]."),
-	span_danger("You throw [grabbed_mob] on [src]."))
-	return TRUE
+	else if(user.grab_state >= GRAB_AGGRESSIVE)
+		M.forceMove(loc)
+		M.Paralyze(10 SECONDS)
+		user.visible_message(span_danger("[user] throws [M] on [src]."),
+		span_danger("You throw [M] on [src]."))
 
 /obj/structure/razorwire/wirecutter_act(mob/living/user, obj/item/I)
 	user.visible_message(span_notice("[user] starts disassembling [src]."),
@@ -183,7 +179,7 @@
 	deconstruct(TRUE)
 	return TRUE
 
-/obj/structure/razorwire/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/structure/razorwire/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
@@ -192,19 +188,10 @@
 	return ..()
 
 /obj/structure/razorwire/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			visible_message(span_danger("[src] is blown apart!"))
-			deconstruct(FALSE)
-			return
-		if(EXPLODE_HEAVY)
-			take_damage(rand(33, 66), BRUTE, BOMB)
-		if(EXPLODE_LIGHT)
-			take_damage(rand(10, 33), BRUTE, BOMB)
-		if(EXPLODE_WEAK)
-			take_damage(10, BRUTE, BOMB)
+	take_damage(severity / 2, BRUTE, BOMB)
+	if(severity >= EXPLODE_LIGHT)
+		visible_message(span_danger("[src] is blown apart!"))
 	update_icon()
-
 
 /obj/structure/razorwire/CanAllowThrough(atom/movable/mover, turf/target)
 	if(mover.throwing && ismob(mover) && !(mover.pass_flags & PASS_DEFENSIVE_STRUCTURE))

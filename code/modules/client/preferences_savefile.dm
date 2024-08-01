@@ -4,7 +4,7 @@
 //	You do not need to raise this if you are adding new values that have sane defaults.
 //	Only raise this value when changing the meaning/format/name/layout of an existing value
 //	where you would want the updater procs below to run
-#define SAVEFILE_VERSION_MAX 46
+#define SAVEFILE_VERSION_MAX 45
 
 /datum/preferences/proc/savefile_needs_update(savefile/S)
 	var/savefile_version
@@ -52,11 +52,6 @@
 		WRITE_FILE(S["mute_xeno_health_alert_messages"], TRUE)
 		mute_xeno_health_alert_messages = TRUE
 		to_chat(parent, span_userdanger("Preferences for Mute xeno health alert messages have been reverted to default settings; these are now muted. Go into Preferences and set Mute xeno health alert messages to No if you wish to get xeno critical health alerts."))
-	if(current_version < 46)
-		toggles_sound |= SOUND_WEATHER
-		WRITE_FILE(S["toggles_sound"], toggles_sound)
-		to_chat(parent, span_userdanger("Due to a fix, preferences for weather sound have been reverted to default settings; these are now ON. Go into Preferences and set sound toggles to OFF if you wish to not hear these sounds."))
-
 
 //handles converting savefiles to new formats
 //MAKE SURE YOU KEEP THIS UP TO DATE!
@@ -157,6 +152,7 @@
 	READ_FILE(S["windowflashing"], windowflashing)
 	READ_FILE(S["auto_fit_viewport"], auto_fit_viewport)
 	READ_FILE(S["widescreenpref"], widescreenpref)
+	READ_FILE(S["screen_resolution"], screen_resolution)
 	READ_FILE(S["pixel_size"], pixel_size)
 	READ_FILE(S["scaling_method"], scaling_method)
 	READ_FILE(S["menuoptions"], menuoptions)
@@ -173,14 +169,12 @@
 	READ_FILE(S["split_admin_tabs"], split_admin_tabs)
 
 	READ_FILE(S["key_bindings"], key_bindings)
-	READ_FILE(S["slot_draw_order"], slot_draw_order_pref)
 	READ_FILE(S["custom_emotes"], custom_emotes)
 	READ_FILE(S["chem_macros"], chem_macros)
 
 	READ_FILE(S["mute_self_combat_messages"], mute_self_combat_messages)
 	READ_FILE(S["mute_others_combat_messages"], mute_others_combat_messages)
 	READ_FILE(S["mute_xeno_health_alert_messages"], mute_xeno_health_alert_messages)
-	READ_FILE(S["show_xeno_rank"], show_xeno_rank)
 
 	// Runechat options
 	READ_FILE(S["chat_on_map"], chat_on_map)
@@ -217,6 +211,7 @@
 	windowflashing = sanitize_integer(windowflashing, FALSE, TRUE, initial(windowflashing))
 	auto_fit_viewport = sanitize_integer(auto_fit_viewport, FALSE, TRUE, initial(auto_fit_viewport))
 	widescreenpref = sanitize_integer(widescreenpref, FALSE, TRUE, initial(widescreenpref))
+	screen_resolution = sanitize_inlist(screen_resolution, WIDESCREEN_RESOLUTIONS, initial(screen_resolution))
 	pixel_size = sanitize_float(pixel_size, PIXEL_SCALING_AUTO, PIXEL_SCALING_3X, 0.5, initial(pixel_size))
 	scaling_method = sanitize_text(scaling_method, initial(scaling_method))
 	ghost_vision = sanitize_integer(ghost_vision, FALSE, TRUE, initial(ghost_vision))
@@ -230,7 +225,7 @@
 	volume_tts = sanitize_integer(volume_tts, 1, 100, initial(volume_tts))
 
 	key_bindings = sanitize_islist(key_bindings, list())
-	if (!length(key_bindings))
+	if(!length(key_bindings))
 		key_bindings = deepCopyList(GLOB.hotkey_keybinding_list_by_key)
 
 	custom_emotes = sanitize_is_full_emote_list(custom_emotes)
@@ -241,7 +236,6 @@
 	mute_self_combat_messages = sanitize_integer(mute_self_combat_messages, FALSE, TRUE, initial(mute_self_combat_messages))
 	mute_others_combat_messages = sanitize_integer(mute_others_combat_messages, FALSE, TRUE, initial(mute_others_combat_messages))
 	mute_xeno_health_alert_messages = sanitize_integer(mute_xeno_health_alert_messages, FALSE, TRUE, initial(mute_xeno_health_alert_messages))
-	show_xeno_rank = sanitize_integer(show_xeno_rank, FALSE, TRUE, initial(show_xeno_rank))
 
 	chat_on_map = sanitize_integer(chat_on_map, FALSE, TRUE, initial(chat_on_map))
 	max_chat_length = sanitize_integer(max_chat_length, 1, CHAT_MESSAGE_MAX_LENGTH, initial(max_chat_length))
@@ -292,6 +286,7 @@
 	windowflashing = sanitize_integer(windowflashing, FALSE, TRUE, initial(windowflashing))
 	auto_fit_viewport = sanitize_integer(auto_fit_viewport, FALSE, TRUE, initial(auto_fit_viewport))
 	widescreenpref = sanitize_integer(widescreenpref, FALSE, TRUE, initial(widescreenpref))
+	screen_resolution = sanitize_inlist(screen_resolution, WIDESCREEN_RESOLUTIONS, initial(screen_resolution))
 	pixel_size = sanitize_float(pixel_size, PIXEL_SCALING_AUTO, PIXEL_SCALING_3X, 0.5, initial(pixel_size))
 	scaling_method = sanitize_text(scaling_method, initial(scaling_method))
 	chem_macros = sanitize_islist(chem_macros, list())
@@ -308,7 +303,6 @@
 	mute_self_combat_messages = sanitize_integer(mute_self_combat_messages, FALSE, TRUE, initial(mute_self_combat_messages))
 	mute_others_combat_messages = sanitize_integer(mute_others_combat_messages, FALSE, TRUE, initial(mute_others_combat_messages))
 	mute_xeno_health_alert_messages = sanitize_integer(mute_xeno_health_alert_messages, FALSE, TRUE, initial(mute_xeno_health_alert_messages))
-	show_xeno_rank = sanitize_integer(show_xeno_rank, FALSE, TRUE, initial(show_xeno_rank))
 
 	// Runechat
 	chat_on_map = sanitize_integer(chat_on_map, FALSE, TRUE, initial(chat_on_map))
@@ -343,6 +337,7 @@
 	WRITE_FILE(S["windowflashing"], windowflashing)
 	WRITE_FILE(S["auto_fit_viewport"], auto_fit_viewport)
 	WRITE_FILE(S["widescreenpref"], widescreenpref)
+	WRITE_FILE(S["screen_resolution"], screen_resolution)
 	WRITE_FILE(S["pixel_size"], pixel_size)
 	WRITE_FILE(S["scaling_method"], scaling_method)
 	WRITE_FILE(S["menuoptions"], menuoptions)
@@ -356,12 +351,10 @@
 	WRITE_FILE(S["tooltips"], tooltips)
 	WRITE_FILE(S["sound_tts"], sound_tts)
 	WRITE_FILE(S["volume_tts"], volume_tts)
-	WRITE_FILE(S["slot_draw_order"], slot_draw_order_pref)
 
 	WRITE_FILE(S["mute_self_combat_messages"], mute_self_combat_messages)
 	WRITE_FILE(S["mute_others_combat_messages"], mute_others_combat_messages)
 	WRITE_FILE(S["mute_xeno_health_alert_messages"], mute_xeno_health_alert_messages)
-	WRITE_FILE(S["show_xeno_rank"], show_xeno_rank)
 
 	// Runechat options
 	WRITE_FILE(S["chat_on_map"], chat_on_map)
@@ -418,6 +411,30 @@
 	READ_FILE(S["robot_type"], robot_type)
 	READ_FILE(S["xeno_name"], xeno_name)
 	READ_FILE(S["ai_name"], ai_name)
+
+//RUTGMC EDIT
+	READ_FILE(S["pred_name"], predator_name)
+	READ_FILE(S["pred_gender"], predator_gender)
+	READ_FILE(S["pred_age"], predator_age)
+	READ_FILE(S["pred_use_legacy"], predator_use_legacy)
+	READ_FILE(S["pred_trans_type"], predator_translator_type)
+	READ_FILE(S["pred_mask_type"], predator_mask_type)
+	READ_FILE(S["pred_armor_type"], predator_armor_type)
+	READ_FILE(S["pred_boot_type"], predator_boot_type)
+	READ_FILE(S["pred_mask_mat"], predator_mask_material)
+	READ_FILE(S["pred_armor_mat"], predator_armor_material)
+	READ_FILE(S["pred_greave_mat"], predator_greave_material)
+	READ_FILE(S["pred_caster_mat"], predator_caster_material)
+	READ_FILE(S["pred_cape_type"], predator_cape_type)
+	READ_FILE(S["pred_cape_color"], predator_cape_color)
+	READ_FILE(S["pred_h_style"], predator_h_style)
+	READ_FILE(S["pred_skin_color"], predator_skin_color)
+	READ_FILE(S["pred_flavor_text"], predator_flavor_text)
+	READ_FILE(S["pred_r_eyes"], pred_r_eyes)
+	READ_FILE(S["pred_g_eyes"], pred_g_eyes)
+	READ_FILE(S["pred_b_eyes"], pred_b_eyes)
+	READ_FILE(S["yautja_status"], yautja_status)
+//RUTGMC EDIT
 
 	READ_FILE(S["real_name"], real_name)
 	READ_FILE(S["random_name"], random_name)
@@ -517,6 +534,12 @@
 	g_facial = sanitize_integer(g_facial, 0, 255, initial(g_facial))
 	b_facial = sanitize_integer(b_facial, 0, 255, initial(b_facial))
 
+//RUTGMC EDIT
+	pred_r_eyes = sanitize_integer(pred_r_eyes, 0, 255, initial(pred_r_eyes))
+	pred_g_eyes = sanitize_integer(pred_g_eyes, 0, 255, initial(pred_g_eyes))
+	pred_b_eyes = sanitize_integer(pred_b_eyes, 0, 255, initial(pred_b_eyes))
+//RUTGMC EDIT
+
 	r_eyes = sanitize_integer(r_eyes, 0, 255, initial(r_eyes))
 	g_eyes = sanitize_integer(g_eyes, 0, 255, initial(g_eyes))
 	b_eyes = sanitize_integer(b_eyes, 0, 255, initial(b_eyes))
@@ -569,6 +592,27 @@
 	xeno_name = reject_bad_name(xeno_name)
 	ai_name = reject_bad_name(ai_name, TRUE)
 
+//RUTGMC EDIT
+	predator_name = predator_name ? sanitize_text(predator_name, initial(predator_name)) : initial(predator_name)
+	predator_gender = sanitize_text(predator_gender, initial(predator_gender))
+	predator_age = sanitize_integer(predator_age, 100, 10000, initial(predator_age))
+	predator_use_legacy = sanitize_inlist(predator_use_legacy, PRED_LEGACIES, initial(predator_use_legacy))
+	predator_translator_type = sanitize_inlist(predator_translator_type, PRED_TRANSLATORS, initial(predator_translator_type))
+	predator_mask_type = sanitize_integer(predator_mask_type,1,1000000,initial(predator_mask_type))
+	predator_armor_type = sanitize_integer(predator_armor_type,1,1000000,initial(predator_armor_type))
+	predator_boot_type = sanitize_integer(predator_boot_type,1,1000000,initial(predator_boot_type))
+	predator_mask_material = sanitize_inlist(predator_mask_material, PRED_MATERIALS, initial(predator_mask_material))
+	predator_armor_material = sanitize_inlist(predator_armor_material, PRED_MATERIALS, initial(predator_armor_material))
+	predator_greave_material = sanitize_inlist(predator_greave_material, PRED_MATERIALS, initial(predator_greave_material))
+	predator_caster_material = sanitize_inlist(predator_caster_material, PRED_MATERIALS + "retro", initial(predator_caster_material))
+	predator_cape_type = sanitize_inlist(predator_cape_type, GLOB.all_yautja_capes + "None", initial(predator_cape_type))
+	predator_cape_color = sanitize_hexcolor(predator_cape_color, 6, TRUE, initial(predator_cape_color))
+	predator_h_style = sanitize_inlist(predator_h_style, GLOB.yautja_hair_styles_list, initial(predator_h_style))
+	predator_skin_color = sanitize_inlist(predator_skin_color, PRED_SKIN_COLOR, initial(predator_skin_color))
+	predator_flavor_text = predator_flavor_text ? sanitize_text(predator_flavor_text, initial(predator_flavor_text)) : initial(predator_flavor_text)
+	yautja_status = sanitize_inlist(yautja_status, WHITELIST_HIERARCHY + list("Elder"), initial(yautja_status))
+//RUTGMC EDIT
+
 	real_name = reject_bad_name(real_name, TRUE)
 	random_name = sanitize_integer(random_name, FALSE, TRUE, initial(random_name))
 	gender = sanitize_gender(gender, TRUE, TRUE)
@@ -607,6 +651,12 @@
 	g_facial = sanitize_integer(g_facial, 0, 255, initial(g_facial))
 	b_facial = sanitize_integer(b_facial, 0, 255, initial(b_facial))
 
+//RUTGMC EDIT
+	pred_r_eyes = sanitize_integer(pred_r_eyes, 0, 255, initial(pred_r_eyes))
+	pred_g_eyes = sanitize_integer(pred_g_eyes, 0, 255, initial(pred_g_eyes))
+	pred_b_eyes = sanitize_integer(pred_b_eyes, 0, 255, initial(pred_b_eyes))
+//RUTGMC EDIT
+
 	r_eyes = sanitize_integer(r_eyes, 0, 255, initial(r_eyes))
 	g_eyes = sanitize_integer(g_eyes, 0, 255, initial(g_eyes))
 	b_eyes = sanitize_integer(b_eyes, 0, 255, initial(b_eyes))
@@ -632,6 +682,30 @@
 	WRITE_FILE(S["robot_type"], robot_type)
 	WRITE_FILE(S["xeno_name"], xeno_name)
 	WRITE_FILE(S["ai_name"], ai_name)
+
+//RUTGMC EDIT
+	WRITE_FILE(S["pred_name"], predator_name)
+	WRITE_FILE(S["pred_gender"], predator_gender)
+	WRITE_FILE(S["pred_age"], predator_age)
+	WRITE_FILE(S["pred_use_legacy"], predator_use_legacy)
+	WRITE_FILE(S["pred_trans_type"], predator_translator_type)
+	WRITE_FILE(S["pred_mask_type"], predator_mask_type)
+	WRITE_FILE(S["pred_armor_type"], predator_armor_type)
+	WRITE_FILE(S["pred_boot_type"], predator_boot_type)
+	WRITE_FILE(S["pred_mask_mat"], predator_mask_material)
+	WRITE_FILE(S["pred_armor_mat"], predator_armor_material)
+	WRITE_FILE(S["pred_greave_mat"], predator_greave_material)
+	WRITE_FILE(S["pred_caster_mat"], predator_caster_material)
+	WRITE_FILE(S["pred_cape_type"], predator_cape_type)
+	WRITE_FILE(S["pred_cape_color"], predator_cape_color)
+	WRITE_FILE(S["pred_h_style"], predator_h_style)
+	WRITE_FILE(S["pred_skin_color"], predator_skin_color)
+	WRITE_FILE(S["pred_flavor_text"], predator_flavor_text)
+	WRITE_FILE(S["pred_r_eyes"], pred_r_eyes)
+	WRITE_FILE(S["pred_g_eyes"], pred_g_eyes)
+	WRITE_FILE(S["pred_b_eyes"], pred_b_eyes)
+	WRITE_FILE(S["yautja_status"], yautja_status)
+//RUTGMC EDIT
 
 	WRITE_FILE(S["real_name"], real_name)
 	WRITE_FILE(S["random_name"], random_name)

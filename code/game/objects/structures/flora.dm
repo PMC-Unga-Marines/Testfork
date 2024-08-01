@@ -12,21 +12,15 @@
 		icon_state = "[initial(icon_state)]_[rand(1, icon_variants)]"
 
 /obj/structure/flora/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if(prob(70))
-				qdel(src)
-		if(EXPLODE_LIGHT)
-			if(prob(50))
-				qdel(src)
-		if(EXPLODE_WEAK)
-			if(prob(10))
-				qdel(src)
+	if(prob(severity / 4))
+		qdel(src)
 
-/obj/structure/flora/fire_act(burn_level)
-	take_damage(burn_level, BURN, FIRE)
+/obj/structure/flora/flamer_fire_act(burnlevel)
+	take_damage(burnlevel, BURN, FIRE)
+
+/obj/structure/flora/fire_act()
+	take_damage(25, BURN, FIRE)
+
 
 //TREES
 
@@ -39,7 +33,6 @@
 	layer = ABOVE_FLY_LAYER
 	allow_pass_flags = PASS_PROJECTILE|PASS_AIR
 	var/log_amount = 10
-	resistance_flags = XENO_DAMAGEABLE
 
 /obj/structure/flora/tree/add_debris_element()
 	AddElement(/datum/element/debris, DEBRIS_WOOD, -10, 5)
@@ -53,17 +46,8 @@
 	AddComponent(/datum/component/largetransparency)
 
 /obj/structure/flora/tree/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			take_damage(500, BRUTE, BOMB)
-		if(EXPLODE_HEAVY)
-			take_damage(rand(140, 300), BRUTE, BOMB)
-		if(EXPLODE_LIGHT)
-			take_damage(rand(50, 100), BRUTE, BOMB)
-		if(EXPLODE_WEAK)
-			take_damage(rand(25, 50), BRUTE, BOMB)
+	take_damage(severity, BRUTE, BOMB)
 	START_PROCESSING(SSobj, src)
-
 
 /obj/structure/flora/tree/deconstruct(disassembled = TRUE)
 	density = FALSE
@@ -74,8 +58,6 @@
 
 /obj/structure/flora/tree/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(!I.sharp && I.force <= 0)
 		return
@@ -99,8 +81,8 @@
 
 	qdel(src)
 
-/obj/structure/flora/tree/fire_act(burn_level)
-	take_damage(burn_level * 0.3, BURN, FIRE)
+/obj/structure/flora/tree/flamer_fire_act(burnlevel)
+	take_damage(burnlevel/6, BURN, FIRE)
 
 
 /obj/structure/flora/tree/update_overlays()
@@ -127,7 +109,6 @@
 	name = "xmas tree"
 	icon_state = "pine_c"
 	icon_variants = NONE
-	resistance_flags = null
 
 /obj/structure/flora/tree/xmas/presents
 	icon_state = "pinepresents"
@@ -221,17 +202,6 @@
 	opacity = TRUE
 	color = "#7a8c54"
 
-/obj/structure/flora/grass/tallgrass/Initialize(mapload)
-	. = ..()
-	var/static/list/connections = list(
-		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override),
-	)
-	AddElement(/datum/element/connect_loc, connections)
-	AddComponent(/datum/component/submerge_modifier, 10)
-
-/obj/structure/flora/grass/tallgrass/footstep_override(atom/movable/source, list/footstep_overrides)
-	footstep_overrides[FOOTSTEP_GRASS] = layer
-
 /obj/structure/flora/grass/tallgrass/tallgrasscorner
 	name = "tall grass"
 	icon_state = "tallgrass_corner"
@@ -258,13 +228,6 @@
 		SMOOTH_GROUP_FLORA,
 		SMOOTH_GROUP_WINDOW_FRAME,
 	)
-
-/obj/structure/flora/grass/tallgrass/autosmooth/desert
-	color = "#ffbd72"
-
-/obj/structure/flora/grass/tallgrass/autosmooth/desert/Initialize(mapload)
-	. = ..()
-	layer = BUSH_LAYER //do this here instead of on type so it doesn't layer over things in map editor
 
 //bushes
 /obj/structure/flora/bush
@@ -383,10 +346,6 @@
 /obj/structure/flora/ausbushes/grassybush
 	icon_state = "grassybush"
 
-/obj/structure/flora/ausbushes/yellowbush
-	icon_state = "yellowbush"
-	icon_variants = 5
-
 /obj/structure/flora/ausbushes/fernybush
 	icon_state = "fernybush"
 	icon_variants = 3
@@ -414,7 +373,6 @@
 
 /obj/structure/flora/ausbushes/ppflowers
 	icon_state = "ppflowers"
-	icon_variants = 3
 
 /obj/structure/flora/ausbushes/sparsegrass
 	icon_state = "sparsegrass"
@@ -532,8 +490,6 @@
 
 /obj/structure/flora/jungle/vines/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(I.sharp != IS_SHARP_ITEM_BIG || !isliving(user))
 		return
@@ -575,7 +531,7 @@
 	icon_state = "tall_cactus"
 	icon_variants = 3
 	density = TRUE
-	resistance_flags = XENO_DAMAGEABLE
+
 /obj/structure/flora/drought/short_cactus
 	name = "cactus"
 	desc = "Some short, spikey looking cactus."

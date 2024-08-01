@@ -1,30 +1,19 @@
 #define MAX_SQUAD_NAME_LEN 15
 
-GLOBAL_DATUM_INIT(squad_manager, /datum/squad_manager, new)
-
 /obj/machinery/computer/squad_manager
 	name = "squad managment console"
 	desc = "A console for squad management. Allows squad leaders to manage their squad."
 	screen_overlay = "rdcomp"
 	light_color = LIGHT_COLOR_PINK
-	interaction_flags = INTERACT_OBJ_UI
+	interaction_flags = NONE
 
 /obj/machinery/computer/squad_manager/ui_interact(mob/user, datum/tgui/ui)
-	return GLOB.squad_manager.ui_interact(arglist(args))
-
-/datum/squad_manager
-	interaction_flags = INTERACT_UI_INTERACT
-
-/datum/squad_manager/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "SquadManager", "Squad Management")
+		ui = new(user, src, "SquadManager", name)
 		ui.open()
 
-/datum/squad_manager/ui_state(mob/user)
-	return GLOB.conscious_state
-
-/datum/squad_manager/ui_data(mob/user)
+/obj/machinery/computer/squad_manager/ui_data(mob/user)
 	var/list/data = list()
 	data["active_squads"] = list()
 	for(var/datum/squad/squad AS in SSjob.active_squads[user.faction])
@@ -33,7 +22,7 @@ GLOBAL_DATUM_INIT(squad_manager, /datum/squad_manager, new)
 	data["valid_colors"] = GLOB.custom_squad_colors
 	return data
 
-/datum/squad_manager/ui_act(action, list/params)
+/obj/machinery/computer/squad_manager/ui_act(action, list/params)
 	. = ..()
 	if(.)
 		return
@@ -88,5 +77,5 @@ GLOBAL_DATUM_INIT(squad_manager, /datum/squad_manager, new)
 	log_game(log_msg)
 	message_admins(log_msg)
 	new_squad.desc = new_desc
-	SStgui.close_user_uis(usr, src)
-	user.balloon_alert(user, "\"[new_name]\" created")
+	ui_close(user)
+	balloon_alert(user, "\"[new_name]\" created")

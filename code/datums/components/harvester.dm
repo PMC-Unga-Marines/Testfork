@@ -30,8 +30,9 @@
 	var/datum/action/harvester/reagent_select/reagent_select_action
 	///The maximum amount that one chemical can be loaded
 	var/max_loadable_reagent_amount = 30
+	var/loadup_on_attack = FALSE
 
-/datum/component/harvester/Initialize(max_reagent_amount)
+/datum/component/harvester/Initialize(max_reagent_amount, loadup_on_attack)
 	if(!isitem(parent))
 		return COMPONENT_INCOMPATIBLE
 
@@ -39,6 +40,8 @@
 
 	if(max_reagent_amount)
 		max_loadable_reagent_amount = max_reagent_amount
+	if(loadup_on_attack)
+		src.loadup_on_attack = loadup_on_attack
 
 	reagent_select_action = new
 	LAZYADD(item_parent.actions, reagent_select_action)
@@ -72,17 +75,19 @@
 ///Adds additional text for the component when examining the item
 /datum/component/harvester/proc/examine(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER
+	var/output = ""
 	if(length(loaded_reagents))
-		examine_list += "It currently holds:<br>"
+		output += "It currently holds:<br>"
 		for(var/datum/reagent/reagent_type AS in loaded_reagents)
-			examine_list += "<span style='color:[initial(reagent_type.color)];font-weight:bold'>[initial(reagent_type.name)]</span> - [loaded_reagents[reagent_type]]\n"
+			output += "<span style='color:[initial(reagent_type.color)];font-weight:bold'>[initial(reagent_type.name)]</span> - [loaded_reagents[reagent_type]]\n"
 	else
-		examine_list += "The internal storage is empty"
+		output += "The internal storage is empty\n"
 
-	examine_list += "<b>Compatible chemicals:</b>"
+	output += "<b>Compatible chemicals:</b>\n"
 	for(var/datum/reagent/reagent AS in loadable_reagents)
-		examine_list += "<span style='color:[initial(reagent.color)];font-weight:bold'>[initial(reagent.name)]</span>\n"
+		output += "<span style='color:[initial(reagent.color)];font-weight:bold'>[initial(reagent.name)]</span>\n"
 
+	to_chat(user, output)
 
 ///Adds mechanics info to the weapon
 /datum/component/harvester/proc/get_mechanics_info(datum/source, list/mechanics_text)
@@ -115,7 +120,7 @@
 		user.balloon_alert(user, "incompatible reagent, check description")
 		return
 
-	if(loaded_reagents[reagent_to_load] >= max_loadable_reagent_amount)
+	if(loaded_reagents[reagent_to_load] > max_loadable_reagent_amount)
 		user.balloon_alert(user, "full")
 		return
 
@@ -175,7 +180,7 @@
 /datum/component/harvester/proc/update_loaded_color(datum/source, list/overlays_list)
 	SIGNAL_HANDLER
 	var/obj/item/item_parent = parent
-	var/image/item_overlay = image('icons/obj/items/weapons/vali.dmi', item_parent, "[initial(item_parent.icon_state)]_loaded")
+	var/image/item_overlay = image('icons/obj/items/vali.dmi', item_parent, "[initial(item_parent.icon_state)]_loaded") //RUTGMC EDIT CHANGE
 	if(!loaded_reagent)
 		item_overlay.color = COLOR_GREEN
 	else
@@ -221,8 +226,7 @@
 
 		if(/datum/reagent/medicine/kelotane)
 			target.apply_damage(weapon.force*0.6, BRUTE, user.zone_selected)
-			target.adjust_fire_stacks(5)
-			target.IgniteMob()
+			target.flamer_fire_act(10)
 
 		if(/datum/reagent/medicine/tramadol)
 			target.apply_damage(weapon.force*0.6, BRUTE, user.zone_selected)
@@ -243,7 +247,8 @@
 	user.update_inv_r_hand()
 	user.update_inv_l_hand()
 
-	INVOKE_ASYNC(src, PROC_REF(activate_blade_async), source, user)
+	if(loadup_on_attack)
+		INVOKE_ASYNC(src, PROC_REF(activate_blade_async), source, user)
 
 ///Handles behavior when attacking a mob with bicaridine
 /datum/component/harvester/proc/attack_bicaridine(datum/source, mob/living/target, mob/living/user, obj/item/weapon)
@@ -252,18 +257,6 @@
 		target.apply_damage(weapon.force*0.6, BRUTE, user.zone_selected)
 		user.adjustStaminaLoss(-30)
 		user.heal_overall_damage(5, 0, updating_health = TRUE)
-		return
-
-	if(target.stat == DEAD)
-		to_chat(user, span_rose("[target] is already dead."))
-		return
-
-	if(!ishuman(target))
-		return
-	var/mob/living/carbon/carbon_target = target
-
-	if((carbon_target.species.species_flags & NO_CHEM_METABOLIZATION))
-		to_chat(user, span_rose("[target] Cannot process chemicals."))
 		return
 
 	to_chat(user, span_rose("You prepare to stab <b>[target != user ? "[target]" : "yourself"]</b>!"))
@@ -291,18 +284,8 @@
 		if(initial(reagent_entry.name) == selected_option)
 			selected_reagent = reagent_entry
 
-	var/obj/item/item_parent = parent
-	item_parent.update_appearance(UPDATE_ICON)
-	loaded_reagent = null
-	var/parent_slot = reagent_select_action.owner.get_equipped_slot(parent)
-	if(parent_slot == SLOT_L_HAND)
-		reagent_select_action.owner.update_inv_l_hand()
-	else
-		reagent_select_action.owner.update_inv_r_hand()
-
 	update_selected_reagent(selected_reagent)
 
-	INVOKE_ASYNC(src, PROC_REF(activate_blade_async), item_parent, reagent_select_action.owner) //Load up on the chem we just picked
 
 /datum/component/harvester/proc/update_selected_reagent(datum/reagent/new_reagent)
 	selected_reagent = new_reagent

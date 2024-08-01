@@ -1,3 +1,6 @@
+
+
+
 //-------------------------------------------------------
 //M41A PULSE RIFLE AMMUNITION
 
@@ -6,7 +9,6 @@
 	desc = "A 10mm assault rifle magazine."
 	caliber = CALIBER_10X24_CASELESS
 	icon_state = "m412"
-	icon = 'icons/obj/items/ammo/rifle.dmi'
 	icon_state_mini = "mag_rifle"
 	w_class = WEIGHT_CLASS_NORMAL
 	default_ammo = /datum/ammo/bullet/rifle
@@ -49,13 +51,6 @@
 	default_ammo = /datum/ammo/bullet/rifle
 	max_rounds = 36
 
-/obj/item/ammo_magazine/rifle/standard_carbine/ap
-	name = "\improper AR-18 AP magazine (10x24mm)"
-	desc = "A 10mm assault carbine magazine, loaded with light armor piercing rounds."
-	icon_state = "t18_ap"
-	default_ammo = /datum/ammo/bullet/rifle/hv
-	bonus_overlay = "t18_ap"
-
 //-------------------------------------------------------
 //T12 Assault Rifle
 
@@ -68,13 +63,6 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	default_ammo = /datum/ammo/bullet/rifle
 	max_rounds = 50
-
-/obj/item/ammo_magazine/rifle/standard_assaultrifle/ap
-	name = "\improper AR-12 AP magazine (10x24mm)"
-	desc = "A 10mm assault rifle magazine, loaded with light armor piercing rounds."
-	icon_state = "t12_ap"
-	default_ammo = /datum/ammo/bullet/rifle/hv
-	bonus_overlay = "t12_ap"
 
 //-------------------------------------------------------
 //T37 DMR
@@ -182,7 +170,6 @@
 	caliber = CALIBER_762X39
 	default_ammo = /datum/ammo/bullet/rifle/mpi_km
 	icon_state = "rpd"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_drum_big"
 	bonus_overlay = "rpd_100"
 	max_rounds = 100
@@ -195,7 +182,6 @@
 	desc = "A drum magazine for the Degtyaryov machine gun."
 	caliber = CALIBER_762X39
 	icon_state = "dp27"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	default_ammo = /datum/ammo/bullet/rifle/ap
 	max_rounds = 47
 	icon_state_mini = "mag_rifle"
@@ -231,7 +217,6 @@
 	name = "\improper MG-42 drum magazine (10x24mm)"
 	desc = "A drum magazine for the MG-42 light machine gun."
 	icon_state = "t42"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_drum"
 	caliber = CALIBER_10X24_CASELESS
 	default_ammo = /datum/ammo/bullet/rifle
@@ -245,7 +230,6 @@
 	name = "\improper MG-60 GPMG box magazine (10x26mm)"
 	desc = "A belt box for the MG-60 general purpose machinegun."
 	icon_state = "t60"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_gpmg"
 	caliber = CALIBER_10x26_CASELESS
 	default_ammo = /datum/ammo/bullet/rifle/machinegun
@@ -260,7 +244,6 @@
 	name = "\improper PR-412L1 box magazine (10x24mm)"
 	desc = "A semi-rectangular box of rounds for the PR-412L1 heavy pulse rifle."
 	icon_state = "m412l1"
-	icon = 'icons/obj/items/ammo/rifle.dmi'
 	icon_state_mini = "mag_box"
 	caliber = CALIBER_10X24_CASELESS
 	default_ammo = /datum/ammo/bullet/rifle
@@ -309,7 +292,6 @@
 	desc = "A wide drum magazine carefully filled to capacity with 10x26mm specialized smart rounds."
 	caliber = CALIBER_10x26_CASELESS
 	icon_state = "sg29"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_sg29"
 	w_class = WEIGHT_CLASS_NORMAL
 	default_ammo = /datum/ammo/bullet/smartmachinegun
@@ -388,7 +370,7 @@
 	caliber = CALIBER_ALIEN
 	icon_state = "alien_rifle"
 	icon_state_mini = "mag_rifle_purple"
-	default_ammo = /datum/ammo/energy/sectoid_plasma
+	default_ammo = /datum/ammo/energy/plasma
 	max_rounds = 20
 
 //-------------------------------------------------------
@@ -398,7 +380,6 @@
 	desc = "A box magazine filled with 8.6x70mm rifle rounds for the SR-127."
 	caliber = CALIBER_86X70
 	icon_state = "tl127"
-	icon = 'icons/obj/items/ammo/sniper.dmi'
 	icon_state_mini = "mag_rifle_big"
 	default_ammo = /datum/ammo/bullet/sniper/pfc
 	max_rounds = 10
@@ -443,7 +424,7 @@
 	icon_state = "t21"
 	icon_state_mini = "mag_rifle"
 	default_ammo = /datum/ammo/bullet/rifle/heavy
-	max_rounds = 40
+	max_rounds = 30
 
 //ALF-51B
 
@@ -451,7 +432,6 @@
 	name = "\improper ALF-51B box magazine (10x25mm)"
 	desc = "A box magazine for the ALF-51B machinecarbine."
 	icon_state = "t60"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_gpmg"
 	caliber = CALIBER_10X25_CASELESS
 	default_ammo = /datum/ammo/bullet/rifle/som_machinegun
@@ -525,14 +505,6 @@
 	icon_state_mini = "mag_sniper_purple"
 	greyscale_colors = COLOR_AMMO_TANGLEFOOT
 
-/obj/item/ammo_magazine/rifle/tx54/smoke/acid
-	name = "\improper 20mm acid smoke grenade magazine"
-	desc = "A 20mm magazine loaded with acid grenades. For use with the GL-54 or AR-55."
-	default_ammo = /datum/ammo/tx54/smoke/acid
-	icon_state = "tx54_airburst"
-	icon_state_mini = "mag_sniper_purple"
-	greyscale_colors = COLOR_AMMO_ACID
-
 /obj/item/ammo_magazine/rifle/tx54/razor
 	name = "\improper 20mm razorburn grenade magazine"
 	desc = "A 20mm magazine loaded with razorburn grenades. For use with the GL-54 or AR-55."
@@ -590,7 +562,6 @@
 	name = "\improper V-41 box magazine (10x26mm)"
 	desc = "A drum magazine for the V-41 machinegun."
 	icon_state = "v41"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
 	icon_state_mini = "mag_drum_big_long"
 	caliber = CALIBER_10x26_CASELESS
 	default_ammo = /datum/ammo/bullet/rifle/som_machinegun
@@ -668,56 +639,78 @@
 	desc = "A magazine filled with 5.56x45mm rifle rounds for the EM-88 series of firearms."
 
 //-------------------------------------------------------
-//ML-41 Assault Machiengun
-/obj/item/ammo_magazine/icc_mg
-	name = "\improper ML-41 GPMG box magazine (10x26mm)"
-	desc = "A belt box for the ML-41 assault machinegun."
-	icon_state = "minimi"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
-	icon_state_mini = "mag_gpmg"
+//
+
+/obj/item/ammo_magazine/rifle/T25
+	name = "\improper T-25 magazine (10x26mm)"
+	desc = "A 10mm assault rifle magazine."
 	caliber = CALIBER_10x26_CASELESS
-	default_ammo = /datum/ammo/bullet/rifle/machinegun
+	icon = 'icons/obj/items/ammo.dmi'
+	icon_state = "T25"
 	w_class = WEIGHT_CLASS_NORMAL
-	max_rounds = 150
-	reload_delay = 2 SECONDS
-
-// This is a 'belt'.
-/obj/item/ammo_magazine/icc_mg/belt
-	name = "\improper ML-41 GPMG buttpack magazine (10x26mm)"
-	desc = "A buttpack for the ML-41 which carries the ammo inside."
-	icon_state = "minimi_belt"
-	equip_slot_flags = ITEM_SLOT_BELT
-	magazine_flags = MAGAZINE_WORN
-	w_class = WEIGHT_CLASS_HUGE
-	max_rounds = 750
-
-/obj/item/ammo_magazine/icc_mg/packet
-	name = "box of 10x26mm"
-	desc = "A box containing 500 rounds of 10x26mm caseless."
-	icon_state = "minimi"
-	icon = 'icons/obj/items/ammo/packet.dmi'
-	current_rounds = 500
-	max_rounds = 500
-
-// L26
-
-/obj/item/ammo_magazine/rifle/vsd_mg
-	name = "\improper L26 box mag (5.56x45mm)"
-	desc = "A 200 round box mag for the L26."
-	caliber = CALIBER_556X45
-	default_ammo = /datum/ammo/bullet/rifle/machinegun
-	icon_state = "l26"
-	icon = 'icons/obj/items/ammo/machinegun.dmi'
-	icon_state_mini = "mag_gpmg"
-	bonus_overlay = "l26_100"
-	max_rounds = 200
-
-/obj/item/ammo_magazine/rifle/vsd_rifle
-	name = "\improper C550 magazine (10x27mm)"
-	desc = "A 10x27mm rifle magazine."
-	caliber = CALIBER_10x27_CASELESS
-	icon_state = "c550"
+	default_ammo = /datum/ammo/bullet/rifle/T25
+	max_rounds = 80
 	icon_state_mini = "mag_rifle_big"
+
+/obj/item/ammo_magazine/rifle/standard_skirmishrifle/extended
+	name = "\improper AR-21 extended skirmish rifle magazine"
+	desc = "A extended magazine filled with 10x25mm rifle rounds for the AR-21."
+	icon = 'icons/obj/items/ammo.dmi'
+	icon_state = "t21_ext"
+	max_rounds = 50
+	icon_state_mini = "mag_rifle_big_yellow"
+	//bonus_overlay = "t21_ext"
+
+/obj/item/ammo_magazine/rifle/T25/extended
+	name = "\improper T-25 extended magazine (10x26mm)"
+	desc = "A 10mm extended assault rifle magazine."
+	icon_state = "T25_ext"
+	max_rounds = 120
+	icon_state_mini = "mag_rifle_big_yellow"
+	//bonus_overlay = "T25_ext"
+
+/obj/item/ammo_magazine/rifle/standard_carbine/ap
+	name = "\improper AR-18 AP magazine (10x24mm)"
+	desc = "A 10mm armor piercing carbine magazine."
+	icon = 'icons/obj/items/ammo.dmi'
+	icon_state = "t18_ap"
+	//bonus_overlay = "t18_ap"
+	default_ammo = /datum/ammo/bullet/rifle/ap
+	max_rounds = 36
+
+/obj/item/ammo_magazine/rifle/standard_assaultrifle/ap
+	name = "\improper AR-12 AP magazine (10x24mm)"
+	desc = "A 10mm armor piercing assault rifle magazine."
+	icon = 'icons/obj/items/ammo.dmi'
+	icon_state = "t12_ap"
+	//bonus_overlay = "t12_ap"
+	default_ammo = /datum/ammo/bullet/rifle/ap
+	max_rounds = 50
+
+/obj/item/ammo_magazine/rifle/standard_br/ap
+	name = "\improper BR-64 AP magazine (10x26.5mm)"
+	desc = "A 10mm armor piercing battle rifle magazine."
+	caliber = CALIBER_10x265_CASELESS
+	icon = 'icons/obj/items/ammo.dmi'
+	icon_state = "t64_ap"
+	//bonus_overlay = "t64_ap"
+	default_ammo = /datum/ammo/bullet/rifle/standard_br/ap
+	icon_state_mini = "mag_rifle_big"
+
+/obj/item/ammo_magazine/rifle/standard_skirmishrifle/ap
+	name = "\improper AR-21 skirmish AP rifle magazine"
+	desc = "A magazine filled with 10x25mm armor piercing rifle rounds for the AR-21."
+	icon = 'icons/obj/items/ammo.dmi'
+	icon_state = "t21_ap"
+	//bonus_overlay = "t21_ap"
+	default_ammo = /datum/ammo/bullet/rifle/heavy/ap
+
+/obj/item/ammo_magazine/rifle/som/ap
+	name = "\improper V-31 AP magazine (10x24mm)"
+	desc = "A 10mm rifle magazine designed for the V-31, loaded with armor piercing rounds."
+	caliber = CALIBER_10X24_CASELESS
+	icon_state = "v31_ap"
 	w_class = WEIGHT_CLASS_NORMAL
-	default_ammo = /datum/ammo/bullet/rifle
-	max_rounds = 30
+	default_ammo = /datum/ammo/bullet/rifle/hv
+	max_rounds = 50
+	icon_state_mini = "mag_rifle_big_green"

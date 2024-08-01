@@ -5,12 +5,14 @@ GLOBAL_LIST_INIT(exp_jobsmap, list(
 	EXP_TYPE_MEDICAL = list("titles" = GLOB.jobs_medical),
 	EXP_TYPE_MARINES = list("titles" = GLOB.jobs_marines),
 	EXP_TYPE_REQUISITIONS = list("titles" = GLOB.jobs_requisitions),
-	EXP_TYPE_SPECIAL = list("titles" = GLOB.jobs_xenos),
+	//EXP_TYPE_SPECIAL = list("titles" = GLOB.jobs_xenos), // ORIGINAL
+	EXP_TYPE_XENO = list("titles" = GLOB.jobs_xenos), // RUTGMC ADDITION
 ))
 
 GLOBAL_LIST_INIT(exp_specialmap, list(
 	EXP_TYPE_LIVING = list(),
-	EXP_TYPE_SPECIAL = list(ROLE_XENOMORPH, ROLE_XENO_QUEEN),
+	// EXP_TYPE_SPECIAL = list(ROLE_XENOMORPH, ROLE_XENO_QUEEN), // ORIGINAL
+	EXP_TYPE_XENO = list(ROLE_XENOMORPH, ROLE_XENO_QUEEN), // RUTGMC ADDITION
 	EXP_TYPE_GHOST = list(),
 	EXP_TYPE_ADMIN = list()
 ))
@@ -58,10 +60,8 @@ GLOBAL_PROTECT(exp_specialmap)
 	var/multiple_outfits = FALSE
 	///list of outfit variants
 	var/list/datum/outfit/job/outfits = list()
-	///Skills for this job
+
 	var/skills_type = /datum/skills
-	///Any special traits that are assigned for this job
-	var/list/job_traits
 
 	var/display_order = JOB_DISPLAY_ORDER_DEFAULT
 	var/job_flags = NONE
@@ -74,6 +74,9 @@ GLOBAL_PROTECT(exp_specialmap)
 	///string; typepath for the icon that this job will show on the minimap
 	var/minimap_icon
 
+	///Gear preset name used for council snowflakes ;)
+	var/list/datum/outfit/gear_preset_whitelist = list()
+
 /datum/job/New()
 	if(outfit)
 		if(!ispath(outfit, /datum/outfit))
@@ -81,8 +84,11 @@ GLOBAL_PROTECT(exp_specialmap)
 		else
 			outfit = new outfit //Can be improved to reference a singleton.
 
-///called during gamemode pre_setup, use for stuff like roundstart poplock
-/datum/job/proc/on_pre_setup()
+/datum/job/proc/get_whitelist_status(list/roles_whitelist, client/player)
+	if(!roles_whitelist)
+		return FALSE
+
+	return WHITELIST_NORMAL
 
 /datum/job/proc/after_spawn(mob/living/L, mob/M, latejoin = FALSE) //do actions on L but send messages to M as the key may not have been transferred_yet
 	if(isnull(L))
@@ -120,7 +126,7 @@ GLOBAL_PROTECT(exp_specialmap)
 	if(!mannequin)
 		CRASH("equip_dummy called without a mannequin")
 
-	mannequin.equipOutfit(outfit_override || outfit, TRUE)
+	mannequin.equipOutfit(outfit_override || outfit, TRUE, preference_source)
 
 
 /datum/job/proc/get_access()
@@ -165,13 +171,15 @@ GLOBAL_PROTECT(exp_specialmap)
 
 /datum/job/proc/radio_help_message(mob/M)
 	to_chat(M, {"
-[span_role_header("You are the [title].")]
-[span_role_body("As the <b>[title]</b> you answer to [supervisors]. Special circumstances may change this.")]
+[span_role_body("|______________________|")]
+[span_role_header("You are \an [title]!")]
+[span_role_body("As \an <b>[title]</b> you answer to [supervisors]. Special circumstances may change this.")]
+[span_role_body("|______________________|")]
 "})
 	if(!(job_flags & JOB_FLAG_NOHEADSET))
-		to_chat(M, "<span class='role_body'>Prefix your message with ; to speak on the default radio channel. To see other prefixes, look closely at your headset.</span>")
+		to_chat(M, "<b>Prefix your message with ; to speak on the default radio channel. To see other prefixes, look closely at your headset.</b>")
 	if(req_admin_notify)
-		to_chat(M, "<span class='role_body'>You are playing a job that is important for game progression. If you have to disconnect, please head to hypersleep, if you can't make it there, notify the admins via adminhelp.</span>")
+		to_chat(M, "<span clas='danger'>You are playing a job that is important for game progression. If you have to disconnect, please head to hypersleep, if you can't make it there, notify the admins via adminhelp.</span>")
 
 /datum/outfit/job
 	var/jobtype
@@ -185,7 +193,7 @@ GLOBAL_PROTECT(exp_specialmap)
 	return
 
 
-/datum/outfit/job/proc/handle_id(mob/living/carbon/human/H)
+/datum/outfit/job/proc/handle_id(mob/living/carbon/human/H, client/override_client)
 	var/datum/job/job = H.job ? H.job : SSjob.GetJobType(jobtype)
 	var/obj/item/card/id/id = H.wear_id
 	if(istype(id))
@@ -215,7 +223,7 @@ GLOBAL_PROTECT(exp_specialmap)
 		if(!(index in SSticker.mode.valid_job_types))
 			continue
 		if(isxenosjob(scaled_job))
-			if(respawn && (SSticker.mode?.round_type_flags & MODE_SILO_RESPAWN))
+			if(respawn && (SSticker.mode?.flags_round_type & MODE_SILO_RESPAWN))
 				continue
 			GLOB.round_statistics.larva_from_marine_spawning += jobworth[index] / scaled_job.job_points_needed
 		scaled_job.add_job_points(jobworth[index])
@@ -231,9 +239,8 @@ GLOBAL_PROTECT(exp_specialmap)
 		var/datum/job/scaled_job = SSjob.GetJobType(index)
 		if(!(scaled_job in SSjob.active_joinable_occupations))
 			continue
-		scaled_job.remove_job_points(jobworth[index])
+		scaled_job.add_job_points(-jobworth[index])
 
-///Adds to job points, adding a new slot if threshold reached
 /datum/job/proc/add_job_points(amount)
 	job_points += amount
 	if(total_positions >= max_positions)
@@ -242,22 +249,11 @@ GLOBAL_PROTECT(exp_specialmap)
 		job_points -= job_points_needed
 		add_job_positions(1)
 
-///Removes job points, and if needed, job positions
-/datum/job/proc/remove_job_points(amount)
-	if(job_points_needed == INFINITY || total_positions == -1)
-		return
-	if(job_points >= amount)
-		job_points -= amount
-		return
-	var/job_slots_removed = ROUND_UP((amount - job_points) / job_points_needed)
-	remove_job_positions(job_slots_removed)
-	job_points += (job_slots_removed * job_points_needed) - amount
-
 /datum/job/proc/add_job_positions(amount)
 	if(!(job_flags & (JOB_FLAG_LATEJOINABLE|JOB_FLAG_ROUNDSTARTJOINABLE)))
-		return
+		CRASH("add_job_positions called for a non-joinable job")
 	if(total_positions == -1)
-		return TRUE
+		CRASH("add_job_positions called with [amount] amount for a job set to overflow")
 	var/previous_amount = total_positions
 	total_positions += amount
 	manage_job_lists(previous_amount)
@@ -292,10 +288,10 @@ GLOBAL_PROTECT(exp_specialmap)
 
 // Spawning mobs.
 /mob/living/proc/apply_assigned_role_to_spawn(datum/job/assigned_role, client/player, datum/squad/assigned_squad, admin_action = FALSE)
+	if(!player && client)
+		player = client
 	job = assigned_role
 	set_skills(getSkillsType(job.return_skills_type(player?.prefs)))
-	if(islist(job.job_traits))
-		add_traits(job.job_traits, INNATE_TRAIT)
 	faction = job.faction
 	job.announce(src)
 	GLOB.round_statistics.total_humans_created[faction]++
@@ -323,11 +319,28 @@ GLOBAL_PROTECT(exp_specialmap)
 					new_backpack = new /obj/item/storage/backpack/marine(src)
 				if(BACK_SATCHEL)
 					new_backpack = new /obj/item/storage/backpack/marine/satchel(src)
+				if(BACK_GREEN_SATCHEL) // RUTGMC ADDITION START
+					new_backpack = new /obj/item/storage/backpack/marine/satchel/green(src)
+				if(BACK_MOLLE_BACKPACK)
+					new_backpack = new /obj/item/storage/backpack/marine/standard/molle(src)
+				if(BACK_MOLLE_SATCHEL)
+					new_backpack = new /obj/item/storage/backpack/marine/satchel/molle(src)
+				if(BACK_SCAV_BACKPACK)
+					new_backpack = new /obj/item/storage/backpack/marine/standard/scav(src) // RUTGMC ADDITION END
 			equip_to_slot_or_del(new_backpack, SLOT_BACK)
 
 		job.outfit.handle_id(src, player)
 
-		equip_role_outfit(job)
+		var/job_whitelist = job.title
+		var/whitelist_status = job.get_whitelist_status(GLOB.roles_whitelist, player)
+
+		if(whitelist_status)
+			job_whitelist = "[job_whitelist][whitelist_status]"
+
+		if(job.gear_preset_whitelist[job_whitelist])
+			job.gear_preset_whitelist[job_whitelist].equip(src, override_client = player)
+		else
+			equip_role_outfit(job)
 
 	if((job.job_flags & JOB_FLAG_ALLOWS_PREFS_GEAR) && player)
 		equip_preference_gear(player)
@@ -377,7 +390,7 @@ GLOBAL_PROTECT(exp_specialmap)
 /datum/job/proc/return_skills_type(datum/preferences/prefs)
 	return skills_type
 
-/datum/job/proc/return_spawn_turf()
+/datum/job/proc/return_spawn_turf(mob/living/new_character, client/player)
 	return pick(GLOB.spawns_by_job[type])
 
 /datum/job/proc/handle_special_preview(client/parent)

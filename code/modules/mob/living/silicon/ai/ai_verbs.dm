@@ -112,7 +112,7 @@
 				"floating face" = 'icons/mob/ai.dmi',
 				"xeno_queen" = 'icons/mob/ai.dmi',
 				"void_horror" = 'icons/mob/ai.dmi',
-				"carp" = 'icons/mob/ai.dmi'
+				"holo4" = 'icons/mob/ai.dmi'
 				)
 
 			hologram = tgui_input_list(src, "Please select a hologram:", null, icon_list)
@@ -235,12 +235,14 @@
 	if(stat == DEAD)
 		return
 
-	src.anchored = !anchored
+	anchored = !anchored
+	if(!anchored)
+		move_resist = MOVE_RESIST_DEFAULT
+	else
+		move_resist = initial(move_resist)
 	playsound(loc,'sound/mecha/mechanical_toggle.ogg', 20)
 
-
-	to_chat(src, "<b>You are now [anchored ? "" : "un"]anchored.</b>")
-
+	to_chat(src, span_notice("<b>You are now [anchored ? "" : "un"]anchored.</b>"))
 
 /mob/living/silicon/ai/verb/show_laws()
 	set category = "Silicon"

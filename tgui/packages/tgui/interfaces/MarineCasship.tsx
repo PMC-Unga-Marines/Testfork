@@ -1,23 +1,6 @@
-import {
-  KEY_1,
-  KEY_2,
-  KEY_3,
-  KEY_4,
-  KEY_5,
-  KEY_6,
-  KEY_A,
-  KEY_D,
-  KEY_DOWN,
-  KEY_ENTER,
-  KEY_LEFT,
-  KEY_RIGHT,
-  KEY_S,
-  KEY_SPACE,
-  KEY_UP,
-  KEY_W,
-} from '../../common/keycodes';
 import { useBackend } from '../backend';
-import { Button, NoticeBox, ProgressBar, Stack } from '../components';
+import { Button, ProgressBar, NoticeBox, Stack } from '../components';
+import { KEY_DOWN, KEY_ENTER, KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_UP, KEY_W, KEY_D, KEY_S, KEY_A, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6 } from '../../common/keycodes';
 import { Window } from '../layouts';
 
 // _DEFINES/cas.dm
@@ -49,14 +32,13 @@ type CasWeapon = {
   eqp_tag: number;
 };
 
-export const MarineCasship = (props) => {
-  const { act, data } = useBackend<CasData>();
+export const MarineCasship = (props, context) => {
+  const { act, data } = useBackend<CasData>(context);
   return (
     <Window
       width={590}
       height={data.plane_state === PLANE_STATE_ACTIVATED ? 170 : 285}
-      theme="ntos"
-    >
+      theme="ntos">
       <Window.Content
         onKeyDown={(event) => {
           const keyCode = window.event ? event.which : event.keyCode;
@@ -120,8 +102,7 @@ export const MarineCasship = (props) => {
             }
             act('cycle_attackdir', { newdir: newdir });
           }
-        }}
-      >
+        }}>
         {data.plane_state === PLANE_STATE_ACTIVATED ? (
           <EnginesOff />
         ) : (
@@ -132,8 +113,8 @@ export const MarineCasship = (props) => {
   );
 };
 
-const EnginesOff = (props) => {
-  const { act, data } = useBackend<CasData>();
+const EnginesOff = (props, context) => {
+  const { act, data } = useBackend<CasData>(context);
   const { fuel_left, fuel_max } = data;
   return (
     <Stack fill>
@@ -173,8 +154,8 @@ const EnginesOff = (props) => {
   );
 };
 
-const NormalOperation = (props) => {
-  const { act, data } = useBackend<CasData>();
+const NormalOperation = (props, context) => {
+  const { act, data } = useBackend<CasData>(context);
   const {
     plane_state,
     location_state,
@@ -230,7 +211,7 @@ const NormalOperation = (props) => {
           <Stack.Item>
             <Button
               fontSize="43px"
-              icon={getDirectionArrow(props)}
+              icon={getDirectionArrow(props, context)}
               tooltip="Direction of strafe"
               onClick={() => act('cycle_attackdir')}
               disabled={
@@ -252,8 +233,7 @@ const NormalOperation = (props) => {
                 onClick={() =>
                   act('change_weapon', { selection: equipment.eqp_tag })
                 }
-                color={equipment.eqp_tag === active_weapon_tag ? 'red' : null}
-              >
+                color={equipment.eqp_tag === active_weapon_tag ? 'red' : null}>
                 {equipment.ammo_name ? equipment.ammo_name : equipment.name}
               </Button>
             </Stack.Item>
@@ -279,8 +259,8 @@ const NormalOperation = (props) => {
   );
 };
 
-const LaunchLandButton = (props) => {
-  const { act, data } = useBackend<CasData>();
+const LaunchLandButton = (props, context) => {
+  const { act, data } = useBackend<CasData>(context);
   const { plane_state, plane_mode } = data;
   return plane_state === PLANE_STATE_FLYING ? (
     <Button
@@ -299,8 +279,8 @@ const LaunchLandButton = (props) => {
   );
 };
 
-const EngineFiremissionButton = (props) => {
-  const { act, data } = useBackend<CasData>();
+const EngineFiremissionButton = (props, context) => {
+  const { act, data } = useBackend<CasData>(context);
   const { plane_state, location_state } = data;
   return plane_state === PLANE_STATE_PREPARED ? (
     <Button
@@ -321,8 +301,8 @@ const EngineFiremissionButton = (props) => {
   );
 };
 
-const getDirectionArrow = (props) => {
-  const { act, data } = useBackend<CasData>();
+const getDirectionArrow = (props, context) => {
+  const { act, data } = useBackend<CasData>(context);
   switch (data.attackdir) {
     case 'NORTH':
       return 'arrow-up';

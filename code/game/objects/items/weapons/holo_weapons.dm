@@ -1,4 +1,6 @@
+
 //holographic weapons used by the holodeck.
+
 /obj/item/weapon/holo
 	damtype = STAMINA
 
@@ -9,14 +11,16 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = WEIGHT_CLASS_SMALL
-	item_flags = NOBLUDGEON
+	flags_item = NOBLUDGEON
 	var/sword_color
+
 
 /obj/item/weapon/holo/esword/Initialize(mapload)
 	. = ..()
 	if(!sword_color)
 		sword_color = pick("red","blue","green","purple")
 	AddComponent(/datum/component/shield, SHIELD_TOGGLE|SHIELD_PURE_BLOCKING)
+
 
 /obj/item/weapon/holo/esword/attack_self(mob/living/user as mob)
 	toggle_active()
@@ -37,6 +41,8 @@
 		var/mob/living/carbon/human/H = user
 		H.update_inv_l_hand(0)
 		H.update_inv_r_hand()
+
+
 
 /obj/item/weapon/holo/esword/green
 	sword_color = "green"

@@ -2,6 +2,7 @@
 	icon = 'icons/turf/decals.dmi'
 	icon_state = "whitedecal"
 
+/* RUTGMC DELETION, TODO: repath it from effects so it can properly be exploded
 /obj/effect/turf_decal/tile/ex_act(severity)
 	switch(severity)
 		if(EXPLODE_DEVASTATE)
@@ -12,6 +13,7 @@
 		if(EXPLODE_LIGHT)
 			if(prob(25))
 				qdel(src)
+*/
 
 /obj/effect/turf_decal/tile/full
 	icon_state = "floor_large"
@@ -188,6 +190,69 @@
 	loc.overlays += image(icon, icon_state, dir = src.dir)
 	return INITIALIZE_HINT_QDEL
 
+//METAL DECAL
+/obj/effect/turf_decal/siding/metal
+	icon_state = "borderfloor_black"
+
+/obj/effect/turf_decal/siding/metal/corner
+	icon_state = "borderfloorcorner_black"
+
+/obj/effect/turf_decal/siding/metal/corner2
+	icon_state = "borderfloorcorner2_black"
+
+/obj/effect/turf_decal/siding/metal/full
+	icon_state = "borderfloorfull_black"
+
+/obj/effect/turf_decal/siding/metal/floorcee
+	icon_state = "borderfloorcee_black"
+
+/obj/effect/turf_decal/siding/metal/flatcorner
+	icon_state = "corner_white"
+
+/obj/effect/turf_decal/siding/metal/flatcorner/diagonal
+	icon_state = "corner_white_diagonal"
+
+/obj/effect/turf_decal/siding/metal/flatcorner/full
+	icon_state = "corner_white_full"
+
+//WIDE METAL DECAL
+/obj/effect/turf_decal/siding/metal/flatcorner/wide
+	icon_state = "wide_corner"
+
+/obj/effect/turf_decal/siding/metal/flatcorner/wide/diagonal
+	icon_state = "wide_corner_diagonal"
+
+/obj/effect/turf_decal/siding/metal/flatcorner/wide/full
+	icon_state = "wide_corner_full"
+
+/obj/effect/turf_decal/tile/metal
+	icon_state = "edge"
+
+/obj/effect/turf_decal/tile/metal/corner
+	icon_state = "edge_corner"
+
+/obj/effect/turf_decal/tile/metal/medical
+	color = "#53876F"
+
+/obj/effect/turf_decal/tile/metal/corner/medical
+	color = "#53876F"
+
+//EMBLEM
+/obj/effect/turf_decal/siding/emblem
+	icon_state = "logo_central"
+
+/obj/effect/turf_decal/siding/emblem/second
+	icon_state = "logo_directional_south"
+
+/obj/effect/turf_decal/siding/emblem/third
+	icon_state = "logo_directional_north"
+
+/obj/effect/turf_decal/siding/emblem/fourth
+	icon_state = "logo_directional_east"
+
+/obj/effect/turf_decal/siding/emblem/fifth
+	icon_state = "logo_directional_west"
+
 /obj/effect/turf_decal/symbol/corsat
 	color = "#9c7f42"
 
@@ -213,51 +278,3 @@
 /obj/effect/turf_decal/symbol/large_rune
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = "rune_large_colored"
-
-/obj/effect/turf_decal/strata_decals
-	layer = TURF_LAYER
-
-/obj/effect/turf_decal/strata_decals/catwalk/prison //For finding and replacing prison catwalk objects since they nasty
-	icon_state = "catwalk"
-	name = "catwalk"
-	layer = CATWALK_LAYER
-	desc = "These things have no depth to them, are they just, painted on?"
-
-//////////////////OUTDOOR STUFF/////////////////
-
-/obj/effect/turf_decal/strata_decals/rocks
-	icon_state = ""
-	name = "some rocks"
-	desc = "A collection of sad little rocks."
-
-/obj/effect/turf_decal/strata_decals/rocks/ice
-	icon_state = ""
-	name = "some ice rocks"
-	desc = "A smattering of ice and rock littered about haphazardly."
-
-/obj/effect/turf_decal/strata_decals/rocks/ice/ice1
-	icon_state = "icerock"
-
-/obj/effect/turf_decal/strata_decals/grasses
-	icon_state = "tufts"
-	name = "some foliage"
-	desc = "A few brave tufts of snow grass."
-
-////////////////INDOORS STUFF////////////////////
-
-/obj/effect/turf_decal/strata_decals/grime
-	icon_state = ""
-	name = "a stain"
-	desc = "A nasty looking brown stain, could be coffee, soot, water damage. Who knows."
-
-/obj/effect/turf_decal/strata_decals/grime/grime1
-	icon_state = "grime1"
-
-/obj/effect/turf_decal/strata_decals/grime/grime2
-	icon_state = "grime2"
-
-/obj/effect/turf_decal/strata_decals/grime/grime3
-	icon_state = "grime3"
-
-/obj/effect/turf_decal/strata_decals/grime/grime4
-	icon_state = "grime4"

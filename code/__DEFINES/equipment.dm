@@ -32,28 +32,19 @@
 
 
 
-//atom_flags
+//flags_atom
 
 #define UNUSED_RESERVATION_TURF_1 (1<<0)
-///Prevent ai from going onto this turf
-#define AI_BLOCKED (1<<1)
-/// You can't interact with it, at all. Useful when doing certain animations.
-#define NOINTERACT (1<<2)
-/// conducts electricity (metal etc.)
-#define CONDUCT (1<<3)
-/// 'border object'. item has priority to check when entering or leaving
-#define ON_BORDER (1<<4)
-/// Don't want a blood overlay on this one.
-#define NOBLOODY (1<<5)
-/// movable atom won't change direction when Moving()ing. Useful for items that have several dir states.
-#define DIRLOCK (1<<6)
-///Whether /atom/Initialize() has already run for the object
-#define INITIALIZED (1<<7)
+#define AI_BLOCKED (1<<1) //Prevent ai from going onto this turf
+#define NOINTERACT (1<<2)		// You can't interact with it, at all. Useful when doing certain animations.
+#define CONDUCT (1<<3)		// conducts electricity (metal etc.)
+#define ON_BORDER (1<<4)		// 'border object'. item has priority to check when entering or leaving
+#define NOBLOODY (1<<5)		// Don't want a blood overlay on this one.
+#define DIRLOCK (1<<6)		// movable atom won't change direction when Moving()ing. Useful for items that have several dir states.
+#define INITIALIZED (1<<7)  	//Whether /atom/Initialize() has already run for the object
 #define NODECONSTRUCT (1<<8)
-///Prevent clicking things below it on the same turf
-#define PREVENT_CLICK_UNDER (1<<9)
-///Use when this shouldn't be obscured by large icons.
-#define CRITICAL_ATOM (1<<10)
+#define PREVENT_CLICK_UNDER (1<<9)		//Prevent clicking things below it on the same turf
+#define CRITICAL_ATOM (1<<10)		//Use when this shouldn't be obscured by large icons.
 ///Does not cascade explosions to its contents.
 #define PREVENT_CONTENTS_EXPLOSION (1<<11)
 /// was this spawned by an admin? used for stat tracking stuff.
@@ -67,14 +58,14 @@
 
 //==========================================================================================
 
-//barrier_flags
+//flags_barrier
 #define HANDLE_BARRIER_CHANCE (1<<0)
 #define HANDLE_BARRIER_BLOCK (1<<1)
 
 
-//bitflags that were previously under atom_flags, these only apply to items.
-//clothing specific stuff uses inventory_flags.
-//item_flags
+//bitflags that were previously under flags_atom, these only apply to items.
+//clothing specific stuff uses flags_inventory.
+//flags_item
 /// when an item has this it produces no "X has been hit by Y with Z" message with the default handler
 #define NOBLUDGEON (1<<0)
 /// Deletes on drop instead of falling on the floor.
@@ -115,26 +106,19 @@
 #define HAS_UNDERLAY (1<<18)
 ///is this item equipped into an inventory slot or hand of a mob?
 #define IN_INVENTORY (1<<19)
+///ITEM_PREDATOR
+#define ITEM_PREDATOR (1<<20)
 ///This item is used for autobalance calculations or excluded, such as valhalla items
-#define AUTOBALANCE_CHECK (1<<20)
-///This item is in any storage
-#define IN_STORAGE (1<<21)
+#define AUTOBALANCE_CHECK (1<<21)
 
-
-//storage_flags
+//flags_storage
 ///If a storage container can be restocked into a vendor
 #define BYPASS_VENDOR_CHECK (1<<0)
 
-//id_flags
-///If you can get buy a loadout
-#define CAN_BUY_LOADOUT (1<<0)
-///If you have used the GHMME
-#define USED_GHMME (1<<1)
-
 //==========================================================================================
 
-//inv_hide_flags
-//Bit flags for the inv_hide_flags variable, which determine when a piece of clothing hides another. IE a helmet hiding glasses.
+//flags_inv_hide
+//Bit flags for the flags_inv_hide variable, which determine when a piece of clothing hides another. IE a helmet hiding glasses.
 
 #define HIDEGLOVES (1<<0)
 #define HIDESUITSTORAGE (1<<1)
@@ -152,7 +136,7 @@
 
 //==========================================================================================
 
-//inventory_flags
+//flags_inventory
 
 //SHOES ONLY===========================================================================================
 #define NOSLIPPING (1<<0) 	//prevents from slipping on wet floors, in space etc
@@ -165,9 +149,7 @@
 //HELMET AND MASK======================================================================================
 
 //SUITS AND HELMETS====================================================================================
-//To successfully stop taking all pressure damage you must have both a suit and head item with this flag.
 #define BLOCKSHARPOBJ (1<<6)  //From /tg: prevents syringes, parapens and hypos if the external suit or helmet (if targeting head) has this flag. Example: space suits, biosuit, bombsuits, thick suits that cover your body.
-#define NOPRESSUREDMAGE (1<<7) //This flag is used on the flags variable for SUIT and HEAD items which stop pressure damage.
 
 #define NOQUICKEQUIP (1<<8) // Prevents the item from being handled via quick-equip hotkeys. Can still manipulate the inventory and be inserted into the slot from the hand, however.
 
@@ -188,7 +170,7 @@
 
 
 //===========================================================================================
-//Marine armor only, use for armor_features_flags.
+//Marine armor only, use for flags_armor_features.
 #define ARMOR_SQUAD_OVERLAY (1<<0)
 #define ARMOR_LAMP_OVERLAY (1<<1)
 #define ARMOR_LAMP_ON (1<<2)
@@ -198,7 +180,7 @@
 //===========================================================================================
 
 //===========================================================================================
-//Marine helmet only, use for marine_helmet_flags.
+//Marine helmet only, use for flags_marine_helmet.
 #define HELMET_SQUAD_OVERLAY (1<<0)
 #define HELMET_GARB_OVERLAY (1<<1)
 #define HELMET_STORE_GARB (1<<2)
@@ -206,7 +188,7 @@
 //===========================================================================================
 
 //ITEM INVENTORY SLOT BITMASKS - These determine to which slot an item can be equipped to
-//equip_slot_flags
+//flags_equip_slot
 #define ITEM_SLOT_OCLOTHING (1<<0) //outer clothing, so armor, vests, etc
 #define ITEM_SLOT_ICLOTHING (1<<1) //inner clothing, so jumpsuits/uniforms, etc
 #define ITEM_SLOT_GLOVES (1<<2) //gloves, any type of gloves
@@ -223,29 +205,6 @@
 	#define ITEM_SLOT_POCKET (ITEM_SLOT_R_POCKET|ITEM_SLOT_L_POCKET) //a combo of the above
 #define ITEM_SLOT_SUITSTORE (1<<13) //the suit storage slot
 #define ITEM_SLOT_HANDCUFF (1<<14) //the slot for handcuffs
-#define ITEM_SLOT_L_HAND (1<<15) //left hand
-#define ITEM_SLOT_R_HAND (1<<16) //right hand
-
-///Inventory slot bits to plain english strings
-GLOBAL_LIST_INIT(inventory_slots_to_string, list(
-	"[ITEM_SLOT_OCLOTHING]" = "Suit",
-	"[ITEM_SLOT_ICLOTHING]" = "Uniform",
-	"[ITEM_SLOT_GLOVES]" = "Gloves",
-	"[ITEM_SLOT_EYES]" = "Eyes",
-	"[ITEM_SLOT_EARS]" = "Ears",
-	"[ITEM_SLOT_MASK]" = "Mask",
-	"[ITEM_SLOT_HEAD]" = "Head",
-	"[ITEM_SLOT_FEET]" = "Feet",
-	"[ITEM_SLOT_ID]" = "ID",
-	"[ITEM_SLOT_BELT]" = "Belt",
-	"[ITEM_SLOT_BACK]" = "Back",
-	"[ITEM_SLOT_R_POCKET]" = "R pocket",
-	"[ITEM_SLOT_L_POCKET]" = "L pocket",
-	"[ITEM_SLOT_SUITSTORE]" = "Suit storage",
-	"[ITEM_SLOT_HANDCUFF]" = "Handcuffs",
-	"[ITEM_SLOT_L_HAND]" = "Left hand",
-	"[ITEM_SLOT_R_HAND]" = "Right hand",
-))
 
 //=================================================
 
@@ -392,10 +351,6 @@ GLOBAL_LIST_INIT(slot_str_to_slot, list(
 			. = SLOT_S_STORE
 		if(ITEM_SLOT_HANDCUFF)
 			. = SLOT_HANDCUFFED
-		if(ITEM_SLOT_L_HAND)
-			. = SLOT_L_HAND
-		if(ITEM_SLOT_R_HAND)
-			. = SLOT_R_HAND
 
 //=================================================
 // bitflags for clothing parts
@@ -421,7 +376,7 @@ GLOBAL_LIST_INIT(slot_str_to_slot, list(
 //=================================================
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
-// Used with human/proc/get_heat_protection_flags() and human/proc/get_cold_protection_flags()
+// Used with human/proc/get_flags_heat_protection() and human/proc/get_flags_cold_protection()
 // The values here should add up to 1.
 // Hands and feet have 2.5%, arms and legs 7.5%, each of the torso parts has 15% and the head has 30%
 #define THERMAL_PROTECTION_HEAD 0.3

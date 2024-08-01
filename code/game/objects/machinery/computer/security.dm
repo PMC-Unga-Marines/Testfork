@@ -41,8 +41,6 @@
 
 /obj/machinery/computer/secure_data/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/card/id) && !scan)
 		if(!user.drop_held_item())
@@ -195,6 +193,7 @@
 							dat += "<td>[crimstat]</td></tr>"
 						dat += "</table><hr width='75%' />"
 						dat += "<br><A href='?src=[text_ref(src)];choice=Return'>Return to index.</A>"
+				else
 		else
 			dat += "<A href='?src=[text_ref(src)];choice=Log In'>{Log In}</A>"
 
@@ -528,6 +527,7 @@ What a mess.*/
 							if ((R.fields["name"] == active1.fields["name"] || R.fields["id"] == active1.fields["id"]))
 								GLOB.datacore.medical -= R
 								qdel(R)
+							else
 						qdel(active1)
 						active1 = null
 					if (active2)
@@ -550,7 +550,8 @@ What a mess.*/
 
 /obj/machinery/computer/secure_data/emp_act(severity)
 	if(machine_stat & (BROKEN|NOPOWER))
-		return ..()
+		..(severity)
+		return
 
 	for(var/datum/data/record/R in GLOB.datacore.security)
 		if(prob(10/severity))
@@ -574,7 +575,7 @@ What a mess.*/
 			qdel(R)
 			continue
 
-	return ..()
+	..(severity)
 
 /obj/machinery/computer/secure_data/detective_computer
 	icon = 'icons/obj/machines/computer.dmi'

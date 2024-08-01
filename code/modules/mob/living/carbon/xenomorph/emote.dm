@@ -1,5 +1,13 @@
 /datum/emote/living/carbon/xenomorph
 	mob_type_allowed_typecache = /mob/living/carbon/xenomorph
+	mob_type_blacklist_typecache = list(/mob/living/carbon/xenomorph/hellhound)
+	var/predalien_sound
+
+/datum/emote/living/carbon/xenomorph/get_sound(mob/living/user)
+	. = ..()
+
+	if(ispredalien(user) && predalien_sound)
+		. = predalien_sound
 
 
 /datum/emote/living/carbon/xenomorph/growl
@@ -7,6 +15,7 @@
 	key_third_person = "growls"
 	message = "growls!"
 	emote_type = EMOTE_AUDIBLE
+	predalien_sound = 'sound/voice/alien/predalien/growl.ogg'
 	sound = 'sound/voice/alien/growl1.ogg'
 
 
@@ -30,6 +39,7 @@
 	key_third_person = "hisses"
 	message = "hisses!"
 	emote_type = EMOTE_AUDIBLE
+	predalien_sound = 'sound/voice/alien/predalien/hiss.ogg'
 	sound = 'sound/voice/alien/hiss1.ogg'
 
 
@@ -71,6 +81,7 @@
 	key_third_person = "roars"
 	message = "roars!"
 	emote_type = EMOTE_AUDIBLE
+	predalien_sound = 'sound/voice/alien/predalien/roar.ogg'
 	sound = 'sound/voice/alien/roar1.ogg'
 
 
@@ -129,6 +140,6 @@
 
 /datum/emote/living/carbon/xenomorph/run_emote(mob/user, params, type_override, intentional = FALSE, prefix)
 	if(istype(user, /mob/living/carbon/xenomorph/larva))
-		playsound(user.loc, SFX_ALIEN_ROAR_LARVA, 15)
+		playsound(user.loc, "alien_roar_larva", 15)
 	else
 		return ..()

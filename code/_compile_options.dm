@@ -37,7 +37,7 @@
 // #define TIMER_DEBUG
 
 #ifndef PRELOAD_RSC				//set to:
-#define PRELOAD_RSC 1			//	0 to allow using external resources or on-demand behaviour;
+#define PRELOAD_RSC 0			//	0 to allow using external resources or on-demand behaviour;
 #endif							//	1 to use the default behaviour;
 								//	2 for preloading absolutely everything;
 
@@ -70,7 +70,7 @@
 #warn compiling in TESTING mode. testing() debug messages will be visible.
 #endif
 
-#if defined(CIBUILDING) && !defined(OPENDREAM)
+#ifdef CIBUILDING
 #define UNIT_TESTS
 #endif
 
@@ -95,15 +95,8 @@
 #define CBT
 #endif
 
-#if defined(OPENDREAM)
-	#if !defined(CIBUILDING)
-		#warn You are building with OpenDream. Remember to build TGUI manually.
-		#warn You can do this by running tgui-build.cmd from the bin directory.
-	#endif
-#else
-	#if !defined(CBT) && !defined(SPACEMAN_DMM)
-		#warn Building with Dream Maker is no longer supported and will result in errors.
-		#warn In order to build, run BUILD.cmd in the root directory.
-		#warn Consider switching to VSCode editor instead, where you can press Ctrl+Shift+B to build.
-	#endif
+#if !defined(CBT) && !defined(SPACEMAN_DMM)
+#warn Building with Dream Maker is no longer supported and will result in errors.
+#warn In order to build, run BUILD.cmd in the root directory.
+#warn Consider switching to VSCode editor instead, where you can press Ctrl+Shift+B to build.
 #endif

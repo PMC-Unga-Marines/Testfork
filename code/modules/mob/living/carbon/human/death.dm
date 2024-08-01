@@ -1,14 +1,29 @@
 /mob/living/carbon/human/gib()
+
+	var/is_a_synth = issynth(src)
 	for(var/datum/limb/E in limbs)
 		if(istype(E, /datum/limb/chest))
 			continue
-		if(istype(E, /datum/limb/groin))
+		if(istype(E, /datum/limb/groin) && is_a_synth)
 			continue
 		// Only make the limb drop if it's not too damaged
 		if(prob(100 - E.get_damage()))
 			// Override the current limb status
-			E.droplimb()
-	return ..()
+			//E.droplimb() // RUTGMC DELETION
+
+			E.droplimb(silent = TRUE) // RUTGMC ADDITION START
+	visible_message(span_warning("[name] explodes violently into a bloody mess!"),
+		span_highdanger("<b>You explode violently into a bloody mess!</b>"),
+		span_warning("You hear a terrible sound of breaking bones and ripping flesh!"), 3) // RUTGMC EDITION END
+
+	if(is_a_synth)
+		spawn_gibs()
+		return
+	..()
+
+
+
+
 
 /mob/living/carbon/human/gib_animation()
 	new /obj/effect/overlay/temp/gib_animation(loc, 0, src, species ? species.gibbed_anim : "gibbed-h")
@@ -34,6 +49,9 @@
 
 /mob/living/carbon/human/death(gibbing, deathmessage, silent, special_death_message)
 	if(stat == DEAD)
+//RUTGMC EDIT
+		species.handle_death(src, gibbing)
+//RUTGMC EDIT
 		return ..()
 	if(species.death_message)
 		deathmessage = species.death_message

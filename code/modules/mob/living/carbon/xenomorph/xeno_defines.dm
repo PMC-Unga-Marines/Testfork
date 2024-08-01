@@ -22,8 +22,6 @@
 	// *** Melee Attacks *** //
 	///The amount of damage a xenomorph caste will do with a 'slash' attack.
 	var/melee_damage = 10
-	///The amount of armour pen their melee attacks have
-	var/melee_ap = 0
 	///number of ticks between attacks for a caste.
 	var/attack_delay = CLICK_CD_MELEE
 
@@ -60,9 +58,8 @@
 	// *** Evolution *** //
 	///Threshold amount of evo points to next evolution
 	var/evolution_threshold = 0
-	///Threshold amount of upgrade points to next maturity
-	var/upgrade_threshold = 0
-
+	///Type paths to the castes that this xenomorph can evolve to
+	var/list/evolves_to = list()
 	///Singular type path for the caste to deevolve to when forced to by the queen.
 	var/deevolves_to
 
@@ -92,8 +89,6 @@
 	var/sunder_recover = 0.5
 	///What is the max amount of sunder that can be applied to a xeno (100 = 100%)
 	var/sunder_max = 100
-	///Multiplier on the weapons sunder, e.g 10 sunder on a projectile is reduced to 5 with a 0.5 multiplier.
-	var/sunder_multiplier = 1
 
 	// *** Ranged Attack *** //
 	///Delay timer for spitting
@@ -138,10 +133,6 @@
 	///delay between the throw hugger ability activation for carriers
 	var/hugger_delay = 0
 
-	// *** Widow Abilities *** //
-	///maximum amount of spiderlings a widow can carry at one time.
-	var/max_spiderlings = 0
-
 	// *** Defender Abilities *** //
 	///modifying amount to the crest defense ability for defenders. Positive integers only.
 	var/crest_defense_armor = 0
@@ -149,11 +140,6 @@
 	var/fortify_armor = 0
 	///amount of slowdown to apply when the crest defense is active. trading defense for speed. Positive numbers makes it slower.
 	var/crest_defense_slowdown = 0
-
-	// *** Puppeteer Abilities *** //
-	var/flay_plasma_gain = 0
-	var/max_puppets = 0
-
 	// *** Crusher Abilities *** //
 	///The damage the stomp causes, counts armor
 	var/stomp_damage = 0
@@ -174,22 +160,17 @@
 	///Amount of leaders allowed
 	var/queen_leader_limit = 0
 
-	// *** Wraith Abilities *** //
-	//Banish - Values for the Wraith's Banish ability
-	///Base duration of Banish before modifiers
-	var/wraith_banish_base_duration = WRAITH_BANISH_BASE_DURATION
-
-	//Blink - Values for the Wraith's Blink ability
-	///Cooldown multiplier of Blink when used on non-friendlies
-	var/wraith_blink_drag_nonfriendly_living_multiplier = WRAITH_BLINK_DRAG_NONFRIENDLY_MULTIPLIER
-	///Cooldown multiplier of Blink when used on friendlies
-	var/wraith_blink_drag_friendly_multiplier = WRAITH_BLINK_DRAG_FRIENDLY_MULTIPLIER
-	///Base range of Blink
-	var/wraith_blink_range = WRAITH_BLINK_RANGE
-
 	// *** Hunter Abilities ***
 	///Damage breakpoint to knock out of stealth
 	var/stealth_break_threshold = 0
+
+	// *** Warlock Abilities ***
+	///The integrity of psychic shields made by the xeno
+	var/shield_strength = 350
+	///The strength of psychic crush's effects
+	var/crush_strength = 35
+	///The strength of psychic blast's  AOE effects
+	var/blast_strength = 25
 
 	// *** Sentinel Abilities ***
 	/// The additional amount of stacks that the Sentinel will apply on eligible abilities.
@@ -198,6 +179,14 @@
 	// *** Behemoth Abilities ***
 	/// The maximum amount of Wrath that we can have stored at a time.
 	var/wrath_max = 0
+
+	// *** Chimera Abilities ***
+	///Cooldown multiplier of Blink when used on non-friendlies
+	var/blink_drag_nonfriendly_living_multiplier = 0
+	///Cooldown multiplier of Blink when used on friendlies
+	var/blink_drag_friendly_multiplier = 0
+	///Base range of Blink
+	var/blink_range = 0
 
 	///the 'abilities' available to a caste.
 	var/list/actions
@@ -219,8 +208,6 @@
 	var/evolve_min_xenos = 0
 	// How many of this caste may be alive at once
 	var/maximum_active_caste = INFINITY
-	// Accuracy malus, 0 by default. Should NOT go over 70.
-	var/accuracy_malus = 0
 
 ///Add needed component to the xeno
 /datum/xeno_caste/proc/on_caste_applied(mob/xenomorph)
@@ -237,37 +224,6 @@
 		xenomorph.UnregisterSignal(xenomorph, COMSIG_GRAB_SELF_ATTACK)
 	for(var/trait in caste_traits)
 		REMOVE_TRAIT(xenomorph, trait, XENO_TRAIT)
-
-///returns the basetype caste to get what the base caste is (e.g base rav not primo or strain rav)
-/datum/xeno_caste/proc/get_base_caste_type()
-	var/datum/xeno_caste/current_type = type
-	while(initial(current_type.upgrade) != XENO_UPGRADE_BASETYPE)
-		current_type = initial(current_type.parent_type)
-	return current_type
-
-/// basetype = list(strain1, strain2)
-GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
-/proc/init_glob_strain_list()
-	var/list/strain_list = list()
-	for(var/datum/xeno_caste/root_caste AS in GLOB.xeno_caste_datums)
-		if(root_caste.parent_type != /datum/xeno_caste)
-			continue
-		strain_list[root_caste] = list()
-		for(var/datum/xeno_caste/typepath AS in subtypesof(root_caste))
-			if(typepath::upgrade != XENO_UPGRADE_BASETYPE)
-				continue
-			if(typepath::caste_flags & CASTE_EXCLUDE_STRAINS)
-				continue
-			strain_list[root_caste] += typepath
-	return strain_list
-
-///returns a list of strains(xeno castedatum paths) that this caste can currently evolve to
-/datum/xeno_caste/proc/get_strain_options()
-	var/datum/xeno_caste/root_type = type
-	while(initial(root_type.parent_type) != /datum/xeno_caste)
-		root_type = root_type::parent_type
-	var/list/options = GLOB.strain_list[root_type]
-	return options?.Copy()
 
 /mob/living/carbon/xenomorph
 	name = "Drone"
@@ -293,7 +249,7 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	appearance_flags = TILE_BOUND|PIXEL_SCALE|KEEP_TOGETHER|LONG_GLIDE
 	see_infrared = TRUE
 	hud_type = /datum/hud/alien
-	hud_possible = list(HEALTH_HUD_XENO, PLASMA_HUD, PHEROMONE_HUD, XENO_RANK_HUD, QUEEN_OVERWATCH_HUD, ARMOR_SUNDER_HUD, XENO_DEBUFF_HUD, XENO_FIRE_HUD, XENO_BLESSING_HUD, XENO_EVASION_HUD)
+	hud_possible = list(HEALTH_HUD_XENO, PLASMA_HUD, PHEROMONE_HUD, XENO_RANK_HUD, QUEEN_OVERWATCH_HUD, ARMOR_SUNDER_HUD, XENO_DEBUFF_HUD, XENO_FIRE_HUD, XENO_BANISHED_HUD, XENO_BLESSING_HUD, XENO_EVASION_HUD, XENO_PRIMO_HUD, HUNTER_HUD)
 	buckle_flags = NONE
 	faction = FACTION_XENO
 	initial_language_holder = /datum/language_holder/xeno
@@ -306,15 +262,13 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	///Hive datum we belong to
 	var/datum/hive_status/hive
 	///Xeno mob specific flags
-	var/xeno_flags = NONE
-
+	var/xeno_flags = NONE //TODO: There are loads of vars below that should be flags
 	///State tracking of hive status toggles
 	var/status_toggle_flags = HIVE_STATUS_DEFAULTS
 
 	var/atom/movable/vis_obj/xeno_wounds/wound_overlay
 	var/atom/movable/vis_obj/xeno_wounds/fire_overlay/fire_overlay
 	var/datum/xeno_caste/xeno_caste
-	/// /datum/xeno_caste that we will be on init
 	var/caste_base_type
 	var/language = "Xenomorph"
 	///Plasma currently stored
@@ -325,7 +279,7 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	///How much evolution they have stored
 	var/evolution_stored = 0
 	///How much upgrade points they have stored.
-	var/upgrade_stored = 0
+	//var/upgrade_stored = 0 // RUTGMC DELETION
 	///This will track their upgrade level.
 	var/upgrade = XENO_UPGRADE_INVALID
 	///sunder affects armour values and does a % removal before dmg is applied. 50 sunder == 50% effective armour values
@@ -350,16 +304,18 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	///Increases by xeno_caste.regen_ramp_amount every decisecond. If you want to balance this, look at the xeno_caste defines mentioned above.
 	var/regen_power = 0
 
+	var/is_zoomed = 0
 	var/zoom_turf = null
+	var/can_walk_zoomed = FALSE
 
 	///Type of weeds the xeno is standing on, null when not on weeds
 	var/obj/alien/weeds/loc_weeds_type
+	///Bonus or pen to time in between attacks. + makes slashes slower.
+	var/attack_delay = 0
 	///This will track their "tier" to restrict/limit evolutions
 	var/tier = XENO_TIER_ONE
 	///which resin structure to build when we secrete resin
 	var/selected_resin = /turf/closed/wall/resin/regenerating
-	//which special resin structure to build when we secrete special resin
-	var/selected_special_resin = /turf/closed/wall/resin/regenerating/special/bulletproof
 	///which reagent to slash with using reagent slash
 	var/selected_reagent = /datum/reagent/toxin/xeno_hemodile
 	///which plant to place when we use sow
@@ -377,10 +333,17 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 
 	///Multiplicative melee damage modifier; referenced by attack_alien.dm, most notably attack_alien_harm
 	var/xeno_melee_damage_modifier = 1
+	///whether the xeno mobhud is activated or not.
+	var/xeno_mobhud = FALSE
+	///whether the xeno has been selected by the queen as a leader.
+	var/queen_chosen_lead = FALSE
 
 	//Charge vars
 	///Will the mob charge when moving ? You need the charge verb to change this
 	var/is_charging = CHARGE_OFF
+
+	//Pounce vars
+	var/usedPounce = 0
 
 	// Gorger vars
 	var/overheal = 0
@@ -408,6 +371,9 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	/// The amount of Wrath currently stored.
 	var/wrath_stored = 0
 
+	// *** Bull vars *** //
+	var/bull_charging = FALSE
+
 	//Notification spam controls
 	var/recent_notice = 0
 	var/notice_delay = 20 //2 second between notices
@@ -417,8 +383,14 @@ GLOBAL_LIST_INIT(strain_list, init_glob_strain_list())
 	///The xenos/silo/nuke currently tracked by the xeno_tracker arrow
 	var/atom/tracked
 
+	///Are we the roony version of this xeno
+	var/is_a_rouny = FALSE
+
 	/// The type of footstep this xeno has.
 	var/footstep_type = FOOTSTEP_XENO_MEDIUM
+
+	var/interference = 0 // Stagger for predator weapons. Prevents hivemind usage, queen overwatching, etc.
+	var/talk_sound = "alien_talk"  // sound when talking
 
 	COOLDOWN_DECLARE(xeno_health_alert_cooldown)
 

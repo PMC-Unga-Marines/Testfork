@@ -45,38 +45,26 @@
 #define EMBED_FLAGS (EMBEDDED_CAN_BE_YANKED_OUT)	//Default flags.
 #define EMBED_CHANCE 3	//Percentage chance for an object to embed into somebody when thrown (if it's sharp).
 #define EMBED_PROCESS_CHANCE 4	//Percentage chance to deal damage or whatever set behavior per victim's move.
-#define EMBED_LIMB_DAMAGE 2	//Damage to deal to victim's limbs.
+//#define EMBED_LIMB_DAMAGE 2	//Damage to deal to victim's limbs. // RUTGMC DELETION, moved to modular
 #define EMBED_BODY_DAMAGE 10	//Damage to deal to victims without limbs (xenos), to their body.
 #define EMBEDDED_UNSAFE_REMOVAL_TIME 8 SECONDS	//Total removal time.
 #define EMBEDDED_UNSAFE_REMOVAL_DMG_MULTIPLIER 8	//Coefficient of multiplication for the damage the item does when removed without a surgery (this*((embed_limb_damage or embed_body_damage)))
 #define EMBEDDED_FALL_CHANCE 5	//Percentage chance for an embeddedd object fall out of the victim on its own, each process.
 #define EMBEDDED_FALL_DMG_MULTIPLIER 3	//Coefficient of multiplication for the damage the item does when it falls out (this*(embed_limb_damage or embed_body_damage))
 
-///Melee damage
 #define COMBAT_MELEE_ATTACK "melee_attack"
-///Projectile damage
 #define COMBAT_PROJ_ATTACK "proj_attack"
-///Potentially hostile interactions that aren't actually damage, such as disarms or grabs
 #define COMBAT_TOUCH_ATTACK "touch_attack"
 
-///Can be toggled on and off
-#define SHIELD_TOGGLE (1<<0)
-///Shield works by % chance to simply block the attack entirely, instead of normal reductive calc
-#define SHIELD_PURE_BLOCKING (1<<1)
-///Transfers damage to parent's integrity
-#define SHIELD_PARENT_INTEGRITY (1<<2)
+#define SHIELD_TOGGLE (1<<0) //Can be toggled on and off.
+#define SHIELD_PURE_BLOCKING (1<<1) //Only runs a percentage chance to block, and doesn't interact in other ways.
+#define SHIELD_PARENT_INTEGRITY (1<<2) //Transfers damage to parent's integrity.
 
-#define EXPLODE_NONE 0
-#define EXPLODE_DEVASTATE 1
-#define EXPLODE_HEAVY 2
-#define EXPLODE_LIGHT 3
-#define EXPLODE_WEAK 4
+#define EXPLODE_DEVASTATE 300
+#define EXPLODE_HEAVY 200
+#define EXPLODE_MEDIUM 150
+#define EXPLODE_LIGHT 100
+#define EXPLODE_WEAK 50
 
-#define EMP_NONE 0
-#define EMP_DEVASTATE 1
-#define EMP_HEAVY 2
-#define EMP_LIGHT 3
-#define EMP_WEAK 4
+#define EMBED_LIMB_DAMAGE 5 //Damage to deal to victim's limbs.
 
-///Xenomorph accuracy
-#define XENO_DEFAULT_ACCURACY 70

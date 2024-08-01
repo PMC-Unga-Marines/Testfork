@@ -322,7 +322,7 @@ SUBSYSTEM_DEF(minimaps)
 	if(mover != src)
 		return
 	var/image/blip = SSminimaps.images_by_source[src]
-	blip?.UnregisterSignal(source, COMSIG_MOVABLE_MOVED)
+	blip?.UnregisterSignal(source, COMSIG_MOVABLE_MOVED) // RUTGMC ADDITION, added "?"
 	UnregisterSignal(source, COMSIG_ATOM_EXITED)
 
 
@@ -380,8 +380,6 @@ SUBSYSTEM_DEF(minimaps)
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	///assoc list of mob choices by clicking on coords. only exists fleetingly for the wait loop in [/proc/get_coords_from_click]
 	var/list/mob/choices_by_mob
-	///should get_coords_from_click stop waiting for an input?
-	var/stop_polling = FALSE
 
 /atom/movable/screen/minimap/Initialize(mapload, datum/hud/hud_owner, target, flags)
 	. = ..()
@@ -393,25 +391,21 @@ SUBSYSTEM_DEF(minimaps)
 
 /atom/movable/screen/minimap/Destroy()
 	SSminimaps.hashed_minimaps -= src
-	stop_polling = TRUE
 	return ..()
 
 /**
  * lets the user get coordinates by clicking the actual map
  * Returns a list(x_coord, y_coord)
- * note: sleeps until the user makes a choice, stop_polling is set to TRUE or they disconnect
+ * note: sleeps until the user makes a choice or they disconnect
  */
 /atom/movable/screen/minimap/proc/get_coords_from_click(mob/user)
 	//lord forgive my shitcode
-	var/signal_by_type = isobserver(user) ? COMSIG_OBSERVER_CLICKON : COMSIG_MOB_CLICKON
-	RegisterSignal(user, signal_by_type, PROC_REF(on_click))
-	while(!(choices_by_mob[user] || stop_polling) && user.client)
+	RegisterSignal(user, COMSIG_MOB_CLICKON, PROC_REF(on_click))
+	while(!choices_by_mob[user] && user.client)
 		stoplag(1)
-	UnregisterSignal(user, signal_by_type)
+	UnregisterSignal(user, COMSIG_MOB_CLICKON)
 	. = choices_by_mob[user]
 	choices_by_mob -= user
-	// I have an extra layer of shitcode for you
-	stop_polling = FALSE
 
 /**
  * Handles fetching the targetted coordinates when the mob tries to click on this map
@@ -498,54 +492,44 @@ SUBSYSTEM_DEF(minimaps)
 /datum/action/minimap/action_activate()
 	. = ..()
 	if(!map)
-		return FALSE
-
-	return toggle_minimap()
-
-/// Toggles the minimap, has a variable to force on or off (most likely only going to be used to close it)
-/datum/action/minimap/proc/toggle_minimap(force_state)
-	// No force state? Invert the current state
-	if(isnull(force_state))
-		force_state = !minimap_displayed
-	if(force_state == minimap_displayed)
-		return FALSE
+		to_chat(owner, span_warning("This region doesn't seem to have a minimap!"))// RUTGMC ADDITION
+		return
 	if(!locator_override && ismovableatom(owner.loc))
 		override_locator(owner.loc)
 	var/atom/movable/tracking = locator_override ? locator_override : owner
-	if(force_state)
-		if(locate(/atom/movable/screen/minimap) in owner.client.screen) //This seems like the most effective way to do this without some wacky code
+	if(minimap_displayed)
+		owner.client.screen -= map
+		owner.client.screen -= locator
+		locator.UnregisterSignal(tracking, COMSIG_MOVABLE_MOVED)
+	else
+		if(locate(/atom/movable/screen/minimap) in owner?.client.screen) //This seems like the most effective way to do this without some wacky code // RUTGMC ADDITION, added "?"
 			to_chat(owner, span_warning("You already have a minimap open!"))
-			return FALSE
+			return
 		owner.client.screen += map
 		owner.client.screen += locator
 		locator.update(tracking)
 		locator.RegisterSignal(tracking, COMSIG_MOVABLE_MOVED, TYPE_PROC_REF(/atom/movable/screen/minimap_locator, update))
-	else
-		owner.client.screen -= map
-		owner.client.screen -= locator
-		locator.UnregisterSignal(tracking, COMSIG_MOVABLE_MOVED)
-	minimap_displayed = force_state
-	return TRUE
+	minimap_displayed = !minimap_displayed
 
 ///Overrides the minimap locator to a given atom
 /datum/action/minimap/proc/override_locator(atom/movable/to_track)
 	var/atom/movable/tracking = locator_override ? locator_override : owner
 	var/atom/movable/new_track = to_track ? to_track : owner
 	if(locator_override)
-		clear_locator_override()
+		UnregisterSignal(locator_override, COMSIG_QDELETING)
 	if(owner)
 		UnregisterSignal(tracking, COMSIG_MOVABLE_Z_CHANGED)
 	if(!minimap_displayed)
 		locator_override = to_track
 		if(to_track)
 			RegisterSignal(to_track, COMSIG_QDELETING, TYPE_PROC_REF(/datum/action/minimap, clear_locator_override))
-			if(owner && owner.loc == to_track)
+			if(owner?.loc == to_track) // RUTGMC ADDITION, added "?"
 				RegisterSignal(to_track, COMSIG_ATOM_EXITED, TYPE_PROC_REF(/datum/action/minimap, on_exit_check))
 		if(owner)
 			RegisterSignal(new_track, COMSIG_MOVABLE_Z_CHANGED, PROC_REF(on_owner_z_change))
 			var/turf/old_turf = get_turf(tracking)
-			if(!old_turf || !old_turf.z || old_turf.z != new_track.z)
-				on_owner_z_change(new_track, old_turf?.z, new_track?.z)
+			if(!old_turf.z || old_turf.z != new_track.z)
+				on_owner_z_change(new_track, old_turf.z, new_track.z)
 		return
 	locator.UnregisterSignal(tracking, COMSIG_MOVABLE_MOVED)
 	locator_override = to_track
@@ -570,12 +554,10 @@ SUBSYSTEM_DEF(minimaps)
 ///CLears the locator override in case the override target is deleted
 /datum/action/minimap/proc/clear_locator_override()
 	SIGNAL_HANDLER
-	if(!locator_override)
-		return
 	UnregisterSignal(locator_override, list(COMSIG_QDELETING, COMSIG_ATOM_EXITED))
 	if(owner)
 		UnregisterSignal(locator_override, COMSIG_MOVABLE_Z_CHANGED)
-		RegisterSignal(owner, COMSIG_MOVABLE_Z_CHANGED, PROC_REF(on_owner_z_change))
+		RegisterSignal(owner, COMSIG_MOVABLE_Z_CHANGED)
 		var/turf/owner_turf = get_turf(owner)
 		if(owner_turf.z != locator_override.z)
 			on_owner_z_change(owner, locator_override.z, owner_turf.z)
@@ -614,7 +596,10 @@ SUBSYSTEM_DEF(minimaps)
 /datum/action/minimap/proc/on_owner_z_change(atom/movable/source, oldz, newz)
 	SIGNAL_HANDLER
 	var/atom/movable/tracking = locator_override ? locator_override : owner
+	/* RUTGMC DELETION
 	if(minimap_displayed)
+	*/
+	if(locate(/atom/movable/screen/minimap) in owner?.client?.screen) // RUTGMC ADDITION
 		owner.client?.screen -= map
 	map = null
 	if(default_overwatch_level)
@@ -644,10 +629,65 @@ SUBSYSTEM_DEF(minimaps)
 		else
 			minimap_displayed = FALSE
 
+/datum/controller/subsystem/minimaps/proc/add_zlevel(zlevel)
+	minimaps_by_z["[zlevel]"] = new /datum/hud_displays
+	var/icon/icon_gen = new('icons/UI_icons/minimap.dmi') //480x480 blank icon template for drawing on the map
+	for(var/xval = 1 to world.maxx)
+		for(var/yval = 1 to world.maxy) //Scan all the turfs and draw as needed
+			var/turf/location = locate(xval,yval,zlevel)
+			if(isspaceturf(location))
+				continue
+			if(location.density)
+				icon_gen.DrawBox(location.minimap_color, xval, yval)
+				continue
+			var/atom/movable/alttarget = (locate(/obj/machinery/door) in location) || (locate(/obj/structure/fence) in location)
+			if(alttarget)
+				icon_gen.DrawBox(alttarget.minimap_color, xval, yval)
+				continue
+			var/area/turfloc = location.loc
+			if(turfloc.minimap_color)
+				icon_gen.DrawBox(BlendRGB(location.minimap_color, turfloc.minimap_color, 0.5), xval, yval)
+				continue
+			icon_gen.DrawBox(location.minimap_color, xval, yval)
+	icon_gen.Scale(480*2,480*2) //scale it up x2 to make it easer to see
+	icon_gen.Crop(1, 1, min(icon_gen.Width(), 480), min(icon_gen.Height(), 480)) //then cut all the empty pixels
+	//generation is done, now we need to center the icon to someones view, this can be left out if you like it ugly and will halve SSinit time
+	//calculate the offset of the icon
+	var/largest_x = 0
+	var/smallest_x = SCREEN_PIXEL_SIZE
+	var/largest_y = 0
+	var/smallest_y = SCREEN_PIXEL_SIZE
+	for(var/xval=1 to SCREEN_PIXEL_SIZE step 2) //step 2 is twice as fast :)
+		for(var/yval=1 to SCREEN_PIXEL_SIZE step 2) //keep in mind 1 wide giant straight lines will offset wierd but you shouldnt be mapping those anyway right???
+			if(!icon_gen.GetPixel(xval, yval))
+				continue
+			if(xval > largest_x)
+				largest_x = xval
+			else if(xval < smallest_x)
+				smallest_x = xval
+			if(yval > largest_y)
+				largest_y = yval
+			else if(yval < smallest_y)
+				smallest_y = yval
+
+	minimaps_by_z["[zlevel]"].x_offset = FLOOR((SCREEN_PIXEL_SIZE-largest_x-smallest_x)/2, 1)
+	minimaps_by_z["[zlevel]"].y_offset = FLOOR((SCREEN_PIXEL_SIZE-largest_y-smallest_y)/2, 1)
+
+	icon_gen.Shift(EAST, minimaps_by_z["[zlevel]"].x_offset)
+	icon_gen.Shift(NORTH, minimaps_by_z["[zlevel]"].y_offset)
+
+	minimaps_by_z["[zlevel]"].hud_image = icon_gen //done making the image!
+
+/datum/action/minimap/yautja
+	minimap_flags = MINIMAP_FLAG_XENO|MINIMAP_FLAG_MARINE|MINIMAP_FLAG_MARINE_SOM|MINIMAP_FLAG_YAUTJA
+	marker_flags = MINIMAP_FLAG_YAUTJA
+
+/datum/action/minimap/observer
+	minimap_flags = MINIMAP_FLAG_XENO|MINIMAP_FLAG_MARINE|MINIMAP_FLAG_MARINE_SOM|MINIMAP_FLAG_EXCAVATION_ZONE|MINIMAP_FLAG_YAUTJA
 
 
 /datum/action/minimap/xeno
-	minimap_flags = MINIMAP_FLAG_XENO|MINIMAP_FLAG_EXCAVATION_ZONE
+	minimap_flags = MINIMAP_FLAG_XENO
 
 /datum/action/minimap/researcher
 	minimap_flags = MINIMAP_FLAG_MARINE|MINIMAP_FLAG_EXCAVATION_ZONE
@@ -677,22 +717,3 @@ SUBSYSTEM_DEF(minimaps)
 /datum/action/minimap/observer
 	minimap_flags = MINIMAP_FLAG_XENO|MINIMAP_FLAG_MARINE|MINIMAP_FLAG_MARINE_SOM|MINIMAP_FLAG_EXCAVATION_ZONE
 	marker_flags = NONE
-
-/datum/action/minimap/observer/action_activate()
-	. = ..()
-	if(!.)
-		return
-	if(!minimap_displayed)
-		map.stop_polling = TRUE
-		return
-	var/list/clicked_coords = map.get_coords_from_click(owner)
-	if(!clicked_coords)
-		return
-	var/turf/clicked_turf = locate(clicked_coords[1], clicked_coords[2], owner.z)
-	if(!clicked_turf)
-		return
-	// Taken directly from observer/DblClickOn
-	owner.abstract_move(clicked_turf)
-	owner.update_parallax_contents()
-	// Close minimap
-	toggle_minimap(FALSE)

@@ -188,7 +188,7 @@
 	if(CONFIG_GET(flag/log_access))
 		for(var/I in GLOB.clients)
 			if(!I)
-				listclearnulls(GLOB.clients)
+				stack_trace("null in GLOB.clients during client/New()")
 				continue
 			if(I == src)
 				continue
@@ -225,6 +225,7 @@
 
 	if(SSinput.initialized)
 		set_macros()
+
 
 	// Initialize tgui panel
 	tgui_panel.initialize()
@@ -269,7 +270,10 @@
 		return
 
 	if(GLOB.custom_info)
-		custom_info()
+		to_chat(src, "<h1 class='alert'>Custom Information</h1>")
+		to_chat(src, "<h2 class='alert'>The following custom information has been set for this round:</h2>")
+		to_chat(src, span_alert("[GLOB.custom_info]"))
+		to_chat(src, "<br>")
 
 	connection_time = world.time
 	connection_realtime = world.realtime
@@ -295,8 +299,13 @@
 	get_message_output("watchlist entry", ckey)
 	validate_key_in_db()
 
+//RUTGMC EDIT
+	load_player_predator_info()
+//RUTGMC EDIT
+
 	send_resources()
 
+	generate_clickcatcher()
 	apply_clickcatcher()
 
 	if(prefs.lastchangelog != GLOB.changelog_hash) //bolds the changelog button on the interface so we know there are updates.
@@ -348,7 +357,7 @@
 	if(!tooltips && prefs.tooltips)
 		tooltips = new /datum/tooltip(src)
 
-	view_size = new(src, get_screen_size(prefs.widescreenpref))
+	view_size = new(src, get_screen_size(prefs.widescreenpref, prefs.screen_resolution)) //RU TGMC EDIT
 	view_size.update_pixel_format()
 	view_size.update_zoom_mode()
 
@@ -357,7 +366,6 @@
 	winset(src, null, "mainwindow.title='[CONFIG_GET(string/title)]'")
 
 	Master.UpdateTickRate()
-	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_CLIENT_CONNECT, src)
 
 
 
@@ -389,7 +397,8 @@
 			message_staff("Mentor logout: [key_name(src)].")
 		holder.owner = null
 		GLOB.admins -= src
-		if (!length(GLOB.admins) && SSticker.IsRoundInProgress()) //Only report this stuff if we are currently playing.
+		//if (!length(GLOB.admins) && SSticker.IsRoundInProgress()) //Only report this stuff if we are currently playing. // ORIGINAL
+		if(!length(GLOB.admins) && SSticker.IsRoundInProgress() && CONFIG_GET(flag/tgs_adminless_messaging)) //RUTGMC ADDITION, TGS CONFIG FLAGS
 			var/cheesy_message = pick(
 				"I have no admins online!",\
 				"I'm all alone :(",\
@@ -873,35 +882,39 @@
 		CRASH("change_view called without argument.")
 	if(isnum(new_size))
 		CRASH("change_view called with a number argument. Use the string format instead.")
-
+/* RU TGMC EDIT
 	if(prefs && !prefs.widescreenpref && new_size == CONFIG_GET(string/default_view))
 		new_size = CONFIG_GET(string/default_view_square)
-
+RU TGMC EDIT */
 	view = new_size
 	apply_clickcatcher()
 	mob.reload_fullscreens()
-	if(prefs.auto_fit_viewport)
+	if(prefs.auto_fit_viewport && (isnull(view_size) || !view_size.is_zooming()))
 		INVOKE_NEXT_TICK(src, VERB_REF(fit_viewport), 1 SECONDS) //Delayed to avoid wingets from Login calls.
 
 ///Change the fullscreen setting of the client
 /client/proc/set_fullscreen(fullscreen_mode)
 	if(fullscreen_mode)
 		winset(src, "mainwindow", "is-maximized=false;can-resize=false;titlebar=false")
-		winset(src, "mainwindow", "menu=null;statusbar=false")
+		winset(src, "mainwindow", "menu=null")
 		winset(src, "mainwindow.split", "pos=0x0")
 		winset(src, "mainwindow", "is-maximized=true")
 		return
 	winset(src, "mainwindow", "is-maximized=false;can-resize=true;titlebar=true")
-	winset(src, "mainwindow", "menu=menu;statusbar=true")
+	winset(src, "mainwindow", "menu=menu")
 	winset(src, "mainwindow.split", "pos=3x0")
 	winset(src, "mainwindow", "is-maximized=true")
 
 
-///Creates and applies a clickcatcher
+/client/proc/generate_clickcatcher()
+	if(void)
+		return
+	void = new()
+	screen += void
+
+
 /client/proc/apply_clickcatcher()
-	if(!void)
-		void = new()
-	screen |= void
+	generate_clickcatcher()
 	var/list/actualview = getviewsize(view)
 	void.UpdateGreed(actualview[1], actualview[2])
 

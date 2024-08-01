@@ -68,18 +68,10 @@
 		isUV = 0
 
 /obj/machinery/suit_storage_unit/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			if(prob(50))
-				dump_everything() //So suits dont survive all the time
-			qdel(src)
-
-		if(EXPLODE_HEAVY)
-			if(prob(50))
-				dump_everything()
-				qdel(src)
-
-
+	if(prob(severity / 3))
+		if(prob(50))
+			dump_everything()
+		qdel(src)
 
 /obj/machinery/suit_storage_unit/interact(mob/user)
 	. = ..()
@@ -213,13 +205,13 @@
 	if(gc_destroyed)
 		return
 	if(inserted_helmet)
-		inserted_helmet.wash()
+		inserted_helmet.clean_blood()
 	if(inserted_suit)
-		inserted_suit.wash()
+		inserted_suit.clean_blood()
 	if(inserted_mask)
-		inserted_mask.wash()
+		inserted_mask.clean_blood()
 	if(inserted_tank)
-		inserted_tank.wash()
+		inserted_tank.clean_blood()
 	isUV = 0 //Cycle ends
 	update_icon()
 	updateUsrDialog()
@@ -229,8 +221,6 @@
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(machine_stat & NOPOWER)
 		return
 

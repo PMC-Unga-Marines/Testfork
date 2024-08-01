@@ -43,9 +43,6 @@
 	var/list/antag_datums
 	var/datum/job/assigned_role
 
-	///List of learned recipe TYPES.
-	var/list/learned_recipes
-
 /datum/mind/New(key)
 	src.key = key
 

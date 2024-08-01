@@ -30,7 +30,7 @@
 	component_parts = list()
 	var/turf/current_turf = get_turf(src)
 	if(anchored && current_turf && density)
-		current_turf.atom_flags |= AI_BLOCKED
+		current_turf.flags_atom |= AI_BLOCKED
 
 
 /obj/machinery/Destroy()
@@ -41,7 +41,7 @@
 	operator = null
 	var/turf/current_turf = get_turf(src)
 	if(anchored && current_turf && density)
-		current_turf.atom_flags &= ~ AI_BLOCKED
+		current_turf.flags_atom &= ~ AI_BLOCKED
 	return ..()
 
 /obj/machinery/proc/is_operational()
@@ -49,7 +49,7 @@
 
 
 /obj/machinery/proc/default_deconstruction_crowbar(obj/item/crowbar, ignore_panel = 0, custom_deconstruct = FALSE)
-	. = !(atom_flags & NODECONSTRUCT) && crowbar.tool_behaviour == TOOL_CROWBAR
+	. = !(flags_atom & NODECONSTRUCT) && crowbar.tool_behaviour == TOOL_CROWBAR
 	if(!. || custom_deconstruct)
 		return
 	crowbar.play_tool_sound(src, 50)
@@ -65,7 +65,7 @@
 	return TRUE
 
 /obj/machinery/deconstruct(disassembled = TRUE)
-	if(!(atom_flags & NODECONSTRUCT))
+	if(!(flags_atom & NODECONSTRUCT))
 		on_deconstruction()
 		if(length(component_parts))
 			spawn_frame(disassembled)
@@ -125,19 +125,8 @@
 /obj/machinery/ex_act(severity)
 	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
 		return FALSE
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if(!prob(50))
-				return
-			qdel(src)
-		if(EXPLODE_LIGHT)
-			if(!prob(25))
-				return
-			qdel(src)
-		if(EXPLODE_WEAK)
-			return
+	if(prob(severity / 3))
+		deconstruct(FALSE)
 
 
 /obj/machinery/proc/power_change()

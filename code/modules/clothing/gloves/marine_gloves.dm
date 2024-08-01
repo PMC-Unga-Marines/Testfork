@@ -1,7 +1,4 @@
-
-
-
-//marine gloves
+//MARINE GLOVES
 
 /obj/item/clothing/gloves/marine
 	name = "marine combat gloves"
@@ -9,31 +6,31 @@
 	icon_state = "gloves_marine"
 	siemens_coefficient = 0.6
 	permeability_coefficient = 0.05
-	cold_protection_flags = HANDS
-	heat_protection_flags = HANDS
+	flags_cold_protection = HANDS
+	flags_heat_protection = HANDS
 	min_cold_protection_temperature = GLOVES_MIN_COLD_PROTECTION_TEMPERATURE
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	armor_protection_flags = HANDS
+	flags_armor_protection = HANDS
 	soft_armor = list(MELEE = 25, BULLET = 15, LASER = 10, ENERGY = 15, BOMB = 15, BIO = 5, FIRE = 15, ACID = 15)
 
 /obj/item/clothing/gloves/marine/black
 	name = "black marine combat gloves"
 	desc = "Standard issue marine tactical gloves but black! It reads: 'knit by Marine Widows Association'."
 	icon_state = "gloves_marine_black"
-	worn_icon_state = "black"
+	item_state = "black"
 
 /obj/item/clothing/gloves/marine/fingerless
 	name = "fingerless marine combat gloves"
 	desc = "Standard issue marine tactical gloves but fingerless! It reads: 'knit by Marine Widows Association'."
 	icon_state = "gloves_marine_fingerless"
-	worn_icon_state = "fingerless"
+	item_state = "fingerless"
 
 /obj/item/clothing/gloves/marine/hyperscale
 	name = "8E Chameleon TGMC combat gloves"
 	desc = "Standard issue marine tactical gloves BUT colorable with a facepaint! It reads: 'knit by Marine Widows Association'."
 	icon_state = "hyperscale_glove_inhand"
-	worn_icon_state = "hyperscale_glove_mob"
-	worn_icon_list = list(slot_gloves = /datum/greyscale_config/marine_uniform)
+	item_state = "hyperscale_glove_mob"
+	item_icons = list(slot_gloves = /datum/greyscale_config/marine_uniform)
 	greyscale_colors = ARMOR_PALETTE_BLACK
 	greyscale_config = /datum/greyscale_config/marine_uniform
 	colorable_colors = ARMOR_PALETTES_LIST
@@ -84,7 +81,7 @@
 	name = "\improper B18 defensive gauntlets"
 	desc = "A pair of heavily armored gloves."
 	icon_state = "armored"
-	item_flags = SYNTH_RESTRICTED
+	flags_item = SYNTH_RESTRICTED
 	soft_armor = list(MELEE = 35, BULLET = 15, LASER = 15, ENERGY = 15, BOMB = 25, BIO = 15, FIRE = 15, ACID = 20)
 	resistance_flags = UNACIDABLE
 
@@ -93,13 +90,13 @@
 	desc = "Armored gloves used in special operations. They are also insulated against electrical shock."
 	icon_state = "black"
 	siemens_coefficient = 0
-	item_flags = SYNTH_RESTRICTED
+	flags_item = SYNTH_RESTRICTED
 	soft_armor = list(MELEE = 30, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 30, BIO = 20, FIRE = 20, ACID = 15)
 
 /obj/item/clothing/gloves/marine/veteran/pmc/commando
 	name = "\improper PMC commando gloves"
 	desc = "A pair of heavily armored, insulated, acid-resistant gloves."
-	icon_state = "death_squad"
+	icon_state = "armored"
 	soft_armor = list(MELEE = 40, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 30, BIO = 20, FIRE = 20, ACID = 25)
 	resistance_flags = UNACIDABLE
 
@@ -145,3 +142,36 @@
 	desc = "Gloves worn by commissars of the Imperial Army so that they do not soil their hands with the blood of their men."
 	icon_state = "red"
 	soft_armor = list(MELEE = 35, BULLET = 30, LASER = 30, ENERGY = 30, BOMB = 15, BIO = 10, FIRE = 20, ACID = 20)
+
+/obj/item/clothing/gloves/marine/separatist
+	name = "kevlar gloves TG-94"
+	desc = "Once before, the original of these gloves had protected the hands of the civilian militia of the colony of Terra during the heroic liberation of their territories from the hands of the enemy. 'Wear it with honor,' reads the inscription at the bottom"
+	icon_state = "separatist"
+	item_state = "separatist"
+
+/obj/item/clothing/gloves/marine/veteran/marine
+	name = "veteran gloves"
+	desc = "Ordinary Marine gloves, artfully reinforced for personal gain. An extra steel plate and a pair of cool white laces will definitely make this item look better. You're sure. The Marine Widows Association is outraged."
+	icon_state = "veteran_1"
+	item_state = "veteran"
+	var/gloves_inside_out = FALSE
+
+/obj/item/clothing/gloves/marine/veteran/marine/examine(mob/user)
+	. = ..()
+	. += span_info("You could <b>use it in-hand</b> to turn it inside out and change it's appearance.")
+
+/obj/item/clothing/gloves/marine/veteran/marine/attack_self(mob/user)
+	. = ..()
+	if(!gloves_inside_out)
+		to_chat(user, span_notice("You turn the gloves inside out and change their appearance."))
+		gloves_inside_out = TRUE
+	else
+		to_chat(user, span_notice("You roll the gloves back inside and they look just right."))
+		gloves_inside_out = initial(gloves_inside_out)
+	update_icon_state()
+
+/obj/item/clothing/gloves/marine/veteran/marine/update_icon_state()
+	if(gloves_inside_out)
+		icon_state = "veteran_2"
+	else
+		icon_state = "veteran_1"

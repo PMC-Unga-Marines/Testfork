@@ -61,8 +61,8 @@ Override makes it so the alert is not replaced until cleared by a clear_alert wi
 	alerts[category] = thealert
 	if(client && hud_used)
 		hud_used.reorganize_alerts()
-	thealert.transform = matrix(32, 6, MATRIX_TRANSLATE)
-	animate(thealert, transform = matrix(), time = 2.5, easing = CUBIC_EASING)
+	thealert.transform = matrix(32, 0, MATRIX_TRANSLATE)
+	animate(thealert, transform = matrix(), time = 1 SECONDS, easing = ELASTIC_EASING)
 
 	if(thealert.timeout)
 		addtimer(CALLBACK(src, PROC_REF(alert_timeout), thealert, category), thealert.timeout)
@@ -143,9 +143,7 @@ Override makes it so the alert is not replaced until cleared by a clear_alert wi
 				return FALSE
 			switch(tgui_alert(G, "What would you like to do?", "Burrowed larva source available", list("Join as Larva", "Jump to it", "Cancel")))
 				if("Join as Larva")
-					var/mob/living/carbon/human/original_corpse = G.can_reenter_corpse.resolve()
-					if(SSticker.mode.spawn_larva(G, target) && ishuman(original_corpse))
-						original_corpse?.set_undefibbable()
+					SSticker.mode.spawn_larva(G, target)
 				if("Jump to it")
 					G.forceMove(get_turf(target))
 

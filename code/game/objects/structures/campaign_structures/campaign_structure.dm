@@ -3,7 +3,7 @@
 	name = "GENERIC CAMPAIGN STRUCTURE"
 	desc = "THIS SHOULDN'T BE VISIBLE"
 	icon = 'icons/obj/structures/campaign_structures.dmi'
-	atom_flags = CRITICAL_ATOM
+	flags_atom = CRITICAL_ATOM
 	///Missions that trigger this landmark to spawn an objective
 	var/list/mission_types
 	///Campaign structure spawned by this landmark
@@ -28,10 +28,8 @@
 	anchored = TRUE
 	allow_pass_flags = PASSABLE
 	destroy_sound = 'sound/effects/meteorimpact.ogg'
-	icon = 'icons/obj/structures/campaign_structures.dmi'
 
-	///overhead timer
-	var/obj/effect/countdown/campaign_objective/countdown
+	icon = 'icons/obj/structures/campaign_structures.dmi'
 
 /obj/structure/campaign_objective/Initialize(mapload)
 	. = ..()
@@ -59,7 +57,3 @@
 /obj/structure/campaign_objective/proc/update_control_minimap_icon()
 	SSminimaps.remove_marker(src)
 	SSminimaps.add_marker(src, MINIMAP_FLAG_ALL, image('icons/UI_icons/map_blips.dmi', null, "campaign_objective", HIGH_FLOAT_LAYER))
-
-///Remaining time for overhead countdown if applicable
-/obj/structure/campaign_objective/proc/get_time_left()
-	return

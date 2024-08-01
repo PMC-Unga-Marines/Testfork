@@ -2,7 +2,7 @@
  * Shows a list of currently running polls a player can vote/has voted on
  *
  */
-/mob/new_player/proc/handle_playeR_POLLSing()
+/mob/new_player/proc/handle_playeR_DBRANKSing()
 	var/list/output = list("<div align='center'><B>Player polls</B><hr><table>")
 	var/rs = REF(src)
 	for(var/p in GLOB.polls)
@@ -250,7 +250,7 @@
 	//otherwise just shuffle the options
 	else
 		prepared_options = shuffle(poll.options)
-	var/list/output = list({"<html><head><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	var/list/output = list({"<html><meta charset='UTF-8'><head><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
 	<script src="[SSassets.transport.get_asset_url("jquery.min.js")]"></script>
 	<script src="[SSassets.transport.get_asset_url("jquery-ui.custom-core-widgit-mouse-sortable-min.js")]"></script>

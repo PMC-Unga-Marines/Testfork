@@ -11,26 +11,22 @@
 	gender = PLURAL
 	icon = 'icons/obj/items/items.dmi'
 	icon_state = "table_parts"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/engineering_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/engineering_right.dmi',
 	)
-	worn_icon_state = "table_parts"
-	atom_flags = CONDUCT
+	item_state = "table_parts"
+	flags_atom = CONDUCT
 	attack_verb = list("slammed", "bashed", "battered", "bludgeoned", "thrashed", "whacked")
 	var/table_type = /obj/structure/table //what type of table it creates when assembled
 	var/deconstruct_type = /obj/item/stack/sheet/metal
-	/// How much of `deconstruct_type` will be spawned on wrench?
-	var/deconstruct_amount = 1
 
 /obj/item/frame/table/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	var/turf/table_turf = get_turf(src)
 	if(iswrench(I) && deconstruct_type)
-		new deconstruct_type(table_turf, deconstruct_amount)
+		new deconstruct_type(table_turf)
 		qdel(src)
 
 	else if(istype(I, /obj/item/stack/rods))
@@ -93,7 +89,6 @@
 	icon = 'icons/obj/items/items.dmi'
 	icon_state = "reinf_tableparts"
 	table_type = /obj/structure/table/reinforced
-	deconstruct_amount = 2
 
 /*
 * Wooden Table Parts
@@ -103,14 +98,12 @@
 	name = "wooden table parts"
 	desc = "A kit for a table, including a large, flat wooden surface and four legs. Some assembly required."
 	icon_state = "wood_tableparts"
-	atom_flags = null
-	table_type = /obj/structure/table/wood
+	flags_atom = null
+	table_type = /obj/structure/table/woodentable
 	deconstruct_type = /obj/item/stack/sheet/wood
 
 /obj/item/frame/table/wood/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/stack/tile/carpet))
 		var/obj/item/stack/tile/carpet/C = I
@@ -135,14 +128,12 @@
 	name = "gamble table parts"
 	desc = "A kit for a table, including a large, flat wooden and carpet surface and four legs. Some assembly required."
 	icon_state = "gamble_tableparts"
-	atom_flags = null
-	table_type = /obj/structure/table/wood/gambling
+	flags_atom = null
+	table_type = /obj/structure/table/gamblingtable
 	deconstruct_type = /obj/item/stack/sheet/wood
 
 /obj/item/frame/table/gambling/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(iscrowbar(I))
 		to_chat(user, span_notice("You pry the carpet out of [src]."))
@@ -163,18 +154,16 @@
 	name = "rack parts"
 	desc = "A kit for a storage rack with multiple metal shelves. Relatively cheap, useful for mass storage. Some assembly required."
 	icon = 'icons/obj/items/items.dmi'
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/engineering_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/engineering_right.dmi',
 	)
 	icon_state = "rack_parts"
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 
 
 /obj/item/frame/rack/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(iswrench(I))
 		new /obj/item/stack/sheet/metal(loc)

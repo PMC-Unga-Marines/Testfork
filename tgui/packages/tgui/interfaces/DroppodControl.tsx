@@ -1,12 +1,12 @@
-import { useBackend } from '../backend';
-import { Box, Button, Section } from '../components';
 import { Window } from '../layouts';
+import { useBackend } from '../backend';
+import { Section, Button, Box } from '../components';
 type DropControlData = {
   pods: number;
 };
 
-export const DroppodControl = (props) => {
-  const { act, data } = useBackend<DropControlData>();
+export const DroppodControl = (props, context) => {
+  const { act, data } = useBackend<DropControlData>(context);
   return (
     <Window width={450} height={250}>
       <Window.Content scrollable>

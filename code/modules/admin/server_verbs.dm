@@ -1,5 +1,5 @@
 /datum/admins/proc/restart()
-	set category = "Server"
+	set category = "Server.Round"
 	set name = "Restart"
 	set desc = "Restarts the server after a short pause."
 
@@ -28,8 +28,9 @@
 	spawn(50)
 		world.Reboot(message)
 
+
 /datum/admins/proc/shutdown_server()
-	set category = "Server"
+	set category = "Server.Server"
 	set name = "Shutdown Server"
 	set desc = "Shuts the server down."
 
@@ -137,8 +138,9 @@
 	sleep(world.tick_lag) //so messages can get sent to players.
 	qdel(world) //there are a few ways to shutdown the server, but this is by far my favorite
 
+
 /datum/admins/proc/toggle_ooc()
-	set category = "Server"
+	set category = "Server.Chat"
 	set name = "Toggle OOC"
 	set desc = "Toggles OOC for non-admins."
 
@@ -155,8 +157,9 @@
 	log_admin("[key_name(usr)] [GLOB.ooc_allowed ? "enabled" : "disabled"] OOC.")
 	message_admins("[ADMIN_TPMONTY(usr)] [GLOB.ooc_allowed ? "enabled" : "disabled"] OOC.")
 
+
 /datum/admins/proc/toggle_looc()
-	set category = "Server"
+	set category = "Server.Chat"
 	set name = "Toggle LOOC"
 	set desc = "Toggles LOOC for non-admins."
 
@@ -170,11 +173,13 @@
 		CONFIG_SET(flag/looc_enabled, TRUE)
 		to_chat(world, span_boldnotice("LOOC channel has been enabled!"))
 
+
 	log_admin("[key_name(usr)] has [CONFIG_GET(flag/looc_enabled) ? "enabled" : "disabled"] LOOC.")
 	message_admins("[ADMIN_TPMONTY(usr)] has [CONFIG_GET(flag/looc_enabled) ? "enabled" : "disabled"] LOOC.")
 
+
 /datum/admins/proc/toggle_deadchat()
-	set category = "Server"
+	set category = "Server.Chat"
 	set name = "Toggle Deadchat"
 	set desc = "Toggles deadchat for non-admins."
 
@@ -191,8 +196,9 @@
 	log_admin("[key_name(usr)] [GLOB.dsay_allowed ? "enabled" : "disabled"] deadchat.")
 	message_admins("[ADMIN_TPMONTY(usr)] [GLOB.dsay_allowed ? "enabled" : "disabled"] deadchat.")
 
+
 /datum/admins/proc/toggle_deadooc()
-	set category = "Server"
+	set category = "Server.Chat"
 	set name = "Toggle Dead OOC"
 	set desc = "Toggle the ability for dead non-admins to use OOC chat."
 
@@ -209,8 +215,9 @@
 	log_admin("[key_name(usr)] [GLOB.dooc_allowed ? "enabled" : "disabled"] dead player OOC.")
 	message_admins("[ADMIN_TPMONTY(usr)] [GLOB.dooc_allowed ? "enabled" : "disabled"] dead player OOC.")
 
+
 /datum/admins/proc/start()
-	set category = "Server"
+	set category = "Server.Round"
 	set name = "Start Round"
 	set desc = "Starts the round early."
 
@@ -228,14 +235,15 @@
 		return
 
 	var/msg = "has started the round early."
+
 	if(SSticker.setup_failed)
-		if(tgui_alert(usr, "Previous setup failed. Would you like to try again, bypassing the checks? Win condition checking will also be paused.", "Start Round", list("Yes", "No"),  0) != "Yes")
+		if(alert("Previous setup failed. Would you like to try again, bypassing the checks? Win condition checking will also be paused.", "Start Round", "Yes", "No") != "Yes")
 			return
 		msg += " Bypassing roundstart checks."
 		SSticker.bypass_checks = TRUE
 		SSticker.roundend_check_paused = TRUE
 
-	else if(tgui_alert(usr, "Are you sure you want to start the round early?", "Start Round", list("Yes", "No"), 0) != "Yes")
+	else if(alert("Are you sure you want to start the round early?", "Start Round", "Yes", "No") == "No")
 		return
 
 	if(SSticker.current_state == GAME_STATE_STARTUP)
@@ -244,6 +252,7 @@
 	SSticker.start_immediately = TRUE
 	log_admin("[key_name(usr)] [msg]")
 	message_admins("[ADMIN_TPMONTY(usr)] [msg]")
+
 
 /datum/admins/proc/toggle_join()
 	set category = "Server"
@@ -263,6 +272,7 @@
 	log_admin("[key_name(usr)] [GLOB.enter_allowed ? "enabled" : "disabled"] new player joining.")
 	message_admins("[ADMIN_TPMONTY(usr)] [GLOB.enter_allowed ? "enabled" : "disabled"] new player joining.")
 
+
 /datum/admins/proc/toggle_respawn()
 	set category = "Server"
 	set name = "Toggle Respawn"
@@ -281,6 +291,7 @@
 	log_admin("[key_name(usr)] [GLOB.respawn_allowed ? "enabled" : "disabled"] respawning.")
 	message_admins("[ADMIN_TPMONTY(usr)] [GLOB.respawn_allowed ? "enabled" : "disabled"] respawning.")
 
+
 /datum/admins/proc/set_respawn_time(time as num)
 	set category = "Server"
 	set name = "Set Respawn Timer"
@@ -297,8 +308,9 @@
 	log_admin("[key_name(usr)] set the respawn time to [SSticker.mode?.respawn_time * 0.1] seconds.")
 	message_admins("[ADMIN_TPMONTY(usr)] set the respawn time to [SSticker.mode?.respawn_time * 0.1] seconds.")
 
+
 /datum/admins/proc/end_round()
-	set category = "Server"
+	set category = "Server.Round"
 	set name = "End Round"
 	set desc = "Immediately ends the round, be very careful"
 
@@ -308,15 +320,15 @@
 	if(!SSticker?.mode)
 		return
 
-	if(tgui_alert(usr, "Are you sure you want to end the round?", "End Round", list("Yes", "No"), 0) != "Yes")
+	if(alert("Are you sure you want to end the round?", "End Round", "Yes", "No") != "Yes")
 		return
 
-	var/winstate = tgui_input_list(usr, "What do you want the round end state to be?", "End Round", list("Custom", "Admin Intervention") + SSticker.mode.round_end_states, timeout = 0)
+	var/winstate = input(usr, "What do you want the round end state to be?", "End Round") as null|anything in list("Custom", "Admin Intervention") + SSticker.mode.round_end_states
 	if(!winstate)
 		return
 
 	if(winstate == "Custom")
-		winstate = tgui_input_text(usr, "Please enter a custom round end state.", "End Round", timeout = 0)
+		winstate = input(usr, "Please enter a custom round end state.", "End Round") as null|text
 		if(!winstate)
 			return
 
@@ -326,8 +338,9 @@
 	log_admin("[key_name(usr)] has made the round end early - [winstate].")
 	message_admins("[ADMIN_TPMONTY(usr)] has made the round end early - [winstate].")
 
+
 /datum/admins/proc/delay_start()
-	set category = "Server"
+	set category = "Server.Round"
 	set name = "Delay Round Start"
 
 	if(!check_rights(R_SERVER))
@@ -353,8 +366,9 @@
 		log_admin("[key_name(usr)] set the pre-game delay to [DisplayTimeText(newtime)].")
 		message_admins("[ADMIN_TPMONTY(usr)] set the pre-game delay to [DisplayTimeText(newtime)].")
 
+
 /datum/admins/proc/delay_end()
-	set category = "Server"
+	set category = "Server.Round"
 	set name = "Delay Round End"
 
 	if(!check_rights(R_SERVER))
@@ -381,6 +395,7 @@
 	log_admin("[key_name(usr)] [SSticker.delay_end ? "delayed the round-end[SSticker.admin_delay_notice ? " for reason: [SSticker.admin_delay_notice]" : ""]" : "made the round end normally"].")
 	message_admins("<hr><h4>[ADMIN_TPMONTY(usr)] [SSticker.delay_end ? "delayed the round-end[SSticker.admin_delay_notice ? " for reason: [SSticker.admin_delay_notice]" : ""]" : "made the round end normally"].</h4><hr>")
 
+
 /datum/admins/proc/toggle_gun_restrictions()
 	set name = "Toggle Gun Restrictions"
 	set category = "Server"
@@ -399,6 +414,7 @@
 
 	log_admin("[key_name(usr)] has [CONFIG_GET(flag/remove_gun_restrictions) ? "enabled" : "disabled"] gun restrictions.")
 	message_admins("[ADMIN_TPMONTY(usr)] has [CONFIG_GET(flag/remove_gun_restrictions) ? "enabled" : "disabled"] gun restrictions.")
+
 
 /datum/admins/proc/toggle_synthetic_restrictions()
 	set category = "Server"
@@ -419,15 +435,13 @@
 	log_admin("[key_name(src)] has [CONFIG_GET(flag/allow_synthetic_gun_use) ? "enabled" : "disabled"] synthetic weapon use.")
 	message_admins("[ADMIN_TPMONTY(usr)] has [CONFIG_GET(flag/allow_synthetic_gun_use) ? "enabled" : "disabled"] synthetic weapon use.")
 
+
 /datum/admins/proc/reload_admins()
-	set category = "Server"
+	set category = "Server.Server"
 	set name = "Reload Admins"
 	set desc = "Manually load all admins from the .txt"
 
 	if(!check_rights(R_SERVER))
-		return
-
-	if(tgui_alert(usr, "Are you sure you want to reload admins?", "Reload admins", list("No", "Yes")) != "Yes")
 		return
 
 	load_admins()
@@ -435,8 +449,9 @@
 	log_admin("[key_name(src)] manually reloaded admins.")
 	message_admins("[ADMIN_TPMONTY(usr)] manually reloaded admins.")
 
+
 /datum/admins/proc/change_ground_map()
-	set category = "Server"
+	set category = "Server.Server"
 	set name = "Change Ground Map"
 
 	if(!check_rights(R_SERVER))
@@ -464,7 +479,7 @@
 
 		maprotatechoices[mapname] = VM
 
-	var/chosenmap = tgui_input_list(usr, "Choose a ground map to change to", "Change Ground Map", maprotatechoices, timeout = 0)
+	var/chosenmap = input("Choose a ground map to change to", "Change Ground Map") as null|anything in maprotatechoices
 	if(!chosenmap)
 		return
 
@@ -476,8 +491,9 @@
 	log_admin("[key_name(usr)] changed the map to [VM.map_name].")
 	message_admins("[ADMIN_TPMONTY(usr)] changed the map to [VM.map_name].")
 
+
 /datum/admins/proc/change_ship_map()
-	set category = "Server"
+	set category = "Server.Server"
 	set name = "Change Ship Map"
 
 	if(!check_rights(R_SERVER))
@@ -505,7 +521,7 @@
 
 		maprotatechoices[mapname] = VM
 
-	var/chosenmap = tgui_input_list(usr, "Choose a ship map to change to", "Change Ship Map", maprotatechoices, timeout = 0)
+	var/chosenmap = input("Choose a ship map to change to", "Change Ship Map") as null|anything in maprotatechoices
 	if(!chosenmap)
 		return
 
@@ -517,8 +533,9 @@
 	log_admin("[key_name(usr)] changed the ship map to [VM.map_name].")
 	message_admins("[ADMIN_TPMONTY(usr)] changed the ship map to [VM.map_name].")
 
+
 /datum/admins/proc/panic_bunker()
-	set category = "Server"
+	set category = "Server.Server"
 	set name = "Toggle Panic Bunker"
 
 	if(!check_rights(R_SERVER))
@@ -535,7 +552,7 @@
 
 
 /datum/admins/proc/mode_check()
-	set category = "Server"
+	set category = "Server.Round"
 	set name = "Toggle Mode Check"
 
 	if(!check_rights(R_SERVER))
@@ -548,7 +565,7 @@
 
 /client/proc/toggle_cdn()
 	set name = "Toggle CDN"
-	set category = "Server"
+	set category = "Server.Server"
 	var/static/admin_disabled_cdn_transport = null
 	if (alert(usr, "Are you sure you want to toggle the CDN asset transport?", "Confirm", "Yes", "No") != "Yes")
 		return

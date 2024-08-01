@@ -2,7 +2,7 @@
 	name = "chemical implant"
 	desc = "A chemical implant containing a single use chemical cocktail which is added via syringe."
 	allow_reagents = TRUE
-	implant_flags = ACTIVATE_ON_HEAR|GRANT_ACTIVATION_ACTION|BENEFICIAL_IMPLANT
+	flags_implant = ACTIVATE_ON_HEAR|GRANT_ACTIVATION_ACTION
 	var/used = FALSE
 	var/activation_phrase = "aaaaaa help i dying help maint"
 
@@ -60,4 +60,5 @@
 		return FALSE
 
 	var/mob/living/carbon/carb_mob = implant_owner
-	carb_mob.adjust_blood_volume(blood_amount)
+	var/current_blood = carb_mob.blood_volume
+	carb_mob.blood_volume += min(BLOOD_VOLUME_MAXIMUM - current_blood, blood_amount)

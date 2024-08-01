@@ -30,8 +30,6 @@
 
 /obj/structure/extinguisher_cabinet/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/tool/extinguisher))
 		if(has_extinguisher || !opened)

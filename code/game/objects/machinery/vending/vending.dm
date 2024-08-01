@@ -34,7 +34,6 @@
 	var/tab
 
 /datum/vending_product/New(name, atom/typepath, product_amount, product_price, product_display_color, category = CAT_NORMAL, tab)
-
 	product_path = typepath
 	amount = product_amount
 	price = product_price
@@ -63,7 +62,6 @@
 	coverage = 80
 	soft_armor = list(MELEE = 0, BULLET = 30, LASER = 30, ENERGY = 30, BOMB = 0, BIO = 100, FIRE = 0, ACID = 0)
 	layer = BELOW_OBJ_LAYER
-
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 10
 	active_power_usage = 100
@@ -73,7 +71,6 @@
 	light_range = 1
 	light_power = 0.5
 	light_color = LIGHT_COLOR_BLUE
-
 	///Whether this vendor is active or not.
 	var/active = TRUE
 	///If the vendor is ready to vend.
@@ -86,7 +83,6 @@
 	var/isshared = FALSE
 	///The sound the vendor makes when it vends something
 	var/vending_sound
-
 	/*These are lists that are made null after they're used, their use is solely to fill the inventory of the vendor on Init.
 	They use the following pattern in case if it doenst pertain to a tab:
 	list(
@@ -117,21 +113,17 @@
 	var/list/premium = list()
 	/// Prices for each item, list(/type/path = price), items not in the list don't have a price.
 	var/list/prices = list()
-
 	/// String of slogans separated by semicolons, optional
 	var/product_slogans = ""
 	///String of small ad messages in the vending screen - random chance
 	var/product_ads = ""
-
 	//These are where the vendor holds their item info with /datum/vending_product
-
 	///list of /datum/vending_product's that are always available on the vendor
 	var/list/product_records = list()
 	///list of /datum/vending_product's that are available when vendor is hacked.
 	var/list/hidden_records = list()
 	///list of /datum/vending_product's that are available on the vendor when a coin is used.
 	var/list/coin_records = list()
-
 	var/list/slogan_list = list()
 	/// small ad messages in the vending screen - random chance of popping up whenever you open it
 	var/list/small_ads = list()
@@ -163,15 +155,11 @@
 	var/tipped_level = 0
 	///Stops the machine from being hacked to shoot inventory or allow all access
 	var/hacking_safety = FALSE
-
 	var/scan_id = TRUE
-
 	/// How much damage we can take before tipping over.
 	var/knockdown_threshold = 100
-
 	///Faction of the vendor. Can be null
 	var/faction
-
 
 /obj/machinery/vending/Initialize(mapload, ...)
 	. = ..()
@@ -207,7 +195,6 @@
 	update_icon()
 	return INITIALIZE_HINT_LATELOAD
 
-
 /obj/machinery/vending/LateInitialize()
 	. = ..()
 	power_change()
@@ -217,13 +204,19 @@
 	return ..()
 
 /obj/machinery/vending/ex_act(severity)
+	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
+		return FALSE
+
 	switch(severity)
-		if(EXPLODE_DEVASTATE)
+		if(0 to EXPLODE_LIGHT)
+			if(prob(25))
+				tip_over()
+		if(EXPLODE_LIGHT to EXPLODE_HEAVY)
+			if(prob(50))
+				tip_over()
+				malfunction()
+		if(EXPLODE_HEAVY to INFINITY)
 			qdel(src)
-		if(EXPLODE_HEAVY)
-			take_damage(rand(150, 250), BRUTE, BOMB)
-		if(EXPLODE_LIGHT)
-			take_damage(rand(75, 125), BRUTE, BOMB)
 
 /**
  * Builds shared vendors inventory
@@ -279,13 +272,13 @@
 	for(var/season in seasonal_items)
 		products[seasonal_items[season]] += SSpersistence.season_items[season]
 
-/obj/machinery/vending/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/vending/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
 	if(xeno_attacker.a_intent == INTENT_HARM)
 		xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_SMASH)
-		if(prob(damage_amount))
+		if(prob(xeno_attacker.xeno_caste.melee_damage))
 			playsound(loc, 'sound/effects/metalhit.ogg', 25, 1)
 			xeno_attacker.visible_message(span_danger("\The [xeno_attacker] smashes \the [src] beyond recognition!"), \
 			span_danger("We enter a frenzy and smash \the [src] apart!"), null, 5)
@@ -337,8 +330,6 @@
 
 /obj/machinery/vending/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(tipped_level)
 		to_chat(user, "Tip it back upright first!")
@@ -380,12 +371,12 @@
 			user.visible_message("[user] tightens the bolts securing \the [src] to the floor.", "You tighten the bolts securing \the [src] to the floor.")
 			var/turf/current_turf = get_turf(src)
 			if(current_turf && density)
-				current_turf.atom_flags |= AI_BLOCKED
+				current_turf.flags_atom |= AI_BLOCKED
 		else
 			user.visible_message("[user] unfastens the bolts securing \the [src] to the floor.", "You unfasten the bolts securing \the [src] to the floor.")
 			var/turf/current_turf = get_turf(src)
 			if(current_turf && density)
-				current_turf.atom_flags &= ~AI_BLOCKED
+				current_turf.flags_atom &= ~AI_BLOCKED
 	else if(isitem(I))
 		var/obj/item/to_stock = I
 		stock(to_stock, user)
@@ -568,59 +559,58 @@
 			scan_card(H.wear_id)
 			. = TRUE
 
-/obj/machinery/vending/proc/vend(datum/vending_product/product, mob/user)
-	if(!vend_ready)
-		return
+/obj/machinery/vending/proc/vend(datum/vending_product/R, mob/user)
 	if(!allowed(user) && (!wires.is_cut(WIRE_IDSCAN) || hacking_safety)) //For SECURE VENDING MACHINES YEAH
 		to_chat(user, span_warning("Access denied."))
 		flick(icon_deny, src)
 		return
 
-	if(product.category == CAT_HIDDEN && !extended_inventory)
+	if(R.category == CAT_HIDDEN && !extended_inventory)
 		return
 
-	vend_ready = FALSE //One thing at a time!!
+	if(locate(/obj/structure/closet/crate) in loc) // RUTMGC ADDITION, hardcoded check to prevent stacking closed crates in vallhalla and opening them all at once with explosion
+		to_chat(user, span_warning("The floor is too cluttered, make some space."))
+		return
+
+	vend_ready = 0 //One thing at a time!!
+	R.amount--
 
 	if(((src.last_reply + (src.vend_delay + 200)) <= world.time) && src.vend_reply)
 		spawn(0)
 			src.speak(src.vend_reply)
 			src.last_reply = world.time
 
-	start_release_item(product, vend_delay, user)
+	var/obj/item/new_item = release_item(R, vend_delay)
 
-///Tries to vend the item
-/obj/machinery/vending/proc/start_release_item(datum/vending_product/product, delay_vending = 0, mob/user)
-	if(powered(power_channel))
-		use_power(active_power_usage)
-	else if(machine_current_charge > active_power_usage) //if no power, use the machine's battery
-		machine_current_charge -= min(machine_current_charge, active_power_usage)
-	else
-		return
-	if(icon_vend)
-		flick(icon_vend, src)
+	if(istype(new_item))
+		new_item.on_vend(user, faction, fill_container = TRUE)
+	vend_ready = 1
+
+/obj/machinery/vending/proc/release_item(datum/vending_product/R, delay_vending = 0, dump_product = 0)
 	if(delay_vending)
-		addtimer(CALLBACK(src, PROC_REF(release_item), product, user), delay_vending)
-		return
-	return release_item(product, user)
-
-///Vends the item
-/obj/machinery/vending/proc/release_item(datum/vending_product/product, mob/user)
-	SSblackbox.record_feedback("tally", "vendored", 1, product.product_name)
+		if(powered(power_channel))
+			use_power(active_power_usage)	//actuators and stuff
+			if (icon_vend)
+				flick(icon_vend, src) //Show the vending animation if needed
+			sleep(delay_vending)
+		else if(machine_current_charge > active_power_usage) //if no power, use the machine's battery.
+			machine_current_charge -= min(machine_current_charge, active_power_usage) //Sterilize with min; no negatives allowed.
+			//to_chat(world, span_warning("DEBUG: Machine Auto_Use_Power: Vend Power Usage: [active_power_usage] Machine Current Charge: [machine_current_charge]."))
+			if (icon_vend)
+				flick(icon_vend,src) //Show the vending animation if needed
+			sleep(delay_vending)
+		else
+			return
+	SSblackbox.record_feedback("tally", "vendored", 1, R.product_name)
 	addtimer(CALLBACK(src, PROC_REF(stock_vacuum)), 2.5 MINUTES, TIMER_UNIQUE | TIMER_OVERRIDE) // We clean up some time after the last item has been vended.
-	playsound(src, vending_sound ? vending_sound : SFX_VENDING, 25, 0)
-	var/obj/item/new_item
-	if(ispath(product.product_path,/obj/item/weapon/gun))
-		new_item = new product.product_path(get_turf(src), 1)
+	if(vending_sound)
+		playsound(src, vending_sound, 25, 0)
 	else
-		new_item = new product.product_path(get_turf(src))
-
-	. = new_item
-	product.amount--
-	vend_ready = TRUE
-
-	if(!user || !istype(new_item))
-		return
-	new_item.on_vend(user, faction, fill_container = TRUE)
+		playsound(src, "vending", 25, 0)
+	if(ispath(R.product_path,/obj/item/weapon/gun))
+		return new R.product_path(get_turf(src), 1)
+	else
+		return new R.product_path(get_turf(src))
 
 /obj/machinery/vending/MouseDrop_T(atom/movable/A, mob/user)
 	. = ..()
@@ -703,9 +693,9 @@
  */
 /datum/vending_product/proc/attempt_restock(obj/item/item_to_stock, mob/user, show_feedback = TRUE)
 	//More accurate comparison between absolute paths.
-	if(item_to_stock.storage_datum) //Nice try, specialists/engis
-		var/datum/storage/storage_to_stock = item_to_stock.storage_datum
-		if(!(storage_to_stock.storage_flags & BYPASS_VENDOR_CHECK)) //If your storage has this flag, it can be restocked
+	if(isstorage(item_to_stock)) //Nice try, specialists/engis
+		var/obj/item/storage/storage_to_stock = item_to_stock
+		if(!(storage_to_stock.flags_storage & BYPASS_VENDOR_CHECK)) //If your storage has this flag, it can be restocked
 			user?.balloon_alert(user, "Can't restock containers!")
 			return FALSE
 
@@ -744,15 +734,13 @@
 	//Actually restocks the item after our checks
 	if(user)
 		if(item_to_stock.loc == user) //Inside the mob's inventory
-			if(item_to_stock.item_flags & WIELDED)
+			if(item_to_stock.flags_item & WIELDED)
 				item_to_stock.unwield(user)
 			user.temporarilyRemoveItemFromInventory(item_to_stock)
 
-		// Hey I don't think this code does anything, it looks like it wants to restock things that are inside a storage?
-		// Probably should be running a loop over every item inside the storage, but whatever that's not for this PR
-		else if(item_to_stock.item_flags & IN_STORAGE) //inside a storage item
+		else if(istype(item_to_stock.loc, /obj/item/storage)) //inside a storage item
 			var/obj/item/storage/S = item_to_stock.loc
-			S.storage_datum.remove_from_storage(item_to_stock, user.loc, user)
+			S.remove_from_storage(item_to_stock, user.loc, user)
 
 	qdel(item_to_stock)
 
@@ -796,7 +784,6 @@
 			if(icon_vend)
 				flick(icon_vend, src)
 			playsound(loc, 'sound/machines/hydraulics_1.ogg', 25, 0, 1)
-
 
 /obj/machinery/vending/process()
 	if(machine_stat & (BROKEN|NOPOWER))
@@ -858,8 +845,8 @@
 			continue
 
 		while(R.amount>0)
-			if(!start_release_item(R, 0))
-				break
+			release_item(R, 0)
+			R.amount--
 		break
 
 	machine_stat |= BROKEN
@@ -879,7 +866,8 @@
 		if (!dump_path)
 			continue
 
-		throw_item = start_release_item(R, 0)
+		R.amount--
+		throw_item = release_item(R, 0)
 		break
 	if (!throw_item)
 		return FALSE
@@ -888,8 +876,7 @@
 	src.visible_message(span_warning("[src] launches [throw_item.name] at [target]!"))
 	. = TRUE
 
-
-/obj/machinery/vending/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, effects = TRUE, attack_dir, armour_penetration = 0, mob/living/blame_mob)
+/obj/machinery/vending/take_damage(damage_amount, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, attack_dir, armour_penetration = 0)
 	if(density && damage_amount >= knockdown_threshold)
 		tip_over()
 	return ..()

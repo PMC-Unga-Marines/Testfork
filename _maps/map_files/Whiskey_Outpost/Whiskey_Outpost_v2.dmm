@@ -309,7 +309,7 @@
 /turf/open/floor/prison,
 /area/whiskey_outpost)
 "bq" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/toy/dice,
 /obj/item/toy/dice/d20,
 /obj/item/toy/deck,
@@ -319,8 +319,8 @@
 /turf/open/floor/prison/plate,
 /area/whiskey_outpost)
 "br" = (
-/obj/structure/table/wood,
-/obj/item/weapon/sword/captain,
+/obj/structure/table/woodentable,
+/obj/item/weapon/claymore/mercsword/captain,
 /turf/open/floor/wood,
 /area/whiskey_outpost)
 "bs" = (
@@ -556,7 +556,7 @@
 /area/whiskey_outpost)
 "cG" = (
 /obj/item/clothing/suit/storage/marine/smartgunner,
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /turf/open/floor/wood,
 /area/whiskey_outpost)
 "cH" = (
@@ -726,9 +726,9 @@
 /turf/open/floor/prison,
 /area/whiskey_outpost)
 "dr" = (
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
 /obj/structure/rack,
 /obj/machinery/light{
 	dir = 1
@@ -736,9 +736,9 @@
 /turf/open/floor/plating,
 /area/whiskey_outpost)
 "dt" = (
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
 /obj/structure/rack,
 /turf/open/floor/plating,
 /area/whiskey_outpost/outside/east)
@@ -750,7 +750,7 @@
 /turf/open/floor/prison,
 /area/whiskey_outpost)
 "dw" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/effect/spawner/random/misc/paperbin,
 /obj/item/tool/pen,
 /obj/item/flashlight/lamp{
@@ -1007,11 +1007,6 @@
 	},
 /turf/open/floor/prison,
 /area/whiskey_outpost)
-"eW" = (
-/obj/effect/turf_decal/grassdecal/corner,
-/obj/effect/landmark/patrol_point/som/som_21,
-/turf/open/floor/plating/ground/dirt,
-/area/whiskey_outpost/outside/south)
 "eY" = (
 /turf/open/floor/plating/ground/dirtgrassborder/corner,
 /area/whiskey_outpost/outside/north)
@@ -1462,7 +1457,7 @@
 /obj/structure/barricade/sandbags{
 	dir = 1
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 4
 	},
 /obj/structure/platform{
@@ -1515,7 +1510,7 @@
 /turf/open/floor/plating/asteroidfloor,
 /area/whiskey_outpost)
 "hu" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8
 	},
 /obj/structure/platform{
@@ -1778,9 +1773,9 @@
 /turf/open/floor/mainship/sterile/side,
 /area/whiskey_outpost)
 "iT" = (
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
 /obj/structure/rack,
 /turf/open/floor/plating,
 /area/whiskey_outpost/outside/west)
@@ -2467,7 +2462,7 @@
 /obj/structure/barricade/sandbags{
 	pixel_y = -6
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8
 	},
 /obj/structure/platform{
@@ -3116,7 +3111,7 @@
 /turf/open/floor/prison,
 /area/whiskey_outpost)
 "px" = (
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/reagent_containers/pill/cyanide{
 	pixel_x = -3;
 	pixel_y = -4
@@ -3255,7 +3250,7 @@
 /area/whiskey_outpost/outside/north)
 "qc" = (
 /obj/item/storage/pill_bottle/happy,
-/obj/structure/table/wood,
+/obj/structure/table/woodentable,
 /obj/item/xenos_claw,
 /turf/open/floor/wood,
 /area/whiskey_outpost/outside/north)
@@ -3881,9 +3876,9 @@
 /area/whiskey_outpost/outside/south)
 "tB" = (
 /obj/structure/rack,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
 /turf/open/floor/plating/ground/dirt,
 /area/whiskey_outpost/outside/north)
 "tC" = (
@@ -3933,10 +3928,10 @@
 /area/whiskey_outpost/outside/east)
 "tP" = (
 /obj/structure/closet/crate,
-/obj/item/stack/sheet/glass/glass{
+/obj/item/stack/sheet/glass{
 	amount = 30
 	},
-/obj/item/stack/sheet/glass/glass{
+/obj/item/stack/sheet/glass{
 	amount = 30
 	},
 /turf/open/floor/marking/bot,
@@ -4164,7 +4159,7 @@
 /turf/open/floor/plating/ground/dirt,
 /area/whiskey_outpost/outside/south)
 "vh" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest,
+/obj/item/weapon/gun/tl102/hsg_nest,
 /turf/open/floor/plating/warning,
 /area/whiskey_outpost/outside/east)
 "vi" = (
@@ -4177,7 +4172,7 @@
 /turf/open/floor/plating,
 /area/whiskey_outpost/outside/north)
 "vq" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest,
+/obj/item/weapon/gun/tl102/hsg_nest,
 /turf/open/floor/plating/warning,
 /area/whiskey_outpost/outside/west)
 "vr" = (
@@ -4496,9 +4491,9 @@
 /area/whiskey_outpost)
 "xp" = (
 /obj/structure/rack,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
 /turf/open/floor/plating,
 /area/whiskey_outpost/outside/west)
 "xr" = (
@@ -4729,9 +4724,9 @@
 /area/whiskey_outpost/outside/east)
 "yO" = (
 /obj/structure/rack,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
 /turf/open/floor/plating/asteroidfloor,
 /area/whiskey_outpost)
 "yP" = (
@@ -4854,7 +4849,7 @@
 /turf/open/floor/plating/ground/dirt,
 /area/whiskey_outpost/outside/east)
 "zG" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest,
+/obj/item/weapon/gun/tl102/hsg_nest,
 /obj/structure/platform,
 /turf/open/floor/plating/asteroidwarning,
 /area/whiskey_outpost)
@@ -5347,7 +5342,7 @@
 /obj/structure/barricade/sandbags{
 	dir = 1
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8
 	},
 /obj/structure/platform{
@@ -5567,7 +5562,7 @@
 /turf/open/liquid/water/river,
 /area/whiskey_outpost/outside/east)
 "Eq" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest,
+/obj/item/weapon/gun/tl102/hsg_nest,
 /turf/open/floor/plating/ground/dirt,
 /area/whiskey_outpost/outside/south)
 "Er" = (
@@ -5601,9 +5596,9 @@
 /area/whiskey_outpost)
 "EK" = (
 /obj/structure/rack,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
-/obj/item/ammo_magazine/hsg_102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
+/obj/item/ammo_magazine/tl102/hsg_nest,
 /turf/open/floor/plating/ground/dirt,
 /area/whiskey_outpost/outside/south)
 "EN" = (
@@ -5809,7 +5804,7 @@
 /turf/open/floor/plating,
 /area/whiskey_outpost/outside/east)
 "GG" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest,
+/obj/item/weapon/gun/tl102/hsg_nest,
 /obj/structure/platform,
 /turf/open/floor/plating/warning,
 /area/whiskey_outpost)
@@ -6901,6 +6896,7 @@
 	},
 /area/whiskey_outpost/outside/east)
 "Pk" = (
+/obj/effect/attach_point/electronics/dropship1,
 /obj/structure/dropship_piece/one/weapon/rightleft,
 /turf/open/floor/plating/ground/dirt,
 /area/whiskey_outpost/outside/east)
@@ -7037,10 +7033,6 @@
 	dir = 8
 	},
 /area/whiskey_outpost)
-"QQ" = (
-/obj/effect/landmark/patrol_point/tgmc_21,
-/turf/open/liquid/water/river,
-/area/whiskey_outpost/outside/north)
 "QS" = (
 /obj/structure/barricade/metal,
 /obj/item/weapon/gun/sentry/premade,
@@ -7061,6 +7053,11 @@
 /area/whiskey_outpost/outside/west)
 "QY" = (
 /obj/structure/barricade/plasteel,
+/turf/open/floor/plating/warning,
+/area/whiskey_outpost/outside/west)
+"Rb" = (
+/obj/structure/barricade/metal,
+/obj/structure/barricade/metal,
 /turf/open/floor/plating/warning,
 /area/whiskey_outpost/outside/west)
 "Rc" = (
@@ -7136,6 +7133,7 @@
 /turf/open/floor/mainship/sterile,
 /area/whiskey_outpost)
 "RP" = (
+/obj/effect/attach_point/electronics/dropship1,
 /obj/structure/dropship_piece/one/weapon/leftright,
 /turf/open/floor/plating/ground/dirt,
 /area/whiskey_outpost/outside/east)
@@ -7712,13 +7710,6 @@
 	dir = 5
 	},
 /area/whiskey_outpost)
-"WK" = (
-/obj/effect/turf_decal/grassdecal/corner2{
-	dir = 4
-	},
-/obj/effect/landmark/patrol_point/som/som_11,
-/turf/open/floor/plating/ground/dirt,
-/area/whiskey_outpost/outside/south)
 "WL" = (
 /turf/open/ground/grass,
 /area/whiskey_outpost/outside/east)
@@ -7936,10 +7927,6 @@
 "YJ" = (
 /turf/open/floor/plating/asteroidfloor,
 /area/whiskey_outpost/outside/east)
-"YK" = (
-/obj/effect/landmark/patrol_point/tgmc_11,
-/turf/open/floor/plating,
-/area/whiskey_outpost)
 "YL" = (
 /obj/effect/landmark/lv624/fog_blocker,
 /turf/closed/mineral/smooth,
@@ -11677,7 +11664,7 @@ gF
 gF
 gF
 gF
-YK
+gF
 gF
 gF
 gF
@@ -12746,7 +12733,7 @@ Sz
 aF
 Hq
 vi
-WK
+fn
 CV
 NW
 NW
@@ -15157,7 +15144,7 @@ Hr
 hm
 hm
 Xh
-QX
+Rb
 Hm
 Qu
 In
@@ -20823,7 +20810,7 @@ Sz
 Sz
 iu
 sh
-eW
+rN
 pY
 Hq
 NW
@@ -21971,7 +21958,7 @@ cx
 cx
 nJ
 Eb
-QQ
+cx
 cx
 nJ
 cx

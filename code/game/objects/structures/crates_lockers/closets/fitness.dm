@@ -4,7 +4,8 @@
 	icon_state = "mixed"
 	icon_closed = "mixed"
 
-/obj/structure/closet/athletic_mixed/PopulateContents()
+/obj/structure/closet/athletic_mixed/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/under/shorts/grey(src)
 	new /obj/item/clothing/under/shorts/black(src)
 	new /obj/item/clothing/under/shorts/red(src)
@@ -26,7 +27,8 @@
 	name = "boxing gloves"
 	desc = "It's a storage unit for gloves for use in the boxing ring."
 
-/obj/structure/closet/boxinggloves/PopulateContents()
+/obj/structure/closet/boxinggloves/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/gloves/heldgloves/boxing/blue(src)
 	new /obj/item/clothing/gloves/heldgloves/boxing/green(src)
 	new /obj/item/clothing/gloves/heldgloves/boxing/yellow(src)
@@ -37,7 +39,8 @@
 	name = "mask closet"
 	desc = "IT'S A STORAGE UNIT FOR FIGHTER MASKS OLE!"
 
-/obj/structure/closet/masks/PopulateContents()
+/obj/structure/closet/masks/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/mask/luchador(src)
 	new /obj/item/clothing/mask/luchador/rudos(src)
 	new /obj/item/clothing/mask/luchador/tecnicos(src)
@@ -49,7 +52,8 @@
 	icon_state = "red"
 	icon_closed = "red"
 
-/obj/structure/closet/lasertag/red/PopulateContents()
+/obj/structure/closet/lasertag/red/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/suit/redtag(src)
 	new /obj/item/clothing/suit/redtag(src)
 
@@ -60,7 +64,8 @@
 	icon_state = "blue"
 	icon_closed = "blue"
 
-/obj/structure/closet/lasertag/blue/PopulateContents()
+/obj/structure/closet/lasertag/blue/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/suit/bluetag(src)
 	new /obj/item/clothing/suit/bluetag(src)
 
@@ -70,7 +75,8 @@
 	icon_state = "mixed"
 	icon_closed = "mixed"
 
-/obj/structure/closet/basketball/PopulateContents()
+/obj/structure/closet/basketball/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/under/shorts/grey(src)
 	new /obj/item/clothing/under/shorts/black(src)
 	new /obj/item/clothing/under/shorts/red(src)
@@ -83,7 +89,8 @@
 	icon_state = "mixed"
 	icon_closed = "mixed"
 
-/obj/structure/closet/swimsuit/PopulateContents()
+/obj/structure/closet/swimsuit/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/under/swimsuit/red(src)
 	new /obj/item/clothing/under/swimsuit/black(src)
 	new /obj/item/clothing/under/swimsuit/blue(src)

@@ -3,9 +3,9 @@
 /obj/item/evidencebag
 	name = "evidence bag"
 	desc = "An empty evidence bag."
-	icon = 'icons/obj/items/storage/misc.dmi'
+	icon = 'icons/obj/items/storage/storage.dmi'
 	icon_state = "evidenceobj"
-	worn_icon_state = ""
+	item_state = ""
 	w_class = WEIGHT_CLASS_SMALL
 	var/obj/item/stored_item = null
 
@@ -23,8 +23,8 @@
 			return
 	else
 		//If it isn't on the floor. Do some checks to see if it's in our hands or a box. Otherwise give up.
-		if(I.item_flags & IN_STORAGE) //in a container.
-			var/sdepth = I.storage_datum.storage_depth(user)
+		if(istype(I.loc,/obj/item/storage))	//in a container.
+			var/sdepth = I.storage_depth(user)
 			if (sdepth == -1 || sdepth > 1)
 				return	//too deeply nested to access
 
@@ -109,11 +109,11 @@
 	icon = 'icons/obj/items/card.dmi'
 	icon_state = "fingerprint0"
 	var/amount = 10
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/civilian_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/civilian_right.dmi',
 	)
-	worn_icon_state = "paper"
+	item_state = "paper"
 	throwforce = 1
 	w_class = WEIGHT_CLASS_TINY
 	throw_speed = 3
@@ -125,8 +125,8 @@
 	desc = "Apply finger print card."
 	icon = 'icons/obj/items/items.dmi'
 	icon_state = "fcardholder0"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/civilian_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/civilian_right.dmi',
 	)
-	worn_icon_state = "clipboard"
+	item_state = "clipboard"

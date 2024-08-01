@@ -9,11 +9,11 @@ LINEN BINS
 	desc = "A surprisingly soft linen bedsheet."
 	icon = 'icons/obj/items/bedsheets.dmi'
 	icon_state = "sheet"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/civilian_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/civilian_right.dmi',
 	)
-	worn_icon_state = "bedsheet"
+	item_state = "bedsheet"
 	layer = MOB_LAYER
 	throwforce = 1
 	throw_speed = 1
@@ -77,6 +77,12 @@ LINEN BINS
 /obj/item/bedsheet/brown
 	icon_state = "sheetbrown"
 
+/obj/item/bedsheet/pred
+	name = "Hunter Nav Console"
+	desc = "A console used by the Hunters for navigation purposes."
+	icon = 'icons/obj/machines/yautja_machines.dmi'
+	icon_state = "cameras"
+
 
 
 
@@ -114,8 +120,6 @@ LINEN BINS
 
 /obj/structure/bedsheetbin/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/bedsheet))
 		if(!user.drop_held_item())

@@ -1,15 +1,15 @@
 /obj/item/pinpointer
 	name = "Xeno structure pinpointer"
-	icon = 'icons/obj/items/pinpointer.dmi'
-	icon_state = "pinpointer_off"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	icon = 'icons/Marine/marine-navigation.dmi'
+	icon_state = "pinoff"
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	w_class = WEIGHT_CLASS_TINY
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/engineering_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/engineering_right.dmi',
 	)
-	worn_icon_state = "electronic"
+	item_state = "electronic"
 	throw_speed = 4
 	throw_range = 20
 	///What we're currently tracking
@@ -60,11 +60,13 @@
 		target = null
 		return
 
+
 /obj/item/pinpointer/attack_self(mob/living/user)
 	if(active)
 		deactivate(user)
 	else
 		activate(user)
+
 
 /obj/item/pinpointer/proc/activate(mob/living/user)
 	set_target(user)
@@ -74,26 +76,29 @@
 	START_PROCESSING(SSobj, src)
 	balloon_alert(user, "Pinpointer activated")
 
+
 /obj/item/pinpointer/proc/deactivate(mob/living/user)
 	active = FALSE
 	target = null
 	STOP_PROCESSING(SSobj, src)
-	icon_state = "pinpointer_off"
+	icon_state = "pinoff"
 	balloon_alert(user, "Pinpointer deactivated")
+
 
 /obj/item/pinpointer/process()
 	if(QDELETED(target))
 		active = FALSE
-		icon_state = "pinpointer_null"
+		icon_state = "pinonnull"
 		return PROCESS_KILL
 
 	setDir(get_dir(src, target))
 	switch(get_dist(src, target))
 		if(0)
-			icon_state = "pinpointer_direct"
+			icon_state = "pinondirect"
 		if(1 to 8)
-			icon_state = "pinpointer_close"
+			icon_state = "pinonclose"
 		if(9 to 16)
-			icon_state = "pinpointer_medium"
+			icon_state = "pinonmedium"
 		if(16 to INFINITY)
-			icon_state = "pinpointer_far"
+			icon_state = "pinonfar"
+

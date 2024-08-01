@@ -51,7 +51,6 @@
 /datum/action/ability/activable/xeno/psychic_shield
 	name = "Psychic Shield"
 	action_icon_state = "psy_shield"
-	action_icon = 'icons/Xeno/actions/warlock.dmi'
 	desc = "Channel a psychic shield at your current location that can reflect most projectiles. Activate again while the shield is active to detonate the shield forcibly, producing knockback. Must remain static to use."
 	cooldown_duration = 10 SECONDS
 	ability_cost = 200
@@ -182,8 +181,8 @@
 /obj/effect/xeno/shield
 	icon = 'icons/Xeno/96x96.dmi'
 	icon_state = "shield"
-	resistance_flags = BANISH_IMMUNE|UNACIDABLE|PLASMACUTTER_IMMUNE
-	max_integrity = 650
+	resistance_flags = UNACIDABLE|PLASMACUTTER_IMMUNE
+	max_integrity = 350
 	layer = ABOVE_MOB_LAYER
 	///Who created the shield
 	var/mob/living/carbon/xenomorph/owner
@@ -196,6 +195,8 @@
 		return INITIALIZE_HINT_QDEL
 	owner = creator
 	dir = owner.dir
+	max_integrity = owner.xeno_caste.shield_strength
+	obj_integrity = max_integrity
 	if(dir & (EAST|WEST))
 		bound_height = 96
 		bound_y = -32
@@ -211,7 +212,7 @@
 	return !uncrossing
 
 /obj/effect/xeno/shield/do_projectile_hit(obj/projectile/proj)
-	proj.projectile_behavior_flags |= PROJECTILE_FROZEN
+	proj.flags_projectile_behavior |= PROJECTILE_FROZEN
 	proj.iff_signal = null
 	frozen_projectiles += proj
 	take_damage(proj.damage, proj.ammo.damage_type, proj.ammo.armor_type, 0, REVERSE_DIR(proj.dir), proj.ammo.penetration)
@@ -220,7 +221,7 @@
 		release_projectiles()
 		owner.apply_effect(1 SECONDS, WEAKEN)
 
-/obj/effect/xeno/shield/obj_destruction(damage_amount, damage_type, damage_flag, mob/living/blame_mob)
+/obj/effect/xeno/shield/obj_destruction()
 	release_projectiles()
 	owner.apply_effect(1 SECONDS, WEAKEN)
 	return ..()
@@ -228,7 +229,7 @@
 ///Unfeezes the projectiles on their original path
 /obj/effect/xeno/shield/proc/release_projectiles()
 	for(var/obj/projectile/proj AS in frozen_projectiles)
-		proj.projectile_behavior_flags &= ~PROJECTILE_FROZEN
+		proj.flags_projectile_behavior &= ~PROJECTILE_FROZEN
 		proj.resume_move()
 	record_projectiles_frozen(owner, LAZYLEN(frozen_projectiles))
 
@@ -237,14 +238,15 @@
 	playsound(loc, 'sound/effects/portal.ogg', 20)
 	var/perpendicular_angle = Get_Angle(get_turf(src), get_step(src, dir)) //the angle src is facing, get_turf because pixel_x or y messes with the angle
 	for(var/obj/projectile/proj AS in frozen_projectiles)
-		proj.projectile_behavior_flags &= ~PROJECTILE_FROZEN
+		proj.flags_projectile_behavior &= ~PROJECTILE_FROZEN
 		proj.distance_travelled = 0 //we're effectively firing it fresh
 		var/new_angle = (perpendicular_angle + (perpendicular_angle - proj.dir_angle - 180))
 		if(new_angle < 0)
 			new_angle += 360
 		else if(new_angle > 360)
 			new_angle -= 360
-		proj.fire_at(source = src, angle = new_angle, recursivity = TRUE)
+		proj.firer = src
+		proj.fire_at(shooter = src, source = src, angle = new_angle, recursivity = TRUE)
 
 		//Record those sick rocket shots
 		//Is not part of record_projectiles_frozen() because it is probably bad to be running that for every bullet!
@@ -259,17 +261,13 @@
 // ***************************************
 // *********** psychic crush
 // ***************************************
-
-#define PSY_CRUSH_DAMAGE 50
 /datum/action/ability/activable/xeno/psy_crush
 	name = "Psychic Crush"
 	action_icon_state = "psy_crush"
-	action_icon = 'icons/Xeno/actions/warlock.dmi'
 	desc = "Channel an expanding AOE crush effect, activating it again pre-maturely crushes enemies over an area. The longer it is channeled, the larger area it will affect, but will consume more plasma."
 	ability_cost = 40
 	cooldown_duration = 12 SECONDS
 	keybind_flags = ABILITY_KEYBIND_USE_ABILITY
-	target_flags = ABILITY_TURF_TARGET
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_PSYCHIC_CRUSH,
 	)
@@ -286,7 +284,7 @@
 	/// A list of all things that had a fliter applied
 	var/list/filters_applied
 	///max range at which we can cast out ability
-	var/ability_range = 7
+	var/ability_range = 9
 	///Holder for the orb visual effect
 	var/obj/effect/xeno/crush_orb/orb
 	/// Used for particles. Holds the particles instead of the mob. See particle_holder for documentation.
@@ -339,7 +337,7 @@
 	if(get_dist(owner, target) > ability_range)
 		owner.balloon_alert(owner, "Too far!")
 		return FALSE
-	if(sight_needed && !line_of_sight(owner, target, 9))
+	if(sight_needed && !line_of_sight(owner, target, 11))
 		owner.balloon_alert(owner, "Out of sight!")
 		return FALSE
 	return TRUE
@@ -401,8 +399,8 @@
 				var/mob/living/carbon/carbon_victim = victim
 				if(isxeno(carbon_victim) || carbon_victim.stat == DEAD)
 					continue
-				carbon_victim.apply_damage(PSY_CRUSH_DAMAGE, BRUTE, blocked = BOMB)
-				carbon_victim.apply_damage(PSY_CRUSH_DAMAGE * 1.5, STAMINA, blocked = BOMB)
+				carbon_victim.apply_damage(xeno_owner.xeno_caste.crush_strength, BRUTE, blocked = BOMB)
+				carbon_victim.apply_damage(xeno_owner.xeno_caste.crush_strength * 1.5, STAMINA, blocked = BOMB)
 				carbon_victim.adjust_stagger(5 SECONDS)
 				carbon_victim.add_slowdown(6)
 			else if(isvehicle(victim) || ishitbox(victim))
@@ -410,7 +408,7 @@
 				var/dam_mult = 0.5
 				if(ismecha(obj_victim))
 					dam_mult = 5
-				obj_victim.take_damage(PSY_CRUSH_DAMAGE * dam_mult, BRUTE, BOMB)
+				obj_victim.take_damage(xeno_owner.xeno_caste.crush_strength * dam_mult, BRUTE, BOMB)
 	stop_crush()
 
 /// stops channeling and unregisters all listeners, resetting the ability
@@ -491,15 +489,12 @@
 	. = ..()
 	flick("orb_charge", src)
 
-#undef PSY_CRUSH_DAMAGE
-
 // ***************************************
 // *********** Psyblast
 // ***************************************
 /datum/action/ability/activable/xeno/psy_blast
 	name = "Psychic Blast"
 	action_icon_state = "psy_blast"
-	action_icon = 'icons/Xeno/actions/warlock.dmi'
 	desc = "Launch a blast of psychic energy that deals light damage and knocks back enemies in its AOE. Must remain stationary for a few seconds to use."
 	cooldown_duration = 6 SECONDS
 	ability_cost = 230
@@ -550,16 +545,19 @@
 
 /datum/action/ability/activable/xeno/psy_blast/use_ability(atom/A)
 	var/mob/living/carbon/xenomorph/xeno_owner = owner
+	var/turf/target_turf = get_turf(A)
+
 	owner.balloon_alert(owner, "We channel our psychic power")
+
 	generate_particles(A, 7)
-	ADD_TRAIT(xeno_owner, TRAIT_IMMOBILE, PSYCHIC_BLAST_ABILITY_TRAIT)
+	//ADD_TRAIT(xeno_owner, TRAIT_IMMOBILE, PSYCHIC_BLAST_ABILITY_TRAIT) // RUTGMC DELETION, PSYBLAST IMMOBILIZING REMOVAL
 	var/datum/ammo/energy/xeno/ammo_type = xeno_owner.ammo
 	xeno_owner.update_glow(3, 3, ammo_type.glow_color)
 
-	if(!do_after(xeno_owner, 1 SECONDS, IGNORE_TARGET_LOC_CHANGE, A, BUSY_ICON_DANGER) || !can_use_ability(A, FALSE) || !(A in range(get_screen_size(TRUE), owner)))
+	if(!do_after(xeno_owner, 1 SECONDS, NONE, target_turf, BUSY_ICON_DANGER) || !can_use_ability(A, FALSE))
 		owner.balloon_alert(owner, "Our focus is disrupted")
 		end_channel()
-		REMOVE_TRAIT(xeno_owner, TRAIT_IMMOBILE, PSYCHIC_BLAST_ABILITY_TRAIT)
+		//REMOVE_TRAIT(xeno_owner, TRAIT_IMMOBILE, PSYCHIC_BLAST_ABILITY_TRAIT) // RUTGMC DELETION, PSYBLAST IMMOBILIZING REMOVAL
 		return fail_activate()
 
 	succeed_activate()
@@ -567,7 +565,7 @@
 	var/obj/projectile/hitscan/projectile = new /obj/projectile/hitscan(xeno_owner.loc)
 	projectile.effect_icon = initial(ammo_type.hitscan_effect_icon)
 	projectile.generate_bullet(ammo_type)
-	projectile.fire_at(A, xeno_owner, xeno_owner, projectile.ammo.max_range, projectile.ammo.shell_speed)
+	projectile.fire_at(A, xeno_owner, null, projectile.ammo.max_range, projectile.ammo.shell_speed)
 	playsound(xeno_owner, 'sound/weapons/guns/fire/volkite_4.ogg', 40)
 
 	if(istype(xeno_owner.ammo, /datum/ammo/energy/xeno/psy_blast))
@@ -579,7 +577,7 @@
 
 	add_cooldown()
 	update_button_icon()
-	REMOVE_TRAIT(xeno_owner, TRAIT_IMMOBILE, PSYCHIC_BLAST_ABILITY_TRAIT)
+	//REMOVE_TRAIT(xeno_owner, TRAIT_IMMOBILE, PSYCHIC_BLAST_ABILITY_TRAIT) // RUTGMC DELETION, PSYBLAST IMMOBILIZING REMOVAL
 	addtimer(CALLBACK(src, PROC_REF(end_channel)), 5)
 
 /datum/action/ability/activable/xeno/psy_blast/update_button_icon()
@@ -607,3 +605,22 @@
 	var/mob/living/carbon/xenomorph/xeno_owner = owner
 	QDEL_NULL(particle_holder)
 	xeno_owner.update_glow()
+
+/datum/action/ability/xeno_action/toggle_warlock_zoom
+	name = "Toggle Warlock Zoom"
+	action_icon_state = "toggle_queen_zoom"
+	desc = "Zoom out for a larger view around wherever you are looking."
+	ability_cost = 0
+	keybinding_signals = list(
+		KEYBINDING_NORMAL = COMSIG_XENOABILITY_TOGGLE_WARLOCK_ZOOM,
+	)
+
+/datum/action/ability/xeno_action/toggle_warlock_zoom/action_activate()
+	var/mob/living/carbon/xenomorph/warlock/X = owner
+	if(X.is_zoomed)
+		X.zoom_out()
+	else
+		if(!do_after(X, 0 SECONDS, IGNORE_HELD_ITEM, null, BUSY_ICON_GENERIC) || X.is_zoomed)
+			return
+		X.zoom_in(0, 4.5)
+		..()

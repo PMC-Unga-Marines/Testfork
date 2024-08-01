@@ -84,7 +84,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/east)
 "aT" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /turf/open/floor,
 /area/oscar_outpost)
 "bb" = (
@@ -119,34 +119,34 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -259,6 +259,14 @@
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northeast)
+"cy" = (
+/obj/structure/table/reinforced,
+/obj/structure/barricade/metal,
+/obj/structure/barricade/metal,
+/obj/structure/barricade/metal,
+/obj/structure/barricade/metal,
+/turf/open/floor/plating,
+/area/oscar_outpost/outside/north)
 "cz" = (
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northeast)
@@ -268,7 +276,7 @@
 	name = "trench lining";
 	pixel_y = 1
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -352,55 +360,55 @@
 /area/oscar_outpost)
 "dd" = (
 /obj/structure/rack,
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/engine/cult{
@@ -573,6 +581,10 @@
 	dir = 2
 	},
 /area/oscar_outpost)
+"eH" = (
+/obj/effect/landmark/patrol_point/som/som_13,
+/turf/open/floor/plating/ground/dirt,
+/area/oscar_outpost/outside/north)
 "eI" = (
 /turf/open/floor/plating/ground/dirtgrassborder/corner2{
 	dir = 8
@@ -689,55 +701,55 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/road)
 "fP" = (
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -767,32 +779,32 @@
 /turf/open/floor,
 /area/oscar_outpost)
 "gL" = (
-/obj/structure/table/wood/rustic,
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/structure/table/rusticwoodentable,
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -5;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -2;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 1;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 4;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 7;
 	pixel_y = 15
 	},
@@ -884,6 +896,10 @@
 "hP" = (
 /turf/open/floor/plating/ground/dirtgrassborder/corner2,
 /area/oscar_outpost/outside/east)
+"hQ" = (
+/obj/effect/landmark/patrol_point/som/som_14,
+/turf/open/floor/plating/ground/dirt,
+/area/oscar_outpost/outside/north)
 "hV" = (
 /obj/structure/fence,
 /obj/effect/ai_node,
@@ -1037,7 +1053,7 @@
 	name = "trench lining";
 	pixel_y = 1
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -1060,8 +1076,12 @@
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/road)
+"jZ" = (
+/obj/effect/landmark/patrol_point/som/som_22,
+/turf/open/floor/plating/ground/dirt,
+/area/oscar_outpost/outside/north)
 "kk" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/item/reagent_containers/glass/bucket,
 /turf/open/floor,
 /area/oscar_outpost)
@@ -1095,7 +1115,7 @@
 	name = "trench lining";
 	pixel_y = 1
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest/sandless{
+/obj/item/weapon/gun/tl102/hsg_nest/sandless{
 	dir = 4
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -1272,7 +1292,7 @@
 /turf/open/ground/grass,
 /area/oscar_outpost)
 "nv" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/effect/spawner/random/food_or_drink/wine{
 	pixel_x = -8;
 	pixel_y = 18
@@ -1515,7 +1535,7 @@
 	},
 /area/oscar_outpost)
 "pk" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/item/reagent_containers/glass/bucket,
 /obj/item/reagent_containers/glass/bucket,
 /obj/item/reagent_containers/glass/bucket,
@@ -1541,7 +1561,7 @@
 /turf/closed/wall/mainship/research,
 /area/oscar_outpost)
 "pz" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/item/storage/box/condimentbottles{
 	pixel_x = -5;
 	pixel_y = 12
@@ -1569,32 +1589,32 @@
 /turf/open/floor,
 /area/oscar_outpost)
 "pE" = (
-/obj/structure/table/wood/rustic,
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/structure/table/rusticwoodentable,
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -5;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -2;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 1;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 4;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 7;
 	pixel_y = 15
 	},
@@ -1660,6 +1680,19 @@
 /obj/effect/spawner/random/weaponry/explosive/plastiqueexplosive,
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/west)
+"qC" = (
+/obj/structure/barricade/sandbags{
+	dir = 4;
+	name = "trench lining";
+	pixel_y = 1
+	},
+/obj/structure/barricade/sandbags{
+	dir = 4;
+	name = "trench lining";
+	pixel_y = 1
+	},
+/turf/open/floor/plating/ground/dirt2,
+/area/oscar_outpost/outside/northwest)
 "qH" = (
 /turf/open/floor/plating/ground/dirtgrassborder{
 	dir = 4
@@ -1746,7 +1779,7 @@
 	name = "barley";
 	plantname = "barley"
 	},
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/machinery/light{
 	dir = 1
 	},
@@ -1765,52 +1798,52 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -1845,7 +1878,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northwest)
 "rG" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/item/reagent_containers/glass/bucket/janibucket,
 /turf/open/floor,
 /area/oscar_outpost)
@@ -1884,6 +1917,10 @@
 "sk" = (
 /turf/open/floor/mainship/sterile/dark,
 /area/oscar_outpost)
+"sr" = (
+/obj/effect/landmark/patrol_point/som/som_23,
+/turf/open/floor/plating/ground/dirt,
+/area/oscar_outpost/outside/north)
 "st" = (
 /obj/machinery/optable,
 /obj/machinery/camera/autoname/mainship{
@@ -2003,14 +2040,14 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	name = "\improper T37 Medium Machinegun"
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northwest)
 "tz" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
@@ -2031,32 +2068,32 @@
 /turf/open/floor/plating/ground/dirtgrassborder,
 /area/oscar_outpost/outside/west)
 "tJ" = (
-/obj/structure/table/wood/rustic,
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/structure/table/rusticwoodentable,
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -5;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -2;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 1;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 4;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 7;
 	pixel_y = 15
 	},
@@ -2146,34 +2183,34 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /obj/structure/barricade/sandbags{
@@ -2276,8 +2313,12 @@
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/north)
+"vX" = (
+/obj/effect/landmark/patrol_point/som/som_12,
+/turf/open/floor/plating/ground/dirt,
+/area/oscar_outpost/outside/north)
 "wf" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -2415,7 +2456,7 @@
 /obj/structure/barricade/metal{
 	dir = 1
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -2796,7 +2837,7 @@
 /turf/open/floor/plating/ground/dirt,
 /area/oscar_outpost/outside/north)
 "Bo" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest/sandless{
+/obj/item/weapon/gun/tl102/hsg_nest/sandless{
 	dir = 4
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -2915,14 +2956,14 @@
 /turf/open/floor,
 /area/oscar_outpost)
 "Dg" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/east)
 "Dj" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/effect/spawner/random/food_or_drink/beer/oscaroutpost{
 	pixel_x = -5;
 	pixel_y = 15
@@ -2982,52 +3023,52 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -3040,7 +3081,7 @@
 /turf/open/floor/mainship/sterile,
 /area/oscar_outpost)
 "Dm" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
@@ -3131,7 +3172,7 @@
 	name = "trench lining";
 	pixel_y = 1
 	},
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
@@ -3200,40 +3241,40 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -3286,7 +3327,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/north)
 "FM" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 4;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -3375,7 +3416,7 @@
 /turf/open/liquid/water/river,
 /area/oscar_outpost/outside/north)
 "GR" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
@@ -3526,7 +3567,7 @@
 	name = "barley";
 	plantname = "barley"
 	},
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /turf/open/floor,
 /area/oscar_outpost)
 "Iz" = (
@@ -3565,34 +3606,34 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /obj/structure/barricade/sandbags{
@@ -3723,7 +3764,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northeast)
 "KD" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/item/reagent_containers/food/snacks/grown/grapes,
 /obj/item/reagent_containers/food/snacks/grown/grapes,
 /obj/item/reagent_containers/food/snacks/grown/grapes,
@@ -3780,7 +3821,7 @@
 	name = "barley";
 	plantname = "barley"
 	},
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/effect/spawner/random/food_or_drink/kitchen,
 /turf/open/floor,
 /area/oscar_outpost)
@@ -3839,7 +3880,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/west)
 "Mj" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
@@ -3910,6 +3951,10 @@
 	dir = 2
 	},
 /area/oscar_outpost)
+"Nf" = (
+/obj/effect/landmark/patrol_point/som/som_24,
+/turf/open/floor/plating/ground/dirt,
+/area/oscar_outpost/outside/north)
 "Nh" = (
 /obj/structure/table/reinforced,
 /obj/structure/barricade/metal,
@@ -4111,7 +4156,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northwest)
 "OO" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/effect/spawner/random/food_or_drink/beer/oscaroutpost{
 	pixel_x = -5;
 	pixel_y = 15
@@ -4183,7 +4228,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northeast)
 "OY" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/effect/spawner/random/food_or_drink/beer/oscaroutpost{
 	pixel_x = -5;
 	pixel_y = 15
@@ -4251,7 +4296,7 @@
 	},
 /area/oscar_outpost/outside/east)
 "Pn" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -4286,43 +4331,43 @@
 /area/oscar_outpost/outside/northwest)
 "PF" = (
 /obj/structure/table/mainship,
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/weapon/gun/hsg_102{
+/obj/item/weapon/gun/tl102{
 	name = "\improper T37 Medium Machinegun"
 	},
-/obj/item/weapon/gun/hsg_102{
+/obj/item/weapon/gun/tl102{
 	name = "\improper T37 Medium Machinegun"
 	},
 /obj/machinery/light{
@@ -4350,67 +4395,67 @@
 	name = "trench lining";
 	pixel_y = 1
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -4472,55 +4517,55 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/north)
 "QH" = (
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /obj/effect/ai_node,
@@ -4568,32 +4613,32 @@
 	},
 /area/oscar_outpost/outside/northeast)
 "Rj" = (
-/obj/structure/table/wood/rustic,
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/structure/table/rusticwoodentable,
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -8;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -5;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = -2;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 1;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 4;
 	pixel_y = 15
 	},
-/obj/item/reagent_containers/cup/glass/drinkingglass{
+/obj/item/reagent_containers/food/drinks/drinkingglass{
 	pixel_x = 7;
 	pixel_y = 15
 	},
@@ -4689,7 +4734,7 @@
 	},
 /area/oscar_outpost)
 "RD" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	name = "\improper T37 Medium Machinegun"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -4700,40 +4745,40 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/east)
 "Sh" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
@@ -4898,7 +4943,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/west)
 "Ug" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 8;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -5093,7 +5138,7 @@
 /turf/open/floor/plating/ground/dirtgrassborder/corner,
 /area/oscar_outpost/outside/west)
 "WC" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 4;
 	name = "\improper T37 Medium Machinegun"
 	},
@@ -5162,34 +5207,34 @@
 	name = "trench lining";
 	pixel_y = 10
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -5303,7 +5348,7 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/road)
 "Ye" = (
-/obj/structure/table/wood/rustic,
+/obj/structure/table/rusticwoodentable,
 /obj/effect/spawner/random/food_or_drink/wine{
 	pixel_x = -8;
 	pixel_y = 18
@@ -5343,19 +5388,19 @@
 /turf/open/floor,
 /area/oscar_outpost)
 "Yh" = (
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -5385,6 +5430,19 @@
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northeast)
+"Yr" = (
+/obj/structure/barricade/sandbags{
+	dir = 8;
+	name = "trench lining";
+	pixel_y = 1
+	},
+/obj/structure/barricade/sandbags{
+	dir = 8;
+	name = "trench lining";
+	pixel_y = 1
+	},
+/turf/open/floor/plating/ground/dirt2,
+/area/oscar_outpost/outside/northeast)
 "Yu" = (
 /obj/structure/platform/rockcliff{
 	dir = 1
@@ -5405,20 +5463,20 @@
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/north)
 "YM" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest/sandless{
+/obj/item/weapon/gun/tl102/hsg_nest/sandless{
 	dir = 4
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northeast)
 "YO" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	dir = 1;
 	pixel_y = 7
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/north)
 "YT" = (
-/obj/item/weapon/gun/hsg_102/hsg_nest{
+/obj/item/weapon/gun/tl102/hsg_nest{
 	name = "\improper T37 Medium Machinegun"
 	},
 /turf/open/floor/plating/ground/dirt2,
@@ -5540,80 +5598,80 @@
 /turf/open/floor,
 /area/oscar_outpost)
 "Zu" = (
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
-/obj/item/ammo_magazine/hsg_102{
+/obj/item/ammo_magazine/tl102{
 	name = "T37 MMG ammunition box (10x28mm tungsten rounds)"
 	},
 /turf/open/floor/plating/ground/dirt2,
 /area/oscar_outpost/outside/northwest)
 "Zz" = (
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
-/obj/item/ammo_magazine/hsg_102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
+/obj/item/ammo_magazine/tl102,
 /obj/structure/barricade/sandbags{
 	dir = 4;
 	name = "trench lining";
@@ -6820,7 +6878,7 @@ eC
 eC
 ZD
 Tj
-Tj
+qC
 Tj
 Rx
 eC
@@ -8652,7 +8710,7 @@ ZE
 ZE
 ZE
 ZE
-ZE
+eH
 ZE
 ZE
 ZE
@@ -8963,7 +9021,7 @@ ZE
 ZE
 ZE
 ZE
-ZE
+Nf
 ZE
 ZE
 ZE
@@ -9116,7 +9174,7 @@ ZE
 ZE
 ZE
 ZE
-ZE
+vX
 ZE
 ZE
 ZE
@@ -11748,9 +11806,9 @@ ZE
 sV
 ZE
 ZE
+jZ
 ZE
-ZE
-ZE
+sr
 ZE
 ZE
 ZE
@@ -12056,7 +12114,7 @@ ZE
 ZE
 HC
 ZE
-ZE
+hQ
 ZE
 ZE
 ZE
@@ -18880,7 +18938,7 @@ ZE
 ZE
 ZE
 ZE
-ZE
+Nf
 ZE
 ZE
 ZE
@@ -19188,7 +19246,7 @@ YC
 Up
 ZE
 ZE
-ZE
+sr
 ZE
 ZE
 QW
@@ -19346,7 +19404,7 @@ ZE
 ZE
 ZE
 ZE
-ZE
+jZ
 ZE
 ZE
 ZE
@@ -20588,7 +20646,7 @@ Zl
 th
 Wi
 ZE
-Nh
+cy
 ZE
 ZE
 ZE
@@ -28044,7 +28102,7 @@ Pv
 Pv
 YZ
 FC
-Az
+Yr
 Az
 Az
 Kk

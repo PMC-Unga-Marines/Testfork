@@ -9,7 +9,6 @@
 /datum/action/ability/activable/xeno/recycle
 	name = "Recycle"
 	action_icon_state = "recycle"
-	action_icon = 'icons/Xeno/actions/drone.dmi'
 	desc = "We deconstruct the body of a fellow fallen xenomorph to avoid marines from harvesting our sisters in arms."
 	use_state_flags = ABILITY_USE_STAGGERED //can't use while staggered, defender fortified or crest down
 	keybinding_signals = list(
@@ -67,8 +66,10 @@
 	buildable_structures = list(
 		/turf/closed/wall/resin/regenerating/thick,
 		/obj/alien/resin/sticky,
-		/obj/structure/door/resin/thick,
+		/obj/structure/mineral_door/resin/thick,
+		/obj/structure/bed/nest,
 	)
+
 
 // ***************************************
 // *********** Resin walker
@@ -76,7 +77,6 @@
 /datum/action/ability/xeno_action/toggle_speed
 	name = "Resin Walker"
 	action_icon_state = "toggle_speed"
-	action_icon = 'icons/Xeno/actions/hivelord.dmi'
 	desc = "Move faster on resin."
 	ability_cost = 50
 	keybinding_signals = list(
@@ -153,7 +153,6 @@
 /datum/action/ability/xeno_action/build_tunnel
 	name = "Dig Tunnel"
 	action_icon_state = "build_tunnel"
-	action_icon = 'icons/Xeno/actions/hivelord.dmi'
 	desc = "Create a tunnel entrance. Use again to create the tunnel exit."
 	ability_cost = 200
 	cooldown_duration = 120 SECONDS
@@ -242,14 +241,12 @@
 /datum/action/ability/xeno_action/place_jelly_pod
 	name = "Place Resin Jelly pod"
 	action_icon_state = "resin_jelly_pod"
-	action_icon = 'icons/Xeno/actions/construction.dmi'
 	desc = "Place down a dispenser that allows xenos to retrieve fireproof jelly."
 	ability_cost = 500
 	cooldown_duration = 1 MINUTES
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_PLACE_JELLY_POD,
 	)
-	use_state_flags = ABILITY_USE_LYING
 
 /datum/action/ability/xeno_action/place_jelly_pod/can_use_action(silent = FALSE, override_flags)
 	. = ..()
@@ -268,7 +265,7 @@
 	if(!T.check_disallow_alien_fortification(owner, silent))
 		return FALSE
 
-	if(!T.check_alien_construction(owner, silent, /obj/structure/xeno/resin_jelly_pod))
+	if(!T.check_alien_construction(owner, silent))
 		return FALSE
 
 /datum/action/ability/xeno_action/place_jelly_pod/action_activate()
@@ -276,7 +273,7 @@
 
 	succeed_activate()
 
-	playsound(owner, SFX_ALIEN_RESIN_BUILD, 25)
+	playsound(owner, "alien_resin_build", 25)
 	var/obj/structure/xeno/resin_jelly_pod/pod = new(T, owner.get_xeno_hivenumber())
 	to_chat(owner, span_xenonotice("We shape some resin into \a [pod]."))
 	add_cooldown()
@@ -284,14 +281,12 @@
 /datum/action/ability/xeno_action/create_jelly
 	name = "Create Resin Jelly"
 	action_icon_state = "resin_jelly"
-	action_icon = 'icons/Xeno/actions/construction.dmi'
 	desc = "Create a fireproof jelly."
 	ability_cost = 100
 	cooldown_duration = 20 SECONDS
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_CREATE_JELLY,
 	)
-	use_state_flags = ABILITY_USE_LYING
 
 /datum/action/ability/xeno_action/create_jelly/can_use_action(silent = FALSE, override_flags)
 	. = ..()
@@ -305,7 +300,7 @@
 /datum/action/ability/xeno_action/create_jelly/action_activate()
 	var/obj/item/resin_jelly/jelly = new(owner.loc)
 	owner.put_in_hands(jelly)
-	to_chat(owner, span_xenonotice("We create a globule of resin from our ovipositor.")) // Ewww...
+	to_chat(owner, span_xenonotice("We create a globule of resin from our ovipostor.")) // Ewww...
 	add_cooldown()
 	succeed_activate()
 
@@ -315,7 +310,6 @@
 /datum/action/ability/activable/xeno/healing_infusion
 	name = "Healing Infusion"
 	action_icon_state = "healing_infusion"
-	action_icon = 'icons/Xeno/actions/hivelord.dmi'
 	desc = "Psychically infuses a friendly xeno with regenerative energies, greatly improving its natural healing. Doesn't work if the target can't naturally heal."
 	cooldown_duration = 12.5 SECONDS
 	ability_cost = 200
@@ -400,7 +394,6 @@
 /datum/action/ability/xeno_action/sow
 	name = "Sow"
 	action_icon_state = "place_trap"
-	action_icon = 'icons/Xeno/actions/construction.dmi'
 	desc = "Sow the seeds of an alien plant."
 	ability_cost = 200
 	cooldown_duration = 45 SECONDS
@@ -419,7 +412,7 @@
 		return FALSE
 
 	var/turf/T = get_turf(owner)
-	if(!T.check_alien_construction(owner, silent, owner_xeno.selected_plant))
+	if(!T.check_alien_construction(owner, silent))
 		return FALSE
 
 /datum/action/ability/xeno_action/sow/action_activate()
@@ -427,7 +420,7 @@
 	if(!X.selected_plant)
 		return FALSE
 
-	playsound(src, SFX_ALIEN_RESIN_BUILD, 25)
+	playsound(src, "alien_resin_build", 25)
 	new X.selected_plant(get_turf(owner))
 	add_cooldown()
 	return succeed_activate()
@@ -435,7 +428,7 @@
 /datum/action/ability/xeno_action/sow/update_button_icon()
 	var/mob/living/carbon/xenomorph/X = owner
 	button.overlays.Cut()
-	button.overlays += image('icons/Xeno/actions/construction.dmi', button, initial(X.selected_plant.name))
+	button.overlays += image('icons/Xeno/actions.dmi', button, initial(X.selected_plant.name))
 	return ..()
 
 ///Shows a radial menu to pick the plant they wish to put down when they use the ability

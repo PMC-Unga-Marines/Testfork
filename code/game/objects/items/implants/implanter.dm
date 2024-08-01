@@ -2,15 +2,14 @@
 	name = "implanter"
 	icon = 'icons/obj/items/implants.dmi'
 	icon_state = "implanter0"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/medical_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/medical_right.dmi',
 	)
-	worn_icon_state = "syringe_0"
+	item_state = "syringe_0"
 	throw_speed = 1
 	throw_range = 5
 	w_class = WEIGHT_CLASS_TINY
-	///The implant itself
 	var/obj/item/implant/imp = null
 
 /obj/item/implanter/Initialize(mapload, ...)
@@ -42,16 +41,15 @@
 
 	if(!do_after(user, 5 SECONDS, NONE, target, BUSY_ICON_GENERIC) || !imp)
 		to_chat(user, span_notice("You failed to implant [target]."))
-		return FALSE
+		return
 
-	if(!imp.try_implant(target, user))
-		to_chat(user, span_notice("You fail to implant [target]."))
-		return FALSE
-	target.visible_message(span_warning("[target] has been implanted by [user]."))
-	log_combat(user, target, "implanted", src)
-	imp = null
-	update_icon()
-	return TRUE
+	if(imp.try_implant(target, user))
+		target.visible_message(span_warning("[target] has been implanted by [user]."))
+		log_combat(user, target, "implanted", src)
+		imp = null
+		update_icon()
+		return TRUE
+	to_chat(user, span_notice("You fail to implant [target]."))
 
 /obj/item/implanter/neurostim
 	name = "neurostim implanter"
@@ -76,29 +74,3 @@
 /obj/item/implanter/suicide_dust
 	name = "Self-Gibbing implant"
 	imp = /obj/item/implant/suicide_dust
-
-/obj/item/implanter/sandevistan
-	name = "sandevistan implanter"
-	icon_state = "imp_spinal"
-	w_class = WEIGHT_CLASS_NORMAL
-	imp = /obj/item/implant/sandevistan
-
-/obj/item/implanter/sandevistan/update_icon_state()
-	. = ..()
-	icon_state = initial(icon_state)
-
-/obj/item/implanter/sandevistan/attack(mob/target, mob/user)
-	. = ..()
-	if(!.)
-		return
-	qdel(src)
-
-/obj/item/implanter/jump_mod
-	name = "fortified ankles implant"
-	imp = /obj/item/implant/jump_mod
-
-/obj/effect/supply_drop/jump_mod/Initialize(mapload)
-	. = ..()
-	new /obj/item/implanter/jump_mod(loc)
-	new /obj/item/implanter/jump_mod(loc)
-	return INITIALIZE_HINT_QDEL

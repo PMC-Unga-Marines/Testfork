@@ -6,27 +6,18 @@
 #define RELEASING 1
 
 /obj/machinery/atmospherics/components/unary/vent_pump
-	icon_state = "vent_map-2"
-
 	name = "air vent"
 	desc = "Has a valve and pump attached to it."
-
+	icon_state = "vent_map-2"
+	base_icon_state = "vent"
 	use_power = IDLE_POWER_USE
 	can_unwrench = FALSE
 	welded = FALSE
 	level = 1
 	layer = ATMOS_DEVICE_LAYER
-	atom_flags = SHUTTLE_IMMUNE
-
+	flags_atom = SHUTTLE_IMMUNE
 	var/pump_direction = RELEASING
-
 	var/pressure_checks = EXT_BOUND
-	var/external_pressure_bound = ONE_ATMOSPHERE
-	var/internal_pressure_bound = 0
-	// EXT_BOUND: Do not pass external_pressure_bound
-	// INT_BOUND: Do not pass internal_pressure_bound
-	// NO_BOUND: Do not pass either
-
 	var/radio_filter_out
 	var/radio_filter_in
 
@@ -39,37 +30,36 @@
 		add_overlay(cap)
 
 	if(welded)
-		icon_state = "vent_welded"
+		icon_state = "[base_icon_state]_welded"
 		return
 
 	if(!nodes[1] || !on || !is_operational())
-		if(icon_state == "vent_welded")
-			icon_state = "vent_off"
+		if(icon_state == "[base_icon_state]_welded")
+			icon_state = "[base_icon_state]_off"
 			return
 
 		if(pump_direction & RELEASING)
-			icon_state = "vent_out-off"
+			icon_state = "[base_icon_state]_out-off"
 		else // pump_direction == SIPHONING
-			icon_state = "vent_in-off"
+			icon_state = "[base_icon_state]_in-off"
 		return
 
-	if(icon_state == ("vent_out-off" || "vent_in-off" || "vent_off"))
+	if(icon_state == ("[base_icon_state]_out-off" || "[base_icon_state]_in-off" || "[base_icon_state]_off"))
 		if(pump_direction & RELEASING)
-			icon_state = "vent_out"
-			flick("vent_out-starting", src)
+			icon_state = "[base_icon_state]_out"
+			flick("[base_icon_state]_out-starting", src)
 		else // pump_direction == SIPHONING
-			icon_state = "vent_in"
-			flick("vent_in-starting", src)
+			icon_state = "[base_icon_state]_in"
+			flick("[base_icon_state]_in-starting", src)
 		return
 
 	if(pump_direction & RELEASING)
-		icon_state = "vent_out"
+		icon_state = "[base_icon_state]_out"
 	else // pump_direction == SIPHONING
-		icon_state = "vent_in"
-
+		icon_state = "[base_icon_state]_in"
 
 /obj/machinery/atmospherics/components/unary/vent_pump/weld_cut_act(mob/living/user, obj/item/W)
-	if(isplasmacutter(W))
+	if(istype(W, /obj/item/tool/pickaxe/plasmacutter))
 		var/obj/item/tool/pickaxe/plasmacutter/P = W
 		if(!welded)
 			to_chat(user, span_warning("\The [P] can only cut open welds!"))
@@ -91,7 +81,7 @@
 			span_notice("You start welding [src] with [WT]."))
 			add_overlay(GLOB.welding_sparks)
 			playsound(loc, 'sound/items/weldingtool_weld.ogg', 25)
-			if(do_after(user, 50, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(WT, TYPE_PROC_REF(/obj/item/tool/weldingtool, isOn))))
+			if(do_after(user, 50, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(WT, /obj/item/tool/weldingtool/proc/isOn)))
 				playsound(get_turf(src), 'sound/items/welder2.ogg', 25, 1)
 				if(!welded)
 					user.visible_message(span_notice("[user] welds [src] shut."), \
@@ -123,10 +113,22 @@
 		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
 		return FALSE
 
+/obj/machinery/atmospherics/components/unary/vent_pump/attack_facehugger(mob/living/carbon/xenomorph/facehugger/F, damage_amount = F.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
+	if(F.status_flags & INCORPOREAL)
+		return
+	if(!welded || !(do_after(F, 3 SECONDS, IGNORE_HELD_ITEM, src, BUSY_ICON_HOSTILE)))
+		return
+	F.visible_message("[F] furiously claws at [src]!", "We manage to clear away the stuff blocking the vent", "You hear loud scraping noises.")
+	welded = FALSE
+	update_icon()
+	pipe_vision_img = image(src, loc, layer = ABOVE_HUD_LAYER, dir = dir)
+	pipe_vision_img.plane = ABOVE_HUD_PLANE
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 100, 1)
+
 /obj/machinery/atmospherics/components/unary/vent_pump/examine(mob/user)
 	. = ..()
 	if(welded)
-		. += "It seems welded shut."
+		. += span_notice("It seems welded shut.")
 
 /obj/machinery/atmospherics/components/unary/vent_pump/power_change()
 	..()
@@ -135,7 +137,7 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/can_crawl_through()
 	return !welded
 
-/obj/machinery/atmospherics/components/unary/vent_pump/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/atmospherics/components/unary/vent_pump/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return
 	if(!welded || !(do_after(xeno_attacker, 2 SECONDS, IGNORE_HELD_ITEM, src, BUSY_ICON_HOSTILE)))
@@ -147,7 +149,6 @@
 	pipe_vision_img.plane = ABOVE_HUD_PLANE
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 100, 1)
 
-
 /obj/machinery/atmospherics/components/unary/vent_pump/AltClick(mob/user)
 	if(!isliving(user))
 		return
@@ -157,7 +158,6 @@
 		return
 	var/mob/living/living_user = user
 	living_user.handle_ventcrawl(src)
-
 
 /obj/machinery/atmospherics/components/unary/vent_pump/high_volume
 	name = "large air vent"
@@ -189,6 +189,10 @@
 	piping_layer = 1
 	icon_state = "vent_map_on-1"
 
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer1/alt
+	icon_state = "alt_vent_map_on-1"
+	base_icon_state = "alt_vent"
+
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer3
 	piping_layer = 3
 	icon_state = "vent_map_on-3"
@@ -196,8 +200,6 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/siphon
 	pump_direction = SIPHONING
 	pressure_checks = INT_BOUND
-	internal_pressure_bound = 4000
-	external_pressure_bound = 0
 
 /obj/machinery/atmospherics/components/unary/vent_pump/siphon/on
 	on = TRUE

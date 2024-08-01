@@ -99,6 +99,13 @@
 /obj/effect/landmark/weed_node,
 /turf/open/floor/tile/white/warningstripe,
 /area/bigredv2/outside/office_complex)
+"fQ" = (
+/obj/structure/cable,
+/obj/effect/ai_node,
+/turf/open/floor/tile/red/redtaupecorner{
+	dir = 4
+	},
+/area/bigredv2/outside/office_complex)
 "fW" = (
 /obj/structure/table,
 /obj/machinery/computer3/laptop/secure_data,
@@ -191,6 +198,7 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable,
 /turf/open/floor,
 /area/bigredv2/outside/office_complex)
 "jz" = (
@@ -262,6 +270,7 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable,
 /obj/effect/ai_node,
 /turf/open/floor/tile/red/redtaupecorner,
 /area/bigredv2/outside/office_complex)
@@ -387,6 +396,11 @@
 	dir = 4
 	},
 /area/bigredv2/outside/office_complex)
+"qF" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable,
+/turf/open/floor,
+/area/bigredv2/outside/office_complex)
 "qU" = (
 /obj/structure/closet/jcloset,
 /obj/item/clothing/head/beret/jan,
@@ -438,6 +452,10 @@
 	dir = 1
 	},
 /obj/effect/decal/cleanable/dirt,
+/turf/open/floor,
+/area/bigredv2/outside/office_complex)
+"ua" = (
+/obj/structure/cable,
 /turf/open/floor,
 /area/bigredv2/outside/office_complex)
 "um" = (
@@ -633,6 +651,13 @@
 "BM" = (
 /turf/open/floor/tile/dark,
 /area/bigredv2/outside/office_complex)
+"Cr" = (
+/obj/machinery/atmospherics/pipe/simple/green/hidden{
+	dir = 4
+	},
+/obj/structure/cable,
+/turf/open/floor/tile/red/redtaupecorner,
+/area/bigredv2/outside/office_complex)
 "Cz" = (
 /obj/machinery/light{
 	dir = 8
@@ -658,6 +683,7 @@
 	dir = 4
 	},
 /obj/effect/decal/cleanable/dirt,
+/obj/structure/cable,
 /obj/effect/ai_node,
 /obj/effect/landmark/weed_node,
 /turf/open/floor,
@@ -875,9 +901,11 @@
 /area/bigredv2/outside/office_complex)
 "Np" = (
 /obj/effect/decal/cleanable/dirt,
+/obj/machinery/power/apc,
+/obj/structure/cable,
 /obj/effect/ai_node,
 /turf/open/floor,
-/area/bigredv2/outside/office_complex)
+/area/bigredv2/outside/e)
 "Nq" = (
 /turf/open/floor/marking/asteroidwarning{
 	dir = 9
@@ -1535,7 +1563,7 @@ ov
 ov
 ov
 VI
-ei
+Cr
 ov
 kz
 tt
@@ -1560,7 +1588,7 @@ Hm
 zI
 ov
 VI
-ei
+Cr
 ov
 ov
 ov
@@ -1606,10 +1634,10 @@ ov
 ov
 ov
 Np
-As
-JI
+ua
+qF
 We
-qB
+fQ
 jl
 LH
 mq

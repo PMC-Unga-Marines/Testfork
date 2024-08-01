@@ -2,13 +2,7 @@
 
 /mob/living/carbon/xenomorph/beetle/ai/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno/suicidal)
-
-/mob/living/carbon/xenomorph/baneling/ai
-
-/mob/living/carbon/xenomorph/baneling/ai/Initialize(mapload)
-	. = ..()
-	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno/suicidal)
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
 
 /mob/living/carbon/xenomorph/crusher/ai
 
@@ -56,7 +50,7 @@
 
 /mob/living/carbon/xenomorph/mantis/ai/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno/suicidal)
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
 
 /mob/living/carbon/xenomorph/ravager/ai
 
@@ -103,5 +97,18 @@
 /mob/living/carbon/xenomorph/nymph/ai
 
 /mob/living/carbon/xenomorph/nymph/ai/Initialize()
+	. = ..()
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
+
+/mob/living/carbon/xenomorph/facehugger/ai
+
+/mob/living/carbon/xenomorph/facehugger/ai/Initialize(mapload)
+	. = ..()
+	GLOB.hive_datums[hivenumber].facehuggers -= src
+	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)
+
+/mob/living/carbon/xenomorph/chimera/ai
+
+/mob/living/carbon/xenomorph/chimera/ai/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/ai_controller, /datum/ai_behavior/xeno)

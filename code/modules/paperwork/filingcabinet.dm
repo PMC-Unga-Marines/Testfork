@@ -20,8 +20,6 @@
 	max_integrity = 100
 	soft_armor = list(MELEE = 0, BULLET = 60, LASER = 60, ENERGY = 60, BOMB = 0, BIO = 0, FIRE = 0, ACID = 0)
 
-/obj/structure/filingcabinet/nondense
-	density = FALSE
 
 /obj/structure/filingcabinet/chestdrawer
 	name = "chest drawer"
@@ -41,8 +39,6 @@
 
 /obj/structure/filingcabinet/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/paper) || istype(I, /obj/item/folder) || istype(I, /obj/item/photo) || istype(I, /obj/item/paper_bundle))
 		if(!user.transferItemToLoc(I, src))
@@ -76,7 +72,7 @@
 	for(var/obj/item/P in src)
 		dat += "<tr><td><a href='?src=[text_ref(src)];retrieve=[text_ref(P)]'>[P.name]</a></td></tr>"
 	dat += "</table></center>"
-	user << browse("<html><head><title>[name]</title></head><body>[dat]</body></html>", "window=filingcabinet;size=350x300")
+	user << browse("<html><meta charset='UTF-8'><head><title>[name]</title></head><body>[dat]</body></html>", "window=filingcabinet;size=350x300")
 
 
 /obj/structure/filingcabinet/Topic(href, href_list)

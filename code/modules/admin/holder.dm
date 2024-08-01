@@ -22,8 +22,7 @@
 	var/ghost_interact = FALSE
 	///Whether this admin is invisiminning
 	var/invisimined = FALSE
-	/// A lazylist of tagged datums, for quick reference with the View Tags verb
-	var/list/tagged_datums
+
 
 /datum/admins/New(datum/admin_rank/R, ckey, protected)
 	if(IsAdminAdvancedProcCall())
@@ -289,27 +288,21 @@ GLOBAL_PROTECT(admin_verbs_default)
 	/datum/admins/proc/jump_key,
 	/datum/admins/proc/secrets_panel,
 	/datum/admins/proc/remove_from_tank,
-	/datum/admins/proc/delete_squad,
 	/datum/admins/proc/game_panel,
 	/datum/admins/proc/mode_panel,
 	/datum/admins/proc/job_slots,
 	/datum/admins/proc/toggle_adminhelp_sound,
 	/datum/admins/proc/toggle_prayers,
 	/datum/admins/proc/check_fingerprints,
-	/datum/admins/proc/display_tags,
-	/datum/admins/proc/open_campaign_panel,
-	/client/proc/mark_datum_mapview,
-	/client/proc/tag_datum_mapview,
-	/client/proc/cmd_admin_check_contents, /*displays the contents of an instance*/
+	/datum/admins/proc/unforbid,
+	/client/proc/cmd_admin_create_predator_report,
 	/client/proc/smite,
 	/client/proc/show_traitor_panel,
-	/client/proc/cmd_select_equipment,
 	/client/proc/validate_objectives,
 	/client/proc/private_message_panel,
 	/client/proc/private_message_context,
 	/client/proc/msay,
-	/client/proc/dsay,
-	/client/proc/object_say,
+	/client/proc/dsay
 	)
 GLOBAL_LIST_INIT(admin_verbs_admin, world.AVadmin())
 GLOBAL_PROTECT(admin_verbs_admin)
@@ -354,8 +347,8 @@ GLOBAL_PROTECT(admin_verbs_asay)
 
 /world/proc/AVdebug()
 	return list(
-	/client/proc/callproc,
-	/client/proc/callproc_datum,
+	/datum/admins/proc/proccall_advanced,
+	/datum/admins/proc/proccall_atom,
 	/datum/admins/proc/delete_all,
 	/datum/admins/proc/generate_powernets,
 	/datum/admins/proc/debug_mob_lists,
@@ -367,6 +360,7 @@ GLOBAL_PROTECT(admin_verbs_asay)
 	/datum/admins/proc/reestablish_db_connection,
 	/client/proc/reestablish_tts_connection,
 	/datum/admins/proc/view_runtimes,
+	/client/proc/spawn_wave,
 	/client/proc/SDQL2_query,
 	/client/proc/toggle_cdn
 	)
@@ -407,7 +401,7 @@ GLOBAL_PROTECT(admin_verbs_varedit)
 	/datum/admins/proc/force_distress,
 	/datum/admins/proc/object_sound,
 	/datum/admins/proc/drop_bomb,
-	/datum/admins/proc/drop_dynex_bomb,
+	/datum/admins/proc/drop_OB,
 	/datum/admins/proc/change_security_level,
 	/datum/admins/proc/edit_appearance,
 	/datum/admins/proc/offer,
@@ -428,8 +422,8 @@ GLOBAL_PROTECT(admin_verbs_varedit)
 	/datum/admins/proc/map_template_load,
 	/datum/admins/proc/map_template_upload,
 	/datum/admins/proc/spatial_agent,
+	/datum/admins/proc/military_policeman,
 	/datum/admins/proc/set_xeno_stat_buffs,
-	/datum/admins/proc/check_bomb_impacts,
 	/datum/admins/proc/adjust_gravity,
 	)
 GLOBAL_LIST_INIT(admin_verbs_fun, world.AVfun())
@@ -457,6 +451,9 @@ GLOBAL_PROTECT(admin_verbs_fun)
 	/datum/admins/proc/change_ship_map,
 	/datum/admins/proc/panic_bunker,
 	/datum/admins/proc/mode_check,
+	/datum/admins/proc/toggle_valhalla,
+	/datum/admins/proc/toggle_sdd_possesion,
+	/datum/admins/proc/force_predator_round,
 	/client/proc/toggle_cdn
 	)
 GLOBAL_LIST_INIT(admin_verbs_server, world.AVserver())
@@ -465,6 +462,7 @@ GLOBAL_PROTECT(admin_verbs_server)
 /world/proc/AVpermissions()
 	return list(
 	/client/proc/edit_admin_permissions,
+	/client/proc/poll_panel,
 	)
 GLOBAL_LIST_INIT(admin_verbs_permissions, world.AVpermissions())
 GLOBAL_PROTECT(admin_verbs_permissions)
@@ -507,53 +505,47 @@ GLOBAL_PROTECT(admin_verbs_spawn)
 GLOBAL_LIST_INIT(admin_verbs_log, world.AVlog())
 GLOBAL_PROTECT(admin_verbs_log)
 
-/world/proc/AVpolls()
-	return list(
-	/client/proc/poll_panel,
-	)
-GLOBAL_LIST_INIT(admin_verbs_polls, world.AVpolls())
-GLOBAL_PROTECT(admin_verbs_polls)
 
 /client/proc/add_admin_verbs()
 	if(holder)
 		var/rights = holder.rank.rights
-		add_verb(src, GLOB.admin_verbs_default)
+		verbs += GLOB.admin_verbs_default
 		if(rights & R_ADMIN)
-			add_verb(src, GLOB.admin_verbs_admin)
+			verbs += GLOB.admin_verbs_admin
 		if(rights & R_MENTOR)
-			add_verb(src, GLOB.admin_verbs_mentor)
+			verbs += GLOB.admin_verbs_mentor
 		if(rights & R_BAN)
-			add_verb(src, GLOB.admin_verbs_ban)
+			verbs += GLOB.admin_verbs_ban
 		if(rights & R_ASAY)
-			add_verb(src, GLOB.admin_verbs_asay)
+			verbs += GLOB.admin_verbs_asay
 		if(rights & R_FUN)
-			add_verb(src, GLOB.admin_verbs_fun)
+			verbs += GLOB.admin_verbs_fun
 		if(rights & R_SERVER)
-			add_verb(src, GLOB.admin_verbs_server)
+			verbs += GLOB.admin_verbs_server
 		if(rights & R_DEBUG)
-			add_verb(src, GLOB.admin_verbs_debug)
+			verbs += GLOB.admin_verbs_debug
 		if(rights & R_RUNTIME)
-			add_verb(src, GLOB.admin_verbs_runtimes)
+			verbs += GLOB.admin_verbs_runtimes
 		if(rights & R_PERMISSIONS)
-			add_verb(src, GLOB.admin_verbs_permissions)
+			verbs += GLOB.admin_verbs_permissions
 		if(rights & R_DBRANKS)
-			add_verb(src, GLOB.admin_verbs_permissions)
+			verbs += GLOB.admin_verbs_permissions
 		if(rights & R_SOUND)
-			add_verb(src, GLOB.admin_verbs_sound)
+			verbs += GLOB.admin_verbs_sound
 		if(rights & R_COLOR)
-			add_verb(src, GLOB.admin_verbs_color)
+			verbs += GLOB.admin_verbs_color
 		if(rights & R_VAREDIT)
-			add_verb(src, GLOB.admin_verbs_varedit)
+			verbs += GLOB.admin_verbs_varedit
 		if(rights & R_SPAWN)
-			add_verb(src, GLOB.admin_verbs_spawn)
+			verbs += GLOB.admin_verbs_spawn
 		if(rights & R_LOG)
-			add_verb(src, GLOB.admin_verbs_log)
-		if(rights & R_POLLS)
-			add_verb(src, GLOB.admin_verbs_polls)
+			verbs += GLOB.admin_verbs_log
+		if(GLOB.roles_whitelist[ckey] & WHITELIST_YAUTJA_LEADER)
+			verbs += GLOB.clan_verbs
 
 
 /client/proc/remove_admin_verbs()
-	remove_verb(src, list(
+	verbs.Remove(
 		GLOB.admin_verbs_default,
 		GLOB.admin_verbs_admin,
 		GLOB.admin_verbs_mentor,
@@ -568,8 +560,16 @@ GLOBAL_PROTECT(admin_verbs_polls)
 		GLOB.admin_verbs_varedit,
 		GLOB.admin_verbs_spawn,
 		GLOB.admin_verbs_log,
-	))
+		GLOB.clan_verbs,
+		)
 
+/world/proc/AVyautja()
+	return list(
+	/client/proc/usr_create_new_clan
+	)
+
+GLOBAL_LIST_INIT(clan_verbs, world.AVyautja())
+GLOBAL_PROTECT(clan_verbs)
 
 /proc/is_mentor(client/C)
 	if(!istype(C))

@@ -1,7 +1,7 @@
 ///what clients use to speak. when you type a message into the chat bar in say mode, this is the first thing that goes off serverside.
 /mob/verb/say_verb(message as text)
 	set name = "Say"
-	set category = "IC"
+	set category = "IC.Chat"
 	set instant = TRUE
 
 	if(!message)
@@ -14,7 +14,7 @@
 
 /mob/verb/me_verb(message as text)
 	set name = "Me"
-	set category = "IC"
+	set category = "IC.Chat"
 	set instant = TRUE
 
 	if(!message)
@@ -27,7 +27,7 @@
 
 /mob/verb/whisper_verb(message as text)
 	set name = "Whisper"
-	set category = "IC"
+	set category = "IC.Chat"
 	set instant = TRUE
 
 	if(!message)
@@ -107,7 +107,7 @@
 	else if(key == ";")
 		return MODE_HEADSET
 	else if((length(message) > (length(key) + 1)) && (key in GLOB.department_radio_prefixes))
-		var/key_symbol = lowertext(message[length(key) + 1])
+		var/key_symbol = lowertext(convert_ru_key_to_en_key(message[length(key) + 1]))
 		if(faction == FACTION_SOM)
 			return GLOB.department_radio_keys_som[key_symbol]
 		return GLOB.department_radio_keys[key_symbol]

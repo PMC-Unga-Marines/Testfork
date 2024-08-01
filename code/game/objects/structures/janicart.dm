@@ -34,8 +34,6 @@
 
 /obj/structure/janitorialcart/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/storage/bag/trash) && !mybag)
 		user.drop_held_item()

@@ -54,7 +54,7 @@
 	///Whether the contents on the meds_beaker will be injected into the wearer when the system is turned on
 	var/automatic_meds_use = TRUE
 	///Image that gets added to the wearer's overlays and gets changed based on resource_storage_current
-	var/static/image/resource_overlay = image('icons/mob/hud/human.dmi', icon_state = "chemsuit_vis")
+	var/static/image/resource_overlay = image('icons/mob/hud.dmi', icon_state = "chemsuit_vis")
 	COOLDOWN_DECLARE(chemboost_activation_cooldown)
 	///Information about how reagents boost the system's effects.
 	var/reagent_info = ""
@@ -145,7 +145,7 @@
 ///Adds additional text for the component when examining the item it is attached to
 /datum/component/chem_booster/proc/examine(datum/source, mob/user, list/examine_text)
 	SIGNAL_HANDLER
-	examine_text += span_notice("The chemical system currently holds [resource_storage_current]u of green blood. Its enhancement level is set to [boost_amount].")
+	examine_text += span_notice("The chemical system currently holds [resource_storage_current]u of green blood. Its' enhancement level is set to [boost_amount].")
 	examine_text += get_meds_beaker_contents()
 
 ///Disables active functions and cleans up actions when the suit is unequipped
@@ -378,7 +378,19 @@
 		return
 	if(resource_storage_current >= resource_storage_max)
 		return
+	//RUTGMC EDIT REMOVAL BEGIN - SWORDS
+	/*
 	update_resource(round(20*connected_weapon.attack_speed/11))
+	*/
+	//RUTGMC EDIT REMOVAL END
+
+	//RUTGMC EDIT ADDITION BEGIN - SWORDS
+	var/obj/item/vali_weapon = wearer.get_held_item()
+	if(vali_weapon.type == /obj/item/weapon/claymore/mercsword/officersword/valirapier)
+		update_resource(20)
+	else
+		update_resource(round(20*connected_weapon.attack_speed/11))
+	//RUTGMC EDIT ADDITION END
 
 ///Adds or removes resource from the suit. Signal gets sent at every 25% of stored resource
 /datum/component/chem_booster/proc/update_resource(amount)

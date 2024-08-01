@@ -80,7 +80,7 @@
 	icon = 'icons/obj/device.dmi'
 	desc = "A camera film cartridge. Insert it into a camera to reload it."
 	icon_state = "film"
-	worn_icon_state = "electropack"
+	item_state = "electropack"
 	w_class = WEIGHT_CLASS_TINY
 
 
@@ -88,11 +88,11 @@
 	name = "photo"
 	icon = 'icons/obj/items/items.dmi'
 	icon_state = "photo"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/civilian_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/civilian_right.dmi',
 	)
-	worn_icon_state = "paper"
+	item_state = "paper"
 	w_class = WEIGHT_CLASS_TINY
 	var/datum/picture/picture
 	var/scribble		//Scribble on the back.
@@ -145,7 +145,7 @@
 		to_chat(user, span_warning("[src] seems to be blank..."))
 		return
 	user << browse_rsc(picture.picture_image, "tmp_photo.png")
-	user << browse("<html><head><title>[name]</title></head>" \
+	user << browse("<html><meta charset='UTF-8'><head><title>[name]</title></head>" \
 		+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
 		+ "<img src='tmp_photo.png' width='480' style='-ms-interpolation-mode:nearest-neighbor' />" \
 		+ "[scribble ? "<br>Written on the back:<br><i>[scribble]</i>" : ""]"\
@@ -168,11 +168,11 @@
 	icon = 'icons/obj/device.dmi'
 	desc = "A polaroid camera."
 	icon_state = "camera"
-	worn_icon_state = "camera"
+	item_state = "camera"
 	light_color = COLOR_WHITE
 	light_power = FLASH_LIGHT_POWER
 	w_class = WEIGHT_CLASS_SMALL
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	interaction_flags = INTERACT_REQUIRES_DEXTERITY
 	var/flash_enabled = TRUE
 	var/state_on = "camera"
@@ -214,8 +214,6 @@
 
 /obj/item/camera/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/camera_film))
 		if(pictures_left)

@@ -6,8 +6,8 @@
 
 ///Handles trying to toggle resting state
 /mob/living/proc/toggle_resting()
-	if(incapacitated(TRUE))
-		return
+	set name = "Rest"
+	set category = "IC"
 
 	if(!resting)
 		if(is_ventcrawling)
@@ -21,10 +21,7 @@
 
 ///Handles getting up, doing a basic check before relaying it to the actual proc that does it
 /mob/living/proc/get_up()
-	if(!incapacitated(TRUE))
-		set_resting(FALSE, FALSE)
-	else
-		to_chat(src, span_notice("You fail to get up."))
+	set_resting(FALSE, FALSE)
 
 ///Actually handles toggling the resting state
 /mob/living/proc/set_resting(rest, silent = TRUE)
@@ -48,7 +45,7 @@
 
 
 /mob/living/verb/ghost()
-	set category = "OOC"
+	set category = "OOC.Ghost"
 	set name = "Ghost"
 
 	if(stat == DEAD)

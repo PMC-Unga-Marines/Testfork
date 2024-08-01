@@ -97,8 +97,14 @@
 /datum/greyscale_config/armor_mk1/skirmisher
 	icon_file = 'icons/mob/modular/mark_one/skirmisher.dmi'
 
-/datum/greyscale_config/armor_mk1/mjolnir
-	icon_file = 'icons/mob/modular/mark_one/mjolnir.dmi'
+/datum/greyscale_config/armor_mk1/kabuto
+	icon_file = 'icons/mob/modular/mark_one/kabuto.dmi'
+
+/datum/greyscale_config/armor_mk1/hotaru
+	icon_file = 'icons/mob/modular/mark_one/hotaru.dmi'
+
+/datum/greyscale_config/armor_mk1/dashe
+	icon_file = 'icons/mob/modular/mark_one/dashe.dmi'
 
 //Hardsuits
 
@@ -153,8 +159,8 @@
 /datum/greyscale_config/armor_mk2/trooper
 	icon_file = 'icons/mob/modular/mark_two/trooper.dmi'
 
-/datum/greyscale_config/armor_mk2/mjolnir_open
-	icon_file = 'icons/mob/modular/mark_two/mjolnir_open.dmi'
+/datum/greyscale_config/armor_mk2/hotaru
+	icon_file = 'icons/mob/modular/mark_two/hotaru.dmi'
 
 /datum/greyscale_config/xenonaut
 	icon_file = 'icons/mob/modular/xenonauten.dmi'
@@ -249,7 +255,7 @@
 ///AMMO - for both bullets and magazines
 /datum/greyscale_config/ammo
 	json_config = 'code/datums/greyscale/json_configs/ammo.json'
-	icon_file = 'icons/obj/items/ammo/greyscale.dmi'
+	icon_file = 'icons/obj/items/ammo.dmi'
 
 ///PROJECTILES
 /datum/greyscale_config/projectile
@@ -323,3 +329,33 @@
 /datum/greyscale_config/broken_man
 	icon_file = 'icons/mob/human_face.dmi'
 	json_config = 'code/datums/greyscale/json_configs/broken_man.json'
+
+//Capes
+/datum/greyscale_config/cape
+	icon_file = 'icons/mob/modular/capes_saro.dmi'
+	json_config = 'code/datums/greyscale/json_configs/cape.json'
+
+
+//Cape highlights
+/datum/greyscale_config/cape_highlight
+	icon_file = 'icons/mob/modular/capes_highlight_saro.dmi'
+	json_config = 'code/datums/greyscale/json_configs/cape_highlight.json'
+
+
+//Xenonauten MK1
+/datum/greyscale_config/xenonaut/mk1
+	icon_file = 'icons/mob/modular/xenonauten_mk1.dmi'
+	json_config = 'code/datums/greyscale/json_configs/xenonaut_mk1.json'
+	prefix = "med_"
+
+/datum/greyscale_config/xenonaut/mk1/light
+	prefix = "light_"
+
+/datum/greyscale_config/xenonaut/mk1/medium
+	prefix = "med_"
+
+/datum/greyscale_config/xenonaut/mk1/heavy
+	prefix = "heavy_"
+
+/datum/greyscale_config/xenonaut/helm/mk1
+	icon_file = 'icons/mob/modular/xenonauten_mk1.dmi'

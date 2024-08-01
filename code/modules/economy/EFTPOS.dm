@@ -117,8 +117,6 @@
 
 /obj/item/eftpos/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/card))
 		var/obj/item/card/C = I

@@ -1,5 +1,5 @@
 /mob/living/carbon/xenomorph/behemoth
-	caste_base_type = /datum/xeno_caste/behemoth
+	caste_base_type = /mob/living/carbon/xenomorph/behemoth
 	name = "Behemoth"
 	desc = "A resilient and equally ferocious monster that commands the earth itself."
 	icon = 'icons/Xeno/castes/behemoth.dmi'
@@ -13,7 +13,8 @@
 	drag_delay = 6
 	mob_size = MOB_SIZE_BIG
 	max_buckled_mobs = 2
-	pixel_x = -28.5
+	pixel_x = -16
+	old_x = -16
 	footstep_type = FOOTSTEP_XENO_HEAVY
 
 
@@ -25,7 +26,7 @@
 	if(!behemoth_roll_action || !behemoth_roll_action.charge_ability_on)
 		return FALSE
 	if(behemoth_roll_action.valid_steps_taken == behemoth_roll_action.max_steps_buildup)
-		icon_state = "Behemoth[(xeno_flags & XENO_ROUNY) ? " rouny" : ""] Charging"
+		icon_state = "Behemoth[is_a_rouny ? " rouny" : ""] Charging"
 	else
 		icon_state = "Behemoth Rolling"
 	return TRUE

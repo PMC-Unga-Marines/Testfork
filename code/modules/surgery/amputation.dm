@@ -6,11 +6,15 @@
 	allowed_tools = list(
 		/obj/item/tool/surgery/circular_saw = 100,
 		/obj/item/tool/hatchet = 75,
-		/obj/item/weapon/sword = 75,
+		/obj/item/weapon/claymore = 75,
 	)
 
 	min_duration = 90
 	max_duration = 110
+
+	preop_sound = 'sound/misc/surgery/saw.ogg'
+	success_sound = 'sound/misc/surgery/organ1.ogg'
+	failure_sound = 'sound/effects/bone_break6.ogg'
 
 /datum/surgery_step/cut_limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected, checks_only)
 	if(!affected)

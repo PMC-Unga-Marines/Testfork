@@ -3,11 +3,11 @@
 	gender = PLURAL
 	icon = 'icons/obj/items/paper.dmi'
 	icon_state = "paper"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/civilian_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/civilian_right.dmi',
 	)
-	worn_icon_state = "paper"
+	item_state = "paper"
 	w_class = WEIGHT_CLASS_TINY
 	throw_range = 2
 	throw_speed = 1
@@ -19,8 +19,6 @@
 
 /obj/item/paper_bundle/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 
 	if(istype(I, /obj/item/paper))
@@ -103,27 +101,27 @@
 		switch(screen)
 			if(0)
 				dat+= "<DIV STYLE='float:left; text-align:left; width:33.33333%'></DIV>"
-				dat+= "<DIV STYLE='float:left; text-align:center; width:33.33333%'><A href='?src=[text_ref(src)];remove=1'>Remove [(istype(page, /obj/item/paper)) ? "paper" : "photo"]</A></DIV>"
+				dat+= "<DIV STYLE='float:left; text-align:center; width:33.33333%'><A href='?src=[text_ref(src)];remove=1'>Remove [(istype(src[page], /obj/item/paper)) ? "paper" : "photo"]</A></DIV>"
 				dat+= "<DIV STYLE='float:left; text-align:right; width:33.33333%'><A href='?src=[text_ref(src)];next_page=1'>Next Page</A></DIV><BR><HR>"
 			if(1)
 				dat+= "<DIV STYLE='float:left; text-align:left; width:33.33333%'><A href='?src=[text_ref(src)];prev_page=1'>Previous Page</A></DIV>"
-				dat+= "<DIV STYLE='float:left; text-align:center; width:33.33333%'><A href='?src=[text_ref(src)];remove=1'>Remove [(istype(page, /obj/item/paper)) ? "paper" : "photo"]</A></DIV>"
+				dat+= "<DIV STYLE='float:left; text-align:center; width:33.33333%'><A href='?src=[text_ref(src)];remove=1'>Remove [(istype(src[page], /obj/item/paper)) ? "paper" : "photo"]</A></DIV>"
 				dat+= "<DIV STYLE='float:left; text-align:right; width:33.33333%'><A href='?src=[text_ref(src)];next_page=1'>Next Page</A></DIV><BR><HR>"
 			if(2)
 				dat+= "<DIV STYLE='float:left; text-align:left; width:33.33333%'><A href='?src=[text_ref(src)];prev_page=1'>Previous Page</A></DIV>"
-				dat+= "<DIV STYLE='float:left; text-align:center; width:33.33333%'><A href='?src=[text_ref(src)];remove=1'>Remove [(istype(page, /obj/item/paper)) ? "paper" : "photo"]</A></DIV><BR><HR>"
+				dat+= "<DIV STYLE='float:left; text-align:center; width:33.33333%'><A href='?src=[text_ref(src)];remove=1'>Remove [(istype(src[page], /obj/item/paper)) ? "paper" : "photo"]</A></DIV><BR><HR>"
 				dat+= "<DIV STYLE='float;left; text-align:right; with:33.33333%'></DIV>"
-		if(istype(page, /obj/item/paper))
-			var/obj/item/paper/P = page
+		if(istype(src[page], /obj/item/paper))
+			var/obj/item/paper/P = src[page]
 			if(!(ishuman(usr) || isobserver(usr) || issilicon(usr)))
-				dat+= "<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[stars(P.info)][P.stamps]</BODY></HTML>"
+				dat+= "<html><meta charset='UTF-8'><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[stars(P.info)][P.stamps]</BODY></HTML>"
 			else
-				dat+= "<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[P.info][P.stamps]</BODY></HTML>"
+				dat+= "<html><meta charset='UTF-8'><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[P.info][P.stamps]</BODY></HTML>"
 			human_user << browse(dat, "window=[name]")
-		else if(istype(page, /obj/item/photo))
-			var/obj/item/photo/P = page
+		else if(istype(src[page], /obj/item/photo))
+			var/obj/item/photo/P = src[page]
 			human_user << browse_rsc(P.picture.picture_icon, "tmp_photo.png")
-			human_user << browse(dat + "<html><head><title>[P.name]</title></head>" \
+			human_user << browse(dat + "<html><meta charset='UTF-8'><head><title>[P.name]</title></head>" \
 			+ "<body style='overflow:hidden'>" \
 			+ "<div> <img src='tmp_photo.png' width = '180'" \
 			+ "[P.scribble ? "<div> Written on the back:<br><i>[P.scribble]</i>" : ""]"\
@@ -144,7 +142,7 @@
 			else if(page == amount)
 				return
 			page++
-			playsound(loc, SFX_PAGE_TURN, 15, 1)
+			playsound(src.loc, "pageturn", 15, 1)
 		if(href_list["prev_page"])
 			if(page == 1)
 				return
@@ -153,7 +151,7 @@
 			else if(page == amount)
 				screen = 1
 			page--
-			playsound(loc, SFX_PAGE_TURN, 15, 1)
+			playsound(src.loc, "pageturn", 15, 1)
 		if(href_list["remove"])
 			var/obj/item/W = contents[page]
 			usr.put_in_hands(W)

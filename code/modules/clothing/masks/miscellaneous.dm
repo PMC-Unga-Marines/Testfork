@@ -2,9 +2,9 @@
 	name = "muzzle"
 	desc = "To stop that awful noise."
 	icon_state = "muzzle"
-	worn_icon_state = "muzzle"
-	inventory_flags = COVERMOUTH
-	armor_protection_flags = NONE
+	item_state = "muzzle"
+	flags_inventory = COVERMOUTH
+	flags_armor_protection = NONE
 	w_class = WEIGHT_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 
@@ -12,10 +12,10 @@
 	name = "sterile mask"
 	desc = "A sterile mask designed to help prevent the spread of diseases."
 	icon_state = "sterile"
-	worn_icon_state = "sterile"
+	item_state = "sterile"
 	w_class = WEIGHT_CLASS_SMALL
-	inventory_flags = COVERMOUTH
-	armor_protection_flags = NONE
+	flags_inventory = COVERMOUTH
+	flags_armor_protection = NONE
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.01
 	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 25, FIRE = 0, ACID = 0)
@@ -24,15 +24,15 @@
 	name = "fake moustache"
 	desc = "Warning: moustache is fake."
 	icon_state = "fake-moustache"
-	inv_hide_flags = HIDEFACE
-	armor_protection_flags = NONE
+	flags_inv_hide = HIDEFACE
+	flags_armor_protection = NONE
 
 /obj/item/clothing/mask/snorkel
 	name = "Snorkel"
 	desc = "For the Swimming Savant."
 	icon_state = "snorkel"
-	inv_hide_flags = HIDEFACE
-	armor_protection_flags = NONE
+	flags_inv_hide = HIDEFACE
+	flags_armor_protection = NONE
 
 //scarves (fit in in mask slot)
 
@@ -40,8 +40,8 @@
 	name = "blue neck scarf"
 	desc = "A blue neck scarf."
 	icon_state = "blueneckscarf"
-	worn_icon_state = "blueneckscarf"
-	inventory_flags = COVERMOUTH
+	item_state = "blueneckscarf"
+	flags_inventory = COVERMOUTH
 	w_class = WEIGHT_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 
@@ -49,8 +49,8 @@
 	name = "red scarf"
 	desc = "A red and white checkered neck scarf."
 	icon_state = "redwhite_scarf"
-	worn_icon_state = "redwhite_scarf"
-	inventory_flags = COVERMOUTH
+	item_state = "redwhite_scarf"
+	flags_inventory = COVERMOUTH
 	w_class = WEIGHT_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 
@@ -58,8 +58,8 @@
 	name = "green scarf"
 	desc = "A green neck scarf."
 	icon_state = "green_scarf"
-	worn_icon_state = "green_scarf"
-	inventory_flags = COVERMOUTH
+	item_state = "green_scarf"
+	flags_inventory = COVERMOUTH
 	w_class = WEIGHT_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 
@@ -67,8 +67,8 @@
 	name = "ninja scarf"
 	desc = "A stealthy, dark scarf."
 	icon_state = "ninja_scarf"
-	worn_icon_state = "ninja_scarf"
-	inventory_flags = COVERMOUTH
+	item_state = "ninja_scarf"
+	flags_inventory = COVERMOUTH
 	w_class = WEIGHT_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	siemens_coefficient = 0
@@ -77,21 +77,21 @@
 	name = "pig mask"
 	desc = "A rubber pig mask."
 	icon_state = "pig"
-	worn_icon_state = "pig"
-	inventory_flags = COVERMOUTH|COVEREYES
-	inv_hide_flags = HIDEFACE|HIDEALLHAIR|HIDEEYES|HIDEEARS
+	item_state = "pig"
+	flags_inventory = COVERMOUTH|COVEREYES
+	flags_inv_hide = HIDEFACE|HIDEALLHAIR|HIDEEYES|HIDEEARS
 	w_class = WEIGHT_CLASS_SMALL
 	siemens_coefficient = 0.9
-	armor_protection_flags = HEAD|FACE|EYES
+	flags_armor_protection = HEAD|FACE|EYES
 
 /obj/item/clothing/mask/horsehead
 	name = "horse head mask"
 	desc = "A mask made of soft vinyl and latex, representing the head of a horse."
 	icon_state = "horsehead"
-	worn_icon_state = "horsehead"
-	inventory_flags = COVERMOUTH|COVEREYES
-	inv_hide_flags = HIDEFACE|HIDEALLHAIR|HIDEEYES|HIDEEARS
-	armor_protection_flags = HEAD|FACE|EYES
+	item_state = "horsehead"
+	flags_inventory = COVERMOUTH|COVEREYES
+	flags_inv_hide = HIDEFACE|HIDEALLHAIR|HIDEEYES|HIDEEARS
+	flags_armor_protection = HEAD|FACE|EYES
 	w_class = WEIGHT_CLASS_SMALL
 	var/voicechange = 0
 	siemens_coefficient = 0.9
@@ -101,28 +101,30 @@
 	name = "balaclava"
 	desc = "LOADSAMONEY"
 	icon_state = "balaclava"
-	worn_icon_state = "balaclava"
-	inv_hide_flags = HIDEFACE|HIDEALLHAIR
-	armor_protection_flags = FACE
+	item_state = "balaclava"
+	flags_inv_hide = HIDEFACE|HIDEALLHAIR
+	flags_armor_protection = FACE
 	w_class = WEIGHT_CLASS_SMALL
+	item_icons = list(
+		slot_wear_mask_str = 'icons/mob/clothing/mask.dmi')
 
 /obj/item/clothing/mask/balaclava/tactical
 	name = "green balaclava"
 	desc = "Designed to both hide identities and keep your face comfy and warm."
 	icon_state = "swatclava"
-	worn_icon_state = "balaclava"
+	item_state = "balaclava"
 	w_class = WEIGHT_CLASS_SMALL
 
 /obj/item/clothing/mask/luchador
 	name = "Luchador Mask"
 	desc = "Worn by robust fighters, flying high to defeat their foes!"
 	icon_state = "luchag"
-	worn_icon_state = "luchag"
-	inv_hide_flags = HIDEFACE|HIDEALLHAIR
-	cold_protection_flags = HEAD
+	item_state = "luchag"
+	flags_inv_hide = HIDEFACE|HIDEALLHAIR
+	flags_cold_protection = HEAD
 	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROTECTION_TEMPERATURE
-	armor_protection_flags = HEAD|FACE
-	inventory_flags = COVERMOUTH
+	flags_armor_protection = HEAD|FACE
+	flags_inventory = COVERMOUTH
 	w_class = WEIGHT_CLASS_SMALL
 	siemens_coefficient = 3
 
@@ -130,10 +132,24 @@
 	name = "Tecnicos Mask"
 	desc = "Worn by robust fighters who uphold justice and fight honorably."
 	icon_state = "luchador"
-	worn_icon_state = "luchador"
+	item_state = "luchador"
 
 /obj/item/clothing/mask/luchador/rudos
 	name = "Rudos Mask"
 	desc = "Worn by robust fighters who are willing to do anything to win."
 	icon_state = "luchar"
-	worn_icon_state = "luchar"
+	item_state = "luchar"
+
+/obj/item/clothing/mask/balaclava/blueskull
+	name = "Blue skull balaclava"
+	desc = "Totally not a ripoff from a famous shooter"
+	icon_state = "blue_skull_balaclava"
+	item_state = "balaclava"
+	w_class = WEIGHT_CLASS_SMALL
+
+/obj/item/clothing/mask/balaclava/blackskull
+	name = "Black skull balaclava"
+	desc = "Totally not a ripoff from a famous shooter"
+	icon_state = "black_skull_balaclava"
+	item_state = "balaclava"
+	w_class = WEIGHT_CLASS_SMALL

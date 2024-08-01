@@ -246,6 +246,7 @@
 
 	updateUsrDialog()
 
+//do not allow AIs to answer calls or people will use it to meta the AI sattelite
 /obj/machinery/holopad/attack_ai(mob/living/silicon/ai/user)
 	if (!istype(user))
 		return
@@ -312,7 +313,7 @@
 			Hologram.copy_overlays(user, TRUE)
 			//codersprite some holo effects here
 			Hologram.alpha = 100
-			Hologram.add_atom_colour("#77abff", FIXED_COLOR_PRIORITY)
+			Hologram.add_atom_colour("#77abff", FIXED_COLOUR_PRIORITY)
 			Hologram.Impersonation = user
 
 		Hologram.copy_known_languages_from(user,replace = TRUE)
@@ -334,6 +335,11 @@
 For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/holopad/Hear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, message_mode)
 	. = ..()
+	if(speaker && LAZYLEN(masters) && !radio_freq)//Master is mostly a safety in case lag hits or something. Radio_freq so AIs dont hear holopad stuff through radios.
+		for(var/mob/living/silicon/ai/master in masters)
+			if(masters[master] && speaker != master)
+				master.relay_speech(message, speaker, message_language, raw_message, radio_freq, spans, message_mode)
+
 	for(var/datum/holocall/holocall_to_update AS in holo_calls)
 		if(holocall_to_update.connected_holopad == src && speaker != holocall_to_update.hologram)
 			holocall_to_update.user.Hear(message, speaker, message_language, raw_message, radio_freq, spans, message_mode)

@@ -141,11 +141,17 @@
 ****************************************************/
 
 /datum/limb/proc/emp_act(severity)
-	for(var/datum/internal_organ/organ AS in internal_organs)
-		organ.emp_act(severity)
 	if(!(limb_status & LIMB_ROBOT))	//meatbags do not care about EMP
 		return
-	take_damage_limb(0, (5 - severity) * 7, blocked = soft_armor.energy, updating_health = TRUE)
+	var/probability = 30
+	var/damage = 15
+	if(severity == 2)
+		probability = 1
+		damage = 3
+	if(prob(probability))
+		droplimb()
+	else
+		take_damage_limb(damage, 0, TRUE, TRUE)
 
 
 /datum/limb/proc/take_damage_limb(brute, burn, sharp, edge, blocked = 0, updating_health = FALSE, list/forbidden_limbs = list())
@@ -174,21 +180,21 @@
 	if(limb_status & LIMB_BIOTIC)
 		brute *= 1.3 // 130% damage for biotic limbs
 		burn *= 1.3
-
+/* RU TGMC EDIT
 	//High brute damage or sharp objects may damage internal organs
 	if(internal_organs && ((sharp && brute >= 10) || brute >= 20) && prob(5))
 		//Damage an internal organ
 		var/datum/internal_organ/I = pick(internal_organs)
 		I.take_damage(brute / 2)
 		brute -= brute / 2
-
+RU TGMC EDIT */
 	if(limb_status & LIMB_BROKEN && prob(40) && brute)
 		if(!(owner.species && (owner.species.species_flags & NO_PAIN)))
 			owner.emote("scream") //Getting hit on broken hand hurts
 
 	//Possibly trigger an internal wound, too.
 	var/local_damage = brute_dam + burn_dam + brute
-	if(brute > 15 && local_damage > 30 && prob(brute*0.5) && !(limb_status & LIMB_ROBOT) && !(SSticker.mode?.round_type_flags & MODE_NO_PERMANENT_WOUNDS))
+	if(brute > 15 && local_damage > 30 && prob(brute*0.5) && !(limb_status & LIMB_ROBOT) && !(SSticker.mode?.flags_round_type & MODE_NO_PERMANENT_WOUNDS))
 		new /datum/wound/internal_bleeding(min(brute - 15, 15), src)
 		owner.custom_pain("You feel something rip in your [display_name]!", 1)
 
@@ -263,7 +269,7 @@
 			owner.updatehealth()
 		return update_icon()
 	var/obj/item/clothing/worn_helmet = owner.head
-	if(body_part == HEAD && worn_helmet && (worn_helmet.armor_features_flags & ARMOR_NO_DECAP)) //Early return if the body part is a head but target is wearing decap-protecting headgear.
+	if(body_part == HEAD && worn_helmet && (worn_helmet.flags_armor_features & ARMOR_NO_DECAP)) //Early return if the body part is a head but target is wearing decap-protecting headgear.
 		if(updating_health)
 			owner.updatehealth()
 		return update_icon()
@@ -415,6 +421,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 		germ_level = 0
 		return
 
+	if(isyautja(owner))
+		germ_level = 0
+		return
+
 	if(owner.bodytemperature >= 170 && !HAS_TRAIT(owner, TRAIT_STASIS))	//cryo stops germs from moving and doing their bad stuffs
 		//** Syncing germ levels with external wounds
 		handle_germ_sync()
@@ -546,51 +556,51 @@ Note that amputating the affected organ does in fact remove the infection from t
 		remove_limb_flags(LIMB_BLEEDING)
 
 
-/datum/limb/proc/set_limb_flags(to_set_flags)
-	if(to_set_flags == limb_status)
+/datum/limb/proc/set_limb_flags(flags_to_set)
+	if(flags_to_set == limb_status)
 		return
 	. = limb_status
-	var/to_change_flags = . & ~to_set_flags //Flags to remove
-	if(to_change_flags)
-		remove_limb_flags(to_change_flags)
-	to_change_flags = to_set_flags & ~(to_set_flags & .) //Flags to add
-	if(to_change_flags)
-		add_limb_flags(to_change_flags)
+	var/flags_to_change = . & ~flags_to_set //Flags to remove
+	if(flags_to_change)
+		remove_limb_flags(flags_to_change)
+	flags_to_change = flags_to_set & ~(flags_to_set & .) //Flags to add
+	if(flags_to_change)
+		add_limb_flags(flags_to_change)
 
 
-/datum/limb/proc/remove_limb_flags(to_remove_flags)
-	if(!(limb_status & to_remove_flags))
+/datum/limb/proc/remove_limb_flags(flags_to_remove)
+	if(!(limb_status & flags_to_remove))
 		return //Nothing old to remove.
 	. = limb_status
-	limb_status &= ~to_remove_flags
-	var/changed_flags = . & to_remove_flags
+	limb_status &= ~flags_to_remove
+	var/changed_flags = . & flags_to_remove
 	if((changed_flags & LIMB_DESTROYED))
 		SEND_SIGNAL(src, COMSIG_LIMB_UNDESTROYED)
 
 
-/datum/limb/proc/add_limb_flags(to_add_flags)
-	if(to_add_flags == (limb_status & to_add_flags))
+/datum/limb/proc/add_limb_flags(flags_to_add)
+	if(flags_to_add == (limb_status & flags_to_add))
 		return //Nothing new to add.
 	. = limb_status
-	limb_status |= to_add_flags
-	var/changed_flags = ~(. & to_add_flags) & to_add_flags
+	limb_status |= flags_to_add
+	var/changed_flags = ~(. & flags_to_add) & flags_to_add
 	if((changed_flags & LIMB_DESTROYED))
 		SEND_SIGNAL(src, COMSIG_LIMB_DESTROYED)
 
 
-/datum/limb/foot/remove_limb_flags(to_remove_flags)
+/datum/limb/foot/remove_limb_flags(flags_to_remove)
 	. = ..()
 	if(isnull(.))
 		return
-	var/changed_flags = . & to_remove_flags
+	var/changed_flags = . & flags_to_remove
 	if((changed_flags & LIMB_DESTROYED) && owner.has_legs())
 		REMOVE_TRAIT(owner, TRAIT_LEGLESS, TRAIT_LEGLESS)
 
-/datum/limb/foot/add_limb_flags(to_add_flags)
+/datum/limb/foot/add_limb_flags(flags_to_add)
 	. = ..()
 	if(isnull(.))
 		return
-	var/changed_flags = ~(. & to_add_flags) & to_add_flags
+	var/changed_flags = ~(. & flags_to_add) & flags_to_add
 	if((changed_flags & LIMB_DESTROYED) && !owner.has_legs())
 		ADD_TRAIT(owner, TRAIT_LEGLESS, TRAIT_LEGLESS)
 
@@ -656,13 +666,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		return limb_name
 	return null
 
-///Amputates the limb in the specified limb zone
-/mob/living/carbon/human/proc/amputate_limb(limb_zone)
-	var/datum/limb/limb_to_drop = get_limb(limb_zone)
-	limb_to_drop?.droplimb(TRUE, TRUE)
-
 //Handles dismemberment
-/datum/limb/proc/droplimb(amputation, delete_limb = FALSE)
+/datum/limb/proc/droplimb(amputation, delete_limb = FALSE, silent = FALSE)
 	if(limb_status & LIMB_DESTROYED)
 		return FALSE
 
@@ -689,7 +694,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	// If any organs are attached to this, destroy them
 	for(var/c in children)
 		var/datum/limb/appendage = c
-		appendage.droplimb(amputation, delete_limb)
+		appendage.droplimb(amputation, delete_limb, silent)
 
 	//Clear out any internal and external wounds, damage the parent limb
 	QDEL_LIST(wounds)
@@ -758,7 +763,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if(delete_limb)
 		QDEL_NULL(organ)
-	else
+	else if(!silent)
 		owner.visible_message(span_warning("[owner.name]'s [display_name] flies off in an arc!"),
 		span_highdanger("<b>Your [display_name] goes flying off!</b>"),
 		span_warning("You hear a terrible sound of ripping tendons and flesh!"), 3)
@@ -777,7 +782,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.death()
 	return TRUE
 
-/datum/limb/hand/l_hand/droplimb(amputation, delete_limb = FALSE)
+/datum/limb/hand/l_hand/droplimb(amputation, delete_limb = FALSE, silent = FALSE)
 	. = ..()
 	if(!.)
 		return
@@ -846,8 +851,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		span_warning("You hear a loud cracking sound coming from [owner]!"),
 		span_highdanger("Something feels like it shattered in your [display_name]!"),
 		"<span class='warning'>You hear a sickening crack!<span>")
-	var/soundeffect = pick('sound/effects/bone_break1.ogg','sound/effects/bone_break2.ogg','sound/effects/bone_break3.ogg','sound/effects/bone_break4.ogg','sound/effects/bone_break5.ogg','sound/effects/bone_break6.ogg','sound/effects/bone_break7.ogg')
-	playsound(owner,soundeffect, 45, 1)
+	playsound(owner, "bone_break", 45, 1)
 	if(owner.species && !(owner.species.species_flags & NO_PAIN))
 		owner.emote("scream")
 
@@ -913,19 +917,23 @@ Note that amputating the affected organ does in fact remove the infection from t
 // todo this proc sucks lmao just redo it from scratch
 //for arms and hands
 /datum/limb/proc/process_grasp(obj/item/c_hand, hand_name)
-	if(!c_hand)
+	if (!c_hand)
 		return
 
 	if(!is_usable())
-		if(owner.dropItemToGround(c_hand))
-			owner.emote("me", 1, "drops what [owner.p_they()] [owner.p_were()] holding in [owner.p_their()] [hand_name], [owner.p_their()] [display_name] unresponsive!")
-	else if(is_broken() && prob(15))
-		if(owner.dropItemToGround(c_hand))
-			var/emote_scream = owner.species?.species_flags & NO_PAIN ? "" : pick("screams in pain and ", "lets out a sharp cry and ", "cries out and ")
-			owner.emote("me", 1, "[emote_scream]drops what [owner.p_they()] [owner.p_were()] holding in [owner.p_their()] [hand_name]!")
-	else if(is_malfunctioning() && prob(20))
-		if(owner.dropItemToGround(c_hand))
-			owner.emote("me", 1, "drops what [owner.p_they()] [owner.p_were()] holding, [owner.p_their()] [hand_name] malfunctioning!")
+		owner.dropItemToGround(c_hand)
+		owner.emote("me", 1, "drop[owner.p_s()] what [owner.p_they()] [owner.p_were()] holding in [owner.p_their()] [hand_name], [owner.p_their()] [display_name] unresponsive!")
+		return
+	if(is_broken())
+		if(prob(15))
+			owner.dropItemToGround(c_hand)
+			var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
+			owner.emote("me", 1, "[(owner.species && owner.species.species_flags & NO_PAIN) ? "" : emote_scream ] drops what [owner.p_they()] [owner.p_were()] holding in their [hand_name]!")
+			return
+	if(is_malfunctioning())
+		if(prob(20))
+			owner.dropItemToGround(c_hand)
+			owner.emote("me", 1, "drops what they were holding, [owner.p_their()] [hand_name] malfunctioning!")
 			new /datum/effect_system/spark_spread(owner, owner, 5, 0, TRUE, 1 SECONDS)
 
 ///applies a splint stack to this limb. should probably be more generic but #notit
@@ -1129,15 +1137,15 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/limb/head/take_damage_limb(brute, burn, sharp, edge, blocked = 0, updating_health = FALSE, list/forbidden_limbs = list())
 	. = ..()
-	if (!disfigured)
-		if (brute_dam > 40)
-			if (prob(50))
+	if(!disfigured)
+		if(brute_dam > 40)
+			if(prob(50))
 				disfigure(BRUTE)
-		if (burn_dam > 40)
-			disfigure("burn")
+		if(burn_dam > 40)
+			disfigure(BURN)
 
 /datum/limb/head/proc/disfigure(type = BRUTE)
-	if (disfigured)
+	if(disfigured)
 		return
 	if(type == BRUTE)
 		owner.visible_message(span_warning(" You hear a sickening cracking sound coming from \the [owner]'s face."),	\
@@ -1155,7 +1163,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	face_surgery_stage = 0
 
 
-/datum/limb/head/droplimb(amputation, delete_limb = FALSE)
+/datum/limb/head/droplimb(amputation, delete_limb = FALSE, silent = FALSE)
 	. = ..()
 	if(!.)
 		return

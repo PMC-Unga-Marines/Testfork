@@ -19,11 +19,11 @@
 	. = ..()
 	var/obj/item/teleporter_kit/kit = get_internal_item()
 	if(!kit?.cell)
-		. += "It is currently lacking a power cell."
+		. += span_notice("It currently lacks a power cell.")
 	if(kit?.linked_teleporter)
-		. += "It is currently linked to Teleporter #[kit.linked_teleporter.self_tele_tag] at [get_area(kit.linked_teleporter)]"
+		. += span_notice("It is currently linked to a Teleporter #[kit.linked_teleporter.self_tele_tag] at [get_area(kit.linked_teleporter)].")
 	else
-		. += "It is not linked to any other teleporter."
+		. += span_notice("It isn't linked to any other teleporter.")
 
 
 /obj/machinery/deployable/teleporter/Initialize(mapload)
@@ -94,10 +94,12 @@
 		thing_to_teleport.forceMove(get_turf(deployed_linked_teleporter))
 
 /obj/machinery/deployable/teleporter/attack_ghost(mob/dead/observer/user)
-	var/obj/item/teleporter_kit/kit = internal_item
-	if(!istype(kit) || !kit.linked_teleporter)
+	. = ..()
+	var/obj/item/teleporter_kit/kit = get_internal_item()
+	if(!kit.linked_teleporter)
 		return
 	user.forceMove(get_turf(kit.linked_teleporter))
+
 
 /obj/machinery/deployable/teleporter/crowbar_act(mob/living/user, obj/item/I)
 	. = ..()
@@ -147,14 +149,14 @@
 /obj/item/teleporter_kit
 	name = "\improper ASRS Bluespace teleporter"
 	desc = "A bluespace telepad for moving personnel and equipment across small distances to another prelinked teleporter. Ctrl+Click on a tile to deploy, use a wrench to undeploy, use a crowbar to remove the power cell."
-	icon = 'icons/obj/structures/teleporter.dmi'
+	icon = 'icons/Marine/teleporter.dmi'
 	icon_state = "teleporter"
 
 	max_integrity = 200
-	item_flags = IS_DEPLOYABLE|DEPLOYED_WRENCH_DISASSEMBLE
+	flags_item = IS_DEPLOYABLE|DEPLOYED_WRENCH_DISASSEMBLE
 
 	w_class = WEIGHT_CLASS_BULKY
-	equip_slot_flags = ITEM_SLOT_BACK
+	flags_equip_slot = ITEM_SLOT_BACK
 	///The linked teleporter
 	var/obj/item/teleporter_kit/linked_teleporter
 	///The optional cell to power the teleporter if off the grid

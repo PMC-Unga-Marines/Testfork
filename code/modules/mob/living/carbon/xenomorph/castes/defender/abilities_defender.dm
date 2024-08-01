@@ -4,7 +4,6 @@
 /datum/action/ability/xeno_action/tail_sweep
 	name = "Tail Sweep"
 	action_icon_state = "tail_sweep"
-	action_icon = 'icons/Xeno/actions/defender.dmi'
 	desc = "Hit all adjacent units around you, knocking them away and down."
 	ability_cost = 35
 	use_state_flags = ABILITY_USE_CRESTED
@@ -37,11 +36,16 @@
 	var/sweep_range = 1
 	var/list/L = orange(sweep_range, X)		// Not actually the fruit
 
+		//RU TGMC GRENADE TURF THROW
+	for(var/obj/item/explosive/grenade/G in L)
+		G.knockback(X, 6, 2)
+		//RU TGMC GRENADE TURF THROW END
+
 	for (var/mob/living/carbon/human/H in L)
-		if(H.stat == DEAD || !X.Adjacent(H))
+		if(H.stat == DEAD)
 			continue
 		H.add_filter("defender_tail_sweep", 2, gauss_blur_filter(1)) //Add cool SFX; motion blur
-		addtimer(CALLBACK(H, TYPE_PROC_REF(/datum, remove_filter), "defender_tail_sweep"), 0.5 SECONDS) //Remove cool SFX
+		addtimer(CALLBACK(H, TYPE_PROC_REF(/atom, remove_filter), "defender_tail_sweep"), 0.5 SECONDS) //Remove cool SFX
 		var/damage = X.xeno_caste.melee_damage
 		var/affecting = H.get_limb(ran_zone(null, 0))
 		if(!affecting) //Still nothing??
@@ -57,7 +61,7 @@
 		to_chat(H, span_xenowarning("We are struck by \the [X]'s tail sweep!"))
 		playsound(H,'sound/weapons/alien_claw_block.ogg', 50, 1)
 
-	addtimer(CALLBACK(X, TYPE_PROC_REF(/datum, remove_filter), "defender_tail_sweep"), 0.5 SECONDS) //Remove cool SFX
+	addtimer(CALLBACK(X, TYPE_PROC_REF(/atom, remove_filter), "defender_tail_sweep"), 0.5 SECONDS) //Remove cool SFX
 	succeed_activate()
 	if(X.crest_defense)
 		X.use_plasma(ability_cost)
@@ -66,7 +70,7 @@
 /datum/action/ability/xeno_action/tail_sweep/on_cooldown_finish()
 	var/mob/living/carbon/xenomorph/X = owner
 	to_chat(X, span_notice("We gather enough strength to tail sweep again."))
-	owner.playsound_local(owner, 'sound/effects/alien/new_larva.ogg', 25, 0, 1)
+	owner.playsound_local(owner, 'sound/effects/alien/newlarva.ogg', 25, 0, 1)
 	return ..()
 
 /datum/action/ability/xeno_action/tail_sweep/ai_should_start_consider()
@@ -89,7 +93,6 @@
 /datum/action/ability/activable/xeno/charge/forward_charge
 	name = "Forward Charge"
 	action_icon_state = "pounce"
-	action_icon = 'icons/Xeno/actions/runner.dmi'
 	desc = "Charge up to 4 tiles and knockdown any targets in our way."
 	cooldown_duration = 10 SECONDS
 	ability_cost = 80
@@ -135,7 +138,6 @@
 	. = TRUE
 	if(living_target.stat || isxeno(living_target) || !(iscarbon(living_target))) //we leap past xenos
 		return
-
 	var/mob/living/carbon/xenomorph/xeno_owner = owner
 	var/mob/living/carbon/carbon_victim = living_target
 	var/extra_dmg = xeno_owner.xeno_caste.melee_damage * xeno_owner.xeno_melee_damage_modifier * 0.5 // 50% dmg reduction
@@ -152,6 +154,7 @@
 	action_activate()
 	LAZYINCREMENT(owner.do_actions, target)
 	addtimer(CALLBACK(src, PROC_REF(decrease_do_action), target), windup_time)
+	return TRUE
 
 ///Decrease the do_actions of the owner
 /datum/action/ability/activable/xeno/charge/forward_charge/proc/decrease_do_action(atom/target)
@@ -163,7 +166,6 @@
 /datum/action/ability/xeno_action/toggle_crest_defense
 	name = "Toggle Crest Defense"
 	action_icon_state = "crest_defense"
-	action_icon = 'icons/Xeno/actions/defender.dmi'
 	desc = "Increase your resistance to projectiles at the cost of move speed. Can use abilities while in Crest Defense."
 	use_state_flags = ABILITY_USE_FORTIFIED|ABILITY_USE_CRESTED // duh
 	cooldown_duration = 1 SECONDS
@@ -241,10 +243,9 @@
 // ***************************************
 /datum/action/ability/xeno_action/fortify
 	name = "Fortify"
-	action_icon_state = "fortify"
-	action_icon = 'icons/Xeno/actions/defender.dmi'
+	action_icon_state = "fortify"	// TODO
 	desc = "Plant yourself for a large defensive boost."
-	use_state_flags = ABILITY_USE_FORTIFIED|ABILITY_USE_CRESTED
+	use_state_flags = ABILITY_USE_FORTIFIED|ABILITY_USE_CRESTED // duh
 	cooldown_duration = 1 SECONDS
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_FORTIFY,
@@ -310,6 +311,7 @@
 			to_chat(X, span_xenowarning("We tuck ourselves into a defensive stance."))
 		X.soft_armor = X.soft_armor.modifyAllRatings(last_fortify_bonus)
 		X.soft_armor = X.soft_armor.modifyRating(BOMB = last_fortify_bonus) //double bomb bonus for explosion immunity
+		owner.drop_all_held_items() // drop items (hugger/jelly)
 	else
 		if(!silent)
 			to_chat(X, span_xenowarning("We resume our normal stance."))
@@ -329,10 +331,9 @@
 /datum/action/ability/xeno_action/regenerate_skin
 	name = "Regenerate Skin"
 	action_icon_state = "regenerate_skin"
-	action_icon = 'icons/Xeno/actions/defender.dmi'
 	desc = "Regenerate your hard exoskeleton skin, restoring some health and removing all sunder."
-	use_state_flags = ABILITY_USE_FORTIFIED|ABILITY_USE_CRESTED|ABILITY_TARGET_SELF|ABILITY_IGNORE_SELECTED_ABILITY|ABILITY_KEYBIND_USE_ABILITY|ABILITY_USE_LYING
-	ability_cost = 160
+	use_state_flags = ABILITY_USE_FORTIFIED|ABILITY_USE_CRESTED|ABILITY_TARGET_SELF|ABILITY_IGNORE_SELECTED_ABILITY|ABILITY_KEYBIND_USE_ABILITY
+	ability_cost = 80
 	cooldown_duration = 1 MINUTES
 	keybind_flags = ABILITY_KEYBIND_USE_ABILITY
 	keybinding_signals = list(
@@ -360,7 +361,7 @@
 
 	X.do_jitter_animation(1000)
 	X.set_sunder(0)
-	X.heal_overall_damage(25, 25, updating_health = TRUE)
+	X.heal_overall_damage(50, 50, updating_health = TRUE) //RUTGMC EDIT
 	add_cooldown()
 	return succeed_activate()
 
@@ -371,7 +372,6 @@
 /datum/action/ability/xeno_action/centrifugal_force
 	name = "Centrifugal force"
 	action_icon_state = "centrifugal_force"
-	action_icon = 'icons/Xeno/actions/defender.dmi'
 	desc = "Rapidly spin and hit all adjacent humans around you, knocking them away and down. Uses double plasma when crest is active."
 	ability_cost = 15
 	use_state_flags = ABILITY_USE_CRESTED
@@ -422,7 +422,7 @@
 		if(slapped.stat == DEAD)
 			continue
 		slapped.add_filter("defender_tail_sweep", 2, gauss_blur_filter(1)) //Add cool SFX; motion blur
-		addtimer(CALLBACK(slapped, TYPE_PROC_REF(/datum, remove_filter), "defender_tail_sweep"), 0.5 SECONDS) //Remove cool SFX
+		addtimer(CALLBACK(slapped, TYPE_PROC_REF(/atom, remove_filter), "defender_tail_sweep"), 0.5 SECONDS) //Remove cool SFX
 		var/damage = X.xeno_caste.melee_damage/2
 		var/affecting = slapped.get_limb(ran_zone(null, 0))
 		if(!affecting)

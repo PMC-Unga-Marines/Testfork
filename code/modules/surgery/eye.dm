@@ -40,7 +40,7 @@
 
 /datum/surgery_step/eye/cut_open/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
 	user.visible_message(span_notice("[user] has separated the cornea on [target]'s eyes with \the [tool].") , \
-	span_notice("You have separated the cornea on [target]'s eyes with \the [tool]."))
+	span_notice("You have separated the cornea on [target]'s eyes with \the [tool]."),)
 	target.balloon_alert_to_viewers("Success")
 	var/datum/internal_organ/eyes/E = target.get_organ_slot(ORGAN_SLOT_EYES)
 	E.eye_surgery_stage = 1
@@ -56,7 +56,6 @@
 	E.take_damage(5, 0)
 	target.updatehealth()
 	affected.update_wounds()
-
 
 /datum/surgery_step/eye/lift_eyes
 	allowed_tools = list(
@@ -123,7 +122,6 @@
 	E.take_damage(5, 0)
 	target.apply_damage(10, BRUTE, affected, 0, TRUE, updating_health = TRUE)
 
-
 /datum/surgery_step/eye/cauterize
 	allowed_tools = list(
 		/obj/item/tool/surgery/cautery = 100,
@@ -151,7 +149,6 @@
 	E.damage = 0
 	E.eye_surgery_stage = 0
 	return ..()
-
 
 /datum/surgery_step/eye/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/limb/affected)
 	var/datum/internal_organ/eyes/E = target.get_organ_slot(ORGAN_SLOT_EYES)

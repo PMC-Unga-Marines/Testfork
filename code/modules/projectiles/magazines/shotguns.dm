@@ -11,11 +11,10 @@ one type of shotgun ammo, but I think it helps in referencing it. ~N
 	name = "box of 12 gauge shotgun slugs"
 	desc = "A box filled with heavy shotgun shells. A timeless classic. 12 Gauge."
 	icon_state = "slugs"
-	icon = 'icons/obj/items/ammo/shotgun.dmi'
 	default_ammo = /datum/ammo/bullet/shotgun/slug
 	caliber = CALIBER_12G //All shotgun rounds are 12g right now.
 	max_rounds = 25 // Real shotgun boxes are usually 5 or 25 rounds. This works with the new system, five handfuls.
-	w_class = WEIGHT_CLASS_BULKY // Can't throw it in your pocket, friend.
+	w_class = WEIGHT_CLASS_NORMAL // Can't throw it in your pocket, friend.
 	icon_state_mini = "slugs"
 
 /obj/item/ammo_magazine/shotgun/incendiary
@@ -53,18 +52,10 @@ one type of shotgun ammo, but I think it helps in referencing it. ~N
 	default_ammo = /datum/ammo/bullet/shotgun/tracker
 	icon_state_mini = "tracking"
 
-/obj/item/ammo_magazine/shotgun/blank
-	name = "box of 12 gauge blank shells"
-	desc = "A box filled with blank shotgun shells. 12 Gauge."
-	icon_state = "blank"
-	default_ammo = /datum/ammo/bullet/shotgun/blank
-	icon_state_mini = "blank"
-
 /obj/item/ammo_magazine/rifle/bolt
 	name = "box of 7.62x54mmR rifle rounds"
 	desc = "A box filled with rifle bullets."
 	icon_state = "7.62" //Thank you Alterist
-	icon = 'icons/obj/items/ammo/packet.dmi'
 	default_ammo = /datum/ammo/bullet/sniper/svd
 	caliber = CALIBER_762X54 //Cyka Blyat
 	max_rounds = 20 // Real rifle boxes are usually 20 rounds. This works with the new system, four handfuls.
@@ -85,7 +76,6 @@ one type of shotgun ammo, but I think it helps in referencing it. ~N
 	name = "box of .557/440 rifle rounds"
 	desc = "A box filled with rifle bullets."
 	icon_state = ".557"
-	icon = 'icons/obj/items/ammo/packet.dmi'
 	default_ammo = /datum/ammo/bullet/sniper/martini
 	caliber = CALIBER_557
 	max_rounds = 20
@@ -95,8 +85,7 @@ one type of shotgun ammo, but I think it helps in referencing it. ~N
 /obj/item/ammo_magazine/pistol/derringer
 	name = "box of .40 rimfire pistol rounds"
 	desc = "A box filled with pistol bullets."
-	icon_state = "derringer"
-	icon = 'icons/obj/items/ammo/packet.dmi'
+	icon_state = "derringer_box"
 	default_ammo = /datum/ammo/bullet/pistol/superheavy/derringer
 	caliber = CALIBER_41RIM
 	max_rounds = 10

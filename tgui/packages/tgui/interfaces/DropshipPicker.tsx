@@ -1,6 +1,6 @@
-import { resolveAsset } from '../assets';
 import { useBackend } from '../backend';
-import { Box, Button, Flex, Section } from '../components';
+import { resolveAsset } from '../assets';
+import { Button, Section, Box, Flex } from '../components';
 import { Window } from '../layouts';
 
 type DropshipEntry = {
@@ -18,8 +18,8 @@ type DropshipPickerData = {
   shuttles: DropshipEntry[];
 };
 
-export const DropshipPicker = (_props) => {
-  const { act, data } = useBackend<DropshipPickerData>();
+export const DropshipPicker = (_props, context) => {
+  const { act, data } = useBackend<DropshipPickerData>(context);
 
   return (
     <Window width={510} height={500} title={'Dropship Selector'}>
@@ -36,8 +36,7 @@ export const DropshipPicker = (_props) => {
             />
             <Section
               title={'Description - ' + (data.name ? data.name : 'None')}
-              fill
-            >
+              fill>
               <Box>{data.desc !== null ? data.desc : 'Pick a ship!'}</Box>
             </Section>
           </Flex.Item>
@@ -46,8 +45,7 @@ export const DropshipPicker = (_props) => {
           color={'bad'}
           width={'100%'}
           disabled={data.current_ref === null}
-          onClick={() => act('confirm')}
-        >
+          onClick={() => act('confirm')}>
           {'CONFIRM SELECTION'}
         </Button>
       </Window.Content>
@@ -55,8 +53,8 @@ export const DropshipPicker = (_props) => {
   );
 };
 
-const ShuttleSelection = (props) => {
-  const { act, data } = useBackend<DropshipPickerData>();
+const ShuttleSelection = (props, context) => {
+  const { act, data } = useBackend<DropshipPickerData>(context);
 
   return (
     <Section title="Available Models" fill>
@@ -65,8 +63,7 @@ const ShuttleSelection = (props) => {
           key={shuttle.ref}
           selected={shuttle.ref === data.current_ref}
           width={'100%'}
-          onClick={() => act('pickship', { ref: shuttle.ref })}
-        >
+          onClick={() => act('pickship', { ref: shuttle.ref })}>
           {shuttle.name}
         </Button>
       ))}

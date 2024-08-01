@@ -13,6 +13,8 @@
 	icon_state = "disposal"
 	anchored = TRUE
 	density = TRUE
+	resistance_flags = XENO_DAMAGEABLE
+	max_integrity = 150
 	active_power_usage = 3500 //The pneumatic pump power. 3 HP ~ 2200W
 	idle_power_usage = 100
 	allow_pass_flags = PASS_LOW_STRUCTURE|PASSABLE
@@ -67,8 +69,6 @@
 //Attack by item places it in to disposal
 /obj/machinery/disposal/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(machine_stat & BROKEN)
 		return
@@ -102,7 +102,7 @@
 
 			playsound(loc, 'sound/items/welder2.ogg', 25, 1)
 			to_chat(user, span_notice("You start slicing the floorweld off the disposal unit."))
-			if(!do_after(user, 20, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(W, TYPE_PROC_REF(/obj/item/tool/weldingtool, isOn))))
+			if(!do_after(user, 20, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(W, /obj/item/tool/weldingtool/proc/isOn)))
 				return
 
 			to_chat(user, span_notice("You sliced the floorweld off the disposal unit."))
@@ -117,7 +117,7 @@
 		var/obj/item/storage/bag/trash/T = I
 		to_chat(user, span_notice("You empty the bag into [src]."))
 		for(var/obj/item/O in T.contents)
-			T.storage_datum.remove_from_storage(O, src, user)
+			T.remove_from_storage(O, src, user)
 		T.update_icon()
 		update()
 
@@ -291,15 +291,8 @@
 
 //Pipe affected by explosion
 /obj/machinery/disposal/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if(prob(60))
-				qdel(src)
-		if(EXPLODE_LIGHT)
-			if(prob(25))
-				qdel(src)
+	if(prob(severity / 4))
+		qdel(src)
 
 //Update the icon & overlays to reflect mode & status
 /obj/machinery/disposal/proc/update()
@@ -693,19 +686,13 @@
 
 //Pipe affected by explosion
 /obj/structure/disposalpipe/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			take_damage(rand(5, 15), BRUTE, BOMB)
-		if(EXPLODE_LIGHT)
-			take_damage(rand(0, 15), BRUTE, BOMB)
+	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
+		return
+	take_damage(severity / 15, BRUTE, BOMB)
 
 //Attack by item. Weldingtool: unfasten and convert to obj/disposalconstruct
 /obj/structure/disposalpipe/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	var/turf/T = loc
 	if(T.intact_tile)
@@ -1015,8 +1002,6 @@
 
 /obj/structure/disposalpipe/tagger/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/destTagger))
 		var/obj/item/destTagger/O = I
@@ -1088,8 +1073,6 @@
 
 /obj/structure/disposalpipe/sortjunction/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/destTagger))
 		var/obj/item/destTagger/O = I
@@ -1312,8 +1295,6 @@
 
 /obj/structure/disposaloutlet/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(isscrewdriver(I))
 		mode = !mode
@@ -1333,7 +1314,7 @@
 		playsound(loc, 'sound/items/welder2.ogg', 25, 1)
 		to_chat(user, span_notice("You start slicing the floorweld off the disposal outlet."))
 
-		if(!do_after(user, 20, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(W, TYPE_PROC_REF(/obj/item/tool/weldingtool, isOn))))
+		if(!do_after(user, 20, NONE, src, BUSY_ICON_BUILD, extra_checks = CALLBACK(W, /obj/item/tool/weldingtool/proc/isOn)))
 			return
 
 		to_chat(user, span_notice("You sliced the floorweld off the disposal outlet."))

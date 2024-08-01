@@ -2,8 +2,8 @@
 	name = "wrench"
 	desc = "A wrench with many common uses. Can be usually found in your hand."
 	icon_state = "wrench"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	force = 5
 	throwforce = 7
 	w_class = WEIGHT_CLASS_SMALL
@@ -16,8 +16,8 @@
 	name = "screwdriver"
 	desc = "You can be totally screwwy with this."
 	icon_state = "screwdriver_map"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	force = 5
 	w_class = WEIGHT_CLASS_TINY
 	throwforce = 5
@@ -49,11 +49,11 @@
 		set_greyscale_config(/datum/greyscale_config/screwdriver)
 		var/our_color = pick(screwdriver_colors)
 		set_greyscale_colors(list(screwdriver_colors[our_color]))
-		worn_icon_list = list(
+		item_icons = list(
 			slot_l_hand_str = SSgreyscale.GetColoredIconByType(/datum/greyscale_config/screwdriver_inhand_left, greyscale_colors),
 			slot_r_hand_str = SSgreyscale.GetColoredIconByType(/datum/greyscale_config/screwdriver_inhand_right, greyscale_colors),
 		)
-		worn_item_state_slots = list(
+		item_state_slots = list(
 			slot_l_hand_str = null,
 			slot_r_hand_str = null,
 		)
@@ -65,8 +65,8 @@
 	name = "wirecutters"
 	desc = "This cuts wires."
 	icon_state = "cutters"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	force = 6
 	throw_speed = 2
 	throw_range = 9
@@ -79,9 +79,9 @@
 
 /obj/item/tool/wirecutters/Initialize(mapload)
 	. = ..()
-	if(prob(50))
+	if(prob(50) && !istype(src, /obj/item/tool/wirecutters/yautja)) //RU TGMC EDIT
 		icon_state = "cutters-y"
-		worn_icon_state = "cutters_yellow"
+		item_state = "cutters_yellow"
 
 
 /obj/item/tool/wirecutters/attack(mob/living/carbon/C, mob/user)
@@ -99,8 +99,8 @@
 	name = "blowtorch"
 	desc = "Used for welding and repairing various things."
 	icon_state = "welder"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 
 	//Amount of OUCH when it's thrown
 	force = 3
@@ -117,21 +117,23 @@
 	var/weld_tick = 0	//Used to slowly deplete the fuel when the tool is left on.
 	var/status = TRUE //When welder is secured on unsecured
 
+	var/datum/looping_sound/weldingtool/soundloop
+
 
 /obj/item/tool/weldingtool/Initialize(mapload)
 	. = ..()
 	create_reagents(max_fuel, null, list(/datum/reagent/fuel = max_fuel))
+	soundloop = new(list(src), active)
 
 
 /obj/item/tool/weldingtool/Destroy()
 	if(welding)
 		STOP_PROCESSING(SSobj, src)
+	QDEL_NULL(soundloop)
 	return ..()
-
 
 /obj/item/tool/weldingtool/examine(mob/user)
 	. += ..()
-	. += EXAMINE_SECTION_BREAK
 	. +=  "It contains [get_fuel()]/[max_fuel] units of fuel!"
 
 
@@ -180,8 +182,6 @@
 
 /obj/item/tool/weldingtool/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/tool/screwdriver))
 		flamethrower_screwdriver(src, user)
@@ -251,15 +251,13 @@
 		return 0
 	return 1
 
-
-//Toggles the welder off and on
 /obj/item/tool/weldingtool/proc/toggle(message = 0)
 	var/mob/M
 	if(ismob(loc))
 		M = loc
 	if(!welding)
 		if(get_fuel() > 0)
-			playsound(loc, 'sound/items/weldingtool_on.ogg', 25)
+			soundloop.start()
 			welding = 1
 			if(M)
 				balloon_alert(M, "Turns on")
@@ -276,7 +274,7 @@
 				balloon_alert(M, "Out of fuel")
 			return
 	else
-		playsound(loc, 'sound/items/weldingtool_off.ogg', 25)
+		soundloop.stop()
 		force = 3
 		damtype = BRUTE
 		icon_state = "welder"
@@ -332,11 +330,11 @@
 	name = "crowbar"
 	desc = "Used to remove floors and to pry open doors."
 	icon_state = "crowbar"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	force = 5
 	throwforce = 7
-	worn_icon_state = "crowbar"
+	item_state = "crowbar"
 	w_class = WEIGHT_CLASS_SMALL
 	attack_verb = list("attacked", "bashed", "battered", "bludgeoned", "whacked")
 	pry_capable = IS_PRY_CAPABLE_CROWBAR
@@ -346,14 +344,14 @@
 
 /obj/item/tool/crowbar/red
 	icon_state = "red_crowbar"
-	worn_icon_state = "crowbar_red"
+	item_state = "crowbar_red"
 
 
 
 /obj/item/tool/weldpack
 	name = "Welding kit"
 	desc = "A heavy-duty, portable fuel carrier. Welder and flamer compatible."
-	equip_slot_flags = ITEM_SLOT_BACK
+	flags_equip_slot = ITEM_SLOT_BACK
 	icon = 'icons/obj/items/tank.dmi'
 	icon_state = "welderpack"
 	w_class = WEIGHT_CLASS_BULKY
@@ -368,8 +366,6 @@
 
 /obj/item/tool/weldpack/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(reagents.total_volume == 0)
 		balloon_alert(user, "Out of fuel")
 		return
@@ -451,7 +447,7 @@
 /obj/item/tool/weldpack/marinestandard
 	name = "M-22 welding kit"
 	desc = "A heavy-duty, portable fuel carrier. Mainly used in flamethrowers. Welder and flamer compatible."
-	equip_slot_flags = ITEM_SLOT_BACK
+	flags_equip_slot = ITEM_SLOT_BACK
 	icon_state = "marine_flamerpack"
 	w_class = WEIGHT_CLASS_BULKY
 	max_fuel = 500 //Because the marine backpack can carry 260, and still allows you to take items, there should be a reason to still use this one.
@@ -460,14 +456,14 @@
 	name = "handheld charger"
 	desc = "A hand-held, lightweight cell charger. It isn't going to give you tons of power, but it can help in a pinch."
 	icon = 'icons/obj/items/tools.dmi'
-	icon_state = "handheldcharger_black"
-	worn_icon_state = "handheldcharger_black_empty"
+	icon_state = "handheldcharger_black_empty"
+	item_state = "handheldcharger_black_empty"
 	w_class = WEIGHT_CLASS_SMALL
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	force = 6
 	throw_speed = 2
 	throw_range = 9
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_equip_slot = ITEM_SLOT_BELT
 	/// This is the cell we ar charging
 	var/obj/item/cell/cell
 	///Are we currently recharging something.
@@ -510,8 +506,6 @@
 
 /obj/item/tool/handheld_charger/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(!istype(I, /obj/item/cell))
 		return
@@ -557,8 +551,4 @@
 
 /obj/item/tool/handheld_charger/Destroy()
 	QDEL_NULL(cell)
-	return ..()
-
-/obj/item/tool/handheld_charger/hicapcell/Initialize(mapload)
-	cell = new /obj/item/cell/high(src)
 	return ..()

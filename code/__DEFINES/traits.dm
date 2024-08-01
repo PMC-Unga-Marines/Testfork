@@ -101,29 +101,22 @@
 #define OPTABLE_TRAIT "optable"
 #define TIMESHIFT_TRAIT "timeshift"
 #define BRAIN_TRAIT "brain"
-#define WIDOW_ABILITY_TRAIT "widow_ability_trait"
 #define PSYCHIC_BLAST_ABILITY_TRAIT "psychic_blast_ability_trait"
 #define PSYCHIC_CRUSH_ABILITY_TRAIT "psychic_crush_ability_trait"
 #define VORTEX_ABILITY_TRAIT "vortex_ability_trait"
 #define PETRIFY_ABILITY_TRAIT "petrify_ability_trait"
 #define SHATTERING_ROAR_ABILITY_TRAIT "shattering_roar_ability_trait"
 #define ZERO_FORM_BEAM_ABILITY_TRAIT "zero_form_beam_ability_trait"
-#define HEATRAY_BEAM_ABILITY_TRAIT "heatray_ability_trait"
 #define VALHALLA_TRAIT "valhalla"
 #define WEIGHTBENCH_TRAIT "weightbench"
 #define BOILER_ROOTED_TRAIT "boiler_rooted"
 #define STRAPPABLE_ITEM_TRAIT "strappable_item"
-#define MOUNTED_TRAIT "mounted"
 #define VALI_TRAIT "vali"
 #define HELDGLOVE_TRAIT "heldglove"
 #define SECTOID_TRAIT "sectoid"
 #define HUGGER_TRAIT "hugger"
 #define PISTOL_LACE_TRAIT "pistol_lace"
 #define NIGHT_VISION_GOGGLES_TRAIT "night_vision_goggles"
-#define SUBMERGED_TRAIT "submerged_trait"
-#define TRAIT_DWARF "dwarf"
-/// Makes you way too tall. Like just too much, dude, it's kind of creepy. Humanoid only.
-#define TRAIT_TOO_TALL "too_tall"
 
 #define ABSTRACT_ITEM_TRAIT "abstract_item"
 /// A trait given by any status effect
@@ -136,19 +129,10 @@
 /// inherited from riding vehicles
 #define VEHICLE_TRAIT "vehicle"
 
-///AM is currently submerged
-#define TRAIT_SUBMERGED "trait_submerged"
-///AM will not be submerged. Trait must ALWAYS be added via the add_nosubmerge_trait proc for correct behavior
-#define TRAIT_NOSUBMERGE "trait_nosubmerge"
-
 
 
 //added b grilling a food
 #define TRAIT_FOOD_GRILLED "food_grilled"
-
-//atom/movable traits
-/// Trait that tracks if something has been renamed. Typically holds a REF() to the object itself (AKA src) for wide addition/removal.
-#define TRAIT_WAS_RENAMED "was_renamed"
 
 //mob traits
 #define TRAIT_POSSESSING "possessing" // Prevents mob from being taken by ghosts
@@ -164,7 +148,7 @@
 #define TRAIT_TIME_SHIFTED "time_shifted"
 #define TRAIT_LEASHED "leashed"
 #define TRAIT_CAN_VENTCRAWL "can_ventcrawl"
-#define TRAIT_WORKED_OUT "worked_out" //user has a unarmed buff from working out
+#define TRAIT_WORKED_OUT "worked_out" //user has a cqc buff from working out
 ///Makes no footsteps at all
 #define TRAIT_SILENT_FOOTSTEPS "silent_footsteps"
 ///quieter footsteps
@@ -173,6 +157,8 @@
 #define TRAIT_HEAVY_STEP "heavy_step"
 ///indicates this mob was spawned by a corpse spawner
 #define TRAIT_MAPSPAWNED "mapspawned"
+///Banished from the hive by the ruler
+#define TRAIT_BANISHED "banished"
 ///Mindmelded with another mob
 #define TRAIT_MINDMELDED "mindmelded"
 ///You swing axe good
@@ -186,7 +172,6 @@
 ///is currently riding an armored vehicle
 #define TRAIT_TANK_DESANT "tank_desant"
 
-
 /// Prevents usage of manipulation appendages (picking, holding or using items, manipulating storage).
 #define TRAIT_HANDS_BLOCKED "handsblocked"
 #define TRAIT_STUNIMMUNE "stun_immunity"
@@ -197,7 +182,6 @@
 #define TRAIT_LEGLESS "legless" //Has lost all the appendages needed to stay standing up.
 #define TRAIT_NOPLASMAREGEN "noplasmaregen"//xeno plasma wont recharge
 #define TRAIT_UNDEFIBBABLE "undefibbable"//human can't be revived
-#define TRAIT_HOLLOW "hollowedout" //examine trait for puppeteer
 #define TRAIT_IMMEDIATE_DEFIB "immediate_defib"//immediately revives when defibbed, rather than just healing
 #define TRAIT_HEALING_INFUSION "healing_infusion"//greatly improves natural healing for xenos
 #define TRAIT_PSY_DRAINED "psy_drained"//mob was drained of life force by a xenos
@@ -209,8 +193,7 @@
 #define TRAIT_SEE_IN_DARK "see_in_dark" //Able to see in dark
 #define TRAIT_MUTED "muted" //target is mute and can't speak
 #define TRAIT_TURRET_HIDDEN "turret_hidden" //target gets passed over by turrets choosing a victim
-///The target xenomorph's wound overlays won't be visible
-#define TRAIT_XENOMORPH_INVISIBLE_BLOOD "invisible_blood"
+#define TRAIT_MOB_ICON_UPDATE_BLOCKED "icon_blocked" //target should not update its icon_state
 #define TRAIT_VALHALLA_XENO "valhalla_xeno"
 #define TRAIT_BULWARKED_TURF "bulwarked_turf" // turf is affected by bulwark ability
 
@@ -270,10 +253,9 @@
 //added to AIs firing railguns
 #define TRAIT_IS_FIRING_RAILGUN "firing_railgun"
 
-//regress and caste swap UI
-#define TRAIT_CASTE_SWAP "caste_swap"
-#define TRAIT_REGRESSING "regressing"
-#define TRAIT_STRAIN_SWAP "strain swap"
-
-///Pauses campaign mission timer
-#define CAMPAIGN_MISSION_TIMER_PAUSED "campaign_mission_timer_paused"
+/// Knowledge of Yautja technology
+#define TRAIT_YAUTJA_TECH "t_yautja_tech"
+/// Absolutely RIPPED. Can do misc. heavyweight stuff others can't. (Yautja, Synths)
+#define TRAIT_SUPER_STRONG "t_super_strong"
+/// Foreign biology. Basic medHUDs won't show the mob. (Yautja, Zombies)
+#define TRAIT_FOREIGN_BIO "t_foreign_bio"

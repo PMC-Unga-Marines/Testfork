@@ -7,11 +7,11 @@
 	name = "pickaxe"
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "pickaxe"
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	force = 15
 	throwforce = 4
-	worn_icon_state = "pickaxe"
+	item_state = "pickaxe"
 	w_class = WEIGHT_CLASS_BULKY
 	var/digspeed = 40 //moving the delay to an item var so R&D can make improved picks. --NEO
 	attack_verb = list("hit", "pierced", "sliced", "attacked")
@@ -22,20 +22,20 @@
 
 /obj/item/tool/pickaxe/hammer
 	name = "sledgehammer"
-	icon_state = "sledgehammer"
+	//icon_state = "sledgehammer" Waiting on sprite
 	desc = "A mining hammer made of reinforced metal. You feel like smashing your boss in the face with this."
 
 /obj/item/tool/pickaxe/silver
 	name = "silver pickaxe"
 	icon_state = "spickaxe"
-	worn_icon_state = "spickaxe"
+	item_state = "spickaxe"
 	digspeed = 30
 	desc = "This makes no metallurgic sense."
 
 /obj/item/tool/pickaxe/drill
 	name = "mining drill" // Can dig sand as well!
 	icon_state = "handdrill"
-	worn_icon_state = "drill"
+	item_state = "drill"
 	digspeed = 30
 	desc = "Yours is the drill that will pierce through the rock walls."
 	drill_verb = "drilling"
@@ -43,7 +43,7 @@
 /obj/item/tool/pickaxe/jackhammer
 	name = "sonic jackhammer"
 	icon_state = "jackhammer"
-	worn_icon_state = "jackhammer"
+	item_state = "jackhammer"
 	digspeed = 20 //faster than drill, but cannot dig
 	desc = "Cracks rocks with sonic blasts, perfect for killing cave lizards."
 	drill_verb = "hammering"
@@ -51,42 +51,33 @@
 /obj/item/tool/pickaxe/gold
 	name = "golden pickaxe"
 	icon_state = "gpickaxe"
-	worn_icon_state = "gpickaxe"
+	item_state = "gpickaxe"
 	digspeed = 20
 	desc = "This makes no metallurgic sense."
 
 /obj/item/tool/pickaxe/diamond
 	name = "diamond pickaxe"
 	icon_state = "dpickaxe"
-	worn_icon_state = "dpickaxe"
+	item_state = "dpickaxe"
 	digspeed = 10
 	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
 
 /obj/item/tool/pickaxe/diamonddrill //When people ask about the badass leader of the mining tools, they are talking about ME!
 	name = "diamond mining drill"
 	icon_state = "diamonddrill"
-	worn_icon_state = "jackhammer"
+	item_state = "jackhammer"
 	digspeed = 5 //Digs through walls, girders, and can dig up sand
 	desc = "Yours is the drill that will pierce the heavens!"
 	drill_verb = "drilling"
-
-/obj/item/tool/pickaxe/borgdrill
-	name = "cyborg mining drill"
-	icon_state = "diamonddrill"
-	worn_icon_state = "jackhammer"
-	digspeed = 15
-	desc = ""
-	drill_verb = "drilling"
-
 
 /obj/item/tool/pickaxe/plasmacutter
 	name = "plasma cutter"
 	desc = "A tool that cuts with deadly hot plasma. You could use it to cut limbs off of xenos! Or, you know, cut apart walls or mine through stone. Eye protection strongly recommended."
 	icon = 'icons/obj/items/tools.dmi'
 	icon_state = "plasma_cutter_off"
-	worn_icon_state = "plasmacutter"
+	item_state = "plasmacutter"
 	w_class = WEIGHT_CLASS_BULKY
-	equip_slot_flags = ITEM_SLOT_BELT|ITEM_SLOT_BACK
+	flags_equip_slot = ITEM_SLOT_BELT|ITEM_SLOT_BACK
 	force = 70
 	damtype = BURN
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction
@@ -154,7 +145,7 @@
 		to_chat(user, span_warning("The plasma cutter has inadequate charge remaining! Give the internal battery time to recharge, or attack a living creature! <b>Charge Remaining: [cell.charge]/[cell.maxcharge]</b>"))
 
 /obj/item/tool/pickaxe/plasmacutter/proc/start_cut(mob/user, name = "", atom/source, charge_amount = PLASMACUTTER_BASE_COST, custom_string, no_string, SFX = TRUE)
-	if(!(cell.charge >= charge_amount) || !powered) //Check power
+	if(!(cell.charge >= charge_amount) || !powered)
 		fizzle_message(user)
 		return FALSE
 	eyecheck(user)
@@ -180,10 +171,11 @@
 	spark_system.set_up(5, 0, source)
 	spark_system.attach(source)
 	spark_system.start(source)
-	use_charge(user, charge_amount, FALSE)
-	balloon_alert(user, "Charge Remaining: [cell.charge]/[cell.maxcharge]")
+	use_charge(user, charge_amount, TRUE)
 	if(custom_string)
 		to_chat(user, span_notice(custom_string))
+	else
+		to_chat(user, span_notice("You cut \the [source] apart."))
 
 /obj/item/tool/pickaxe/plasmacutter/proc/debris(location, metal = 0, rods = 0, wood = 0, wires = 0, shards = 0, plasteel = 0)
 	if(metal)
@@ -203,7 +195,7 @@
 
 /obj/item/tool/pickaxe/plasmacutter/proc/use_charge(mob/user, amount = PLASMACUTTER_BASE_COST, mention_charge = TRUE)
 	cell.charge -= min(cell.charge, amount)
-	if(mention_charge)
+	if(mention_charge && amount > 0)
 		balloon_alert(user, "Charge Remaining: [cell.charge]/[cell.maxcharge]")
 	update_plasmacutter()
 

@@ -31,7 +31,7 @@
 	key_third_person = "bows"
 	message = "bows."
 	message_param = "bows to %t."
-	emote_flags = EMOTE_RESTRAINT_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK
 
 
 /datum/emote/living/carbon/human/chuckle
@@ -45,14 +45,14 @@
 	key = "cross"
 	key_third_person = "crosses"
 	message = "crosses their arms."
-	emote_flags = EMOTE_RESTRAINT_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK
 
 
 /datum/emote/living/carbon/human/clap
 	key = "clap"
 	key_third_person = "claps"
 	message = "claps."
-	emote_flags = EMOTE_RESTRAINT_CHECK|EMOTE_VARY|EMOTE_MUZZLE_IGNORE
+	flags_emote = EMOTE_RESTRAINT_CHECK|EMOTE_VARY|EMOTE_MUZZLE_IGNORE
 	emote_type = EMOTE_AUDIBLE
 	sound = 'sound/misc/clap.ogg'
 
@@ -312,6 +312,14 @@
 	key_third_person = "grimaces"
 	message = "grimaces."
 
+
+/datum/emote/living/carbon/human/jump
+	key = "jump"
+	key_third_person = "jumps"
+	message = "jumps!"
+	flags_emote = EMOTE_RESTRAINT_CHECK
+
+
 /datum/emote/living/carbon/human/grumble
 	key = "grumble"
 	key_third_person = "grumbles"
@@ -330,7 +338,7 @@
 	key = "signal"
 	key_third_person = "signals"
 	message_param = "raises %t fingers."
-	emote_flags = EMOTE_RESTRAINT_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK
 
 
 /datum/emote/living/carbon/human/signal/select_param(mob/user, params)
@@ -363,7 +371,11 @@
 
 
 /datum/emote/living/carbon/human/laugh/get_sound(mob/living/user)
-	if(user.gender == FEMALE)
+//RUTGMC EDIT
+	if(isyautja(user))
+		return pick('sound/voice/predator/laugh1.ogg', 'sound/voice/predator/laugh2.ogg', 'sound/voice/predator/laugh3.ogg', 'sound/voice/predator/laugh4.ogg')
+//RUTGMC EDIT
+	else if(user.gender == FEMALE)
 		return 'sound/voice/human/female/laugh_1.ogg'
 	else
 		return pick('sound/voice/human/male/laugh_1.ogg', 'sound/voice/human/male/laugh_2.ogg')
@@ -395,7 +407,7 @@
 	key_third_person = "snaps"
 	message = "snaps their fingers"
 	emote_type = EMOTE_AUDIBLE
-	emote_flags = EMOTE_RESTRAINT_CHECK|EMOTE_MUZZLE_IGNORE|EMOTE_ARMS_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK|EMOTE_MUZZLE_IGNORE|EMOTE_ARMS_CHECK
 	sound = 'sound/misc/fingersnap.ogg'
 
 /datum/emote/living/carbon/human/hug
@@ -403,7 +415,7 @@
 	key_third_person = "hugs"
 	message = "hugs themself"
 	message_param = "hugs %t."
-	emote_flags = EMOTE_RESTRAINT_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK
 	emote_type = EMOTE_AUDIBLE
 
 
@@ -418,7 +430,7 @@
 	key = "handshake"
 	message = "shakes their own hands."
 	message_param = "shakes hands with %t."
-	emote_flags = EMOTE_RESTRAINT_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK
 	emote_type = EMOTE_AUDIBLE
 
 
@@ -427,7 +439,7 @@
 	key_third_person = "salutes"
 	message = "salutes."
 	message_param = "salutes to %t."
-	emote_flags = EMOTE_RESTRAINT_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK
 	sound = 'sound/misc/salute.ogg'
 
 
@@ -435,7 +447,7 @@
 	key = "golfclap"
 	key_third_person = "golfclaps"
 	message = "claps, clearly unimpressed."
-	emote_flags = EMOTE_RESTRAINT_CHECK
+	flags_emote = EMOTE_RESTRAINT_CHECK
 	sound = 'sound/misc/golfclap.ogg'
 
 
@@ -521,7 +533,7 @@
 	key = "gored"
 	message = "gags out in pain!"
 	emote_type = EMOTE_AUDIBLE
-	emote_flags = EMOTE_FORCED_AUDIO
+	flags_emote = EMOTE_FORCED_AUDIO
 
 
 /datum/emote/living/carbon/human/gored/get_sound(mob/living/carbon/human/user)
@@ -545,7 +557,7 @@
 	key = "burstscream"
 	message = "screams in agony!"
 	emote_type = EMOTE_AUDIBLE
-	emote_flags = EMOTE_FORCED_AUDIO
+	flags_emote = EMOTE_FORCED_AUDIO
 	stat_allowed = UNCONSCIOUS
 
 
@@ -564,3 +576,257 @@
 		return
 	var/image/pain = image('icons/mob/talk.dmi', user, icon_state = "pain")
 	user.add_emote_overlay(pain)
+
+/datum/emote/living/carbon/human/sneeze/get_sound(mob/living/user)
+	if(isrobot(user))
+		return
+	if(user.gender == FEMALE)
+		return 'sound/misc/human_female_sneeze_1.ogg'
+	else
+		return 'sound/misc/human_male_sneeze_1.ogg'
+
+
+/datum/emote/living/carbon/human/sigh/get_sound(mob/living/user)
+	if(isrobot(user))
+		return
+	if(user.gender == FEMALE)
+		return 'sound/voice/human/female/sigh_1.ogg'
+	else
+		return 'sound/voice/human/male/sigh_1.ogg'
+
+
+/datum/emote/living/carbon/human/giggle/get_sound(mob/living/user)
+	if(isrobot(user))
+		if(user.gender == FEMALE)
+			return 'sound/voice/robotic/female_giggle.ogg'
+		else
+			return 'sound/voice/robotic/male_giggle.ogg'
+	if(user.gender == FEMALE)
+		return 'sound/voice/human/female/giggle_1.ogg'
+	else
+		return 'sound/voice/human/male/giggle_1.ogg'
+
+
+/datum/emote/living/carbon/human/yawn/get_sound(mob/living/user)
+	if(isrobot(user))
+		return
+	if(user.gender == FEMALE)
+		return 'sound/voice/human/female/yawn_1.ogg'
+	else
+		return 'sound/voice/human/male/yawn_1.ogg'
+
+
+/datum/emote/living/carbon/human/moan/get_sound(mob/living/user)
+	if(isrobot(user))
+		return
+	if(user.gender == FEMALE)
+		return 'sound/voice/human/female/moan_1.ogg'
+	else
+		return 'sound/voice/human/male/moan_1.ogg'
+
+
+/datum/emote/living/carbon/human/cry/get_sound(mob/living/user)
+	if(isrobot(user))
+		return
+	if(user.gender == FEMALE)
+		return 'sound/voice/human/female/cry_1.ogg'
+	else
+		return 'sound/voice/human/male/cry_1.ogg'
+
+/datum/emote/living/carbon/human/laugh/get_sound(mob/living/user)
+	if(isrobot(user))
+		if(user.gender == FEMALE)
+			return 'sound/voice/robotic/female_laugh.ogg'
+		else
+			return pick('sound/voice/robotic/male_laugh_1.ogg', 'sound/voice/robotic/male_laugh_2.ogg')
+	return ..()
+
+/datum/emote/living/carbon/human/medic/get_sound(mob/living/carbon/human/user)
+	if(isrobot(user))
+		if(user.gender == MALE)
+			if(prob(95))
+				return 'sound/voice/robotic/male_medic.ogg'
+			else
+				return 'sound/voice/robotic/male_medic2.ogg'
+		else
+			return 'sound/voice/robotic/female_medic.ogg'
+	return ..()
+
+/datum/emote/living/carbon/human/whistle
+	key = "whistle"
+	key_third_person = "whistles"
+	message = "whistle"
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/human/whistle/get_sound(mob/living/user)
+	if(isrobot(user))
+		return
+	return 'sound/voice/human/whistle1.ogg'
+
+/datum/emote/living/carbon/human/crack
+	key = "crack"
+	key_third_person = "cracks"
+	message = "cracks their knuckles."
+	emote_type = EMOTE_AUDIBLE
+	flags_emote = EMOTE_RESTRAINT_CHECK|EMOTE_MUZZLE_IGNORE|EMOTE_ARMS_CHECK
+	sound = 'sound/misc/sound_misc_knuckles.ogg'
+
+//Robotic
+
+/datum/emote/living/carbon/robot
+	mob_type_allowed_typecache = list(/mob/living/carbon/human/species/robot, /mob/living/carbon/human/species/synthetic, /mob/living/carbon/human/species/early_synthetic)
+
+/datum/emote/living/carbon/robot/dwoop
+	key = "dwoop"
+	key_third_person = "dwoops"
+	message = "pips happily!"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/robotic/dwoop.ogg'
+
+/datum/emote/living/carbon/robot/yes
+	key = "yes"
+	message = "emits an affirmative blip."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/robotic/synth_yes.ogg'
+
+/datum/emote/living/carbon/robot/no
+	key = "no"
+	message = "emits a negative blip."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/robotic/synth_no.ogg'
+
+/datum/emote/living/carbon/robot/buzz
+	key = "buzz"
+	key_third_person = "buzzes"
+	message = "buzzes."
+	message_param = "buzzes at %t."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/machines/buzz-sigh.ogg'
+
+/datum/emote/living/carbon/robot/buzz2
+	key = "buzz2"
+	message = "buzzes twice."
+	message_param = "buzzes twice at %t."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/machines/buzz-two.ogg'
+
+/datum/emote/living/carbon/robot/beep
+	key = "beep"
+	message = "beeps sharply."
+	message_param = "beeps sharply at %t."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/machines/twobeep.ogg'
+
+/datum/emote/living/carbon/robot/chime
+	key = "chime"
+	key_third_person = "chimes"
+	message = "chimes."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/machines/chime.ogg'
+
+/datum/emote/living/carbon/robot/honk
+	key = "honk"
+	key_third_person = "honks"
+	message = "honks."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/items/bikehorn.ogg'
+
+/datum/emote/living/carbon/robot/ping
+	key = "ping"
+	key_third_person = "pings"
+	message = "pings."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/machines/ping.ogg'
+
+/datum/emote/living/carbon/robot/sad
+	key = "sad"
+	message = "plays a sad trombone..."
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/misc/sadtrombone.ogg'
+
+/datum/emote/living/carbon/robot/warn
+	key = "warn"
+	key_third_person = "warns"
+	message = "blares an alarm!"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/machines/warning-buzzer.ogg'
+
+/datum/emote/living/carbon/robot/laughtrack
+	key = "laughtrack"
+	message = "plays a laughtrack."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/robot/laughtrack/get_sound(mob/living/user)
+	return pick('sound/voice/robotic/sitcomLaugh1.ogg', 'sound/voice/robotic/sitcomLaugh2.ogg')
+
+//Neco Ark
+
+/datum/emote/living/carbon/necoarc
+	mob_type_allowed_typecache = /mob/living/carbon/human/species/necoarc
+
+/datum/emote/living/carbon/necoarc/mudamuda
+	key = "muda"
+	key_third_person = "muda muda"
+	message = "Muda Muda"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco Muda muDa.ogg'
+
+
+/datum/emote/living/carbon/necoarc/bubu //then add to the grenade throw
+	key = "bubu"
+	key_third_person = "bu bu"
+	message = "bu buuu"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco bu buuu.ogg'
+
+
+/datum/emote/living/carbon/necoarc/dori
+	key = "dori"
+	key_third_person = "dori dori dori"
+	message = "dori dori dori"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco dori dori dori.ogg'
+
+
+/datum/emote/living/carbon/necoarc/sayesa
+	key = "sa"
+	key_third_person = "sa yesa"
+	message = "Sa Yesa!"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco Sa Yesa 1.ogg'
+
+
+/datum/emote/living/carbon/necoarc/sayesa/two
+	key = "sa2"
+	key_third_person = "sa yesa2"
+	sound = 'sound/voice/necoarc/Neco Sa Yesa 2.ogg'
+
+
+/datum/emote/living/carbon/necoarc/yanyan
+	key = "yanyan"
+	key_third_person = "yanyan yaan"
+	message = "yanyan yaan"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco yanyan yaan.ogg'
+
+
+/datum/emote/living/carbon/necoarc/nya
+	key = "nya"
+	message = "nya"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco-Arc sound effect.ogg'
+
+
+/datum/emote/living/carbon/necoarc/isa
+	key = "isa"
+	message = "iiiiisAAAAA!"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco iiiiisAAAAA.ogg'
+
+
+/datum/emote/living/carbon/necoarc/qahu
+	key = "qahu"
+	key_third_person = "quiajuuu"
+	message = "qahuuuuu!"
+	emote_type = EMOTE_AUDIBLE
+	sound = 'sound/voice/necoarc/Neco quiajuuubn.ogg'

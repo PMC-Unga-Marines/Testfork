@@ -91,10 +91,6 @@
 
 	hud_used?.nutrition_icon?.update_icon()
 
-	hud_used?.pressure_icon?.update_icon()
-
-	hud_used?.toxin_icon?.update_icon()
-
 	hud_used?.oxygen_icon?.update_icon()
 
 	hud_used?.fire_icon?.update_icon()

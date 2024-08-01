@@ -23,9 +23,6 @@
 #define MESSAGE_SQUAD "Message all marines in a squad"
 #define SWITCH_SQUAD_NEAR "Move all nearby marines to a squad"
 
-/// The maximum length we should use for sending messages with stuff like `message_member`,
-/// `message_squad` etc.
-#define MAX_COMMAND_MESSAGE_LENGTH 100
 
 GLOBAL_LIST_EMPTY(active_orbital_beacons)
 GLOBAL_LIST_EMPTY(active_laser_targets)
@@ -72,7 +69,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 	///Overrides the minimap action minimap and marker flags
 	var/map_flags = MINIMAP_FLAG_MARINE
 	///Ref of the lase that's had an OB warning mark placed on the minimap
-	var/obj/effect/overlay/temp/laser_target/ob/marked_lase
+	var/obj/effect/overlay/temp/laser_target/OB/marked_lase
 	///Static list of CIC radial options for the camera when clicking on a marine
 	var/static/list/human_radial_options = list(
 		MESSAGE_SINGLE = image(icon = 'icons/mob/radial.dmi', icon_state = "cic_message_single"),
@@ -289,6 +286,14 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 							dat += "<a href='?src=[REF(src)];operation=use_cam;cam_target=[REF(LT)];selected_target=[REF(LT)]'>[LT]</a><br>"
 					else
 						dat += "[span_warning("None")]<br>"
+					//RUTGMC EDIT ADDITION BEGIN - ORBITAL_BEACON
+					dat += "<B>[current_squad.name] Beacon Targets:</b><br>"
+					if(length(GLOB.active_orbital_beacons))
+						for(var/obj/item/beacon/orbital_bombardment_beacon/OB AS in current_squad.squad_orbital_beacons)
+							dat += "<a href='?src=[REF(src)];operation=use_cam;cam_target=[REF(OB)];selected_target=[REF(OB)]'>[OB]</a><br>"
+					else
+						dat += "[span_warning("None transmitting")]<br>"
+					//RUTGMC EDIT ADDITION END
 					dat += "<b>Selected Target:</b><br>"
 					if(!selected_target) // Clean the targets if nothing is selected
 						dat += "[span_warning("None")]<br>"
@@ -322,8 +327,30 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 			state = OW_MAIN
 		if("monitor")
 			state = OW_MONITOR
-			if(href_list["squad_id"])
-				current_squad = get_squad_by_id(href_list["squad_id"])
+		if("monitoralpha_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(ALPHA_SQUAD)
+		if("monitorbravo_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(BRAVO_SQUAD)
+		if("monitorcharlie_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(CHARLIE_SQUAD)
+		if("monitordelta_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(DELTA_SQUAD)
+		if("monitorzulu_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(ZULU_SQUAD)
+		if("monitoryankee_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(YANKEE_SQUAD)
+		if("monitorxray_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(XRAY_SQUAD)
+		if("monitorwhiskey_squad")
+			state = OW_MONITOR
+			current_squad = get_squad_by_id(WHISKEY_SQUAD)
 		if("change_operator")
 			if(operator != usr)
 				if(current_squad)
@@ -379,10 +406,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 			attack_hand(operator)
 		if("message")
 			if(current_squad && operator == usr)
-				if(TIMER_COOLDOWN_CHECK(operator, COOLDOWN_HUD_ORDER))
-					to_chat(operator, span_warning("You've sent an announcement or message too recently!"))
-					return
-				var/input = tgui_input_text(operator, "Please write a message to announce to the squad:", "Squad Message", max_length = MAX_COMMAND_MESSAGE_LENGTH)
+				var/input = tgui_input_text(operator, "Please write a message to announce to the squad:", "Squad Message")
 				if(input)
 					current_squad.message_squad(input, operator) //message, adds username
 					if(issilicon(operator))
@@ -390,18 +414,14 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 					visible_message(span_boldnotice("Message sent to all Marines of squad '[current_squad]'."))
 		if("sl_message")
 			if(current_squad && operator == usr)
-				if(TIMER_COOLDOWN_CHECK(operator, COOLDOWN_HUD_ORDER))
-					to_chat(operator, span_warning("You've sent an announcement or message too recently!"))
-					return
-				var/input = tgui_input_text(operator, "Please write a message to announce to the squad leader:", "SL Message", max_length = MAX_COMMAND_MESSAGE_LENGTH)
+				var/input = tgui_input_text(operator, "Please write a message to announce to the squad leader:", "SL Message")
 				if(input)
-					TIMER_COOLDOWN_START(operator, COOLDOWN_HUD_ORDER, ORDER_COOLDOWN)
 					message_member(current_squad.squad_leader, input, operator)
 					if(issilicon(operator))
 						to_chat(operator, span_boldnotice("Message sent to Squad Leader [current_squad.squad_leader] of squad '[current_squad]'."))
 					visible_message(span_boldnotice("Message sent to Squad Leader [current_squad.squad_leader] of squad '[current_squad]'."))
 		if("set_primary")
-			var/input = tgui_input_text(operator, "What will be the squad's primary objective?", "Primary Objective", max_length = MAX_COMMAND_MESSAGE_LENGTH * 0.75)
+			var/input = tgui_input_text(operator, "What will be the squad's primary objective?", "Primary Objective")
 			if( is_ic_filtered(input) || NON_ASCII_CHECK(input))
 				to_chat(operator, span_boldnotice("Message invalid. Check your message does not contain filtered words or characters."))
 				return
@@ -411,7 +431,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 				to_chat(operator, span_boldnotice("Primary objective of squad '[current_squad]' set."))
 			visible_message(span_boldnotice("Primary objective of squad '[current_squad]' set."))
 		if("set_secondary")
-			var/input = tgui_input_text(operator, "What will be the squad's secondary objective?", "Secondary Objective", max_length = MAX_COMMAND_MESSAGE_LENGTH * 0.75)
+			var/input = tgui_input_text(operator, "What will be the squad's secondary objective?", "Secondary Objective")
 			if( is_ic_filtered(input) || NON_ASCII_CHECK(input))
 				to_chat(operator, span_boldnotice("Message invalid. Check your message does not contain filtered words or characters."))
 				return
@@ -493,13 +513,13 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 			state = OW_MAIN
 		if("use_cam")
 			selected_target = locate(href_list["selected_target"])
-			var/atom/cam_target = locate(href_list["cam_target"])
-			if(!cam_target)
-				return
-			var/turf/cam_target_turf = get_turf(cam_target)
-			if(!cam_target_turf)
-				return
 			if(!isAI(operator))
+				var/atom/cam_target = locate(href_list["cam_target"])
+				if(!cam_target)
+					return
+				var/turf/cam_target_turf = get_turf(cam_target)
+				if(!cam_target_turf)
+					return
 				open_prompt(operator)
 				eyeobj.setLoc(cam_target_turf)
 				if(isliving(cam_target))
@@ -507,14 +527,6 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 					track(L)
 				else
 					to_chat(operator, "[icon2html(src, operator)] [span_notice("Jumping to the latest available location of [cam_target].")]")
-			else
-				// If we are an AI
-				to_chat(operator, "[icon2html(src, operator)] [span_notice("Jumping to the latest available location of [cam_target].")]")
-				var/turf/T = get_turf(cam_target)
-				if(T)
-					var/mob/living/silicon/ai/recipientai = operator
-					recipientai.eyeobj.setLoc(T)
-					// operator.eyeobj.setLoc(get_turf(src))
 
 	updateUsrDialog()
 
@@ -544,7 +556,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 						dat += "<b>Squad Overwatch:</b> [S.overwatch_officer.name]<br>"
 					else
 						dat += "<b>Squad Overwatch:</b> <font color=red>NONE</font><br>"
-					dat += "<A href='?src=[text_ref(src)];operation=monitor;squad_id=[S.id]'>[S.name] Squad Monitor</a><br>"
+					dat += "<A href='?src=[text_ref(src)];operation=monitor[S.id]'>[S.name] Squad Monitor</a><br>"
 				dat += "----------------------<br>"
 				dat += "<b>Orbital Bombardment Control</b><br>"
 				dat += "<b>Current Cannon Status:</b> "
@@ -560,6 +572,14 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 						dat += "<a href='?src=[REF(src)];operation=use_cam;cam_target=[REF(LT)];selected_target=[REF(LT)]'>[LT]</a><br>"
 				else
 					dat += "[span_warning("None")]<br>"
+				//RUTGMC EDIT ADDITION BEGIN - ORBITAL_BEACON
+				dat += "<B>Beacon Targets:</b><br>"
+				if(length(GLOB.active_orbital_beacons))
+					for(var/obj/item/beacon/orbital_bombardment_beacon/OB AS in GLOB.active_orbital_beacons)
+						dat += "<a href='?src=\ref[src];operation=use_cam;cam_target=[REF(OB)];selected_target=[REF(OB)]'>[OB]</a><br>"
+				else
+					dat += "[span_warning("None transmitting")]<br>"
+				//RUTGMC EDIT ADDITION END
 				dat += "<b>Selected Target:</b><br>"
 				if(!selected_target) // Clean the targets if nothing is selected
 					dat += "[span_warning("None")]<br>"
@@ -604,7 +624,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 						dat += "<b>Squad Overwatch:</b> [S.overwatch_officer.name]<br>"
 					else
 						dat += "<b>Squad Overwatch:</b> <font color=red>NONE</font><br>"
-					dat += "<A href='?src=[text_ref(src)];operation=monitor;squad_id=[S.id]'>[S.name] Squad Monitor</a><br>"
+					dat += "<A href='?src=[text_ref(src)];operation=monitor[S.id]'>[S.name] Squad Monitor</a><br>"
 			if(OW_MONITOR)//Info screen.
 				dat += get_squad_info()
 
@@ -658,7 +678,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 	addtimer(CALLBACK(src, PROC_REF(do_fire_bombard), T, operator), 3.1 SECONDS)
 
 ///Lets anyone using an overwatch console know that an OB has just been lased
-/obj/machinery/computer/camera_advanced/overwatch/proc/alert_lase(datum/source, obj/effect/overlay/temp/laser_target/ob/incoming_laser)
+/obj/machinery/computer/camera_advanced/overwatch/proc/alert_lase(datum/source, obj/effect/overlay/temp/laser_target/OB/incoming_laser)
 	SIGNAL_HANDLER
 	if(!operator)
 		return
@@ -794,9 +814,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 /obj/machinery/computer/camera_advanced/overwatch/proc/message_member(mob/living/target, message, mob/living/carbon/human/sender)
 	if(!target.client)
 		return
-	target.playsound_local(target, "sound/machines/dotprinter.ogg", 35)
-	to_chat(target, span_notice("<b><i>New message from [sender.real_name]:</b> [message]</i>"))
-	target.play_screen_text("<span class='maptext' style=font-size:24pt;text-align:center valign='top'><u>CIC MESSAGE FROM [sender.real_name]:</u></span><br>" + message, /atom/movable/screen/text/screen_text/command_order, "#32cd32")
+	target.play_screen_text("<span class='maptext' style=font-size:24pt;text-align:center valign='top'><u>CIC MESSAGE FROM [sender.real_name]:</u></span><br>" + message, /atom/movable/screen/text/screen_text/command_order)
 	return TRUE
 
 ///Signal handler for radial menu
@@ -807,14 +825,14 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 ///Quick-select radial menu for Overwatch
 /obj/machinery/computer/camera_advanced/overwatch/proc/do_radial(datum/source, atom/A, params)
 	var/mob/living/carbon/human/human_target
-	var/obj/effect/overlay/temp/laser_target/ob/laser_target
+	var/obj/effect/overlay/temp/laser_target/OB/laser_target
 	var/turf/turf_target
 	var/choice
 	if(ishuman(A))
 		human_target = A
 		choice = show_radial_menu(source, human_target, human_radial_options, null, 48, null, FALSE, TRUE)
 
-	else if(istype(A, /obj/effect/overlay/temp/laser_target/ob))
+	else if(istype(A, /obj/effect/overlay/temp/laser_target/OB))
 		laser_target = A
 		choice = show_radial_menu(source, laser_target, bombardment_radial_options, null, 48, null, FALSE, TRUE)
 	else
@@ -823,12 +841,8 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 
 	switch(choice)
 		if(MESSAGE_SINGLE)
-			if(TIMER_COOLDOWN_CHECK(operator, COOLDOWN_HUD_ORDER))
-				to_chat(operator, span_warning("You've sent an announcement or message too recently!"))
-				return
-			var/input = tgui_input_text(source, "Please write a message to announce to this marine:", "CIC Message", max_length = MAX_COMMAND_MESSAGE_LENGTH)
+			var/input = tgui_input_text(source, "Please write a message to announce to this marine:", "CIC Message")
 			message_member(human_target, input, source)
-			TIMER_COOLDOWN_START(operator, COOLDOWN_HUD_ORDER, ORDER_COOLDOWN)
 		if(ASL)
 			if(human_target == human_target.assigned_squad.squad_leader)
 				human_target.assigned_squad.demote_leader()
@@ -849,10 +863,7 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 		if(ORBITAL_SPOTLIGHT)
 			attempt_spotlight(source, turf_target, params)
 		if(MESSAGE_NEAR)
-			if(TIMER_COOLDOWN_CHECK(operator, COOLDOWN_HUD_ORDER))
-				to_chat(operator, span_warning("You've sent an announcement or message too recently!"))
-				return
-			var/input = tgui_input_text(source, "Please write a message to announce to all marines nearby:", "CIC Proximity Message", max_length = MAX_COMMAND_MESSAGE_LENGTH)
+			var/input = tgui_input_text(source, "Please write a message to announce to all marines nearby:", "CIC Proximity Message")
 			for(var/mob/living/carbon/human/target in GLOB.alive_human_list_faction[faction])
 				if(!target)
 					return
@@ -860,19 +871,14 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 					continue
 				message_member(target, input, source)
 			message_member(source, input, source)
-			TIMER_COOLDOWN_START(operator, COOLDOWN_HUD_ORDER, ORDER_COOLDOWN)
 		if(SQUAD_ACTIONS)
 			choice = show_radial_menu(source, turf_target, squad_radial_options, null, 48, null, FALSE, TRUE)
 			var/datum/squad/chosen_squad = squad_select(source, turf_target)
 			switch(choice)
 				if(MESSAGE_SQUAD)
-					if(TIMER_COOLDOWN_CHECK(operator, COOLDOWN_HUD_ORDER))
-						to_chat(operator, span_warning("You've sent an announcement or message too recently!"))
-						return
-					var/input = tgui_input_text(source, "Please write a message to announce to the squad:", "Squad Message", max_length = MAX_COMMAND_MESSAGE_LENGTH)
+					var/input = tgui_input_text(source, "Please write a message to announce to the squad:", "Squad Message")
 					if(input)
 						chosen_squad.message_squad(input, source)
-						TIMER_COOLDOWN_START(operator, COOLDOWN_HUD_ORDER, ORDER_COOLDOWN)
 				if(SWITCH_SQUAD_NEAR)
 					for(var/mob/living/carbon/human/target in GLOB.human_mob_list)
 						if(!target.faction == faction || get_dist(target, turf_target) > 9)
@@ -986,17 +992,17 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 	switch(command_aura)
 		if("move")
 			var/image/move = image('icons/mob/talk.dmi', src, icon_state = "order_move")
-			message = pick(";GET MOVING!", ";GO, GO, GO!", ";WE ARE ON THE MOVE!", ";MOVE IT!", ";DOUBLE TIME!", ";ONWARDS!", ";MOVE MOVE MOVE!", ";ON YOUR FEET!", ";GET A MOVE ON!", ";ON THE DOUBLE!", ";ROLL OUT!", ";LET'S GO, LET'S GO!", ";MOVE OUT!", ";LEAD THE WAY!", ";FORWARD!", ";COME ON, MOVE!", ";HURRY, GO!")
+			message = pick("ДВИГАЕМ БУЛКАМИ!", "ШЕВЕЛИМСЯ!", "ДВИГАЕМСЯ, ДВИГАЕМСЯ!", "ПОШЁЛ, ПОШЁЛ, ПОШЁЛ!", "ВПЕРЁД! БЫСТРЕЕ!", "ДВИГАЙ, ДВИГАЙ, ДВИГАЙ!", "БЕГОМ, МАРШ!", "ШИРЕ ШАГ!", "ШЕВЕЛИМ ЛАСТАМИ!", "ШЕВЕЛИМ НОЖКАМИ, ДАМЫ!")
 			say(message)
 			add_emote_overlay(move)
 		if("hold")
 			var/image/hold = image('icons/mob/talk.dmi', src, icon_state = "order_hold")
-			message = pick(";DUCK AND COVER!", ";HOLD THE LINE!", ";HOLD POSITION!", ";STAND YOUR GROUND!", ";STAND AND FIGHT!", ";TAKE COVER!", ";COVER THE AREA!", ";BRACE FOR COVER!", ";BRACE!", ";INCOMING!")
+			message = pick("НИ ШАГУ НАЗАД!", "СТОЯТЬ НАСМЕРТЬ!", "ДЕРЖАТЬ СТРОЙ!", "ДЕРЖАТЬ ПОЗИЦИЮ!", "ДЕРЖИМ УДАР!", "ВСТАТЬ И СРАЖАТЬСЯ!", "ВЗЯТЬ ПОД КОНТРОЛЬ ТЕРРИТОРИЮ!", "ПРИГОТОВИТЬСЯ К СТОЛКНОВЕНИЮ!", "ДЕРЖАТЬСЯ!", ";БЕРЕЧЬ ГОЛОВУ!")
 			say(message)
 			add_emote_overlay(hold)
 		if("focus")
 			var/image/focus = image('icons/mob/talk.dmi', src, icon_state = "order_focus")
-			message = pick(";FOCUS FIRE!", ";PICK YOUR TARGETS!", ";CENTER MASS!", ";CONTROLLED BURSTS!", ";AIM YOUR SHOTS!", ";READY WEAPONS!", ";TAKE AIM!", ";LINE YOUR SIGHTS!", ";LOCK AND LOAD!", ";GET READY TO FIRE!")
+			message = pick("НЕ ПАЛИТЕ ПО СВОИМ!", "СОСРЕДОТОЧИТЬ ОГОНЬ!", "СТРЕЛЬБА НА ПОРАЖЕНИЕ!", "ПРИМКНУТЬ ШТЫКИ!", "ОГОНЬ ПО ГОТОВНОСТИ!", "ОРУЖИЕ НА ИЗГОТОВКУ!", "ЦЕЛЬСЯ!", "ВНИМАНИЕ!", "ОГОНЬ!", "ГОТОВЬТЕСЬ К БОЮ!", "НАКОРМИТЕ ИХ СВИНЦОМ!", "УНИЧТОЖИТЬ ЦЕЛЬ!")
 			say(message)
 			add_emote_overlay(focus)
 
@@ -1251,4 +1257,3 @@ GLOBAL_LIST_EMPTY(active_cas_targets)
 
 #undef OW_MAIN
 #undef OW_MONITOR
-#undef MAX_COMMAND_MESSAGE_LENGTH

@@ -11,7 +11,7 @@
 	wound_type = "gorger" //used to match appropriate wound overlays
 
 	// *** Melee Attacks *** //
-	melee_damage = 22
+	melee_damage = 20
 
 	// *** Speed *** //
 	speed = -0.4
@@ -19,21 +19,19 @@
 
 	// *** Plasma *** //
 	plasma_max = 400
-	plasma_gain = 0
-	plasma_regen_limit = 0
+	plasma_gain = 5
+	plasma_regen_limit = 0.1
 	plasma_icon_state = "fury"
 
 	// *** Health *** //
-	max_health = 700
+	max_health = 600
 
 	// *** Evolution *** //
-	upgrade_threshold = TIER_THREE_THRESHOLD
-
-	deevolves_to = /datum/xeno_caste/warrior
+	deevolves_to = list(/mob/living/carbon/xenomorph/warrior, /mob/living/carbon/xenomorph/hivelord)
 
 	// *** Flags *** //
 	caste_flags = CASTE_INNATE_PLASMA_REGEN|CASTE_PLASMADRAIN_IMMUNE|CASTE_EVOLUTION_ALLOWED
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_LEADER
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_HOLD_JELLY
 	caste_traits = null
 
 	// *** Defense *** //
@@ -44,8 +42,8 @@
 
 	// *** Gorger Abilities *** //
 	overheal_max = 275
-	drain_plasma_gain = 40
-	carnage_plasma_gain = 40
+	drain_plasma_gain = 75
+	carnage_plasma_gain = 150
 	feast_plasma_drain = 20
 
 	actions = list(
@@ -75,7 +73,7 @@
 		/datum/action/ability/activable/xeno/psychic_link,
 		/datum/action/ability/activable/xeno/drain,
 		/datum/action/ability/activable/xeno/transfusion,
-		/datum/action/ability/activable/xeno/oppose,
+		/datum/action/ability/activable/xeno/rejuvenate,
 		/datum/action/ability/activable/xeno/carnage,
 		/datum/action/ability/activable/xeno/feast,
 		/datum/action/ability/activable/xeno/devour,

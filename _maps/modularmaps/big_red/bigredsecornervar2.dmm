@@ -295,8 +295,8 @@
 	},
 /area/bigredv2/caves/rustedpreparea)
 "iO" = (
+/obj/machinery/computer/cryopod,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/prop/computer/cryopod,
 /turf/open/floor/mainship/mono,
 /area/bigredv2/caves/rustedpreparea)
 "iQ" = (
@@ -382,6 +382,13 @@
 /obj/structure/prop/brokenvendor/brokenuniformvendor,
 /turf/open/floor/plating/ground/mars/random/cave,
 /area/bigredv2/caves/rustedpreparea)
+"mh" = (
+/obj/effect/turf_decal/sandedge{
+	dir = 4
+	},
+/obj/effect/landmark/patrol_point/tgmc_13,
+/turf/open/floor/mainship/mono,
+/area/bigredv2/caves/rustedpreparea)
 "ms" = (
 /obj/effect/turf_decal/sandedge/corner{
 	dir = 8
@@ -438,10 +445,6 @@
 	},
 /turf/open/floor/mainship/floor,
 /area/bigredv2/caves/southeast)
-"oe" = (
-/obj/effect/landmark/patrol_point/tgmc_11,
-/turf/open/floor/plating/ground/mars/random/cave,
-/area/bigredv2/caves/southeast)
 "oh" = (
 /turf/open/floor/plating/ground/mars/random/cave,
 /area/bigredv2/caves/southeast)
@@ -491,6 +494,11 @@
 	},
 /obj/structure/prop/brokenvendor/brokenweaponsrack,
 /turf/open/floor/mainship/mono,
+/area/bigredv2/caves/rustedpreparea)
+"oF" = (
+/obj/effect/landmark/weed_node,
+/obj/effect/landmark/patrol_point/tgmc_12,
+/turf/open/floor/plating/ground/mars/random/cave/rock,
 /area/bigredv2/caves/rustedpreparea)
 "oI" = (
 /obj/structure/prop/brokenvendor/brokenspecialistvendor/corpsman,
@@ -600,6 +608,10 @@
 	dir = 4
 	},
 /obj/effect/ai_node,
+/turf/open/floor/plating/ground/mars/random/cave,
+/area/bigredv2/caves/rustedpreparea)
+"rW" = (
+/obj/effect/landmark/patrol_point/tgmc_14,
 /turf/open/floor/plating/ground/mars/random/cave,
 /area/bigredv2/caves/rustedpreparea)
 "rZ" = (
@@ -1220,6 +1232,13 @@
 	},
 /obj/item/shard,
 /turf/open/floor/mainship/floor,
+/area/bigredv2/caves/rustedpreparea)
+"JI" = (
+/obj/effect/turf_decal/sandedge{
+	dir = 1
+	},
+/obj/effect/landmark/patrol_point/tgmc_11,
+/turf/open/floor/mainship/mono,
 /area/bigredv2/caves/rustedpreparea)
 "JR" = (
 /obj/structure/table/mainship,
@@ -2937,7 +2956,7 @@ oh
 AT
 oh
 Ym
-oe
+oh
 TC
 oh
 oh
@@ -2967,7 +2986,7 @@ hu
 wF
 md
 KU
-nF
+mh
 Lq
 zm
 FP
@@ -3234,7 +3253,7 @@ FP
 Xd
 UR
 UR
-UR
+rW
 UR
 fn
 Vl
@@ -3381,7 +3400,7 @@ KU
 KU
 KU
 KU
-Bl
+JI
 UR
 UR
 FP
@@ -3580,7 +3599,7 @@ ke
 UR
 UR
 Xd
-ji
+oF
 KU
 KU
 iQ

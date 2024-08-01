@@ -14,29 +14,26 @@
 	melee_damage = 26
 
 	// *** Speed *** //
-	speed = -0.9
+	speed = -1
 
 	// *** Plasma *** //
 	plasma_max = 575
 	plasma_gain = 35
 
 	// *** Health *** //
-	max_health = 420
+	max_health = 400
 
 	// *** Evolution *** //
-	upgrade_threshold = TIER_THREE_THRESHOLD
-
-	deevolves_to = /datum/xeno_caste/carrier
+	deevolves_to = /mob/living/carbon/xenomorph/carrier
 
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED
 	can_hold_eggs = CAN_HOLD_ONE_HAND
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_JELLY
 	caste_traits = list(TRAIT_CAN_VENTCRAWL)
 
 	// *** Defense *** //
-	soft_armor = list(MELEE = 50, BULLET = 50, LASER = 50, ENERGY = 50, BOMB = 10, BIO = 40, FIRE = 40, ACID = 40)
-
+	soft_armor = list(MELEE = 55, BULLET = 55, LASER = 55, ENERGY = 55, BOMB = 30, BIO = 40, FIRE = 50, ACID = 40)
 	// *** Minimap Icon *** //
 	minimap_icon = "defiler"
 
@@ -67,6 +64,10 @@
 
 	// *** Pheromones *** //
 	aura_strength = 2.6 //It's .1 better than a carrier.
+
+
+	additional_stacks = 2
+
 
 /datum/xeno_caste/defiler/normal
 	upgrade = XENO_UPGRADE_NORMAL

@@ -49,6 +49,12 @@
 	desc = "Carbon dioxide, commonly used for increasing the power generation of exotic engine types."
 	icon_state = "black"
 
+/obj/machinery/portable_atmospherics/canister/oxygen/pred
+	icon = 'icons/obj/machines/yautja_machines.dmi'
+	icon_state = "blue"
+	anchored = TRUE
+	resistance_flags = INDESTRUCTIBLE
+
 /obj/machinery/portable_atmospherics/canister/update_icon_state()
 	. = ..()
 	if(machine_stat & BROKEN)
@@ -92,7 +98,7 @@
 
 
 /obj/machinery/portable_atmospherics/canister/deconstruct(disassembled = TRUE)
-	if(!(atom_flags & NODECONSTRUCT))
+	if(!(flags_atom & NODECONSTRUCT))
 		if(!(machine_stat & BROKEN))
 			disconnect()
 			machine_stat |= BROKEN

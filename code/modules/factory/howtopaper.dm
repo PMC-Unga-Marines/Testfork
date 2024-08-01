@@ -9,15 +9,18 @@
 	Unboxers must be refilled with refill kits and clicked with an empty hand to be turned on but all other machines just need to be anchored to work.
 	Machines will always output in the direction they are facing and input from the opposite direction.<br>
 	<br>
+	While pizza factories can be used to increase the supply of marines' personal cargo points, keep in mind that this will only work with pizza and nothing else.
+	Also remember that if marines don't get their goods in time before Normandy leaves, they might just lynch you.<br>
+	<br>
 	RECIPES:<br>
-	ALL GRENADES:<br>
-	UNBOXER -> CUTTER -> HEATER -> FORMER -> COMPRESSOR<br>
+	WP GRENADE:<br>
+	UNBOXER -> CUTTER -> HEATER -> FORMER<br>
+	<br>
+	M15 GRENADE:<br>
+	UNBOXER -> CUTTER -> FORMER<br>
 	<br>
 	PIZZA:<br>
 	UNBOXER -> CUTTER -> HEATER<br>
-	<br>
-	ALL C4 PLASTIQUES AND DETPACKS:<br>
-	UNBOXER -> CUTTER -> FLATTER<br>
 	<br>
 	ALL SADAR AMMO TYPES:<br>
 	UNBOXER -> CUTTER -> HEATER -> FLATTER -> ATOMIC RECONSTRUCTOR<br>
@@ -34,41 +37,20 @@
 	MATEBA SPEEDLOADER:<br>
 	UNBOXER -> CUTTER -> FLATTER<br>
 	<br>
-	ALL RAILGUN AMMO:<br>
+	RAILGUN MAGAZINE:<br>
 	UNBOXER -> CUTTER -> FLATTER -> ATOMIC RECONSTRUCTOR<br>
 	<br>
 	MINIGUN POWERPACK:<br>
 	UNBOXER -> CUTTER -> ATMOIC RECONSTRUCTOR -> FORMER<br>
 	<br>
-	SR-127 FLAK AMMO:<br>
-	UNBOXER -> CUTTER -> ATOMIC RECONSTRUCTOR<br>
+	RAZORFOAM GRENADES:<br>
+	UNBOXER -> CUTTER -> FORMER -> HEATER<br>
 	<br>
 	ALL AMR AMMO:<br>
 	UNBOXER -> CUTTER -> ATOMIC RECONSTRUCTOR<br>
 	<br>
 	ALL HOWITZER SHELL TYPES:<br>
 	UNBOXER -> CUTTER -> DRILLER -> COMPRESSOR -> GALVANIZER<br>
-	<br>
-	ALL MORTAR AMMO:<br>
-	UNBOXER -> CUTTER -> HEATER -> DRILLER -> ATOMIC RECONSTRUCTOR -> GALVANIZER<br>
-	<br>
-	MLRS ROCKETS:<br>
-	UNBOXER -> CUTTER -> HEATER -> DRILLER -> COMPRESSOR -> GALVANIZER<br>
-	<br>
-	ALL AGLS AMMO:<br>
-	UNBOXER -> CUTTER -> HEATER -> CONSTRUCTOR -> FLATTER -> GALVANIZER<br>
-	<br>
-	ALL TAT AMMO:<br>
-	UNBOXER -> CUTTER -> HEATER -> FLATTER -> COMPRESSOR -> GALVANIZER<br>
-	<br>
-	ALL FK-88 AMMO:<br>
-	UNBOXER -> HEATER -> COMPRESSOR -> DRILLER -> GALVANIZER -> FORMER<br>
-	<br>
-	ALL ATR-22 AMMO:<br>
-	UNBOXER -> HEATER -> COMPRESSOR -> GALVANIZER -> FORMER<br>
-	<br>
-	THERMOBARIC WP ROCKETS:<br>
-	UNBOXER -> CUTTER -> HEATER -> FLATTER -> ATOMIC RECONSTRUCTOR -> GALVANIZER<br>
 	<br>
 	SWAT MASKS:<br>
 	UNBOXER -> COMPRESSOR -> GALVANIZER -> CUTTER<br>
@@ -79,7 +61,17 @@
 	ALL MODULES:<br>
 	UNBOXER -> CUTTER -> FLATTER -> DRILLER -> HEATER -> COMPRESSOR -> GALVANIZER<br>
 	<br>
-	MISCELLANEOUS EQUIPMENT (DROP PODS, FLOODLIGHTS, CAMERAS):<br>
+	ALL MORTAR AMMO:<br>
+	UNBOXER -> CUTTER -> HEATER -> DRILLER -> ATOMIC RECONSTRUCTOR -> GALVANIZER<br>
+	<br>
+	MLRS ROCKETS:<br>
+	UNBOXER -> CUTTER -> HEATER -> DRILLER -> COMPRESSOR -> GALVANIZER<br>
+	<br>
+	THERMOBARIC WP ROCKETS:<br>
+	UNBOXER -> CUTTER -> HEATER -> FLATTER -> ATOMIC RECONSTRUCTOR -> GALVANIZER<br>
+	<br>
+	DROP PODS:<br>
 	UNBOXER -> CUTTER -> HEATER -> ATOMIC RECONSTRUCTOR-> FORMER<br>
 	<br>
 	"}
+

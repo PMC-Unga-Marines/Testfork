@@ -9,12 +9,11 @@
 	wound_type = "ravager" //used to match appropriate wound overlays
 
 	// *** Melee Attacks *** //
-	melee_damage = 25
-	melee_ap = 15
+	melee_damage = 30
 	attack_delay = 7
 
 	// *** Speed *** //
-	speed = -1.0
+	speed = -1
 
 	// *** Plasma *** //
 	plasma_max = 800
@@ -23,12 +22,10 @@
 	plasma_icon_state = "fury"
 
 	// *** Health *** //
-	max_health = 400
+	max_health = 350
 
 	// *** Evolution *** //
-	upgrade_threshold = TIER_THREE_THRESHOLD
-
-	deevolves_to = /datum/xeno_caste/hunter
+	deevolves_to = /mob/living/carbon/xenomorph/hunter
 
 	// *** Flags *** //
 	caste_flags = CASTE_INNATE_PLASMA_REGEN|CASTE_PLASMADRAIN_IMMUNE|CASTE_EVOLUTION_ALLOWED

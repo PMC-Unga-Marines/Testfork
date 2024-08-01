@@ -2,7 +2,7 @@
 	name = "remote signaling device"
 	desc = "Used to remotely activate devices. Allows for syncing when using a secure signaler on another."
 	icon_state = "signaller"
-	worn_icon_state = "signaler"
+	item_state = "signaler"
 	wires = WIRE_RECEIVE | WIRE_PULSE | WIRE_RADIO_PULSE | WIRE_RADIO_RECEIVE
 	attachable = TRUE
 
@@ -95,8 +95,6 @@ Code:
 
 /obj/item/assembly/signaler/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(issignaler(I))
 		var/obj/item/assembly/signaler/signaler2 = I
 		if(secured && signaler2.secured)

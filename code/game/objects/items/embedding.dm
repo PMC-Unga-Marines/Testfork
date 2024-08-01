@@ -79,10 +79,14 @@
 		stack_trace("limb_embed called for QDELETED [embedding]")
 		embedding?.unembed_ourself()
 		return FALSE
-	if(HAS_TRAIT(embedding, TRAIT_NODROP) || (embedding.item_flags & DELONDROP))
+	if(HAS_TRAIT(embedding, TRAIT_NODROP) || (embedding.flags_item & DELONDROP))
 		stack_trace("limb_embed called for TRAIT_NODROP or DELONDROP [embedding]")
 		embedding.unembed_ourself()
 		return FALSE
+	//RUTGMC EDIT START
+	if(embedding.w_class >= WEIGHT_CLASS_NORMAL)
+		return FALSE
+	//RUTGMC EDIT END
 	if(limb_status & LIMB_DESTROYED)
 		return FALSE
 	if(!silent)
@@ -103,12 +107,12 @@
 		return //People can safely move inside a vehicle or on a roller bed/chair.
 	var/embedded_thing = carrier.embedded_objects[src]
 	if(embedded_thing == carrier)
-		return
-	if(!istype(embedded_thing, /datum/limb))
+		//carbon stuff
+	else if(istype(embedded_thing, /datum/limb))
+		var/datum/limb/limb_loc = embedded_thing
+		limb_loc.process_embedded(src)
+	else
 		CRASH("[src] called embedded_on_carrier_move for [carrier] with mismatching embedded_object: [.]")
-	var/datum/limb/limb_loc = embedded_thing
-	limb_loc.process_embedded(src)
-
 
 
 /obj/item/proc/embedded_on_limb_destruction(datum/limb/source)
@@ -146,7 +150,7 @@
 
 
 /mob/living/proc/yank_out_object()
-	set category = "Object"
+	set category = "Object.Mob"
 	set name = "Yank out object"
 	set desc = "Remove an embedded item at the cost of bleeding and pain."
 	set src in view(1)
@@ -199,8 +203,10 @@
 		balloon_alert_to_viewers("rips [selection] out of [user.p_their()] body")
 	else
 		balloon_alert_to_viewers("rips [selection] out of [src]'s body")
-
+/*
 	handle_yank_out_damage()
+*/
+	handle_yank_out_damage(selection, user) //RUTGMC EDIT - item embed disable
 
 	selection.unembed_ourself()
 

@@ -5,12 +5,10 @@
 	var/quantity = -1
 	///What job this loadout is associated with. Used for tabs and access.
 	var/jobtype = "Squad Marine"
-	///Restricts loadouts to a specific job. Set to false to allow any job to take the loadout.
-	var/require_job = TRUE
 
 
-/datum/outfit/quick/equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	pre_equip(H, visualsOnly)
+/datum/outfit/quick/equip(mob/living/carbon/human/H, visualsOnly = FALSE, client/override_client)
+	pre_equip(H, visualsOnly, override_client)
 
 	//Start with uniform,suit,backpack for additional slots. Deletes any existing equipped item to avoid accidentally losing half your loadout. Not suitable for standard gamemodes!
 	if(w_uniform)
@@ -390,6 +388,7 @@
 	name = "SH-35 Scout"
 	desc = "For getting too close for comfort. Equipped with a SH-35 shotgun with buckshot and flechette rounds, a MP-19 sidearm, a good amount of grenades and light armor with a cutting edge 'svallin' shield module. Provides for excellent mobility and devestating close range firepower, but will falter against sustained firepower."
 
+	belt = /obj/item/storage/belt/shotgun
 	wear_suit = /obj/item/clothing/suit/modular/xenonauten/light/shield
 	suit_store = /obj/item/weapon/gun/shotgun/pump/t35/standard
 	belt = /obj/item/storage/belt/shotgun/mixed
@@ -760,6 +759,10 @@
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/tx15_flechette, SLOT_IN_R_POUCH)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/tx15_flechette, SLOT_IN_R_POUCH)
 	H.equip_to_slot_or_del(new /obj/item/ammo_magazine/rifle/tx15_slug, SLOT_IN_R_POUCH)
+
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/lasrifle, SLOT_IN_R_POUCH)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/lasrifle, SLOT_IN_R_POUCH)
+	H.equip_to_slot_or_del(new /obj/item/cell/lasgun/lasrifle, SLOT_IN_R_POUCH)
 
 /datum/outfit/quick/tgmc/corpsman/laser_medic
 	name = "Laser Rifle Corpsman"

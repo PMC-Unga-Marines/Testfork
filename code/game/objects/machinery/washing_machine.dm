@@ -41,7 +41,7 @@
 	update_icon()
 	sleep(20 SECONDS)
 	for(var/atom/A in contents)
-		A.wash()
+		A.clean_blood()
 
 	//Tanning!
 	for(var/obj/item/stack/sheet/hairlesshide/HH in contents)
@@ -74,8 +74,6 @@
 
 /obj/machinery/washing_machine/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/toy/crayon) || istype(I, /obj/item/tool/stamp))
 		if(!(state in list(1, 3, 6)))

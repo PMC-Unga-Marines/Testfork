@@ -4,7 +4,6 @@
 /datum/action/ability/activable/xeno/stomp
 	name = "Stomp"
 	action_icon_state = "stomp"
-	action_icon = 'icons/Xeno/actions/crusher.dmi'
 	desc = "Knocks all adjacent targets away and down."
 	ability_cost = 100
 	cooldown_duration = 20 SECONDS
@@ -27,14 +26,17 @@
 	X.create_stomp() //Adds the visual effect. Wom wom wom
 
 	for(var/mob/living/M in range(1, get_turf(X)))
-		if(X.issamexenohive(M) || M.stat == DEAD || isnestedhost(M) || !X.Adjacent(M))
+		if(X.issamexenohive(M) || M.stat == DEAD || isnestedhost(M))
 			continue
 		var/distance = get_dist(M, X)
 		var/damage = X.xeno_caste.stomp_damage/max(1, distance + 1)
 		if(distance == 0) //If we're on top of our victim, give him the full impact
 			GLOB.round_statistics.crusher_stomp_victims++
 			SSblackbox.record_feedback("tally", "round_statistics", 1, "crusher_stomp_victims")
-			M.take_overall_damage(damage, BRUTE, MELEE, updating_health = TRUE, max_limbs = 3)
+			//RUTGMC EDIT CHANGE BEGIN
+			//M.take_overall_damage(damage, BRUTE, MELEE, updating_health = TRUE, max_limbs = 3) // ORIGINAL
+			M.take_overall_damage(damage, BRUTE, MELEE, updating_health = TRUE, penetration = 100, max_limbs = 3) //RUTGMC CHANGE
+			//RUTGMC EDIT END
 			M.Paralyze(3 SECONDS)
 			to_chat(M, span_highdanger("You are stomped on by [X]!"))
 			shake_camera(M, 3, 3)
@@ -63,21 +65,22 @@
 // *********** Cresttoss
 // ***************************************
 /datum/action/ability/activable/xeno/cresttoss
-	name = "Crest Toss"
-	action_icon_state = "cresttoss"
-	action_icon = 'icons/Xeno/actions/crusher.dmi'
-	desc = "Fling an adjacent target over and behind you, or away from you while on harm intent. Also works over barricades."
+	name = "Crest Toss Away"
+	action_icon_state = "cresttoss_away"
+	desc = "Fling an adjacent target away from you. Shares the cooldown with the Crest Toss Behind!"
 	ability_cost = 75
 	cooldown_duration = 12 SECONDS
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_CRESTTOSS,
 	)
 	target_flags = ABILITY_MOB_TARGET
+	var/tossing_away = TRUE
+	var/ability_for_cooldown = /datum/action/ability/activable/xeno/cresttoss/behind
 
 /datum/action/ability/activable/xeno/cresttoss/on_cooldown_finish()
 	var/mob/living/carbon/xenomorph/X = owner
 	to_chat(X, span_xenowarning("<b>We can now crest toss again.</b>"))
-	playsound(X, 'sound/effects/alien/new_larva.ogg', 50, 0, 1)
+	playsound(X, 'sound/effects/alien/newlarva.ogg', 50, 0, 1)
 	return ..()
 
 /datum/action/ability/activable/xeno/cresttoss/can_use_ability(atom/A, silent = FALSE, override_flags)
@@ -96,20 +99,18 @@
 
 /datum/action/ability/activable/xeno/cresttoss/use_ability(atom/movable/A)
 	var/mob/living/carbon/xenomorph/X = owner
-	X.face_atom(A) //Face towards the target so we don't look silly
-	var/facing
 	var/toss_distance = X.xeno_caste.crest_toss_distance
+	var/toss_direction
 	var/turf/throw_origin = get_turf(X)
 	var/turf/target_turf = throw_origin //throw distance is measured from the xeno itself
 	var/big_mob_message
+
+	X.face_atom(A) //Face towards the target so we don't look silly
 
 	if(!X.issamexenohive(A)) //xenos should be able to fling xenos into xeno passable areas!
 		for(var/obj/effect/forcefield/fog/fog in throw_origin)
 			A.balloon_alert(X, "Cannot, fog")
 			return fail_activate()
-	if(isarmoredvehicle(A))
-		A.balloon_alert(X, "Too heavy!")
-		return fail_activate()
 	if(isliving(A))
 		var/mob/living/L = A
 		if(L.mob_size >= MOB_SIZE_BIG) //Penalize toss distance for big creatures
@@ -119,19 +120,19 @@
 		toss_distance = FLOOR(toss_distance * 0.5, 1)
 		big_mob_message = ", struggling mightily to heft its bulk"
 
-	if(X.a_intent == INTENT_HARM) //If we use the ability on hurt intent, we throw them in front; otherwise we throw them behind.
-		facing = get_dir(X, A)
+	if(!tossing_away)
+		toss_direction = get_dir(A, X)
 	else
-		facing = get_dir(A, X)
+		toss_direction = get_dir(X, A)
 
 	var/turf/temp
 	for(var/x in 1 to toss_distance)
-		temp = get_step(target_turf, facing)
+		temp = get_step(target_turf, toss_direction)
 		if(!temp)
 			break
 		target_turf = temp
 
-	X.icon_state = "Crusher Charging"  //Momentarily lower the crest for visual effect
+	X.icon_state = "Crusher Charging" //Momentarily lower the crest for visual effect
 
 	X.visible_message(span_xenowarning("\The [X] flings [A] away with its crest[big_mob_message]!"), \
 	span_xenowarning("We fling [A] away with our crest[big_mob_message]!"))
@@ -151,6 +152,20 @@
 
 	add_cooldown()
 	addtimer(CALLBACK(X, TYPE_PROC_REF(/mob, update_icons)), 3)
+
+	var/datum/action/ability/xeno_action/toss = X.actions_by_path[ability_for_cooldown]
+	if(toss)
+		toss.add_cooldown()
+
+/datum/action/ability/activable/xeno/cresttoss/behind
+	name = "Crest Toss Behind"
+	action_icon_state = "cresttoss_behind"
+	desc = "Fling an adjacent target behind you. Also works over barricades. Shares the cooldown with the Crest Toss Away!"
+	keybinding_signals = list(
+		KEYBINDING_NORMAL = COMSIG_XENOABILITY_CRESTTOSS_BEHIND,
+	)
+	tossing_away = FALSE
+	ability_for_cooldown = /datum/action/ability/activable/xeno/cresttoss
 
 /datum/action/ability/activable/xeno/cresttoss/ai_should_start_consider()
 	return TRUE
@@ -172,7 +187,6 @@
 /datum/action/ability/activable/xeno/advance
 	name = "Rapid Advance"
 	action_icon_state = "crest_defense"
-	action_icon = 'icons/Xeno/actions/defender.dmi'
 	desc = "Charges up the crushers charge in place, then unleashes the full bulk of the crusher at the target location. Does not crush in diagonal directions."
 	ability_cost = 175
 	cooldown_duration = 30 SECONDS
@@ -184,7 +198,7 @@
 
 /datum/action/ability/activable/xeno/advance/on_cooldown_finish()
 	to_chat(owner, span_xenowarning("<b>We can now rapidly charge forward again.</b>"))
-	playsound(owner, 'sound/effects/alien/new_larva.ogg', 50, 0, 1)
+	playsound(owner, 'sound/effects/alien/newlarva.ogg', 50, 0, 1)
 	return ..()
 
 /datum/action/ability/activable/xeno/advance/can_use_ability(atom/A, silent = FALSE, override_flags)
@@ -216,8 +230,8 @@
 		charge.charge_dir = aimdir //Set dir so check_momentum() does not cuck us
 	for(var/i=0 to max(get_dist(X, A), advance_range))
 		if(i % 2)
-			playsound(X, SFX_ALIEN_CHARGE, 50)
-			new /obj/effect/temp_visual/after_image(get_turf(X), X)
+			playsound(X, "alien_charge", 50)
+			new /obj/effect/temp_visual/xenomorph/afterimage(get_turf(X), X)
 		X.Move(get_step(X, aimdir), aimdir)
 		aimdir = get_dir(X, A)
 	succeed_activate()
@@ -234,3 +248,42 @@
 	if(target.get_xeno_hivenumber() == owner.get_xeno_hivenumber())
 		return FALSE
 	return TRUE
+
+// ***************************************
+// *********** Regenerate Skin
+// ***************************************
+/datum/action/ability/xeno_action/regenerate_skin/crusher
+	name = "Regenerate Armor"
+	action_icon_state = "regenerate_skin"
+	desc = "Regenerate your hard exoskeleton armor, removing all sunder."
+	use_state_flags = ABILITY_TARGET_SELF|ABILITY_IGNORE_SELECTED_ABILITY
+	ability_cost = 400
+	cooldown_duration = 90 SECONDS
+	keybind_flags = ABILITY_KEYBIND_USE_ABILITY
+	keybinding_signals = list(
+		KEYBINDING_NORMAL = COMSIG_XENOABILITY_REGENERATE_SKIN,
+	)
+
+/datum/action/ability/xeno_action/regenerate_skin/crusher/on_cooldown_finish()
+	var/mob/living/carbon/xenomorph/X = owner
+	to_chat(X, span_notice("We feel we are ready to shred our armor and grow another."))
+	return ..()
+
+/datum/action/ability/xeno_action/regenerate_skin/crusher/action_activate()
+	var/mob/living/carbon/xenomorph/crusher/X = owner
+
+	if(!can_use_action(TRUE))
+		return fail_activate()
+
+	if(X.on_fire)
+		to_chat(X, span_xenowarning("We can't use that while on fire."))
+		return fail_activate()
+
+	X.emote("roar")
+	X.visible_message(span_warning("The armor on \the [X] shreds and a new layer can be seen in it's place!"),
+		span_notice("We shed our armor, showing the fresh new layer underneath!"))
+
+	X.do_jitter_animation(1000)
+	X.adjust_sunder(-50)
+	add_cooldown()
+	return succeed_activate()

@@ -21,40 +21,40 @@
 ///Check if the item can go to the specified slot
 /datum/loadout/proc/can_equip_to_slot(item_type, slot)
 	var/obj/item/item = item_type
-	var/equip_slot_flags = initial(item.equip_slot_flags)
+	var/flags_equip_slot = initial(item.flags_equip_slot)
 	var/w_class = initial(item.w_class)
 	switch(slot)
 		if(slot_wear_mask_str)
-			return (equip_slot_flags & ITEM_SLOT_MASK)
+			return (flags_equip_slot & ITEM_SLOT_MASK)
 		if(slot_back_str)
-			return (equip_slot_flags & ITEM_SLOT_BACK)
+			return (flags_equip_slot & ITEM_SLOT_BACK)
 		if(slot_wear_suit_str)
-			return (equip_slot_flags & ITEM_SLOT_OCLOTHING)
+			return (flags_equip_slot & ITEM_SLOT_OCLOTHING)
 		if(slot_gloves_str)
-			return (equip_slot_flags & ITEM_SLOT_GLOVES)
+			return (flags_equip_slot & ITEM_SLOT_GLOVES)
 		if(slot_shoes_str)
-			return (equip_slot_flags & ITEM_SLOT_FEET)
+			return (flags_equip_slot & ITEM_SLOT_FEET)
 		if(slot_belt_str)
-			if(!(equip_slot_flags & ITEM_SLOT_BELT))
+			if(!(flags_equip_slot & ITEM_SLOT_BELT))
 				return FALSE
 			if(!item_list[SLOT_W_UNIFORM])
 				return FALSE
 			return TRUE
 		if(slot_glasses_str)
-			return (equip_slot_flags & ITEM_SLOT_EYES)
+			return (flags_equip_slot & ITEM_SLOT_EYES)
 		if(slot_head_str)
-			return (equip_slot_flags & ITEM_SLOT_HEAD)
+			return (flags_equip_slot & ITEM_SLOT_HEAD)
 		if(slot_w_uniform_str)
-			return (equip_slot_flags & ITEM_SLOT_ICLOTHING)
+			return (flags_equip_slot & ITEM_SLOT_ICLOTHING)
 		if(slot_l_store_str)
 			if(!item_list[SLOT_W_UNIFORM])
 				return FALSE
-			if(w_class <= 2 || (equip_slot_flags & ITEM_SLOT_POCKET))
+			if(w_class <= 2 || (flags_equip_slot & ITEM_SLOT_POCKET))
 				return TRUE
 		if(slot_r_store_str)
 			if(!item_list[SLOT_W_UNIFORM])
 				return FALSE
-			if(w_class <= 2 || (equip_slot_flags & ITEM_SLOT_POCKET))
+			if(w_class <= 2 || (flags_equip_slot & ITEM_SLOT_POCKET))
 				return TRUE
 		if(slot_s_store_str)
 			if(!item_list[SLOT_W_UNIFORM])
@@ -66,9 +66,9 @@
 				return TRUE
 			return FALSE
 		if(slot_ear_str)
-			return (equip_slot_flags & ITEM_SLOT_EARS)
+			return (flags_equip_slot & ITEM_SLOT_EARS)
 		if(slot_wear_id_str)
-			return (equip_slot_flags & ITEM_SLOT_ID)
+			return (flags_equip_slot & ITEM_SLOT_ID)
 		if(slot_r_hand_str)
 			return TRUE
 		if(slot_l_hand_str)

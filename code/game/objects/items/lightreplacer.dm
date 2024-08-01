@@ -25,14 +25,14 @@
 
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "lightreplacer0"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/engineering_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/engineering_right.dmi',
 	)
-	worn_icon_state = "electronic"
+	item_state = "electronic"
 
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 
 	w_class = WEIGHT_CLASS_SMALL
 
@@ -52,8 +52,6 @@
 
 /obj/item/lightreplacer/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/stack/sheet/glass))
 		var/obj/item/stack/sheet/glass/G = I

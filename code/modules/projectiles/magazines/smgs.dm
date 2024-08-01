@@ -3,7 +3,6 @@
 	desc = "A submachinegun magazine."
 	default_ammo = /datum/ammo/bullet/smg
 	max_rounds = 30
-	icon = 'icons/obj/items/ammo/submachinegun.dmi'
 	icon_state_mini = "mag_smg"
 
 //-------------------------------------------------------
@@ -54,27 +53,6 @@
 	max_rounds = 50
 	w_class = WEIGHT_CLASS_SMALL
 	icon_state_mini = "mag_t90"
-
-//-------------------------------------------------------
-//SMG-45 SMG ammo
-
-/obj/item/ammo_magazine/smg/standard_heavysmg
-	name = "\improper SMG-45 magazine (.41 AE)"
-	desc = "A .41 AE caseless submachinegun magazine."
-	default_ammo = /datum/ammo/bullet/smg/heavy
-	caliber = CALIBER_41AE
-	icon_state = "t45"
-	max_rounds = 40
-	w_class = WEIGHT_CLASS_SMALL
-	icon_state_mini = "mag_heavy_smg"
-	bonus_overlay = "t45_mag"
-
-/obj/item/ammo_magazine/smg/standard_heavysmg/squashhead
-	name = "\improper SMG-45 squash-head magazine (.41 AE)"
-	desc = "A .41 AE caseless submachinegun magazine that does a minituare explosion upon contact, will shred the armor off of basically anything."
-	default_ammo = /datum/ammo/bullet/smg/squash
-	icon_state = "t45_sh"
-	bonus_overlay = "t45_mag_sh"
 
 //-------------------------------------------------------
 //SMG-27, based on the SMG-27, based on the M7.
@@ -221,15 +199,14 @@
 	max_rounds = 45
 	w_class = WEIGHT_CLASS_SMALL
 
-//------------------------------------------------------
-//C17 riot PDW
+//-------------------------------------------------------
+//vector
 
-/obj/item/ammo_magazine/smg/vsd_pdw
-	name = "\improper C17 drum mag (.45 ACP)"
-	desc = "An Armor-Piercing .45 ACP caseless submachinegun magazine."
-	default_ammo = /datum/ammo/bullet/smg/ap/hv
+/obj/item/ammo_magazine/smg/vector
+	name = "\improper Vector drum magazine (.45ACP)"
+	desc = "A .45ACP HP caliber drum magazine for the Vector, with even more dakka."
+	default_ammo = /datum/ammo/bullet/smg/acp
+	w_class = WEIGHT_CLASS_SMALL
 	caliber = CALIBER_45ACP
 	icon_state = "ppsh_ext"
-	max_rounds = 55
-	w_class = WEIGHT_CLASS_SMALL
-	icon_state_mini = "mag_heavy_smg"
+	max_rounds = 40 // HI-Point .45 ACP Drum mag

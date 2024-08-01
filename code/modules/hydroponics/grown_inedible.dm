@@ -4,7 +4,7 @@
 
 /obj/item/grown // Grown things that are not edible
 	name = "grown_weapon"
-	icon = 'icons/obj/items/harvest.dmi'
+	icon = 'icons/obj/items/weapons.dmi'
 	var/plantname
 	var/potency = 1
 
@@ -37,9 +37,10 @@
 	name = "towercap"
 	name = "tower-cap log"
 	desc = "It's better than bad, it's good!"
+	icon = 'icons/obj/items/harvest.dmi'
 	icon_state = "logs"
 	force = 5
-	atom_flags = NONE
+	flags_atom = NONE
 	throwforce = 5
 	w_class = WEIGHT_CLASS_NORMAL
 	throw_speed = 3
@@ -49,8 +50,6 @@
 
 /obj/item/grown/log/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(I.sharp != IS_SHARP_ITEM_BIG)
 		return
@@ -65,10 +64,11 @@
 	plantname = "sunflowers"
 	name = "sunflower"
 	desc = "It's beautiful! A certain person might beat you to death if you trample these."
+	icon = 'icons/obj/items/harvest.dmi'
 	icon_state = "sunflower"
 	damtype = BURN
 	force = 0
-	atom_flags = NONE
+	flags_atom = NONE
 	throwforce = 1
 	w_class = WEIGHT_CLASS_TINY
 	throw_speed = 1
@@ -81,11 +81,12 @@
 /obj/item/grown/nettle // -- Skie
 	plantname = "nettle"
 	desc = "It's probably <B>not</B> wise to touch it with bare hands..."
+	icon = 'icons/obj/items/weapons.dmi'
 	name = "nettle"
 	icon_state = "nettle"
 	damtype = BURN
 	force = 15
-	atom_flags = NONE
+	flags_atom = NONE
 	throwforce = 1
 	w_class = WEIGHT_CLASS_SMALL
 	throw_speed = 1
@@ -165,15 +166,13 @@
 	desc = "A reminder of meals gone by."
 	icon = 'icons/obj/items/harvest.dmi'
 	icon_state = "corncob"
-	worn_icon_state = "corncob"
+	item_state = "corncob"
 	w_class = WEIGHT_CLASS_SMALL
 	throw_speed = 4
 	throw_range = 20
 
 /obj/item/corncob/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(I.sharp == IS_SHARP_ITEM_ACCURATE)
 		to_chat(user, span_notice("You use [I] to fashion a pipe out of the corn cob!"))

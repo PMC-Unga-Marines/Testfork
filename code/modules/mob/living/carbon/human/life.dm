@@ -3,7 +3,6 @@
 
 	fire_alert = 0 //Reset this here, because both breathe() and handle_environment() have a chance to set it.
 
-
 	//update the current life tick, can be used to e.g. only do something every 4 ticks
 	life_tick++
 
@@ -33,8 +32,11 @@
 
 		else //Dead
 			dead_ticks ++
-			if(dead_ticks > TIME_BEFORE_DNR)
-				set_undefibbable()
+			var/mob/dead/observer/related_ghost = get_ghost()
+			// boolean, determines if the body's ghost can reenter the body
+			var/ghost_left = !client && !related_ghost?.can_reenter_corpse
+			if(dead_ticks > TIME_BEFORE_DNR || ghost_left)
+				set_undefibbable(ghost_left)
 			else
 				med_hud_set_status()
 
@@ -56,8 +58,14 @@
 	SEND_SIGNAL(src, COMSIG_HUMAN_SET_UNDEFIBBABLE)
 	SSmobs.stop_processing(src) //Last round of processing.
 
-	if((SSticker.mode?.round_type_flags & MODE_TWO_HUMAN_FACTIONS) && job?.job_cost)
-		job.free_job_positions(1)
+	if(CHECK_BITFIELD(status_flags, XENO_HOST))
+		var/obj/item/alien_embryo/parasite = locate(/obj/item/alien_embryo) in src
+		if(parasite) //The larva cannot survive without a host.
+			qdel(parasite)
+		DISABLE_BITFIELD(status_flags, XENO_HOST)
+
+	if((SSticker.mode?.flags_round_type & MODE_TWO_HUMAN_FACTIONS) && job?.job_cost)
+		job.add_job_positions(1)
 	if(hud_list)
 		med_hud_set_status()
 
@@ -65,13 +73,10 @@
 	if(species.species_flags & NO_BREATHE)
 		return
 
-	if(pulledby?.grab_state >= GRAB_KILL)
-		Losebreath(1)
-		adjustOxyLoss(4)
-	else if(losebreath > 10)
-		set_Losebreath(10) //Any single hit is functionally capped - to keep someone suffocating, you need continued losebreath applications.
-	else if(losebreath > 0)
+	if(losebreath <= 10)
 		adjust_Losebreath(-1) //Since this happens before checking to take/heal oxyloss, a losebreath of 1 or less won't do anything.
+	else
+		set_Losebreath(10) //Any single hit is functionally capped - to keep someone suffocating, you need continued losebreath applications.
 
 	if(health < get_crit_threshold() || losebreath)
 		if(HAS_TRAIT(src, TRAIT_IGNORE_SUFFOCATION)) //Prevent losing health from asphyxiation, but natural recovery can still happen.

@@ -31,13 +31,13 @@
 	minimap_color = MINIMAP_AREA_LZ
 
 /area/shuttle/drop1/gelida
-	name = "Gelida IV - Dropship Alamo Landing Zone"
+	name = "Gelida IV - Dropship Normandy Landing Zone"
 	icon_state = "away1"
 	outside = FALSE
 	minimap_color = MINIMAP_AREA_LZ
 
 /area/gelida/landing_zone_1/lz1_console
-	name = "Gelida IV - Dropship Alamo Console"
+	name = "Gelida IV - Dropship Normandy Console"
 	icon_state = "tcomsatcham"
 	requires_power = FALSE
 	outside = FALSE
@@ -363,7 +363,6 @@
 	ceiling = CEILING_DEEP_UNDERGROUND
 	minimap_color = MINIMAP_AREA_CAVES
 	always_unpowered = TRUE
-	area_flags = CANNOT_NUKE
 
 //ATMOS
 /area/gelida/atmos

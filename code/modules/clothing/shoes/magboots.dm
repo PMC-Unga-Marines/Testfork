@@ -7,13 +7,13 @@
 
 /obj/item/clothing/shoes/magboots/attack_self(mob/user)
 	if(magpulse)
-		inventory_flags &= ~NOSLIPPING
+		flags_inventory &= ~NOSLIPPING
 		slowdown = SHOES_SLOWDOWN
 		magpulse = 0
 		icon_state = "magboots0"
 		to_chat(user, "You disable the mag-pulse traction system.")
 	else
-		inventory_flags |= NOSLIPPING
+		flags_inventory |= NOSLIPPING
 		slowdown = 2
 		magpulse = 1
 		icon_state = "magboots1"
@@ -26,6 +26,6 @@
 /obj/item/clothing/shoes/magboots/examine(mob/user)
 	. = ..()
 	var/state = "disabled"
-	if(inventory_flags&NOSLIPPING)
+	if(flags_inventory&NOSLIPPING)
 		state = "enabled"
 	. += "Its mag-pulse traction system appears to be [state]."

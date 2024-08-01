@@ -74,10 +74,7 @@ GLOBAL_LIST_INIT(string_equip_flags, list("suit slot" = ITEM_SLOT_OCLOTHING,
 	if(accuracy_mod)
 		armor_strings += "<br>This will alter your shooting accuracy by up to [accuracy_mod]% when worn."
 
-	if(inventory_flags & NOPRESSUREDMAGE)
-		armor_strings += "Wearing this will protect you from the vacuum of space."
-
-	if(inventory_flags & BLOCKSHARPOBJ)
+	if(flags_inventory & BLOCKSHARPOBJ)
 		armor_strings += "The material is exceptionally thick."
 
 	if(max_heat_protection_temperature >= FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE)
@@ -91,10 +88,10 @@ GLOBAL_LIST_INIT(string_equip_flags, list("suit slot" = ITEM_SLOT_OCLOTHING,
 	var/list/covers = list()
 	var/list/slots = list()
 	for(var/name in GLOB.string_part_flags)
-		if(armor_protection_flags & GLOB.string_part_flags[name])
+		if(flags_armor_protection & GLOB.string_part_flags[name])
 			covers += name
 	for(var/name in GLOB.string_equip_flags)
-		if(equip_slot_flags & GLOB.string_equip_flags[name])
+		if(flags_equip_slot & GLOB.string_equip_flags[name])
 			slots += name
 
 	if(length(covers))
@@ -114,10 +111,10 @@ GLOBAL_LIST_INIT(string_equip_flags, list("suit slot" = ITEM_SLOT_OCLOTHING,
 
 /obj/item/armor_module/storage/uniform/get_mechanics_info()
 	. = ..()
-	. += "<br>This item has an internal inventory of [storage_datum.storage_slots] slots."
-	if(length(storage_datum.storage_type_limits))
+	. += "<br>This item has an internal inventory of [storage.storage_slots] slots."
+	if(length(storage.bypass_w_limit))
 		. += "<br><br><U>You can also carry the following special items in this</U>:"
-		for(var/X in storage_datum.storage_type_limits)
+		for(var/X in storage.bypass_w_limit)
 			var/obj/B = X
 			. += "<br>[initial(B.name)]"
 

@@ -49,7 +49,7 @@
 		if(5)
 			return list(ACCESS_MARINE_WO, ACCESS_MARINE_ARMORY, ACCESS_MARINE_BRIG)//security
 		if(6)
-			return list(ACCESS_MARINE_PREP, ACCESS_MARINE_MEDPREP, ACCESS_MARINE_ENGPREP, ACCESS_MARINE_SMARTPREP, ACCESS_MARINE_LEADER)//spess mahreens
+			return list(ACCESS_MARINE_PREP, ACCESS_MARINE_MEDPREP, ACCESS_MARINE_ENGPREP, ACCESS_MARINE_SMARTPREP, ACCESS_MARINE_LEADER,)//spess mahreens
 		if(7)
 			return list(ACCESS_MARINE_ALPHA, ACCESS_MARINE_BRAVO, ACCESS_MARINE_CHARLIE, ACCESS_MARINE_DELTA)//squads
 		if(8)
@@ -187,34 +187,16 @@
 	switch(paygrade)
 		if("C")
 			. = size ? "" : "Civilian"
-		if("MS")
-			. = size ? "MS" : "Medical Student"
-		if("JR")
-			. = size ? "JR" : "Junior Resident"
-		if("SR")
-			. = size ? "SR" : "Senior Resident"
-		if("GP")
-			. = size ? "GP" : "General Practitioner"
-		if("AP")
-			. = size ? "AP" : "Attending Physician"
-		if("SP")
-			. = size ? "SP" : "Senior Physician"
-		if("HP")
-			. = size ? "HP" : "Head Physician"
-		if("MSPVR")
-			. = size ? "MSPVR" : "Medical Supervisor"
-		if("MDR")
-			. = size ? "MDR" : "Medical Director"
-		if("RSRA")
-			. = size ? "RSRA" : "Research Assistant"
-		if("RSR")
-			. = size ? "RSR" : "Researcher"
-		if("LECT")
-			. = size ? "LECT" : "Lecturer"
-		if("APROF")
-			. = size ? "APROF" : "Associate Professor"
+		if("CD")
+			. = size ? "Dr." : "Doctor"
 		if("PROF")
-			. = size ? "PROF" : "Professor"
+			. = size ? "Prof." : "Professor"
+		if("RES")
+			. = size ? "RES" : "Medical Resident"
+		if("MD")
+			. = size ? "MD" : "Medical Doctor"
+		if("CHO")
+			. = size ? "CHO" : "Chief Health Officer"
 		if("CMO")
 			. = size ? "CMO" : "Chief Medical Officer"
 		if("CMN")
@@ -256,17 +238,13 @@
 		if("E6")
 			. = size ? "SSGT" : "Staff Sergeant"
 		if("E7")
-			. = size ? "SFC" : "Sergeant First Class"
-		if("E7E")
 			. = size ? "GYSGT" : "Gunnery Sergeant"
 		if("E8")
 			. = size ? "MSGT" : "Master Sergeant"
 		if("E8E")
 			. = size ? "FSGT" : "First Sergeant"
 		if("E9")
-			. = size ? "MGYSGT" : "Master Gunnery Sergeant"
-		if("E9A")
-			. = size ? "SGM" : "Sergeant Major" //above master gunnery sergeant, below command sergeant major
+			. = size ? "SGM" : "Sergeant Major"
 		if("E9E")
 			. = size ? "CSGM" : "Command Sergeant Major"
 		if("O1")
@@ -303,16 +281,10 @@
 			. = size ? "PO1" : "Petty Officer First Class"
 		if("CPO")
 			. = size ? "CPO" : "Chief Petty Officer"
-		if("SCPO")
-			. = size ? "SCPO" : "Senior Chief Petty Officer"
 		if("MO4")
 			. = size ? "MAJ" : "Major"
 		if("MO5")
 			. = size ? "LtCol" : "Lieutenant Colonel"
-		if("MO6")
-			. = size ? "Col" : "Colonel"
-		if("M10")
-			. = size ? "Gen" : "General"
 		if("UPP1")
 			. = size ? "UGNR" : "USL Gunner"
 		if("UPP2")
@@ -425,16 +397,6 @@
 			. = size ? "ICCG" : "ICC Guard"
 		if("ICC4")
 			. = size ? "ICCL" : "ICC Leader"
-		if("VSD1")
-			. = size ? "JSGT" : "VSD Mládshiy serzhánt"
-		if("VSD2")
-			. = size ? "SSGT" : "VSD Stárshiy serzhánt"
-		if("VSD3")
-			. = size ? "SGM" : "VSD Starshiná"
-		if("VSD4")
-			. = size ? "LT" : "VSD Leytenánt"
-		if("VSD5")
-			. = size ? "COLGEN" : "VSD Generál-polkóvnik"
 		if("MRC1")
 			. = size ? "MERC" : "MERC Heavy"
 		if("MRC2")
@@ -443,15 +405,31 @@
 			. = size ? "MERC" : "MERC Engineer"
 		if("VM")
 			. = size ? "VAT" : "VatGrown Marine"
+		if("Mk.X") // RUTGMC ADDITION START
+			. = size ? "Mk.X" : "Mark X"
+		if("Mk.IX")
+			. = size ? "Mk.IX" : "Mark IX"
+		if("Mk.VIII")
+			. = size ? "Mk.VIII" : "Mark VIII"
+		if("Mk.VII")
+			. = size ? "Mk.VII" : "Mark VII"
+		if("Mk.VI")
+			. = size ? "Mk.VI" : "Mark VI"
 		if("Mk.V")
 			. = size ? "Mk.V" : "Mark V"
 		if("Mk.IV")
-			. = size ? "Mk.IV" : "Mark IV"
+			. = size ? "Mk.IV" : "Mark IV" // RUTGMC ADDITION END
 		if("Mk.III")
 			. = size ? "Mk.III" : "Mark III"
 		if("Mk.II")
 			. = size ? "Mk.II" : "Mark II"
 		if("Mk.I")
 			. = size ? "Mk.I" : "Mark I"
+		//RUTGMC EDIT ADDITION BEGIN - SHITSPAWN_ROLES
+		if("MP")
+			. = size ? "MP" : "Military Police"
+		if("CLW")
+			. = size ? "HONK" : "Ship Clown"
+		//RUTGMC EDIT ADDITION END - SHITSPAWN_ROLES
 		else
 			. = paygrade //custom paygrade

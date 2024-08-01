@@ -32,7 +32,7 @@
 	throwforce = 8
 	throw_speed = 3
 	throw_range = 6
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	turf_type = /turf/open/floor
 
 ///Creates plating, used for space turfs only
@@ -42,6 +42,15 @@
 	else
 		space_turf.ChangeTurf(/turf/open/floor/plating)
 
+/obj/item/stack/tile/plasteel/sandstone/runed
+	icon_state = "tile_runedsandstone"
+	icon = 'icons/obj/stack_objects.dmi'
+	force = 6
+	throwforce = 8
+	throw_speed = 3
+	throw_range = 6
+	flags_atom = CONDUCT
+	turf_type = /turf/open/floor/sandstone/runed
 
 /obj/item/stack/tile/grass
 	name = "grass tile"
@@ -87,8 +96,6 @@
 
 /obj/item/stack/tile/light/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/tool/crowbar))
 		new /obj/item/stack/sheet/metal(user.loc)

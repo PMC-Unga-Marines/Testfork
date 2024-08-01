@@ -4,8 +4,8 @@
 	gender = PLURAL
 	icon = 'icons/obj/det.dmi'
 	icon_state = "plastic-explosive"
-	worn_icon_state = "plasticx"
-	item_flags = NOBLUDGEON
+	item_state = "plasticx"
+	flags_item = NOBLUDGEON
 	w_class = WEIGHT_CLASS_TINY
 	/// whether the plastic explosive is armed or not
 	var/armed = FALSE
@@ -21,12 +21,9 @@
 	var/datum/effect_system/smoke_spread/smoketype = /datum/effect_system/smoke_spread/bad
 	/// radius this smoke will encompass
 	var/smokeradius = 1
-	///Current/last user of the c4
-	var/mob/living/last_user
 
 /obj/item/explosive/plastique/Destroy()
 	plant_target = null
-	last_user = null
 	return ..()
 
 /obj/item/explosive/plastique/update_icon_state()
@@ -97,7 +94,6 @@
 			forceMove(location)
 		armed = TRUE
 		timer = target.plastique_time_mod(timer)
-		last_user = user
 
 		log_bomber(user, "planted", src, "on [target] with a [timer] second fuse", message_admins = TRUE)
 
@@ -116,6 +112,12 @@
 
 /obj/item/explosive/plastique/attack_hand(mob/living/user)
 	if(armed)
+		to_chat(user, "<font color='warning'>Disarm [src] first to remove it!</font>")
+		return
+	return ..()
+
+/obj/item/explosive/plastique/attackby(obj/item/I, mob/user, params)
+	if(ismultitool(I) && armed)
 		if(!do_after(user, 2 SECONDS, NONE, plant_target, BUSY_ICON_HOSTILE))
 			return
 
@@ -140,15 +142,7 @@
 		armed = FALSE
 		alarm_sounded = FALSE
 		plant_target = null
-		last_user = null
 		update_icon()
-	return ..()
-
-/obj/item/explosive/plastique/ex_act(severity)
-	if(QDELETED(src))
-		return
-	if(severity == EXPLODE_DEVASTATE)
-		take_damage(INFINITY, BRUTE, BOMB, 0)
 
 ///Handles the actual explosion effects
 /obj/item/explosive/plastique/proc/detonate()
@@ -157,12 +151,12 @@
 		explosion(plant_target, flash_range = 1) //todo: place as abuse of explosion
 		qdel(src)
 		return
-	explosion(plant_target, 0, 0, 1, 0, 0, 0, 1, 0, 1)
-	playsound(plant_target, SFX_EXPLOSION_SMALL, 100, FALSE, 25)
+	cell_explosion(plant_target, 95, 45, EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL)
+	playsound(plant_target, sound(get_sfx("explosion_small")), 100, FALSE, 25)
 	var/datum/effect_system/smoke_spread/smoke = new smoketype()
 	smoke.set_up(smokeradius, plant_target, 2)
 	smoke.start()
-	plant_target.plastique_act(last_user)
+	plant_target.plastique_act()
 	qdel(src)
 
 ///Triggers a warning beep prior to the actual detonation, while also setting the actual detonation timer
@@ -174,7 +168,7 @@
 		update_icon()
 
 ///Handles the effect of c4 on the atom - overridden as needed
-/atom/proc/plastique_act(mob/living/plastique_user)
+/atom/proc/plastique_act()
 	ex_act(EXPLODE_DEVASTATE)
 
 /obj/item/explosive/plastique/genghis_charge
@@ -185,7 +179,7 @@
 /obj/item/explosive/plastique/genghis_charge/afterattack(atom/target, mob/user, flag)
 	if(istype(target, /turf/closed/wall/resin))
 		return ..()
-	if(istype(target, /obj/structure/door/resin))
+	if(istype(target, /obj/structure/mineral_door/resin))
 		return ..()
 	balloon_alert(user, "Insufficient organic matter!")
 
@@ -196,15 +190,15 @@
 		flame_target.ignite(10, 5)
 		qdel(src)
 		return
-	new /obj/fire/flamer/autospread(flame_target, 9, 62)
-	playsound(plant_target, SFX_EXPLOSION_SMALL, 100, FALSE, 25)
+	new /obj/flamer_fire/autospread(flame_target, 17, 31)
+	playsound(plant_target, sound(get_sfx("explosion_small")), 100, FALSE, 25)
 	qdel(src)
 
-/obj/fire/flamer/autospread
+/obj/flamer_fire/autospread
 	///Which directions this patch is capable of spreading to, as bitflags
 	var/possible_directions = NONE
 
-/obj/fire/flamer/autospread/Initialize(mapload, fire_lvl, burn_lvl, f_color, fire_stacks = 0, fire_damage = 0, inherited_directions = NONE)
+/obj/flamer_fire/autospread/Initialize(mapload, fire_lvl, burn_lvl, f_color, fire_stacks = 0, fire_damage = 0, inherited_directions = NONE)
 	. = ..()
 
 	for(var/direction in GLOB.cardinals)
@@ -216,23 +210,23 @@
 			addtimer(CALLBACK(src, PROC_REF(spread_flames), direction, turf_to_check), rand(2, 7))
 
 ///Returns TRUE if the supplied turf has something we can ignite on, either a resin wall or door
-/obj/fire/flamer/autospread/proc/turf_contains_valid_burnable(turf_to_check)
+/obj/flamer_fire/autospread/proc/turf_contains_valid_burnable(turf_to_check)
 	if(istype(turf_to_check, /turf/closed/wall/resin))
 		return TRUE
-	if(locate(/obj/structure/door/resin) in turf_to_check)
+	if(locate(/obj/structure/mineral_door/resin) in turf_to_check)
 		return TRUE
 	return FALSE
 
 ///Ignites an adjacent turf or adds our possible directions to an existing flame
-/obj/fire/flamer/autospread/proc/spread_flames(direction, turf/turf_to_burn)
+/obj/flamer_fire/autospread/proc/spread_flames(direction, turf/turf_to_burn)
 	var/spread_directions = possible_directions & ~REVERSE_DIR(direction) //Make sure we can't go backwards
-	var/old_flame = locate(/obj/fire/flamer) in turf_to_burn
-	if(istype(old_flame, /obj/fire/flamer/autospread))
-		var/obj/fire/flamer/autospread/old_spreader = old_flame
+	var/old_flame = locate(/obj/flamer_fire) in turf_to_burn
+	if(istype(old_flame, /obj/flamer_fire/autospread))
+		var/obj/flamer_fire/autospread/old_spreader = old_flame
 		spread_directions |= old_spreader.possible_directions
 	if(old_flame)
 		qdel(old_flame)
-	new /obj/fire/flamer/autospread(turf_to_burn, 9, 62, flame_color, 0, 0, spread_directions)
+	new /obj/flamer_fire/autospread(turf_to_burn, 17, 31, flame_color, 0, 0, spread_directions)
 
 ///Allows the c4 timer to be tweaked on certain atoms as required
 /atom/proc/plastique_time_mod(time)

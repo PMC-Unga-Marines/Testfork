@@ -8,7 +8,6 @@
 	dir_in = 1 //Facing North.
 	max_integrity = 250
 	soft_armor = list(MELEE = 25, BULLET = 20, LASER = 30, ENERGY = 15, BOMB = 0, BIO = 0, FIRE = 100, ACID = 100)
-	max_temperature = 25000
 	leg_overload_coeff = 80
 	force = 25
 	wreckage = /obj/structure/mecha_wreckage/gygax
@@ -27,9 +26,6 @@
 /datum/action/vehicle/sealed/mecha/mech_overload_mode
 	name = "Toggle leg actuators overload"
 	action_icon_state = "mech_overload_off"
-	keybinding_signals = list(
-		KEYBINDING_NORMAL = COMSIG_MECHABILITY_TOGGLE_ACTUATORS,
-	)
 
 /datum/action/vehicle/sealed/mecha/mech_overload_mode/action_activate(trigger_flags, forced_state = null)
 	if(!owner || !chassis || !(owner in chassis.occupants))
@@ -70,7 +66,6 @@
 	base_icon_state = "darkgygax"
 	max_integrity = 300
 	soft_armor = list(MELEE = 40, BULLET = 40, LASER = 50, ENERGY = 35, BOMB = 20, BIO = 0, FIRE = 100, ACID = 100)
-	max_temperature = 35000
 	leg_overload_coeff = 70
 	force = 30
 	operation_req_access = list()

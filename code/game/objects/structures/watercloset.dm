@@ -52,8 +52,6 @@
 
 /obj/structure/toilet/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(iscrowbar(I))
 		to_chat(user, span_notice("You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"]."))
@@ -65,6 +63,40 @@
 		user.visible_message(span_notice("[user] [cistern ? "replaces the lid on the cistern" : "lifts the lid off the cistern"]!"), span_notice("You [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"]!"), "You hear grinding porcelain.")
 		cistern = !cistern
 		update_icon()
+
+	else if(istype(I, /obj/item/grab))
+		if(isxeno(user))
+			return
+		var/obj/item/grab/G = I
+
+		if(!iscarbon(G.grabbed_thing))
+			return
+
+		var/mob/living/carbon/C = G.grabbed_thing
+
+		if(user.grab_state <= GRAB_PASSIVE)
+			to_chat(user, span_notice("You need a tighter grip."))
+			return
+
+		if(!C.loc == get_turf(src))
+			to_chat(user, span_notice("[C] needs to be on the toilet."))
+			return
+
+		if(open && !swirlie)
+			user.visible_message(span_danger("[user] starts to give [C] a swirlie!"), span_notice("You start to give [C] a swirlie!"))
+			swirlie = C
+			if(!do_after(user, 3 SECONDS, NONE, src, BUSY_ICON_HOSTILE))
+				return
+
+			user.visible_message(span_danger("[user] gives [C] a swirlie!"), span_notice("You give [C] a swirlie!"), "You hear a toilet flushing.")
+			log_combat(user, C, "given a swirlie")
+			if(!C.internal)
+				C.adjustOxyLoss(5)
+			swirlie = null
+		else
+			user.visible_message(span_danger("[user] slams [C] into the [src]!"), span_notice("You slam [C] into the [src]!"))
+			log_combat(user, C, "slammed", "", "into the \the [src]")
+			C.apply_damage(8, BRUTE, blocked = MELEE, updating_health = TRUE)
 
 	else if(cistern && !issilicon(user)) //STOP PUTTING YOUR MODULES IN THE TOILET.
 		if(I.w_class > 3)
@@ -80,38 +112,6 @@
 		w_items += I.w_class
 		to_chat(user, "You carefully place \the [I] into the cistern.")
 
-/obj/structure/toilet/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_OBJ_SLAM_DAMAGE, is_sharp = FALSE)
-	. = ..()
-	if(.)
-		return
-	if(isxeno(user))
-		return
-	if(!iscarbon(grab.grabbed_thing))
-		return
-	if(!open || swirlie)
-		return
-
-	var/mob/living/carbon/grabbed_mob = grab.grabbed_thing
-
-	if(user.grab_state <= GRAB_PASSIVE)
-		to_chat(user, span_notice("You need a tighter grip."))
-		return
-
-	if(!grabbed_mob.loc == get_turf(src))
-		to_chat(user, span_notice("[grabbed_mob] needs to be on the toilet."))
-		return
-
-	user.visible_message(span_danger("[user] starts to give [grabbed_mob] a swirlie!"), span_notice("You start to give [grabbed_mob] a swirlie!"))
-	swirlie = grabbed_mob
-	if(!do_after(user, 3 SECONDS, NONE, src, BUSY_ICON_HOSTILE))
-		return
-
-	user.visible_message(span_danger("[user] gives [grabbed_mob] a swirlie!"), span_notice("You give [grabbed_mob] a swirlie!"), "You hear a toilet flushing.")
-	log_combat(user, grabbed_mob, "given a swirlie")
-	if(!grabbed_mob.internal)
-		grabbed_mob.adjustOxyLoss(5)
-	swirlie = null
-
 /obj/structure/toilet/alternate
 	icon_state = "toilet200"
 
@@ -126,6 +126,30 @@
 	icon_state = "urinal"
 	density = FALSE
 	anchored = TRUE
+
+/obj/structure/urinal/attackby(obj/item/I, mob/user, params)
+	. = ..()
+
+	if(istype(I, /obj/item/grab))
+		if(isxeno(user))
+			return
+		var/obj/item/grab/G = I
+		if(!isliving(G.grabbed_thing))
+			return
+
+		var/mob/living/GM = G.grabbed_thing
+		if(user.grab_state <= GRAB_PASSIVE)
+			to_chat(user, span_notice("You need a tighter grip."))
+			return
+
+		if(!GM.loc == get_turf(src))
+			to_chat(user, span_notice("[GM] needs to be on the urinal."))
+			return
+
+		user.visible_message(span_danger("[user] slams [GM] into the [src]!"), span_notice("You slam [GM] into the [src]!"))
+		GM.apply_damage(8, blocked = MELEE)
+		UPDATEHEALTH(GM)
+
 
 /obj/machinery/shower
 	name = "shower"
@@ -171,17 +195,15 @@
 	if(on)
 		start_processing()
 		if (user.loc == loc)
-			wash_atom(user)
+			wash(user)
 			check_heat(user)
 		for (var/atom/movable/G in src.loc)
-			G.wash()
+			G.clean_blood()
 	else
 		stop_processing()
 
 /obj/machinery/shower/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(I.type == /obj/item/tool/analyzer)
 		to_chat(user, span_notice("The water temperature seems to be [watertemp]."))
@@ -236,7 +258,7 @@
 
 /obj/machinery/shower/proc/on_cross(datum/source, atom/movable/O, oldloc, oldlocs)
 	SIGNAL_HANDLER
-	wash_atom(O)
+	wash(O)
 	if(ismob(O))
 		mobpresent += 1
 		check_heat(O)
@@ -246,7 +268,7 @@
 		mobpresent -= 1
 
 //Yes, showers are super powerful as far as washing goes.
-/obj/machinery/shower/proc/wash_atom(atom/movable/O as obj|mob)
+/obj/machinery/shower/proc/wash(atom/movable/O as obj|mob)
 	if(!on)
 		return
 
@@ -255,9 +277,9 @@
 		L.ExtinguishMob()
 		L.fire_stacks = -20 //Douse ourselves with water to avoid fire more easily
 		to_chat(L, span_warning("You've been drenched in water!"))
-		L.wash()
+		L.clean_mob()
 	else
-		O.wash()
+		O.clean_blood()
 
 /obj/machinery/shower/process()
 	if(!on)
@@ -274,7 +296,7 @@
 	is_washing = TRUE
 	addtimer(VARSET_CALLBACK(src, is_washing, FALSE), 10 SECONDS)
 	var/turf/T = get_turf(src)
-	T.wash()
+	T.clean_turf()
 
 /obj/machinery/shower/proc/check_heat(mob/M)
 	if(!on || watertemp == WATER_TEMP_NORMAL)
@@ -298,7 +320,7 @@
 	desc = "Rubber ducky you're so fine, you make bathtime lots of fuuun. Rubber ducky I'm awfully fooooond of yooooouuuu~"	//thanks doohl
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "rubberducky"
-	worn_icon_state = "rubberducky"
+	item_state = "rubberducky"
 
 
 
@@ -344,15 +366,13 @@
 		return
 	busy = FALSE
 
-	user.wash()
+	user.clean_blood()
 	user:update_inv_gloves()
 	balloon_alert_to_viewers("Washes their hands")
 
 
 /obj/structure/sink/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(busy)
 		to_chat(user, span_warning("Someone's already washing here."))
@@ -383,7 +403,7 @@
 		L.Paralyze(20 SECONDS)
 		L.visible_message(span_danger("[L] was stunned by [L.p_their()] wet [I]!"))
 
-	if(I.item_flags & ITEM_ABSTRACT)
+	if(I.flags_item & ITEM_ABSTRACT)
 		return
 
 	var/turf/location = user.loc
@@ -398,7 +418,7 @@
 	if(user.loc != location || user.get_active_held_item() != I)
 		return
 
-	I.wash()
+	I.clean_blood()
 	user.visible_message( \
 		span_notice(" [user] washes \a [I] using \the [src]."), \
 		span_notice(" You wash \a [I] using \the [src]."))

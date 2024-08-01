@@ -11,37 +11,35 @@
 	wound_type = "shrike" //used to match appropriate wound overlays
 
 	// *** Melee Attacks *** //
-	melee_damage = 25
+	melee_damage = 23
 
 	// *** Speed *** //
-	speed = -0.4
+	speed = -0.6
 
 	// *** Plasma *** //
 	plasma_max = 925
-	plasma_gain = 60
+	plasma_gain = 45
 
 	// *** Health *** //
-	max_health = 500
+	max_health = 400
 
 	// *** Evolution *** //
-	// The only evolution path does not require threshold
-	// evolution_threshold = 225
 	maximum_active_caste = 1
-	upgrade_threshold = TIER_TWO_THRESHOLD
 
-	deevolves_to = /datum/xeno_caste/drone
+	evolves_to = list(/mob/living/carbon/xenomorph/queen)
+	deevolves_to = /mob/living/carbon/xenomorph/drone
 
 	// *** Flags *** //
 	caste_flags = CASTE_IS_INTELLIGENT|CASTE_IS_STRONG|CASTE_IS_BUILDER|CASTE_INSTANT_EVOLUTION|CASTE_EVOLUTION_ALLOWED|CASTE_LEADER_TYPE
 	can_hold_eggs = CAN_HOLD_TWO_HANDS
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_CORRUPT_GENERATOR
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_CORRUPT_GENERATOR|CASTE_CAN_HOLD_JELLY
 	caste_traits = null
 
 	// *** Defense *** //
 	soft_armor = list(MELEE = 45, BULLET = 45, LASER = 45, ENERGY = 45, BOMB = 20, BIO = 25, FIRE = 45, ACID = 20)
 
 	// *** Pheromones *** //
-	aura_strength = 3 //The Shrike's aura is decent.
+	aura_strength = 4.5 //The Shrike's aura is decent.
 
 	// *** Minimap Icon *** //
 	minimap_icon = "xenoshrike"
@@ -57,9 +55,9 @@
 		/datum/action/ability/activable/xeno/neurotox_sting/ozelomelyn,
 		/datum/action/ability/xeno_action/call_of_the_burrowed,
 		/datum/action/ability/activable/xeno/secrete_resin,
-		/datum/action/ability/activable/xeno/secrete_special_resin,
 		/datum/action/ability/xeno_action/place_acidwell,
-		/datum/action/ability/activable/xeno/corrosive_acid,
+		/datum/action/ability/activable/xeno/corrosive_acid/strong,
+		/datum/action/ability/xeno_action/create_jelly,
 		/datum/action/ability/activable/xeno/psychic_cure,
 		/datum/action/ability/activable/xeno/transfer_plasma/drone,
 		/datum/action/ability/xeno_action/psychic_whisper,
@@ -94,9 +92,9 @@
 		/datum/action/ability/activable/xeno/neurotox_sting/ozelomelyn,
 		/datum/action/ability/xeno_action/call_of_the_burrowed,
 		/datum/action/ability/activable/xeno/secrete_resin,
-		/datum/action/ability/activable/xeno/secrete_special_resin,
 		/datum/action/ability/xeno_action/place_acidwell,
-		/datum/action/ability/activable/xeno/corrosive_acid,
+		/datum/action/ability/activable/xeno/corrosive_acid/strong,
+		/datum/action/ability/xeno_action/create_jelly,
 		/datum/action/ability/activable/xeno/psychic_cure,
 		/datum/action/ability/activable/xeno/transfer_plasma/drone,
 		/datum/action/ability/xeno_action/sow,
@@ -111,5 +109,5 @@
 		/datum/action/ability/xeno_action/rally_hive,
 		/datum/action/ability/xeno_action/rally_minion,
 		/datum/action/ability/xeno_action/blessing_menu,
-		/datum/action/ability/activable/xeno/psychic_vortex,
+		/datum/action/ability/activable/xeno/psychic_grab,
 	)

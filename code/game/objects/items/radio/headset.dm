@@ -16,15 +16,15 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	name = "radio headset"
 	desc = "An updated, modular intercom that fits over the head. Takes encryption keys."
 	icon_state = "headset"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/clothing/ears_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/clothing/ears_right.dmi',
 	)
-	worn_icon_state = "headset"
+	item_state = "headset"
 	subspace_transmission = TRUE
 	canhear_range = 0 // can't hear headsets from very far away
 
-	equip_slot_flags = ITEM_SLOT_EARS
+	flags_equip_slot = ITEM_SLOT_EARS
 	var/obj/item/encryptionkey/keyslot2 = null
 
 
@@ -54,8 +54,6 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 
 /obj/item/radio/headset/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(isscrewdriver(I))
 		if(keyslot || keyslot2)
@@ -170,9 +168,9 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	name = "marine radio headset"
 	desc = "A standard military radio headset."
 	icon_state = "cargo_headset"
-	worn_icon_state = "headset"
+	item_state = "headset"
 	frequency = FREQ_COMMON
-	atom_flags = CONDUCT | PREVENT_CONTENTS_EXPLOSION
+	flags_atom = CONDUCT | PREVENT_CONTENTS_EXPLOSION
 	freerange = TRUE
 	var/obj/machinery/camera/camera
 	var/datum/atom_hud/squadhud = null
@@ -199,7 +197,8 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 		wearer = user
 		squadhud = GLOB.huds[GLOB.faction_to_data_hud[faction]]
 		enable_squadhud()
-		RegisterSignals(user, list(COMSIG_MOB_REVIVE, COMSIG_MOB_DEATH, COMSIG_HUMAN_SET_UNDEFIBBABLE), PROC_REF(update_minimap_icon))
+		//RegisterSignals(user, list(COMSIG_MOB_REVIVE, COMSIG_MOB_DEATH, COMSIG_HUMAN_SET_UNDEFIBBABLE), PROC_REF(update_minimap_icon)) // ORIGINAL
+		RegisterSignals(user, list(COMSIG_MOB_REVIVE, COMSIG_MOB_DEATH, COMSIG_HUMAN_SET_UNDEFIBBABLE, COMSIG_HUMAN_DEATH_STAGE_CHANGE), PROC_REF(update_minimap_icon)) // RUTGMC ADDITION
 	if(camera)
 		camera.c_tag = user.name
 		if(user.assigned_squad)
@@ -211,22 +210,21 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 /obj/item/radio/headset/mainship/proc/safety_protocol(mob/living/carbon/human/user)
 	balloon_alert_to_viewers("Explodes")
 	playsound(user, 'sound/effects/explosion/micro1.ogg', 50, 1)
-	if(wearer)
-		wearer.ex_act(EXPLODE_LIGHT)
+	user.ex_act(EXPLODE_LIGHT)
 	qdel(src)
 
 /obj/item/radio/headset/mainship/dropped(mob/living/carbon/human/user)
 	if(istype(user) && headset_hud_on)
 		disable_squadhud()
 		squadhud.remove_hud_from(user)
-		user.hud_used.SL_locator.alpha = 0
+		user.hud_used?.SL_locator.alpha = 0
 		wearer = null
 		squadhud = null
 	if(camera)
 		camera.c_tag = "Unknown"
 		if(user.assigned_squad)
 			camera.network -= lowertext(user.assigned_squad.name)
-	UnregisterSignal(user, list(COMSIG_MOB_DEATH, COMSIG_HUMAN_SET_UNDEFIBBABLE, COMSIG_MOB_REVIVE))
+	UnregisterSignal(user, list(COMSIG_MOB_DEATH, COMSIG_HUMAN_SET_UNDEFIBBABLE, COMSIG_MOB_REVIVE, COMSIG_HUMAN_DEATH_STAGE_CHANGE))
 	return ..()
 
 
@@ -234,6 +232,7 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	if(wearer)
 		if(headset_hud_on && wearer.wear_ear == src)
 			squadhud.remove_hud_from(wearer)
+			wearer.SL_directional = null
 			if(wearer.assigned_squad)
 				SSdirection.stop_tracking(wearer.assigned_squad.tracking_id, wearer)
 		wearer = null
@@ -282,14 +281,37 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	var/marker_flags = initial(minimap_type.marker_flags)
 	if(wearer.stat == DEAD)
 		if(HAS_TRAIT(wearer, TRAIT_UNDEFIBBABLE))
-			SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "undefibbable"))
-			return
-		if(!wearer.mind)
-			var/mob/dead/observer/ghost = wearer.get_ghost(TRUE)
-			if(!ghost?.can_reenter_corpse)
+			if(issynth(wearer))
+				SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "undefibbable_synt"))
+			else if(isrobot(wearer))
+				SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "undefibbable_robo"))
+			else if(ishuman(wearer))
 				SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "undefibbable"))
+			return
+		if(!wearer.client)
+			var/mob/dead/observer/ghost = wearer.get_ghost()
+			if(!ghost?.can_reenter_corpse)
+				if(issynth(wearer))
+					SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "undefibbable_synt"))
+				else if(isrobot(wearer))
+					SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "undefibbable_robo"))
+				else if(ishuman(wearer))
+					SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "undefibbable"))
 				return
-		SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "defibbable", ABOVE_FLOAT_LAYER))
+		if(issynth(wearer))
+			SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "defibbable_synt"))
+		else if(isrobot(wearer))
+			SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "defibbable_robo"))
+		else if(ishuman(wearer))
+			var/stage
+			switch(wearer.dead_ticks)
+				if(0 to 0.4 * TIME_BEFORE_DNR)
+					stage = 1
+				if(0.4 * TIME_BEFORE_DNR to 0.8 * TIME_BEFORE_DNR)
+					stage = 2
+				if(0.8 * TIME_BEFORE_DNR to INFINITY)
+					stage = 3
+			SSminimaps.add_marker(wearer, marker_flags, image('icons/UI_icons/map_blips.dmi', null, "defibbable[stage]"))
 		return
 	if(wearer.assigned_squad)
 		var/image/underlay = image('icons/UI_icons/map_blips.dmi', null, "squad_underlay")
@@ -346,7 +368,7 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 
 /obj/item/radio/headset/mainship/verb/configure_squadhud()
 	set name = "Configure Headset HUD"
-	set category = "Object"
+	set category = "Object.Clothing"
 	set src in usr
 
 	if(!can_interact(usr))
@@ -431,6 +453,40 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	keyslot = /obj/item/encryptionkey/mcom
 	use_command = TRUE
 	command = TRUE
+	var/loud = FALSE
+
+/obj/item/radio/headset/mainship/mcom/examine(mob/user)
+	. = ..()
+	. += span_info("Ctrl-click to toggle the voice high-volume mode.")
+
+/obj/item/radio/headset/mainship/mcom/equipped(mob/living/carbon/human/user, slot)
+	. = ..()
+	if (slot == SLOT_EARS)
+		RegisterSignal(user, COMSIG_MOB_SAY, PROC_REF(handle_speech))
+		loud = TRUE
+	else
+		UnregisterSignal(user, COMSIG_MOB_SAY)
+		loud = FALSE
+
+/obj/item/radio/headset/mainship/mcom/dropped(mob/living/carbon/human/user)
+	. = ..()
+	UnregisterSignal(user, COMSIG_MOB_SAY)
+	loud = FALSE
+
+/obj/item/radio/headset/mainship/mcom/proc/handle_speech(mob/living/carbon/user, list/speech_args)
+	SIGNAL_HANDLER
+	speech_args[SPEECH_SPANS] |= list(SPAN_COMMAND)
+
+/obj/item/radio/headset/mainship/mcom/CtrlClick(mob/user)
+	. = ..()
+	if(loud == TRUE)
+		UnregisterSignal(user, COMSIG_MOB_SAY)
+		loud = FALSE
+		balloon_alert(user, "Loud mode disabled")
+	else
+		RegisterSignal(user, COMSIG_MOB_SAY, PROC_REF(handle_speech))
+		loud = TRUE
+		balloon_alert(user, "Loud mode enabled")
 
 /obj/item/radio/headset/mainship/mcom/som
 	frequency = FREQ_SOM
@@ -447,10 +503,7 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 
 /obj/item/radio/headset/mainship/marine/Initialize(mapload, datum/squad/squad, rank)
 	if(squad)
-		icon_state = "headset_marine_greyscale"
-		var/image/coloring = image(icon, icon_state="headset_marine_overlay")
-		coloring.color = squad.color
-		add_overlay(coloring)
+		icon_state = "headset_marine_[lowertext(squad.name)]"
 		var/dat = "marine [lowertext(squad.name)]"
 		frequency = squad.radio_freq
 		if(ispath(rank, /datum/job/terragov/squad/leader))
@@ -648,16 +701,6 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 /obj/item/radio/headset/distress/echo
 	name = "\improper Echo Task Force headset"
 	keyslot = /obj/item/encryptionkey/echo
-
-/obj/item/radio/headset/distress/retired
-	name = "retirement home headset"
-	keyslot = /obj/item/encryptionkey/retired
-	frequency = FREQ_RETIRED
-
-/obj/item/radio/headset/distress/vsd
-	name = "security detail headset"
-	keyslot = /obj/item/encryptionkey/vsd
-	frequency = FREQ_VSD
 
 //SOM headsets
 

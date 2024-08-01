@@ -40,25 +40,15 @@
 
 	var/static/list/connections = list(
 		COMSIG_OBJ_TRY_ALLOW_THROUGH = PROC_REF(can_climb_over),
-		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override),
-		COMSIG_TURF_CHECK_COVERED = TYPE_PROC_REF(/atom/movable, turf_cover_check),
 	)
 	AddElement(/datum/element/connect_loc, connections)
 
 	create_reagents(tank_volume, AMOUNT_VISIBLE|DRAINABLE, list_reagents)
 
 /obj/structure/reagent_dispensers/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if (prob(50))
-				new /obj/effect/particle_effect/water(loc)
-				qdel(src)
-		if(EXPLODE_LIGHT)
-			if (prob(5))
-				new /obj/effect/particle_effect/water(loc)
-				qdel(src)
+	if(prob(severity / 4))
+		new /obj/effect/particle_effect/water(loc)
+		qdel(src)
 
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
@@ -69,7 +59,9 @@
 	amount_per_transfer_from_this = 10
 	list_reagents = list(/datum/reagent/water = 1000)
 
-
+/obj/structure/reagent_dispensers/watertank/pred
+	icon = 'icons/obj/machines/yautja_machines.dmi'
+	icon_state = "watertank"
 
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
@@ -83,6 +75,10 @@
 	var/obj/item/assembly_holder/rig
 	//Whether the tank is already exploding to prevent chain explosions
 	var/exploding = FALSE
+
+/obj/structure/reagent_dispensers/fueltank/pred
+	icon = 'icons/obj/machines/yautja_machines.dmi'
+	icon_state = "weldtank"
 
 /obj/structure/reagent_dispensers/fueltank/Destroy()
 	QDEL_NULL(rig)
@@ -145,8 +141,6 @@
 
 /obj/structure/reagent_dispensers/fueltank/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(!istype(I, /obj/item/assembly_holder))
 		return
@@ -172,16 +166,18 @@
 /obj/structure/reagent_dispensers/fueltank/bullet_act(obj/projectile/Proj)
 	if(exploding)
 		return FALSE
+
+	. = ..()
+
 	if(Proj.damage > 10 && prob(60) && (Proj.ammo.damage_type in list(BRUTE, BURN)))
-		log_attack("[key_name(Proj.firer)] detonated a fuel tank with a projectile at [AREACOORD(src)].")
 		explode()
-	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/ex_act()
 	explode()
 
 ///Does what it says on the tin, blows up the fueltank with radius depending on fuel left
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
+	log_bomber(usr, "triggered a fueltank explosion with", src)
 	if(exploding)
 		return
 	exploding = TRUE
@@ -193,8 +189,10 @@
 		explosion(loc, light_impact_range = 2, flame_range = 2)
 	qdel(src)
 
-/obj/structure/reagent_dispensers/fueltank/fire_act(burn_level)
-	explode()
+/obj/structure/reagent_dispensers/fueltank/fire_act(temperature, volume)
+	if(temperature > T0C+500)
+		explode()
+	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/Moved(atom/old_loc, movement_dir, forced, list/old_locs)
 	. = ..()
@@ -216,6 +214,9 @@
 
 	playsound(src, 'sound/effects/glob.ogg', 25, 1)
 
+/obj/structure/reagent_dispensers/fueltank/flamer_fire_act(burnlevel)
+	explode()
+
 /obj/structure/reagent_dispensers/fueltank/barrel
 	name = "red barrel"
 	desc = "A red fuel barrel"
@@ -235,21 +236,16 @@
 	exploding = TRUE
 
 	if(reagents.total_volume > 500)
-		flame_radius(5, loc, 40, 46, 31, 30, colour = "blue")
+		flame_radius(5, loc, 46, 40, 31, 30, colour = "blue")
 		explosion(loc, light_impact_range = 5)
 	else if(reagents.total_volume > 100)
-		flame_radius(4, loc, 40, 46, 31, 30, colour = "blue")
+		flame_radius(4, loc, 46, 40, 31, 30, colour = "blue")
 		explosion(loc, light_impact_range = 4)
 	else
-		flame_radius(3, loc, 40, 46, 31, 30, colour = "blue")
+		flame_radius(3, loc, 46, 40, 31, 30, colour = "blue")
 		explosion(loc, light_impact_range = 3)
 
 	qdel(src)
-
-/obj/structure/reagent_dispensers/fueltank/spacefuel
-	name = "spacecraft fuel-mix tank"
-	desc = "A fuel tank mix with fuel designed for various spacecraft, very combustible.";
-	icon = 'icons/obj/structures/prop/urban/urbanrandomprops.dmi';
 
 /obj/structure/reagent_dispensers/water_cooler
 	name = "water cooler"
@@ -263,8 +259,6 @@
 	list_reagents = list(/datum/reagent/water = 500)
 	coverage = 20
 
-/obj/structure/reagent_dispensers/water_cooler/nondense
-	density = FALSE
 
 /obj/structure/reagent_dispensers/beerkeg
 	name = "beer keg"

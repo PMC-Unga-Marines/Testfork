@@ -14,30 +14,23 @@
 	light_range = 2
 	light_power = 0.5
 	light_color = LIGHT_COLOR_EMISSIVE_GREEN
-
 	var/autoeject = FALSE
 	var/release_notice = FALSE
-
 	var/temperature = 100
-
 	var/efficiency = 1
 	var/sleep_factor = 0.00125
 	var/unconscious_factor = 0.001
 	var/heat_capacity = 20000
 	var/conduction_coefficient = 0.3
-
 	var/obj/item/reagent_containers/glass/beaker = null
 	var/reagent_transfer = 0
-
 	var/obj/item/radio/headset/mainship/doc/radio
-	var/idle_ticks_until_shutdown = 60 //Number of ticks permitted to elapse without a patient before the cryotube shuts itself off to save processing
-
+	///Number of ticks permitted to elapse without a patient before the cryotube shuts itself off to save processing
+	var/idle_ticks_until_shutdown = 60
 	var/running_anim = FALSE
-
 	var/escape_in_progress = FALSE
 	var/message_cooldown
 	var/breakout_time = 300
-
 	var/mob/living/carbon/occupant
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/Initialize(mapload)
@@ -197,15 +190,12 @@
 		if(!idle_ticks_until_shutdown) //shut down after all ticks elapsed to conserve on processing
 			turn_off()
 			idle_ticks_until_shutdown = 60 //reset idle ticks
-
 	return TRUE
-
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/relaymove(mob/user)
 	if(message_cooldown <= world.time)
 		message_cooldown = world.time + 50
 		to_chat(user, span_warning("[src]'s door won't budge!"))
-
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/verb/move_eject()
 	set name = "Eject occupant"
@@ -223,8 +213,6 @@
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/reagent_containers/glass))
 
@@ -243,9 +231,7 @@
 
 		beaker = I
 
-
 		var/reagentnames = ""
-
 		for(var/datum/reagent/R in beaker.reagents.reagent_list)
 			reagentnames += ", [R.name]"
 
@@ -258,12 +244,9 @@
 		var/obj/item/healthanalyzer/J = I
 		J.attack(occupant, user)
 
-/obj/machinery/atmospherics/components/unary/cryo_cell/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_OBJ_SLAM_DAMAGE, is_sharp = FALSE)
-	. = ..()
-	if(.)
+	if(!istype(I, /obj/item/grab))
 		return
-	if(isxeno(user))
-		return
+
 	if(machine_stat & (NOPOWER|BROKEN))
 		to_chat(user, span_notice("\ [src] is non-functional!"))
 		return
@@ -272,31 +255,33 @@
 		to_chat(user, span_notice("\ [src] is already occupied!"))
 		return
 
-	var/mob/grabbed_mob
+	var/obj/item/grab/G = I
+	var/mob/M
 
-	if(ismob(grab.grabbed_thing))
-		grabbed_mob = grab.grabbed_thing
+	if(ismob(G.grabbed_thing))
+		M = G.grabbed_thing
 
-	else if(istype(grab.grabbed_thing,/obj/structure/closet/bodybag/cryobag))
-		var/obj/structure/closet/bodybag/cryobag/cryobag = grab.grabbed_thing
-		if(!cryobag.bodybag_occupant)
+	else if(istype(G.grabbed_thing,/obj/structure/closet/bodybag/cryobag))
+		var/obj/structure/closet/bodybag/cryobag/C = G.grabbed_thing
+		if(!C.bodybag_occupant)
 			to_chat(user, span_warning("The stasis bag is empty!"))
 			return
-		grabbed_mob = cryobag.bodybag_occupant
-		cryobag.open()
-		user.start_pulling(grabbed_mob)
+		M = C.bodybag_occupant
+		C.open()
+		user.start_pulling(M)
 
-	if(!ishuman(grabbed_mob))
+	if(!M)
+		return
+
+	if(!ishuman(M))
 		to_chat(user, span_notice("\ [src] is compatible with humanoid anatomies only!"))
 		return
 
-	if(grabbed_mob.abiotic())
+	if(M.abiotic())
 		to_chat(user, span_warning("Subject cannot have abiotic items on."))
 		return
 
-	put_mob(grabbed_mob, TRUE)
-
-	return TRUE
+	put_mob(M, TRUE)
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/proc/put_mob(mob/living/carbon/M as mob, put_in = null)
 	if (machine_stat & (NOPOWER|BROKEN))
@@ -444,7 +429,7 @@
 /obj/machinery/atmospherics/components/unary/cryo_cell/can_crawl_through()
 	return // can't ventcrawl in or out of cryo.
 
-/obj/machinery/atmospherics/components/unary/cryo_cell/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/atmospherics/components/unary/cryo_cell/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount, damage_type, damage_flag, effects, armor_penetration, isrightclick)
 	if(!occupant)
 		to_chat(xeno_attacker, span_xenowarning("There is nothing of interest in there."))
 		return
@@ -456,6 +441,5 @@
 		return
 	playsound(loc, 'sound/effects/metal_creaking.ogg', 25, 1)
 	go_out()
-
 
 #undef CRYOMOBS

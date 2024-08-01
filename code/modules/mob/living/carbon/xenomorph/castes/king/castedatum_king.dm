@@ -10,37 +10,34 @@
 	wound_type = "king" //used to match appropriate wound overlays
 
 	// *** Melee Attacks *** //
-	melee_damage = 33
+	melee_damage = 30
 
 	// *** Speed *** //
 	speed = -0.1
 
 	// *** Plasma *** //
 	plasma_max = 1200
-	plasma_gain = 90
+	plasma_gain = 70
 
 	// *** Health *** //
-	max_health = 700
-
-	// *** Sunder *** //
-	sunder_multiplier = 0.8
+	max_health = 650
+	sunder_recover = 2
 
 	// *** Evolution *** //
-	upgrade_threshold = TIER_THREE_THRESHOLD
 	maximum_active_caste = 1
 	evolve_min_xenos = 12
 	death_evolution_delay = 7 MINUTES
 
 	// *** Flags *** //
-	caste_flags = CASTE_IS_INTELLIGENT|CASTE_STAGGER_RESISTANT|CASTE_LEADER_TYPE|CASTE_INSTANT_EVOLUTION|CASTE_HAS_WOUND_MASK
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_CORRUPT_GENERATOR
+	caste_flags = CASTE_IS_INTELLIGENT|CASTE_STAGGER_RESISTANT|CASTE_LEADER_TYPE|CASTE_INSTANT_EVOLUTION
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_CORRUPT_GENERATOR|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_HOLD_JELLY
 	caste_traits = null
 
 	// *** Defense *** //
 	soft_armor = list(MELEE = 65, BULLET = 65, LASER = 65, ENERGY = 65, BOMB = 100, BIO = 60, FIRE = 100, ACID = 60)
 
 	// *** Pheromones *** //
-	aura_strength = 4.5
+	aura_strength = 6
 
 	minimap_icon = "xenoking"
 

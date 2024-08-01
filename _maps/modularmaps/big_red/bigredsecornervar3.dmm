@@ -1,4 +1,8 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ax" = (
+/obj/effect/landmark/patrol_point/tgmc_14,
+/turf/open/floor/plating/ground/mars/random/cave,
+/area/bigredv2/caves/southeast)
 "aA" = (
 /obj/machinery/door/airlock/mainship/research,
 /obj/effect/turf_decal/sandedge{
@@ -17,6 +21,10 @@
 /area/bigredv2/caves/east)
 "bk" = (
 /obj/effect/landmark/start/job/xenomorph,
+/turf/open/floor/plating/ground/mars/random/cave,
+/area/bigredv2/caves/southeast)
+"bl" = (
+/obj/effect/landmark/patrol_point/tgmc_12,
 /turf/open/floor/plating/ground/mars/random/cave,
 /area/bigredv2/caves/southeast)
 "bn" = (
@@ -367,6 +375,10 @@
 /obj/effect/landmark/lv624/fog_blocker/xeno_spawn,
 /turf/closed/mineral/smooth/bigred,
 /area/bigredv2/caves/rock)
+"qw" = (
+/obj/effect/landmark/patrol_point/tgmc_13,
+/turf/open/floor/plating/ground/mars/random/cave,
+/area/bigredv2/caves/southeast)
 "qC" = (
 /obj/effect/turf_decal/sandedge,
 /obj/effect/landmark/xeno_resin_door,
@@ -3926,7 +3938,7 @@ Qq
 QB
 QB
 QB
-BF
+QB
 QB
 kb
 qj
@@ -4489,7 +4501,7 @@ dj
 dj
 dj
 dj
-QB
+ax
 QB
 QB
 QB
@@ -4548,7 +4560,7 @@ dj
 dj
 dj
 dj
-QB
+qw
 QB
 QB
 QB
@@ -4771,7 +4783,7 @@ QB
 QB
 cZ
 QB
-QB
+BF
 dj
 dj
 dj
@@ -4828,7 +4840,7 @@ dj
 dj
 dj
 dj
-QB
+bl
 QB
 QB
 QB

@@ -6,7 +6,7 @@
 	anchored = TRUE
 	w_class = WEIGHT_CLASS_BULKY
 	canhear_range = 2
-	atom_flags = CONDUCT|NOBLOODY
+	flags_atom = CONDUCT|NOBLOODY
 	light_range = 1.5
 	light_power = 0.5
 	light_color = LIGHT_COLOR_EMISSIVE_YELLOW
@@ -113,13 +113,14 @@
 
 /obj/item/radio/intercom/dropship
 	name = "\improper Alamo dropship intercom"
-	canhear_range = 7
+	canhear_range = 2
 	frequency = FREQ_DROPSHIP_1
 
 /obj/item/radio/intercom/dropship/normandy
 	name = "\improper Normandy dropship intercom"
 	frequency = FREQ_DROPSHIP_2
+	canhear_range = 7
 
 /obj/item/radio/intercom/dropship/triumph
 	name = "\improper Triumph dropship intercom"
-	frequency = FREQ_DROPSHIP_2
+	frequency = FREQ_DROPSHIP_1

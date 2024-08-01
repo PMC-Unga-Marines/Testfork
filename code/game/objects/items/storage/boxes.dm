@@ -39,24 +39,24 @@
 #define BOX_GRENADE_COLUMNS 3
 #define BOX_GRENADE_ROWS 2
 
+
 /obj/item/storage/box
 	name = "box"
 	desc = "It's just an ordinary box."
 	icon_state = "box"
-	icon = 'icons/obj/items/storage/box.dmi'
-	worn_icon_state = "syringe_kit"
+	item_state = "syringe_kit"
+	foldable = /obj/item/paper/crumpled
+	storage_slots = null
+	max_w_class = WEIGHT_CLASS_SMALL //Changed because of in-game abuse
 	w_class = WEIGHT_CLASS_BULKY //Changed becuase of in-game abuse
-	var/obj/item/spawn_type
+	var/spawn_type
 	var/spawn_number
-	storage_type = /datum/storage/box
 
 /obj/item/storage/box/Initialize(mapload, ...)
-	. = ..()
 	if(spawn_type)
-		if(!(spawn_type in storage_datum.can_hold))
-			// must be set before parent init for typecacheof
-			var/list/new_hold_list = storage_datum.can_hold + spawn_type
-			storage_datum.set_holdable(can_hold_list = list(new_hold_list))
+		if(!(spawn_type in can_hold))
+			can_hold += spawn_type // must be set before parent init for typecacheof
+	. = ..()
 	if(spawn_type)
 		for(var/i in 1 to spawn_number)
 			new spawn_type(src)
@@ -64,13 +64,15 @@
 /obj/item/storage/box/survival
 	w_class = WEIGHT_CLASS_NORMAL
 
-/obj/item/storage/box/survival/PopulateContents()
-	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/tank/emergency_oxygen(src)
+/obj/item/storage/box/survival/Initialize(mapload, ...)
+	. = ..()
+	new /obj/item/clothing/mask/breath( src )
+	new /obj/item/tank/emergency_oxygen( src )
 
-/obj/item/storage/box/engineer/PopulateContents()
-	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/tank/emergency_oxygen/engi(src)
+/obj/item/storage/box/engineer/Initialize(mapload, ...)
+	. = ..()
+	new /obj/item/clothing/mask/breath( src )
+	new /obj/item/tank/emergency_oxygen/engi( src )
 
 /obj/item/storage/box/gloves
 	name = "box of latex gloves"
@@ -116,7 +118,7 @@
 	name = "box of emp grenades"
 	desc = "A box with 5 emp grenades."
 	icon_state = "flashbang"
-	spawn_type = /obj/item/explosive/grenade/emp
+	spawn_type = /obj/item/explosive/grenade/empgrenade
 	spawn_number = 5
 
 /obj/item/storage/box/rxglasses
@@ -130,7 +132,7 @@
 /obj/item/storage/box/drinkingglasses
 	name = "box of drinking glasses"
 	desc = "It has a picture of drinking glasses on it."
-	spawn_type = /obj/item/reagent_containers/cup/glass/drinkingglass
+	spawn_type = /obj/item/reagent_containers/food/drinks/drinkingglass
 	spawn_number = 6
 
 /obj/item/storage/box/condimentbottles
@@ -222,21 +224,18 @@
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
 	icon = 'icons/obj/items/toy.dmi'
 	icon_state = "spbox"
+	max_storage_space = 8
 	spawn_type = /obj/item/toy/snappop
 	spawn_number = 8
-
-/obj/item/storage/box/snappops/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.max_storage_space = 8
 
 /obj/item/storage/box/matches
 	name = "matchbox"
 	desc = "A small box of 'Space-Proof' premium matches."
 	icon = 'icons/obj/items/cigarettes.dmi'
 	icon_state = "matchbox"
-	worn_icon_state = "zippo"
+	item_state = "zippo"
 	w_class = WEIGHT_CLASS_TINY
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_equip_slot = ITEM_SLOT_BELT
 	spawn_type = /obj/item/tool/match
 	spawn_number = 14
 
@@ -272,12 +271,15 @@
 
 /obj/item/storage/box/lights
 	name = "box of replacement bulbs"
+	icon = 'icons/obj/items/storage/storage.dmi'
 	icon_state = "light"
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
-	worn_icon_state = "syringe_kit"
+	item_state = "syringe_kit"
+	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
+	max_storage_space = 42	//holds 21 items of w_class 2
+	use_to_pickup = 1 // for picking up broken bulbs, not that most people will try
 	spawn_type = /obj/item/light_bulb/bulb
 	spawn_number = 21
-	storage_type = /datum/storage/box/lights
 
 /obj/item/storage/box/lights/bulbs // mapping placeholder
 
@@ -291,14 +293,13 @@
 /obj/item/storage/box/lights/mixed
 	name = "box of replacement lights"
 	icon_state = "lightmixed"
+	can_hold = list(
+		/obj/item/light_bulb/tube/large,
+		/obj/item/light_bulb/bulb,
+	)
 
 /obj/item/storage/box/lights/mixed/Initialize(mapload, ...)
 	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
-		/obj/item/light_bulb/tube/large,
-		/obj/item/light_bulb/bulb,
-	))
-
 	for(var/i in 1 to 14)
 		new /obj/item/light_bulb/tube/large(src)
 	for(var/i in 1 to 7)
@@ -318,11 +319,8 @@
 	icon_state = "lolipop_box_generic"
 	spawn_type = /obj/item/reagent_containers/food/snacks/lollipop/combat
 	spawn_number = 10
+	draw_mode = 1
 	w_class = WEIGHT_CLASS_SMALL
-
-/obj/item/storage/box/combat_lolipop/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.draw_mode = TRUE
 
 /obj/item/storage/box/combat_lolipop/tricord
 	name = "box of Tricord-pops"
@@ -346,12 +344,9 @@
 	desc = "A secure box holding anti-personel proximity mines."
 	icon_state = "minebox"
 	w_class = WEIGHT_CLASS_NORMAL
+	max_storage_space = 10
 	spawn_type = /obj/item/explosive/mine
 	spawn_number = 5
-
-/obj/item/storage/box/explosive_mines/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.max_storage_space = 10
 
 /obj/item/storage/box/explosive_mines/update_icon_state()
 	. = ..()
@@ -363,12 +358,9 @@
 	name = "\improper M20 mine box"
 	desc = "A large secure box holding anti-personel proximity mines."
 	icon_state = "minebox"
+	max_storage_space = 20
 	spawn_type = /obj/item/explosive/mine
 	spawn_number = 10
-
-/obj/item/storage/box/explosive_mines/large/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.max_storage_space = 20
 
 /obj/item/storage/box/explosive_mines/pmc
 	name = "\improper M20P mine box"
@@ -386,12 +378,9 @@
 	desc = "A packet of seven M40 FLDP Flares. Carried by TGMC marines to light dark areas that cannot be reached with the usual TNR Shoulder Lamp. Can be launched from an underslung grenade launcher."
 	icon_state = "m40"
 	w_class = WEIGHT_CLASS_SMALL
+	max_storage_space = 14
 	spawn_type = /obj/item/explosive/grenade/flare
 	spawn_number = 14
-
-/obj/item/storage/box/m94/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.max_storage_space = 14
 
 /obj/item/storage/box/m94/update_icon_state()
 	. = ..()
@@ -419,16 +408,30 @@
 	spawn_type = /obj/item/lightstick/red
 	spawn_number = 7
 
+
 /obj/item/storage/box/MRE
 	name = "\improper TGMC MRE"
 	desc = "Meal Ready-to-Eat, meant to be consumed in the field, and has an expiration that is two decades past a marine's average combat life expectancy."
 	icon_state = "mealpack"
 	w_class = WEIGHT_CLASS_SMALL
-	///If our MRE is opened, it gets a new icon
+	can_hold = list(/obj/item/reagent_containers/food/snacks/packaged_meal)
+	storage_slots = 4
+	foldable = 0
 	var/isopened = 0
-	storage_type = /datum/storage/box/mre
+	///the item left behind when this is used up
+	var/trash_item = /obj/item/trash/mre
 
-/obj/item/storage/box/MRE/PopulateContents()
+/obj/item/storage/box/MRE/Initialize(mapload)
+	. = ..()
+	pickflavor()
+
+/obj/item/storage/box/MRE/Destroy()
+	var/turf/T = get_turf(src)
+	if(T)
+		new trash_item(T)
+	return ..()
+
+/obj/item/storage/box/MRE/proc/pickflavor()
 	var/entree = pick("boneless pork ribs", "grilled chicken", "pizza square", "spaghetti", "chicken tenders")
 	var/side = pick("meatballs", "cheese spread", "beef turnover", "mashed potatoes")
 	var/snack = pick("biscuit", "pretzels", "peanuts", "cracker")
@@ -438,6 +441,11 @@
 	new /obj/item/reagent_containers/food/snacks/packaged_meal(src, side)
 	new /obj/item/reagent_containers/food/snacks/packaged_meal(src, snack)
 	new /obj/item/reagent_containers/food/snacks/packaged_meal(src, desert)
+
+/obj/item/storage/box/MRE/remove_from_storage(obj/item/item, atom/new_location, mob/user)
+	. = ..()
+	if(. && !length(contents) && !gc_destroyed)
+		qdel(src)
 
 /obj/item/storage/box/MRE/update_icon_state()
 	. = ..()
@@ -449,10 +457,7 @@
 	name = "\improper SOM MFR"
 	desc = "A Martian Field Ration, guaranteed to have a taste of Mars in every bite."
 	icon_state = "som_mealpack"
-
-/obj/item/storage/box/MRE/som/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.trash_item = /obj/item/trash/mre/som
+	trash_item = /obj/item/trash/mre/som
 
 /**
  * # fillable box
@@ -466,9 +471,16 @@
 	desc = "This box is able to hold a wide variety of supplies."
 	icon = 'icons/obj/items/storage/storage_boxes.dmi'
 	icon_state = "mag_box"
-	worn_icon_state = "mag_box"
+	item_state = "mag_box"
 	w_class = WEIGHT_CLASS_HUGE
 	slowdown = 0.4 // Big unhandly box
+	max_w_class = WEIGHT_CLASS_BULKY
+	storage_slots = 32 // 8 images x 4 items
+	max_storage_space = 64
+	use_to_pickup = TRUE
+	can_hold = list(
+		/obj/item, //This box should normally be unobtainable so here we go
+	)
 	///Assoc list of how much weight every item type takes. Used to determine how many overlays to make.
 	var/list/contents_weight = list()
 	///Initial pixel_x offset of the overlays.
@@ -495,7 +507,6 @@
 	var/closed_overlay
 	///Overlay icon_state to display on the box when it is open
 	var/open_overlay
-	storage_type = /datum/storage/box/visual
 
 /obj/item/storage/box/visual/Initialize(mapload, ...)
 	. = ..()
@@ -509,8 +520,10 @@
 /obj/item/storage/box/visual/proc/update_stats()
 	SHOULD_CALL_PARENT(TRUE)
 	max_overlays = amt_horizontal * amt_vertical
-	overlay_w_class = FLOOR(storage_datum.max_storage_space / max_overlays, 1)
+	overlay_w_class = FLOOR(max_storage_space / max_overlays, 1)
+	can_hold -= cant_hold //Have cant_hold actually have a use
 	update_icon() //Getting the closed_overlay onto it
+
 
 /obj/item/storage/box/visual/examine(mob/user, distance, infix, suffix)
 	. = ..()
@@ -540,20 +553,19 @@
 
 /obj/item/storage/box/visual/attack_hand(mob/living/user)
 	if(loc == user)
-		storage_datum.open(user) //Always show content when holding box
+		open(user) //Always show content when holding box
 		return
 
 	if(!deployed)
-		user.put_in_hands(src)
-		return
+		return ..()
 
 	else if(deployed)
-		storage_datum.draw_mode = variety == 1? TRUE: FALSE //If only one type of item in box, then quickdraw it.
-		if(storage_datum.draw_mode && ishuman(user) && length(contents))
+		draw_mode = variety == 1? TRUE: FALSE //If only one type of item in box, then quickdraw it.
+		if(draw_mode && ishuman(user) && length(contents))
 			var/obj/item/I = contents[length(contents)]
 			I.attack_hand(user)
 			return
-		storage_datum.open(user)
+		open(user)
 
 /obj/item/storage/box/visual/MouseDrop(atom/over_object)
 	if(!deployed)
@@ -564,6 +576,7 @@
 
 	var/mob/living/carbon/human/H = over_object
 	if(H == usr && !H.incapacitated() && Adjacent(H) && H.put_in_hands(src))
+		pickup(H) // RUTGMC ADDITION
 		deployed = FALSE
 		update_icon()
 
@@ -596,37 +609,33 @@
 		icon_state = "[initial(icon_state)]"
 		if(closed_overlay)
 			. += image('icons/obj/items/storage/storage_boxes.dmi', icon_state = closed_overlay)
-		return // We early return here since we don't draw the insides when it's closed.
+		return
 
 	if(open_overlay)
 		. += image('icons/obj/items/storage/storage_boxes.dmi', icon_state = open_overlay)
 
-	if(variety > max_overlays) // Too many items inside so lets make it cluttered
+	if(variety > max_overlays)
 		return
 
-	//Determine the amount of overlays to draw
 	var/total_overlays = 0
 	for(var/object in contents_weight)
 		total_overlays += 1 + FLOOR(contents_weight[object] / overlay_w_class, 1)
 
-	//In case 6 overlays are for a LMG and then someone adds 7 unique tiny items into the mix
 	var/overlay_overflow = max(0, total_overlays - max_overlays)
 
-	//The Xth overlay being drawed.
 	var/current_iteration = 1
 
-	for(var/obj_typepath in contents_weight) //Max [total_overlays] items in contents_weight since otherwise the icon_state would be "mixed"
-		var/overlays_to_draw = 1 + FLOOR(contents_weight[obj_typepath] / overlay_w_class, 1) //Always draw at least 1 icon per unique item and add additional icons if it takes a lot of weight inside.
-		if(overlay_overflow)//This makes sure no matter the configuration, every item will get at least 1 spot in the mix.
+	for(var/obj_typepath in contents_weight)
+		var/overlays_to_draw = 1 + FLOOR(contents_weight[obj_typepath] / overlay_w_class, 1)
+		if(overlay_overflow)
 			var/adjustment = min(overlay_overflow, overlays_to_draw - 1)
 			overlay_overflow -= adjustment
 			overlays_to_draw -= adjustment
 			total_overlays -= adjustment
 
-		for(var/i = 1 to overlays_to_draw) //Same item type, but now we actually draw them since we know how many to draw
-			var/imagepixel_x = overlay_pixel_x + FLOOR((current_iteration / amt_vertical) - 0.01, 1) * shift_x //Shift to the right only after all vertical spaces are occupied.
-			var/imagepixel_y = overlay_pixel_y + min(amt_vertical - WRAP(current_iteration - 1, 0, amt_vertical) - 1, total_overlays - current_iteration) * shift_y //Vertical shifting that draws the top overlays first if applicable
-			//Getting the mini icon_state to display
+		for(var/i = 1 to overlays_to_draw)
+			var/imagepixel_x = overlay_pixel_x + FLOOR((current_iteration / amt_vertical) - 0.01, 1) * shift_x
+			var/imagepixel_y = overlay_pixel_y + min(amt_vertical - WRAP(current_iteration - 1, 0, amt_vertical) - 1, total_overlays - current_iteration) * shift_y
 			var/obj/item/relateditem = obj_typepath
 
 			. += image('icons/obj/items/items_mini.dmi', icon_state = initial(relateditem.icon_state_mini), pixel_x = imagepixel_x, pixel_y = imagepixel_y)
@@ -637,24 +646,56 @@
 	name = "ammunition box"
 	desc = "This box is able to hold a wide variety of supplies, mainly military-grade ammunition."
 	icon_state = "mag_box"
-	storage_type = /datum/storage/box/visual/magazine
+	max_w_class = WEIGHT_CLASS_BULKY
+	storage_slots = 32 // 8 images x 4 items
+	max_storage_space = 64	//SMG and pistol sized (tiny and small) mags can fit all 32 slots, normal (LMG and AR) fit 21
+	can_hold = list(
+		/obj/item/ammo_magazine/packet,
+		/obj/item/ammo_magazine/flamer_tank,
+		/obj/item/ammo_magazine/handful,
+		/obj/item/ammo_magazine/m412l1_hpr,
+		/obj/item/ammo_magazine/pistol,
+		/obj/item/ammo_magazine/railgun,
+		/obj/item/ammo_magazine/revolver,
+		/obj/item/ammo_magazine/rifle,
+		/obj/item/ammo_magazine/shotgun,
+		/obj/item/ammo_magazine/smg,
+		/obj/item/ammo_magazine/sniper,
+		/obj/item/ammo_magazine/standard_gpmg,
+		/obj/item/ammo_magazine/tl102,
+		/obj/item/ammo_magazine/standard_lmg,
+		/obj/item/ammo_magazine/standard_mmg,
+		/obj/item/ammo_magazine/heavymachinegun,
+		/obj/item/ammo_magazine/standard_smartmachinegun,
+		/obj/item/ammo_magazine/som_mg,
+		/obj/item/cell/lasgun,
+	)
+	cant_hold = list(
+		/obj/item/ammo_magazine/flamer_tank/backtank,
+		/obj/item/ammo_magazine/flamer_tank/backtank/X,
+	)
 
 /obj/item/storage/box/visual/magazine/compact
 	name = "compact magazine box"
 	desc = "A magnifically designed box specifically designed to hold a large quantity of ammo."
 	icon_state = "mag_box_small"
+	storage_slots = 40 //Same storage as the old prefilled mag boxes found in the req vendor.
+	max_storage_space = 40 //Adjusted in update_stats() to fit the needs.
+	can_hold = list(
+		/obj/item/ammo_magazine, //Able to hold all ammo due to this box being unobtainable. admemes beware of the rocket crate.
+	)
+	cant_hold = list()
 	overlay_pixel_x = BOX_MAGAZINE_COMPACT_OFFSET_X
 	overlay_pixel_y = BOX_MAGAZINE_COMPACT_OFFSET_Y
 	amt_horizontal = BOX_MAGAZINE_COMPACT_COLUMNS
 	amt_vertical = BOX_MAGAZINE_COMPACT_ROWS
-	storage_type = /datum/storage/box/visual/magazine/compact
 
 /obj/item/storage/box/visual/magazine/compact/update_stats()
-	for(var/item_path in storage_datum.can_hold)
+	for(var/item_path in can_hold)
 		var/obj/item/I = item_path
 		if(I)
-			storage_datum.max_storage_space = max(initial(I.w_class) * storage_datum.storage_slots, storage_datum.max_storage_space)
-			storage_datum.max_w_class = max(initial(I.w_class), storage_datum.max_w_class)
+			max_storage_space = max(initial(I.w_class) * storage_slots, max_storage_space)
+			max_w_class = max(initial(I.w_class), max_w_class)
 	return ..()
 
 // --PREFILLED MAG BOXES--
@@ -665,12 +706,9 @@
 	name = "P-14 magazine box"
 	desc = "A box specifically designed to hold a large amount of P-14 magazines."
 	closed_overlay = "mag_box_small_overlay_p14"
-
-/obj/item/storage/box/visual/magazine/compact/standard_pistol/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/pistol/standard_pistol,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_pistol/full
 	spawn_number = 40
@@ -680,12 +718,9 @@
 	name = "P-23 magazine box"
 	desc = "A box specifically designed to hold a large amount of P-23 magazines."
 	closed_overlay = "mag_box_small_overlay_p23"
-
-/obj/item/storage/box/visual/magazine/compact/standard_heavypistol/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/pistol/standard_heavypistol,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_heavypistol/full
 	spawn_number = 40
@@ -695,12 +730,9 @@
 	name = "R-44 speedloader box"
 	desc = "A box specifically designed to hold a large amount of R-44 speedloaders."
 	closed_overlay = "mag_box_small_overlay_r44"
-
-/obj/item/storage/box/visual/magazine/compact/standard_revolver/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/revolver/standard_revolver,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_revolver/full
 	spawn_number = 40
@@ -710,12 +742,9 @@
 	name = "P-17 magazine box"
 	desc = "A box specifically designed to hold a large amount of P-17 magazines."
 	closed_overlay = "mag_box_small_overlay_p17"
-
-/obj/item/storage/box/visual/magazine/compact/standard_pocketpistol/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/pistol/standard_pocketpistol,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_pocketpistol/full
 	spawn_number = 40
@@ -725,12 +754,9 @@
 	name = "88M4 magazine box"
 	desc = "A box specifically designed to hold a large amount of 88M4 magazines."
 	closed_overlay = "mag_box_small_overlay_88m4"
-
-/obj/item/storage/box/visual/magazine/compact/vp70/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/pistol/vp70,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/vp70/full
 	spawn_number = 40
@@ -741,12 +767,9 @@
 	name = ".40 rimfire ammo packet box"
 	desc = "A box specifically designed to hold a large amount of .40 rimfire ammo packets."
 	closed_overlay = "mag_box_small_overlay_derringer"
-
-/obj/item/storage/box/visual/magazine/compact/derringer/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/pistol/derringer,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/derringer/full
 	spawn_number = 40
@@ -756,12 +779,9 @@
 	name = "PP-7 plasma cell box"
 	desc = "A box specifically designed to hold a large amount of PP-7 plasma cells."
 	closed_overlay = "mag_box_small_overlay_pp7"
-
-/obj/item/storage/box/visual/magazine/compact/plasma_pistol/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/pistol/plasma_pistol,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/plasma_pistol/full
 	spawn_number = 40
@@ -773,12 +793,9 @@
 	name = "SMG-90 magazine box"
 	desc = "A box specifically designed to hold a large amount of SMG-90 magazines."
 	closed_overlay = "mag_box_small_overlay_smg90"
-
-/obj/item/storage/box/visual/magazine/compact/standard_smg/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/smg/standard_smg,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_smg/full
 	spawn_number = 40
@@ -788,12 +805,9 @@
 	name = "MP-19 magazine box"
 	desc = "A box specifically designed to hold a large amount of MP-19 magazines."
 	closed_overlay = "mag_box_small_overlay_mp19"
-
-/obj/item/storage/box/visual/magazine/compact/standard_machinepistol/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/smg/standard_machinepistol,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_machinepistol/full
 	spawn_number = 40
@@ -802,47 +816,26 @@
 /obj/item/storage/box/visual/magazine/compact/pepperball
 	name = "Pepperball canister box"
 	desc = "A box specifically designed to hold a large amount of Pepperball canisters."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_pepperball"
-
-/obj/item/storage/box/visual/magazine/compact/pepperball/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/pepperball,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/pepperball/full
 	spawn_number = 30
 	spawn_type = /obj/item/ammo_magazine/rifle/pepperball
-
-
-/obj/item/storage/box/visual/magazine/compact/standard_heavysmg
-	name = "SMG-45 magazine box"
-	desc = "A box specifically designed to hold a large amount of SMG-45 magazines."
-
-/obj/item/storage/box/visual/magazine/compact/standard_heavysmg/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.set_holdable(can_hold_list = list(
-		/obj/item/ammo_magazine/smg/standard_heavysmg,
-	))
-
-/obj/item/storage/box/visual/magazine/compact/standard_heavysmg/full
-	spawn_number = 40
-	spawn_type = /obj/item/ammo_magazine/smg/standard_heavysmg
 
 // -Rifle-
 
 /obj/item/storage/box/visual/magazine/compact/standard_assaultrifle
 	name = "AR-12 magazine box"
 	desc = "A box specifically designed to hold a large amount of AR-12 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_ar12"
-
-/obj/item/storage/box/visual/magazine/compact/standard_assaultrifle/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/standard_assaultrifle,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_assaultrifle/full
 	spawn_number = 30
@@ -851,14 +844,11 @@
 /obj/item/storage/box/visual/magazine/compact/standard_carbine
 	name = "AR-18 magazine box"
 	desc = "A box specifically designed to hold a large amount of AR-18 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_ar18"
-
-/obj/item/storage/box/visual/magazine/compact/standard_carbine/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/standard_carbine,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_carbine/full
 	spawn_number = 30
@@ -867,14 +857,11 @@
 /obj/item/storage/box/visual/magazine/compact/standard_skirmishrifle
 	name = "AR-21 magazine box"
 	desc = "A box specifically designed to hold a large amount of AR-21 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_ar21"
-
-/obj/item/storage/box/visual/magazine/compact/standard_skirmishrifle/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/standard_skirmishrifle,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_skirmishrifle/full
 	spawn_number = 30
@@ -883,14 +870,11 @@
 /obj/item/storage/box/visual/magazine/compact/ar11
 	name = "AR-11 magazine box"
 	desc = "A box specifically designed to hold a large amount of AR-11 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_ar11"
-
-/obj/item/storage/box/visual/magazine/compact/ar11/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/tx11,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/ar11/full
 	spawn_number = 30
@@ -899,14 +883,11 @@
 /obj/item/storage/box/visual/magazine/compact/martini
 	name = "Martini Henry ammo packet box"
 	desc = "A box specifically designed to hold a large amount of Martini ammo packets."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_martini"
-
-/obj/item/storage/box/visual/magazine/compact/martini/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/martini,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/martini/full
 	spawn_number = 30
@@ -915,15 +896,12 @@
 /obj/item/storage/box/visual/magazine/compact/sh15
 	name = "SH-15 magazine box"
 	desc = "A box specifically designed to hold a large amount of SH-15 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_sh15"
-
-/obj/item/storage/box/visual/magazine/compact/sh15/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/tx15_flechette,
 		/obj/item/ammo_magazine/rifle/tx15_slug,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/sh15/flechette
 	name = "SH-15 flechette magazine box"
@@ -944,15 +922,12 @@
 /obj/item/storage/box/visual/magazine/compact/sectoid_rifle
 	name = "Suspicious glowing box"
 	desc = "A purple glowing box with a big TOP SECRET label as well as conspiracy talkpoints printed topside. What a load of gibberish!"
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_sectoid_rifle"
 	open_overlay = "mag_box_small_overlay_sectoid_rifle_open"
-
-/obj/item/storage/box/visual/magazine/compact/sectoid_rifle/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/sectoid_rifle,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/sectoid_rifle/examine(mob/user, distance, infix, suffix)
 	. = ..()
@@ -968,14 +943,11 @@
 /obj/item/storage/box/visual/magazine/compact/lasrifle
 	name = "LR-73 cell box"
 	desc = "A box specifically designed to hold a large amount of TX-73 cells."
-	closed_overlay = "mag_box_small_overlay_lr73"
-
-/obj/item/storage/box/visual/magazine/compact/lasrifle/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	storage_slots = 30
+	closed_overlay = "mag_box_small_overlay_tx73"
+	can_hold = list(
 		/obj/item/cell/lasgun/lasrifle,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/lasrifle/full
 	spawn_number = 30
@@ -984,14 +956,11 @@
 /obj/item/storage/box/visual/magazine/compact/lasrifle/marine
 	name = "Terra Experimental cell box"
 	desc = "A box specifically designed to hold a large amount of Terra Experimental cells."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_te"
-
-/obj/item/storage/box/visual/magazine/compact/lasrifle/marine/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/cell/lasgun/lasrifle,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/lasrifle/marine/full
 	spawn_number = 30
@@ -1002,14 +971,11 @@
 /obj/item/storage/box/visual/magazine/compact/standard_dmr
 	name = "DMR-37 magazine box"
 	desc = "A box specifically designed to hold a large amount of DMR-37 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_dmr37"
-
-/obj/item/storage/box/visual/magazine/compact/standard_dmr/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/standard_dmr,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_dmr/full
 	spawn_number = 30
@@ -1018,14 +984,11 @@
 /obj/item/storage/box/visual/magazine/compact/standard_br
 	name = "BR-64 magazine box"
 	desc = "A box specifically designed to hold a large amount of BR-64 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_br64"
-
-/obj/item/storage/box/visual/magazine/compact/standard_br/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/standard_br,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_br/full
 	spawn_number = 30
@@ -1034,14 +997,11 @@
 /obj/item/storage/box/visual/magazine/compact/chamberedrifle
 	name = "SR-127 magazine box"
 	desc = "A box specifically designed to hold a large amount of SR-127 magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_sr127"
-
-/obj/item/storage/box/visual/magazine/compact/chamberedrifle/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/chamberedrifle,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/chamberedrifle/full
 	spawn_number = 30
@@ -1050,15 +1010,12 @@
 /obj/item/storage/box/visual/magazine/compact/mosin
 	name = "mosin packet box"
 	desc = "A box specifically designed to hold a large amount of mosin packets."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_mosin"
-
-/obj/item/storage/box/visual/magazine/compact/mosin/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/rifle/bolt,
 		/obj/item/ammo_magazine/rifle/boltclip,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/mosin/packet/full
 	spawn_number = 30
@@ -1073,14 +1030,11 @@
 /obj/item/storage/box/visual/magazine/compact/standard_lmg
 	name = "MG-42 drum magazine box"
 	desc = "A box specifically designed to hold a large amount of MG-42 drum magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_mg42"
-
-/obj/item/storage/box/visual/magazine/compact/standard_lmg/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/standard_lmg,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_lmg/full
 	spawn_number = 30
@@ -1089,14 +1043,11 @@
 /obj/item/storage/box/visual/magazine/compact/standard_gpmg
 	name = "MG-60 magazine box"
 	desc = "A box specifically designed to hold a large amount of MG-60 box magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_mg60"
-
-/obj/item/storage/box/visual/magazine/compact/standard_gpmg/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/standard_gpmg,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_gpmg/full
 	spawn_number = 30
@@ -1105,14 +1056,11 @@
 /obj/item/storage/box/visual/magazine/compact/standard_mmg
 	name = "MG-27 magazine box"
 	desc = "A box specifically designed to hold a large amount of MG-27 box magazines."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_mg27"
-
-/obj/item/storage/box/visual/magazine/compact/standard_mmg/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/standard_mmg,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/standard_mmg/full
 	spawn_number = 30
@@ -1122,14 +1070,11 @@
 /obj/item/storage/box/visual/magazine/compact/heavymachinegun
 	name = "HMG-08 drum box"
 	desc = "A box specifically designed to hold a large amount of HMG-08 drum."
+	storage_slots = 30
 	closed_overlay = "mag_box_small_overlay_mg08"
-
-/obj/item/storage/box/visual/magazine/compact/heavymachinegun/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 30
-	storage_datum.set_holdable(can_hold_list = list(
+	can_hold = list(
 		/obj/item/ammo_magazine/heavymachinegun,
-	))
+	)
 
 /obj/item/storage/box/visual/magazine/compact/heavymachinegun/full
 	spawn_number = 10
@@ -1140,11 +1085,17 @@
 	name = "grenade box"
 	desc = "This box is able to hold a wide variety of grenades."
 	icon_state = "grenade_box"
+	max_w_class = WEIGHT_CLASS_NORMAL
+	storage_slots = 25
+	max_storage_space = 50
+	can_hold = list(
+		/obj/item/explosive/grenade,
+	)
+	cant_hold = list()
 	overlay_pixel_x = BOX_GRENADE_OFFSET_X
 	overlay_pixel_y = BOX_GRENADE_OFFSET_Y
 	amt_horizontal = BOX_GRENADE_COLUMNS
 	amt_vertical = BOX_GRENADE_ROWS
-	storage_type = /datum/storage/box/visual/grenade
 
 /obj/item/storage/box/visual/grenade/M15
 	name = "\improper M15 grenade box"
@@ -1181,6 +1132,12 @@
 	spawn_type = /obj/item/explosive/grenade/sticky/trailblazer
 	closed_overlay = "grenade_box_overlay_M45"
 
+/obj/item/storage/box/visual/grenade/trailblazer/phosphorus
+	name = "\improper M45 Phosphorus trailblazer grenade box"
+	desc = "A secure box holding 25 M45 Phosphorus trailblazer grenades. Warning: VERY flammable!!!"
+	spawn_type = /obj/item/explosive/grenade/sticky/trailblazer/phosphorus
+	closed_overlay = "grenade_box_overlay_M45_phosphorus"
+
 /obj/item/storage/box/visual/grenade/sticky
 	name = "\improper M40 adhesive charge grenade box"
 	desc = "A secure box holding 25 M40 adhesive charge grenades. Highly explosive and sticky."
@@ -1191,14 +1148,11 @@
 /obj/item/storage/box/visual/grenade/phosphorus
 	name = "\improper M40 HPDP grenade box"
 	desc = "A secure box holding 15 M40 HPDP white phosphorous grenades. War crimes for the entire platoon!"
-	spawn_number = 25
+	storage_slots = 15
+	max_storage_space = 30
+	spawn_number = 15
 	spawn_type = /obj/item/explosive/grenade/phosphorus
 	closed_overlay = "grenade_box_overlay_phosphorus"
-
-/obj/item/storage/box/visual/grenade/phosphorus/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 25
-	storage_datum.max_storage_space = 50
 
 /obj/item/storage/box/visual/grenade/impact
 	name = "\improper M40 IMDP grenade box"
@@ -1228,35 +1182,22 @@
 	spawn_type = /obj/item/explosive/grenade/smokebomb/drain
 	closed_overlay = "grenade_box_overlay_drain"
 
-/obj/item/storage/box/visual/grenade/antigas
-	name = "\improper M40-AG grenade box"
-	desc = "A secure box holding 25 M40-AG gas grenades. Quickly clears out hostile smoke."
-	spawn_number = 25
-	spawn_type = /obj/item/explosive/grenade/smokebomb/antigas
-	closed_overlay = "grenade_box_overlay_antigas"
-
 /obj/item/storage/box/visual/grenade/razorburn
 	name = "razorburn grenade box"
 	desc = "A secure box holding 15 razor burn grenades. Used for quick flank coverage."
-	spawn_number = 25
-	spawn_type = /obj/item/explosive/grenade/chem_grenade/razorburn_small
+	storage_slots = 15
+	max_storage_space = 30
+	spawn_number = 15
+	spawn_type = /obj/item/explosive/grenade/chem_grenade/razorburn_smol
 	closed_overlay = "grenade_box_overlay_razorburn"
-
-/obj/item/storage/box/visual/grenade/razorburn/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 25
-	storage_datum.max_storage_space = 50
 
 /obj/item/storage/box/visual/grenade/razorburn_large
 	name = "razorburn canister box"
 	desc = "A secure box holding 10 razorburn canisters. Used for quick flank coverage."
+	storage_slots = 10
 	spawn_number = 10
 	spawn_type = /obj/item/explosive/grenade/chem_grenade/razorburn_large
 	closed_overlay = "grenade_box_overlay_razorburn_large"
-
-/obj/item/storage/box/visual/grenade/razorburn_large/Initialize(mapload, ...)
-	. = ..()
-	storage_datum.storage_slots = 10
 
 /obj/item/storage/box/visual/grenade/teargas
 	name = "\improper M66 teargas grenade box"
@@ -1265,26 +1206,44 @@
 	spawn_type = /obj/item/explosive/grenade/chem_grenade/teargas
 	closed_overlay = "grenade_box_overlay_teargas"
 
-/obj/item/storage/box/visual/grenade/lasburster
-	name = "\improper M80 lasburster grenade box"
-	desc = "A secure box holding 25 M80 lasburster grenades."
-	spawn_number = 25
-	spawn_type = /obj/item/explosive/grenade/bullet/laser
-	closed_overlay = "grenade_box_overlay_grenade_lasburster"
-
-/obj/item/storage/box/visual/grenade/hefa
-	name = "\improper M25 HEFA grenade box"
-	desc = "A secure box holding 25 M25 high explosive fragmentation grenades. Keep very far away from extreme heat and flame."
-	spawn_number = 25
-	spawn_type = /obj/item/explosive/grenade/bullet/hefa
-	closed_overlay = "grenade_box_overlay_grenade_hefa2"
-
 /obj/item/storage/box/visual/grenade/training
 	name = "\improper M07 training grenade box"
 	desc = "A secure box holding 25 M07 training grenades. Harmless and reusable."
 	spawn_number = 25
 	spawn_type = /obj/item/explosive/grenade/training
 	closed_overlay = "grenade_box_overlay_training"
+
+/obj/item/storage/box/t500case
+	name = "\improper R-500 special case"
+	desc = "High-tech case made by BMSS for delivery their special weapons. Label on this case says: 'This is the greatest handgun ever made. Five bullets. More than enough to kill anything that moves'."
+	icon = 'icons/obj/items/storage/storage.dmi'
+	icon_state = "t500case"
+	w_class = WEIGHT_CLASS_NORMAL
+	max_w_class = 1
+	storage_slots = 5
+	max_storage_space = 1
+	can_hold = list(
+		/obj/item/attachable/stock/t500stock,
+		/obj/item/attachable/lace/t500,
+		/obj/item/attachable/t500barrelshort,
+		/obj/item/attachable/t500barrel,
+		/obj/item/weapon/gun/revolver/t500,
+	)
+	bypass_w_limit = list(
+		/obj/item/attachable/stock/t500stock,
+		/obj/item/attachable/lace/t500,
+		/obj/item/attachable/t500barrelshort,
+		/obj/item/attachable/t500barrel,
+		/obj/item/weapon/gun/revolver/t500,
+	)
+
+/obj/item/storage/box/t500case/Initialize()
+	. = ..()
+	new /obj/item/attachable/stock/t500stock(src)
+	new /obj/item/attachable/lace/t500(src)
+	new /obj/item/attachable/t500barrelshort(src)
+	new /obj/item/attachable/t500barrel(src)
+	new /obj/item/weapon/gun/revolver/t500(src)
 
 #undef BOX_OVERLAY_SHIFT_X
 #undef BOX_OVERLAY_SHIFT_Y

@@ -193,14 +193,13 @@
 /obj/item/mecha_parts/mecha_equipment/proc/get_snowflake_data()
 	return list()
 
-///Tries to rearm the module
-/obj/item/mecha_parts/mecha_equipment/proc/attempt_rearm()
-	return FALSE
-
-///Rearms the module
+/**
+ * Proc for reloading weapons from HTML UI or by AI
+ * note that this is old and likely broken code
+ */
 /obj/item/mecha_parts/mecha_equipment/proc/rearm()
 	return FALSE
 
-///Checks if the module actually need rearming
+/// AI mech pilot: returns TRUE if the Ai should try to reload the mecha
 /obj/item/mecha_parts/mecha_equipment/proc/needs_rearm()
 	return FALSE

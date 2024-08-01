@@ -38,7 +38,7 @@ All ShuttleMove procs go here
 			continue
 		if(ismovable(thing))
 			var/atom/movable/movable_thing = thing
-			if(movable_thing.atom_flags & SHUTTLE_IMMUNE)
+			if(movable_thing.flags_atom & SHUTTLE_IMMUNE)
 				var/old_dir = movable_thing.dir
 				movable_thing.abstract_move(src)
 				movable_thing.setDir(old_dir)
@@ -64,7 +64,7 @@ All ShuttleMove procs go here
 /turf/proc/afterShuttleMove(turf/oldT, rotation)
 	//Dealing with the turf we left behind
 	oldT.TransferComponents(src)
-	SSexplosions.wipe_turf(src)
+	//SSexplosions.wipe_turf(src) // RUTGMC DELETION
 
 	var/shuttle_boundary = baseturfs.Find(/turf/baseturf_skipover/shuttle)
 	if(shuttle_boundary)
@@ -98,7 +98,7 @@ All ShuttleMove procs go here
 	if(loc != oldT) // This is for multi tile objects
 		return
 
-	if(atom_flags & SHUTTLE_IMMUNE)
+	if(flags_atom & SHUTTLE_IMMUNE)
 		return
 
 	abstract_move(newT)
@@ -204,7 +204,6 @@ All ShuttleMove procs go here
 	. = ..()
 	if(pipe_vision_img)
 		pipe_vision_img.loc = loc
-	var/missing_nodes = FALSE
 	for(var/i in 1 to device_type)
 		if(nodes[i])
 			var/obj/machinery/atmospherics/node = nodes[i]
@@ -213,23 +212,16 @@ All ShuttleMove procs go here
 				if(node in get_step(src, D))
 					connected = TRUE
 					break
-
 			if(!connected)
 				nullifyNode(i)
 
-		if(!nodes[i])
-			missing_nodes = TRUE
-
-	if(missing_nodes)
-		atmosinit()
-		for(var/obj/machinery/atmospherics/A in pipeline_expansion())
-			A.atmosinit()
-			if(A.returnPipenet())
-				A.addMember(src)
-		build_network()
-	else
-		// atmosinit() calls update_icon(), so we don't need to call it
-		update_icon()
+	atmosinit()
+	for(var/obj/machinery/atmospherics/A in pipeline_expansion())
+		A.atmosinit()
+		if(A.returnPipenet())
+			A.addMember(src)
+	build_network()
+	covered_by_shuttle = FALSE
 
 /obj/machinery/atmospherics/pipe/afterShuttleMove(turf/oldT, list/movement_force, shuttle_dir, shuttle_preferred_direction, move_dir, rotation)
 	. = ..()

@@ -2,17 +2,17 @@
 	name = "clipboard"
 	icon = 'icons/obj/items/paper.dmi'
 	icon_state = "clipboard"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/civilian_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/civilian_right.dmi',
 	)
-	worn_icon_state = "clipboard"
+	item_state = "clipboard"
 	w_class = WEIGHT_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 10
 	var/obj/item/tool/pen/haspen		//The stored pen.
 	var/obj/item/toppaper	//The topmost piece of paper.
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_equip_slot = ITEM_SLOT_BELT
 
 /obj/item/clipboard/Initialize(mapload)
 	. = ..()
@@ -48,8 +48,6 @@
 
 /obj/item/clipboard/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/paper) || istype(I, /obj/item/photo))
 		user.drop_held_item()
@@ -146,10 +144,10 @@
 			if(P && (P.loc == src) && istype(P, /obj/item/paper) )
 
 				if(!(ishuman(usr) || isobserver(usr) || issilicon(usr)))
-					usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[stars(P.info)][P.stamps]</BODY></HTML>", "window=[P.name]")
+					usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[stars(P.info)][P.stamps]</BODY></HTML>", "window=[P.name]")
 					onclose(usr, "[P.name]")
 				else
-					usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[P.info][P.stamps]</BODY></HTML>", "window=[P.name]")
+					usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY>[P.info][P.stamps]</BODY></HTML>", "window=[P.name]")
 					onclose(usr, "[P.name]")
 
 		else if(href_list["look"])

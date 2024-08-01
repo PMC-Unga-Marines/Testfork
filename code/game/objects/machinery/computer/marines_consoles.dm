@@ -15,8 +15,6 @@
 
 /obj/machinery/computer/marine_card/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/card/id))
 		var/obj/item/card/id/idcard = I
@@ -354,8 +352,6 @@
 
 /obj/machinery/computer/squad_changer/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/card/id))
 		var/obj/item/card/id/idcard = I

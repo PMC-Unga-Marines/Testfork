@@ -209,7 +209,7 @@ SUBSYSTEM_DEF(job)
 		if(PopcapReached())
 			RejectPlayer(player)
 		//Choose a faction in advance if needed
-		if(SSticker.mode?.round_type_flags & MODE_TWO_HUMAN_FACTIONS) //Alternates between the two factions
+		if(SSticker.mode?.flags_round_type & MODE_TWO_HUMAN_FACTIONS) //Alternates between the two factions
 			faction_rejected = faction_rejected == FACTION_TERRAGOV ? FACTION_SOM : FACTION_TERRAGOV
 		// Loop through all jobs
 		for(var/datum/job/job AS in occupations_to_assign)
@@ -267,7 +267,12 @@ SUBSYSTEM_DEF(job)
 	//If we joined at roundstart we should be positioned at our workstation
 	var/turf/spawn_turf
 	if(!joined_late || job.job_flags & JOB_FLAG_OVERRIDELATEJOINSPAWN)
-		spawn_turf = job.return_spawn_turf()
+		var/datum/job/terragov/squad/marine = job
+		var/mob/living/carbon/human/h = new_character
+		if(!ishuman(new_character) || !h.assigned_squad || !length_char(GLOB.start_squad_landmarks_list))
+			spawn_turf = job.return_spawn_turf(player, player.client)
+		else
+			spawn_turf = marine.spawn_by_squads(h.assigned_squad.id)
 	if(spawn_turf)
 		SendToAtom(new_character, spawn_turf)
 	else
@@ -339,9 +344,14 @@ SUBSYSTEM_DEF(job)
 				SendToAtom(M, pick(GLOB.latejoinsom))
 				return
 		else
-			if(length(GLOB.latejoin))
-				SendToAtom(M, pick(GLOB.latejoin))
+			var/mob/living/carbon/human/h = M
+			if(h.assigned_squad && length_char(GLOB.latejoin_squad_landmarks_list))
+				SendToAtom(M, pick(GLOB.latejoin_squad_landmarks_list[h.assigned_squad.id]))
 				return
+			else
+				if(length_char(GLOB.latejoin))
+					SendToAtom(M, pick(GLOB.latejoin))
+					return
 	message_admins("Unable to send mob [M] to late join!")
 	CRASH("Unable to send mob [M] to late join!")
 

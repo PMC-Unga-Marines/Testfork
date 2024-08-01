@@ -45,19 +45,15 @@
 #define COOLDOWN_GAS_BREATH "cooldown_gas_breath"
 #define COOLDOWN_SIGNALLER_SEND "cooldown_signaller_send"
 #define COOLDOWN_BIKE_FUEL_MESSAGE "cooldown_bikee_fuel_message"
-#define COOLDOWN_WRAITH_PORTAL_TELEPORTED "cooldown_wraith_portal_teleported"
 #define COOLDOWN_ITEM_TRICK "cooldown_item_trick"
 #define COOLDOWN_RAVAGER_FLAMER_ACT "cooldown_ravager_flamer_act"
 #define COOLDOWN_DROPPOD_TARGETTING "cooldown_droppod_targetting"
 #define COOLDOWN_TRY_TTS "cooldown_try_tts"
+#define COOLDOWN_EVACUATION "evacuation"
+#define COOLDOWN_SENTIENT_HUGGER "sentient_hugger"
 #define COOLDOWN_EVASION_ACTIVATION "cooldown_evasion_activation"
 #define COOLDOWN_TANK_SWIVEL "tank_turret_swivel"
 #define COOLDOWN_ARMORED_HORN "cooldown_armored_horn"
-#define COOLDOWN_WHISTLE_BLOW "cooldown_whistle_blow"
-#define COOLDOWN_WHISTLE_WARCRY "cooldown_whistle_warcry"
-#define COOLDOWN_ARMORED_SMOKE "cooldown_armored_smoke"
-#define COOLDOWN_FORCE_OPEN_DOOR "cooldown_force_open_door"
-#define COOLDOWN_FORCE_CLOSE_DOOR "cooldown_force_close_door"
 
 //Mecha cooldowns
 #define COOLDOWN_MECHA "mecha"
@@ -96,11 +92,6 @@
 /*
  * Cooldown system based on an datum-level associative lazylist using timers.
 */
-
-//INDEXES
-#define COOLDOWN_BORG_SELF_REPAIR "borg_self_repair"
-#define COOLDOWN_EXPRESSPOD_CONSOLE "expresspod_console"
-
 
 //TIMER COOLDOWN MACROS
 

@@ -1,14 +1,5 @@
 import { useBackend } from '../backend';
-import {
-  Box,
-  Button,
-  ColorBox,
-  Icon,
-  Input,
-  LabeledList,
-  Section,
-  Table,
-} from '../components';
+import { Box, Button, ColorBox, Icon, Input, LabeledList, Section, Table } from '../components';
 import { Window } from '../layouts';
 
 type ColorEntry = {
@@ -31,8 +22,8 @@ type GreyscaleMenuData = {
   sprites: SpriteData;
 };
 
-const ColorDisplay = (props) => {
-  const { act, data } = useBackend<GreyscaleMenuData>();
+const ColorDisplay = (props, context) => {
+  const { act, data } = useBackend<GreyscaleMenuData>(context);
   const colors = data.colors || [];
   return (
     <Section title="Colors">
@@ -49,8 +40,7 @@ const ColorDisplay = (props) => {
           <LabeledList.Item
             key={`colorgroup${item.index}${item.value}`}
             label={`Color Group ${item.index}`}
-            color={item.value}
-          >
+            color={item.value}>
             <ColorBox color={item.value} />{' '}
             <Button
               content={<Icon name="palette" />}
@@ -69,8 +59,8 @@ const ColorDisplay = (props) => {
   );
 };
 
-const PreviewDisplay = (props) => {
-  const { data } = useBackend<GreyscaleMenuData>();
+const PreviewDisplay = (props, context) => {
+  const { data } = useBackend<GreyscaleMenuData>(context);
   return (
     <Section title="Preview">
       <Table>
@@ -98,8 +88,8 @@ const SingleSprite = (props) => {
   return <Box as="img" src={source} width="100%" />;
 };
 
-export const GreyscaleModifyMenu = (props) => {
-  const { act, data } = useBackend<GreyscaleMenuData>();
+export const GreyscaleModifyMenu = (props, context) => {
+  const { act, data } = useBackend<GreyscaleMenuData>(context);
   return (
     <Window title="Greyscale Modification" width={325} height={800}>
       <Window.Content scrollable>

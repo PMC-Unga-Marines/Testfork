@@ -105,33 +105,23 @@ GLOBAL_LIST_EMPTY(blood_particles)
 	duration = 0.5 SECONDS
 
 
-/obj/effect/temp_visual/after_image
+/obj/effect/temp_visual/xenomorph/afterimage
 	name = "afterimage"
-	layer = BELOW_MOB_LAYER
+	layer = MOB_LAYER
 	alpha = 64 //Translucent
+	duration = 0.5 SECONDS
 	density = FALSE
 	opacity = FALSE
 	anchored = FALSE
 	animate_movement = SLIDE_STEPS
-	randomdir = FALSE
-	vis_flags = VIS_INHERIT_LAYER | VIS_INHERIT_PLANE
-	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
-/obj/effect/temp_visual/after_image/Initialize(mapload, atom/owner, _duration = 0.5 SECONDS)
+/obj/effect/temp_visual/xenomorph/afterimage/Initialize(mapload, atom/owner)
 	. = ..()
-	var/mutable_appearance/after_image = new()
-	after_image.appearance = owner.appearance
-	after_image.render_target = null
-	after_image.density = initial(density)
-	after_image.alpha = initial(alpha)
-	after_image.appearance_flags = RESET_COLOR|RESET_ALPHA|PASS_MOUSE
-	after_image.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	after_image.layer = BELOW_MOB_LAYER
-	after_image.setDir(owner.dir)
-	after_image.pixel_x = owner.pixel_x
-	after_image.pixel_y = owner.pixel_y
-	appearance = after_image
-	duration = _duration
+	appearance = owner.appearance
+	setDir(owner.dir)
+	alpha = initial(alpha)
+	layer = initial(layer)
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	animate(src, alpha = 0, time = duration)
 
 /obj/effect/temp_visual/ob_impact
@@ -162,7 +152,7 @@ GLOBAL_LIST_EMPTY(blood_particles)
 	flick("heavyimpact", src)
 
 /obj/effect/temp_visual/order
-	icon = 'icons/effects/orders.dmi'
+	icon = 'icons/Marine/marine-items.dmi'
 	var/icon_state_on
 	hud_possible = list(SQUAD_HUD_TERRAGOV, SQUAD_HUD_SOM)
 	duration = ORDER_DURATION
@@ -206,7 +196,7 @@ GLOBAL_LIST_EMPTY(blood_particles)
 	var/image/holder = hud_list[hud_type]
 	if(!holder)
 		return
-	holder.icon = 'icons/effects/orders.dmi'
+	holder.icon = 'icons/Marine/marine-items.dmi'
 	holder.icon_state = icon_state_on
 	hud_list[hud_type] = holder
 
@@ -234,13 +224,6 @@ GLOBAL_LIST_EMPTY(blood_particles)
 	icon_state = "anom"
 	layer = ABOVE_LYING_MOB_LAYER
 	duration = 0.5 SECONDS
-
-/obj/effect/temp_visual/banishment_portal
-	name = "banishment portal"
-	icon = 'icons/obj/objects.dmi'
-	icon_state = "bhole3"
-	layer = ABOVE_LYING_MOB_LAYER
-	duration = WRAITH_BANISH_BASE_DURATION+1 //So we don't delete our contents early
 
 /obj/effect/temp_visual/acid_splatter
 	name = "acid_splatter"

@@ -106,12 +106,14 @@
 
 // Shuttles start here:
 /datum/map_template/shuttle/dropship_one
-	shuttle_id = SHUTTLE_ALAMO
-	name = "Alamo"
-
-/datum/map_template/shuttle/dropship_two
+	prefix = "_maps/shuttles/"
 	shuttle_id = SHUTTLE_NORMANDY
 	name = "Normandy"
+
+/datum/map_template/shuttle/dropship_two
+	prefix = "_maps/shuttles/"
+	shuttle_id = SHUTTLE_ALAMO
+	name = "Alamo"
 
 /datum/map_template/shuttle/cas
 	shuttle_id = SHUTTLE_CAS
@@ -143,20 +145,20 @@
 	display_name = "Tadpole NK-Haul Model"
 
 /datum/map_template/shuttle/minidropship/mobile_bar
-	suffix = "_mobile_bar"
+	suffix =	"_mobile_bar"
 	description =	"A Tadpole modified to provide drinks and disservices. God dammit it's him again, I thought we got rid of him."
 	display_name =	"Tadpole Mobile-Bar Model"
 	admin_enable = FALSE
 
+/datum/map_template/shuttle/minidropship/combat_tad
+	suffix = "_combat_tad"
+	description = "A Tadpole model modified to have three weapon hardpoints instead of just one, the majority of the other standard features had to be scrapped to fit all three of them on."
+	display_name = "Tadpole Combat Model"
+
 /datum/map_template/shuttle/minidropship/umbilical
-	suffix = "_umbilical"
+	suffix =	"_umbilical"
 	description = "A high-point orbital shuttle with a tactical umbilical airlock for insertion of ground troops."
 	display_name = "Tadpole Umbilical Model"
-
-/datum/map_template/shuttle/minidropship/outrider
-	suffix = "_outrider"
-	description = "An asymmetric tadpole designed with vehicle transport in mind. Built with a wide umbilical to allow fluid heavy-vehicle movement."
-	display_name = "Tadpole Outrider Model"
 
 /datum/map_template/shuttle/escape_pod
 	shuttle_id = SHUTTLE_ESCAPE_POD

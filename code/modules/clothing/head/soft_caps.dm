@@ -2,12 +2,13 @@
 	name = "cargo cap"
 	desc = "It's a baseball hat in a tasteless yellow color."
 	icon_state = "cargosoft"
-	worn_icon_state = "cargosoft"
-	inventory_flags = COVEREYES
+	item_state = "cargosoft"
+	flags_inventory = COVEREYES
 	var/cap_color = "cargo"
 	var/flipped = 0
 	siemens_coefficient = 0.9
-	armor_protection_flags = NONE
+	flags_armor_protection = NONE
+	species_exception = list(/datum/species/robot)
 
 /obj/item/clothing/head/soft/dropped()
 	icon_state = "[cap_color]soft"
@@ -15,7 +16,7 @@
 	..()
 
 /obj/item/clothing/head/soft/verb/flip()
-	set category = "Object"
+	set category = "Object.Clothing"
 	set name = "Flip cap"
 	set src in usr
 	if(!usr.incapacitated())
@@ -104,7 +105,7 @@
 	icon_state = "greysoft"
 	cap_color = "grey"
 	soft_armor = list(MELEE = 35, BULLET = 35, LASER = 35, ENERGY = 15, BOMB = 10, BIO = 0, FIRE = 15, ACID = 15)
-	inventory_flags = BLOCKSHARPOBJ
+	flags_inventory = BLOCKSHARPOBJ
 
 /obj/item/clothing/head/soft/marine/alpha
 	name = "alpha squad sergeant cap"

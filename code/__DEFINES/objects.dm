@@ -1,27 +1,6 @@
 // Doors!
 #define DOOR_CRUSH_DAMAGE 10
 
-/*
-	Atmos Machinery
-*/
-#define MAX_SIPHON_FLOWRATE 2500	//L/s	This can be used to balance how fast a room is siphoned. Anything higher than CELL_VOLUME has no effect.
-#define MAX_SCRUBBER_FLOWRATE 200		//L/s	Max flow rate when scrubbing from a turf.
-
-//These balance how easy or hard it is to create huge pressure gradients with pumps and filters. Lower values means it takes longer to create large pressures differences.
-//Has no effect on pumping gasses from high pressure to low, only from low to high. Must be between 0 and 1.
-#define ATMOS_PUMP_EFFICIENCY 2.5
-#define ATMOS_FILTER_EFFICIENCY 2.5
-
-//will not bother pumping or filtering if the gas source as fewer than this amount of moles, to help with performance.
-#define MINUMUM_MOLES_TO_PUMP 0.01
-#define MINUMUM_MOLES_TO_FILTER 0.1
-
-//The flow rate/effectiveness of various atmos devices is limited by their internal volume, so for many atmos devices these will control maximum flow rates in L/s
-#define ATMOS_DEFAULT_VOLUME_PUMP 200	//L
-#define ATMOS_DEFAULT_VOLUME_FILTER 200	//L
-#define ATMOS_DEFAULT_VOLUME_MIXER 200	//L
-#define ATMOS_DEFAULT_VOLUME_PIPE 70	//L
-
 // bitflags for machine stat variable
 #define BROKEN (1<<0)
 #define NOPOWER (1<<1)
@@ -56,7 +35,6 @@ GLOBAL_LIST_INIT(restricted_camera_networks, list( //Those networks can only be 
 	"NUKE"
 	))
 
-
 // Diagonal movement for movable atoms
 #define FIRST_DIAG_STEP 1
 #define SECOND_DIAG_STEP 2
@@ -68,13 +46,11 @@ GLOBAL_LIST_INIT(restricted_camera_networks, list( //Those networks can only be 
 #define SHUTTLE_COOLING_FACTOR_RECHARGE 0.5
 #define SHUTTLE_FUEL_ENHANCE_FACTOR_TRAVEL 0.75
 
-
 //sharp item defines
 #define IS_NOT_SHARP_ITEM 0
 #define IS_SHARP_ITEM_SIMPLE 1 //not easily usable to cut or slice. e.g. shard, wirecutters, spear
 #define IS_SHARP_ITEM_ACCURATE 2 //knife, scalpel
 #define IS_SHARP_ITEM_BIG 3 //fireaxe, hatchet, energy sword
-
 
 //pry capable item defines
 #define IS_PRY_CAPABLE_SIMPLE 1
@@ -105,7 +81,8 @@ GLOBAL_LIST_INIT(restricted_camera_networks, list( //Those networks can only be 
 #define SCOUT_CLOAK_ENERGY 100
 #define SCOUT_CLOAK_STEALTH_DELAY 30
 #define SCOUT_CLOAK_RUN_DRAIN 5
-#define SCOUT_CLOAK_WALK_DRAIN 1
+//#define SCOUT_CLOAK_WALK_DRAIN 1
+#define SCOUT_CLOAK_WALK_DRAIN -1 //RUTGMС EDIT
 #define SCOUT_CLOAK_ACTIVE_RECOVERY -5 //You only get this once every obj tick, so it'll be comparable to the inactive value
 #define SCOUT_CLOAK_INACTIVE_RECOVERY 5
 #define SCOUT_CLOAK_COOLDOWN 100
@@ -124,11 +101,10 @@ GLOBAL_LIST_INIT(restricted_camera_networks, list( //Those networks can only be 
 #define B18_OXY_CODE 3
 #define B18_TOX_CODE 4
 #define B18_PAIN_CODE 5
-#define B18_DAMAGE_MIN 50
-#define B18_DAMAGE_MAX 150
-#define B18_PAIN_MIN 50
-#define B18_PAIN_MAX 150
-
+#define B18_DAMAGE_MIN 20
+#define B18_DAMAGE_MAX 300
+#define B18_PAIN_MIN 20
+#define B18_PAIN_MAX 300
 
 //Razor wire
 
@@ -152,12 +128,10 @@ GLOBAL_LIST_INIT(restricted_camera_networks, list( //Those networks can only be 
 #define SCOPE_RAIL_MINI 0.2
 #define SCOPE_RAIL_SNIPER 0.5
 
-
 //Hypospray
 
 #define HYPOSPRAY_INJECT_MODE_DRAW 0
 #define HYPOSPRAY_INJECT_MODE_INJECT 1
-
 
 //Lighter
 
@@ -202,8 +176,9 @@ GLOBAL_LIST_INIT(restricted_camera_networks, list( //Those networks can only be 
 //Item sprite variants
 #define ITEM_JUNGLE_VARIANT (1<<0)
 #define ITEM_ICE_VARIANT (1<<1)
-#define ITEM_PRISON_VARIANT (1<<2)
-#define ITEM_DESERT_VARIANT (1<<3)
+#define ITEM_ICE_PROTECTION (1<<2)
+#define ITEM_PRISON_VARIANT (1<<3)
+#define ITEM_DESERT_VARIANT (1<<4)
 
 #define ITEM_UNEQUIP_FAIL 0
 #define ITEM_UNEQUIP_DROPPED 1
@@ -268,11 +243,3 @@ GLOBAL_LIST_INIT(restricted_camera_networks, list( //Those networks can only be 
 
 //cameras
 #define SOM_CAMERA_NETWORK "som_camera_network"
-
-///Burn level applied by lava if it calls fire_act
-#define LAVA_BURN_LEVEL 60
-
-///Rods needed to build a catwalk
-#define CATWALK_ROD_REQ 4
-///Rods needed to reinforce a floor
-#define REINFORCED_FLOOR_ROD_REQ 2

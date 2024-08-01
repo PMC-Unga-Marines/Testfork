@@ -3,7 +3,6 @@
 	use_power = 0
 	req_one_access = list(ACCESS_MARINE_ENGINEERING, ACCESS_MARINE_ENGPREP, ACCESS_MARINE_LEADER)
 	hud_possible = list(MACHINE_HEALTH_HUD, MACHINE_AMMO_HUD)
-	allow_pass_flags = PASSABLE
 	///Spark system for making sparks
 	var/datum/effect_system/spark_spread/spark_system
 	///Camera for viewing with cam consoles
@@ -83,11 +82,6 @@
 		return
 	icon_state += "_f"
 
-/obj/machinery/deployable/mounted/sentry/update_overlays()
-	. = ..()
-	if(machine_stat & EMPED)
-		. += image('icons/effects/effects.dmi', src, "shieldsparkles")
-
 /obj/machinery/deployable/mounted/sentry/Destroy()
 	QDEL_NULL(radio)
 	QDEL_NULL(camera)
@@ -144,6 +138,11 @@
 	DISABLE_BITFIELD(machine_stat, KNOCKED_DOWN)
 	density = TRUE
 	set_on(TRUE)
+
+/obj/machinery/deployable/mounted/sentry/attack_ghost(mob/dead/observer/user)
+	. = ..()
+	ui_interact(user)
+	update_static_data(user)
 
 /obj/machinery/deployable/mounted/sentry/reload(mob/user, ammo_magazine)
 	if(!match_iff(user)) //You can't pull the ammo out of hostile turrets
@@ -301,12 +300,12 @@
 	set_on(FALSE)
 	update_icon()
 
-/obj/machinery/deployable/mounted/sentry/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, effects = TRUE, attack_dir, armour_penetration = 0, mob/living/blame_mob)
+/obj/machinery/deployable/mounted/sentry/take_damage(damage_amount, damage_type, damage_flag, effects, attack_dir, armour_penetration)
 	if(damage_amount <= 0)
 		return
 	if(prob(10))
 		spark_system.start()
-	if(damage_amount >= knockdown_threshold) //Knockdown is certain if we deal this much in one hit; no more RNG nonsense, the fucking thing is bolted.
+	if(damage_amount >= knockdown_threshold && damage_type != STAMINA) //Knockdown is certain if we deal this much in one hit; no more RNG nonsense, the fucking thing is bolted.
 		knock_down()
 
 	. = ..()
@@ -315,24 +314,13 @@
 	sentry_alert(SENTRY_ALERT_DAMAGE)
 	update_icon()
 
-/obj/machinery/deployable/mounted/sentry/emp_act(severity)
-	. = ..()
-	machine_stat |= EMPED
-	playsound(loc, 'sound/magic/lightningshock.ogg', 50, FALSE)
-	addtimer(CALLBACK(src, PROC_REF(remove_emp)), (5 - severity) * 2 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE) //will need to add something later to be additive or something
-	update_appearance(UPDATE_OVERLAYS)
-
-///Lifts EMP effects
-/obj/machinery/deployable/mounted/sentry/proc/remove_emp()
-	machine_stat &= ~EMPED
-	update_appearance(UPDATE_OVERLAYS)
-	playsound(loc, 'sound/machines/warning-buzzer.ogg', 50, FALSE)
-
 //----------------------------------------------------------------------------
 // Sentry Functions
 
 ///Sentry wants to scream for help.
 /obj/machinery/deployable/mounted/sentry/proc/sentry_alert(alert_code, mob/mob)
+	if(!internal_item)
+		return
 	var/obj/item/weapon/gun/gun = get_internal_item()
 	if(!gun)
 		return
@@ -366,7 +354,7 @@
 
 /obj/machinery/deployable/mounted/sentry/process()
 	update_icon()
-	if((machine_stat & EMPED) || !scan())
+	if(!scan())
 		var/obj/item/weapon/gun/gun = get_internal_item()
 		gun?.stop_fire()
 		firing = FALSE
@@ -381,31 +369,24 @@
 	var/obj/item/weapon/gun/gun = get_internal_item()
 	potential_targets.Cut()
 	if(!gun)
-		return FALSE
+		return length(potential_targets)
 	for(var/mob/living/carbon/human/nearby_human AS in cheap_get_humans_near(src, range))
-		if(nearby_human.stat == DEAD || CHECK_BITFIELD(nearby_human.status_flags, INCORPOREAL)  || (CHECK_BITFIELD(gun.turret_flags, TURRET_SAFETY) || nearby_human.wear_id?.iff_signal & iff_signal))
+		if(nearby_human.stat == DEAD || CHECK_BITFIELD(nearby_human.status_flags, INCORPOREAL)  || (CHECK_BITFIELD(gun.turret_flags, TURRET_SAFETY) || nearby_human.wear_id?.iff_signal & iff_signal) || HAS_TRAIT(nearby_human, TRAIT_TURRET_HIDDEN)) //RU TGMC EDIT
 			continue
 		potential_targets += nearby_human
 	for(var/mob/living/carbon/xenomorph/nearby_xeno AS in cheap_get_xenos_near(src, range))
-		if(nearby_xeno.stat == DEAD || HAS_TRAIT(nearby_xeno, TRAIT_TURRET_HIDDEN) || CHECK_BITFIELD(nearby_xeno.status_flags, INCORPOREAL) || CHECK_BITFIELD(nearby_xeno.xeno_iff_check(), iff_signal)) //So wraiths wont be shot at when in phase shift
+		if(nearby_xeno.stat == DEAD || HAS_TRAIT(nearby_xeno, TRAIT_TURRET_HIDDEN) || CHECK_BITFIELD(nearby_xeno.status_flags, INCORPOREAL) || CHECK_BITFIELD(nearby_xeno.xeno_iff_check(), iff_signal)) //So hiveminds wont be shot at when in phase shift
 			continue
 		potential_targets += nearby_xeno
+	for(var/mob/illusion/nearby_illusion AS in cheap_get_illusions_near(src, range))
+		potential_targets += nearby_illusion
 	for(var/obj/vehicle/sealed/mecha/nearby_mech AS in cheap_get_mechs_near(src, range))
-		var/list/driver_list = nearby_mech.return_drivers()
-		if(!length(driver_list))
+		if(!length(nearby_mech.occupants))
 			continue
-		var/mob/living/carbon/human/human_occupant = driver_list[1]
-		if(human_occupant.wear_id?.iff_signal & iff_signal)
+		var/mob/living/carbon/human/human_occupant = nearby_mech.occupants[1]
+		if(!istype(human_occupant) || (human_occupant.wear_id?.iff_signal & iff_signal))
 			continue
 		potential_targets += nearby_mech
-	for(var/obj/vehicle/sealed/armored/nearby_tank AS in cheap_get_tanks_near(src, range))
-		var/list/driver_list = nearby_tank.return_drivers()
-		if(!length(driver_list))
-			continue
-		var/mob/living/carbon/human/human_occupant = driver_list[1]
-		if(human_occupant.wear_id?.iff_signal & iff_signal)
-			continue
-		potential_targets += nearby_tank
 	return length(potential_targets)
 
 ///Checks the range and the path of the target currently being shot at to see if it is eligable for being shot at again. If not it will stop the firing.
@@ -416,7 +397,7 @@
 		return
 	if(CHECK_BITFIELD(internal_gun.reciever_flags, AMMO_RECIEVER_REQUIRES_UNIQUE_ACTION) && length(internal_gun.chamber_items))
 		INVOKE_ASYNC(internal_gun, TYPE_PROC_REF(/obj/item/weapon/gun, do_unique_action))
-	if(!CHECK_BITFIELD(internal_gun.item_flags, IS_DEPLOYED) || get_dist(src, gun_target) > range || (!CHECK_BITFIELD(get_dir(src, gun_target), dir) && !CHECK_BITFIELD(internal_gun.turret_flags, TURRET_RADIAL)) || !check_target_path(gun_target))
+	if(!CHECK_BITFIELD(internal_gun.flags_item, IS_DEPLOYED) || get_dist(src, gun_target) > range || (!CHECK_BITFIELD(get_dir(src, gun_target), dir) && !CHECK_BITFIELD(internal_gun.turret_flags, TURRET_RADIAL)) || !check_target_path(gun_target))
 		internal_gun.stop_fire()
 		firing = FALSE
 		update_minimap_icon()
@@ -428,14 +409,13 @@
 ///Sees if theres a target to shoot, then handles firing.
 /obj/machinery/deployable/mounted/sentry/proc/sentry_start_fire()
 	var/obj/item/weapon/gun/gun = get_internal_item()
-	var/atom/target = get_target()
-	if(!target)
+	var/mob/living/target = get_target()
+	update_icon()
+	if(!target || get_dist(src, target) > range)
 		gun.stop_fire()
 		firing = FALSE
 		update_minimap_icon()
 		return
-	sentry_alert(SENTRY_ALERT_HOSTILE, target)
-	update_icon()
 	if(target != gun.target)
 		gun.stop_fire()
 		firing = FALSE
@@ -454,8 +434,6 @@
 
 ///Checks the path to the target for obstructions. Returns TRUE if the path is clear, FALSE if not.
 /obj/machinery/deployable/mounted/sentry/proc/check_target_path(atom/target)
-	if(target.loc == loc)
-		return TRUE
 	var/list/turf/path = getline(src, target)
 	var/turf/starting_turf = get_turf(src)
 	var/turf/target_turf = path[length(path)-1]
@@ -471,8 +449,6 @@
 				break
 			if(i==2)
 				return FALSE
-
-	var/obj/item/weapon/gun/gun = get_internal_item()
 	for(var/turf/T AS in path)
 		var/obj/effect/particle_effect/smoke/smoke = locate() in T
 		if(smoke?.opacity)
@@ -481,34 +457,36 @@
 		if(IS_OPAQUE_TURF(T) || T.density && !(T.allow_pass_flags & PASS_PROJECTILE) && !(T.type in ignored_terrains))
 			return FALSE
 
-		for(var/atom/movable/AM AS in T)
-			if(AM == target)
-				continue
-			if(AM.opacity)
+		for(var/obj/machinery/MA in T)
+			if(MA.density && !(MA.allow_pass_flags & PASS_PROJECTILE) && !(MA.type in ignored_terrains))
 				return FALSE
-			if(!AM.density)
-				continue
-			if(ismob(AM))
-				continue
-			if(AM.type in ignored_terrains) //todo:accurately populate ignored_terrains
-				continue
-			if(AM.allow_pass_flags & (gun.ammo_datum_type::ammo_behavior_flags & AMMO_ENERGY ? (PASS_GLASS|PASS_PROJECTILE) : PASS_PROJECTILE))
-				continue
-			return FALSE
+
+		for(var/obj/structure/S in T)
+			if(S.density && !(S.allow_pass_flags & PASS_PROJECTILE) && !(S.type in ignored_terrains))
+				return FALSE
 
 	return TRUE
 
 ///Works through potential targets. First checks if they are in range, and if they are friend/foe. Then checks the path to them. Returns the first eligable target.
 /obj/machinery/deployable/mounted/sentry/proc/get_target()
+	var/distance = range + 0.5 //we add 0.5 so if a potential target is at range, it is accepted by the system
+	var/buffer_distance
 	var/obj/item/weapon/gun/gun = get_internal_item()
-	for(var/atom/nearby_target AS in potential_targets)
-		if(nearby_target.loc == loc)
-			return nearby_target
-
+	for (var/atom/nearby_target AS in potential_targets)
 		if(!(get_dir(src, nearby_target) & dir) && !CHECK_BITFIELD(gun.turret_flags, TURRET_RADIAL))
 			continue
+
+		buffer_distance = get_dist(nearby_target, src)
+
+		if (distance <= buffer_distance)
+			continue
+
 		if(!check_target_path(nearby_target))
 			continue
+
+		sentry_alert(SENTRY_ALERT_HOSTILE, nearby_target)
+
+		distance = buffer_distance
 		return nearby_target
 
 /obj/machinery/deployable/mounted/sentry/disassemble(mob/user)
@@ -540,7 +518,7 @@
 	var/obj/item/internal_sentry = get_internal_item()
 	if(internal_sentry)
 		name = "Deployed " + internal_sentry.name
-	icon = 'icons/obj/machines/deployable/sentry/build_a_sentry.dmi'
+	icon = 'icons/Marine/sentry.dmi'
 	default_icon_state = "build_a_sentry"
 	update_icon()
 
@@ -548,7 +526,7 @@
 	. = ..()
 	var/obj/item/weapon/gun/internal_gun = get_internal_item()
 	if(internal_gun)
-		. += image('icons/obj/machines/deployable/sentry/build_a_sentry.dmi', src, internal_gun.placed_overlay_iconstate, dir = dir)
+		. += image('icons/Marine/sentry.dmi', src, internal_gun.placed_overlay_iconstate, dir = dir)
 
 //Throwable turret
 /obj/machinery/deployable/mounted/sentry/cope
@@ -564,8 +542,8 @@
 	var/obj/item/item = get_internal_item()
 	if(!item)
 		return
-	if(CHECK_BITFIELD(item.item_flags, DEPLOYED_NO_PICKUP))
-		balloon_alert(user, "Cannot disassemble")
+	if(CHECK_BITFIELD(item.flags_item, DEPLOYED_NO_PICKUP))
+		to_chat(user, span_notice("[src] is anchored in place and cannot be disassembled."))
 		return
 	if(!match_iff(user)) //You can't steal other faction's turrets
 		to_chat(user, span_notice("Access denied."))
@@ -582,7 +560,7 @@
 		set_on(TRUE)
 		return
 
-	DISABLE_BITFIELD(attached_item.item_flags, IS_DEPLOYED)
+	DISABLE_BITFIELD(attached_item.flags_item, IS_DEPLOYED)
 
 	attached_item.reset()
 	user.unset_interaction()

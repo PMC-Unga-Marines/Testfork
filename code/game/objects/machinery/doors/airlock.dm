@@ -7,9 +7,8 @@
 	use_power = IDLE_POWER_USE
 	idle_power_usage = 5
 	active_power_usage = 360
-	atom_flags = HTML_USE_INITAL_ICON_1
+	flags_atom = HTML_USE_INITAL_ICON_1
 	obj_flags = CAN_BE_HIT
-
 	var/aiControlDisabled = 0 //If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock. If -1, the control is enabled but the AI had bypassed it earlier, so if it is disabled again the AI would have no trouble getting back in.
 	var/hackProof = 0 // if 1, this door can't be hacked by the AI
 	var/secondsMainPowerLost = 0 //The number of seconds until power is restored.
@@ -63,8 +62,6 @@
 
 /obj/machinery/door/airlock/LateInitialize()
 	. = ..()
-	if(cyclelinkeddir)
-		cyclelinkairlock()
 	if(!abandoned)
 		return
 	var/outcome = rand(1,40)
@@ -86,71 +83,33 @@
 		if(24 to 30)
 			machine_stat ^= PANEL_OPEN
 
-/obj/machinery/door/airlock/emp_act(severity)
-	. = ..()
-	if(prob(75 / severity))
-		set_electrified(MACHINE_DEFAULT_ELECTRIFY_TIME)
-	if(prob(30 / severity))
-		open()
-
-///connect potential airlocks to each other for cycling
-/obj/machinery/door/airlock/proc/cyclelinkairlock()
-	if (cycle_linked_airlock)
-		cycle_linked_airlock.cycle_linked_airlock = null
-		cycle_linked_airlock = null
-	if (!cyclelinkeddir)
-		return
-	var/limit = world.view
-	var/turf/T = get_turf(src)
-	var/obj/machinery/door/airlock/FoundDoor
-	do
-		T = get_step(T, cyclelinkeddir)
-		FoundDoor = locate() in T
-		if (FoundDoor && FoundDoor.cyclelinkeddir != get_dir(FoundDoor, src))
-			FoundDoor = null
-		limit--
-	while(!FoundDoor && limit)
-	if (!FoundDoor)
-		return
-	FoundDoor.cycle_linked_airlock = src
-	cycle_linked_airlock = FoundDoor
-
 /obj/machinery/door/airlock/proc/isElectrified()
 	if(secondsElectrified != MACHINE_NOT_ELECTRIFIED)
 		return TRUE
 	return FALSE
 
-
 /obj/machinery/door/airlock/proc/canAIControl(mob/user)
-	if(hackProof)
-		return
 	if(z != user.z)
 		return
 	return ((aiControlDisabled != 1) && !isAllPowerCut())
 
-
 /obj/machinery/door/airlock/proc/canAIHack()
 	return ((aiControlDisabled==1) && (!hackProof) && (!isAllPowerCut()));
-
 
 /obj/machinery/door/airlock/hasPower()
 	return ((!secondsMainPowerLost || !secondsBackupPowerLost) && !(machine_stat & NOPOWER))
 
-
 /obj/machinery/door/airlock/requiresID()
 	return !(wires.is_cut(WIRE_IDSCAN) || aiDisabledIdScanner)
-
 
 /obj/machinery/door/airlock/proc/isAllPowerCut()
 	if((wires.is_cut(WIRE_POWER1) || wires.is_cut(WIRE_POWER2)) && (wires.is_cut(WIRE_BACKUP1) || wires.is_cut(WIRE_BACKUP2)))
 		return TRUE
 
-
 /obj/machinery/door/airlock/proc/regainMainPower()
 	if(secondsMainPowerLost > 0)
 		secondsMainPowerLost = 0
 	update_icon()
-
 
 /obj/machinery/door/airlock/proc/handlePowerRestore()
 	var/cont = TRUE
@@ -173,7 +132,6 @@
 	updateUsrDialog()
 	update_icon()
 
-
 /obj/machinery/door/airlock/proc/loseMainPower()
 	if(secondsMainPowerLost <= 0)
 		secondsMainPowerLost = 60
@@ -184,7 +142,6 @@
 	INVOKE_ASYNC(src, PROC_REF(handlePowerRestore))
 	update_icon()
 
-
 /obj/machinery/door/airlock/proc/loseBackupPower()
 	if(secondsBackupPowerLost < 60)
 		secondsBackupPowerLost = 60
@@ -192,7 +149,6 @@
 		spawnPowerRestoreRunning = TRUE
 	INVOKE_ASYNC(src, PROC_REF(handlePowerRestore))
 	update_icon()
-
 
 /obj/machinery/door/airlock/proc/regainBackupPower()
 	if(secondsBackupPowerLost > 0)
@@ -215,6 +171,7 @@
 	else
 		return 0
 
+
 /obj/machinery/door/airlock/update_icon_state()
 	. = ..()
 	if(density)
@@ -231,29 +188,11 @@
 		return
 	if(emergency && hasPower())
 		. += image(icon, "emergency_access_on")
-	if(CHECK_BITFIELD(machine_stat, PANEL_OPEN))
-		. += image(icon, "panel_open")
-	if(welded)
-		. += image(icon, "welded")
-	if(hasPower() && unres_sides)
-		for(var/heading in list(NORTH,SOUTH,EAST,WEST))
-			if(!(unres_sides & heading))
-				continue
-			var/image/access_overlay = image('icons/obj/doors/overlays.dmi', "unres_[heading]", layer = DOOR_HELPER_LAYER, pixel_y = -4)
-			switch(heading)
-				if(NORTH)
-					access_overlay.pixel_x = 0
-					access_overlay.pixel_y = 32
-				if(SOUTH)
-					access_overlay.pixel_x = 0
-					access_overlay.pixel_y = -32
-				if(EAST)
-					access_overlay.pixel_x = 32
-					access_overlay.pixel_y = 0
-				if(WEST)
-					access_overlay.pixel_x = -32
-					access_overlay.pixel_y = 0
-			. += access_overlay
+	if(CHECK_BITFIELD(machine_stat, PANEL_OPEN) || welded)
+		if(CHECK_BITFIELD(machine_stat, PANEL_OPEN))
+			. += image(icon, "panel_open")
+		if(welded)
+			. += image(icon, "welded")
 
 /obj/machinery/door/airlock/do_animate(animation)
 	switch(animation)
@@ -277,10 +216,8 @@
 			if(density)
 				flick("door_deny", src)
 
-
-
 //Prying open doors
-/obj/machinery/door/airlock/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/door/airlock/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
@@ -334,7 +271,6 @@
 	span_warning("You squeeze and scuttle underneath \the [src]."), null, 5)
 	M.forceMove(loc)
 
-
 /obj/machinery/door/airlock/attack_hand(mob/living/user)
 	. = ..()
 	if(.)
@@ -344,10 +280,37 @@
 
 /obj/machinery/door/airlock/projectile_hit(obj/projectile/proj, cardinal_move, uncrossing)
 	. = ..()
-	if(. && is_mainship_level(z)) //log shipside greytiders
+	if(. && is_mainship_level(z) && !proj.is_shrapnel)
 		log_attack("[key_name(proj.firer)] shot [src] with [proj] at [AREACOORD(src)]")
 		if(SSmonitor.gamestate != SHIPSIDE)
 			msg_admin_ff("[ADMIN_TPMONTY(proj.firer)] shot [src] with [proj] in [ADMIN_VERBOSEJMP(src)].")
+
+/obj/machinery/door/airlock/ex_act(severity, direction)
+	take_damage(severity * density ? EXPLOSION_DAMAGE_MULTIPLIER_DOOR : EXPLOSION_DAMAGE_MULTIPLIER_DOOR_OPEN, BRUTE, BOMB, attack_dir = direction)
+
+/obj/machinery/door/airlock/on_explosion_destruction(severity, direction)
+	create_shrapnel(get_turf(src), rand(2, 5), direction, shrapnel_type = /datum/ammo/bullet/shrapnel/light)
+
+/obj/machinery/door/airlock/get_explosion_resistance()
+	if(density)
+		if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
+			return EXPLOSION_MAX_POWER
+		else
+			return (max_integrity - (max_integrity - obj_integrity)) / EXPLOSION_DAMAGE_MULTIPLIER_DOOR
+	else
+		return FALSE
+
+/obj/machinery/door/airlock/attack_facehugger(mob/living/carbon/xenomorph/facehugger/M, isrightclick = FALSE)
+	for(var/atom/movable/AM in get_turf(src))
+		if(AM != src && AM.density && !AM.CanPass(M, M.loc))
+			to_chat(M, span_warning("\The [AM] prevents you from squeezing under \the [src]!"))
+			return
+	if(locked || welded) //Can't pass through airlocks that have been bolted down or welded
+		to_chat(M, span_warning("\The [src] is locked down tight. You can't squeeze underneath!"))
+		return
+	M.visible_message(span_warning("\The [M] scuttles underneath \the [src]!"), \
+	span_warning("You squeeze and scuttle underneath \the [src]."), null, 5)
+	M.forceMove(loc)
 
 /obj/machinery/door/airlock/attacked_by(obj/item/I, mob/living/user, def_zone)
 	. = ..()
@@ -358,8 +321,6 @@
 
 /obj/machinery/door/airlock/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/clothing/mask/cigarette) && isElectrified())
 		var/obj/item/clothing/mask/cigarette/L = I
@@ -580,23 +541,18 @@
 		return TRUE
 	return FALSE
 
-
 /obj/machinery/door/airlock/Destroy()
 	QUEUE_SMOOTH_NEIGHBORS(loc)
 	QDEL_NULL(wires)
 	return ..()
-
 
 /obj/machinery/door/airlock/proc/prison_open()
 	unlock()
 	open()
 	lock()
 
-
-
 /obj/machinery/door/airlock/proc/update_nearby_icons()
 	QUEUE_SMOOTH_NEIGHBORS(src)
-
 
 /obj/machinery/door/airlock/proc/set_electrified(seconds, mob/user)
 	secondsElectrified = seconds
@@ -615,7 +571,6 @@
 		LAZYADD(shockedby, "\[[time_stamp()]\] [key_name(user)] - ([uppertext(message)])")
 		log_combat(user, src, message)
 
-
 /obj/machinery/door/airlock/proc/electrified_loop()
 	while(secondsElectrified > MACHINE_NOT_ELECTRIFIED)
 		sleep(1 SECONDS)
@@ -630,7 +585,6 @@
 	else
 		set_electrified(MACHINE_ELECTRIFIED_PERMANENT)
 	updateUsrDialog()
-
 
 /obj/machinery/door/airlock/proc/user_toggle_open(mob/user)
 	if(!canAIControl(user))
@@ -649,7 +603,6 @@
 	else
 		open()
 
-
 /obj/machinery/door/airlock/proc/shock_restore(mob/user)
 	if(!canAIControl(user))
 		return
@@ -661,7 +614,6 @@
 	if(isElectrified())
 		set_electrified(MACHINE_NOT_ELECTRIFIED, user)
 
-
 /obj/machinery/door/airlock/proc/shock_temp(mob/user)
 	if(!canAIControl(user))
 		return
@@ -672,7 +624,6 @@
 
 	set_electrified(MACHINE_DEFAULT_ELECTRIFY_TIME, user)
 
-
 /obj/machinery/door/airlock/proc/shock_perm(mob/user)
 	if(!canAIControl(user))
 		return
@@ -682,7 +633,6 @@
 		return
 
 	set_electrified(MACHINE_ELECTRIFIED_PERMANENT, user)
-
 
 /obj/machinery/door/airlock/proc/emergency_on(mob/user)
 	if(!canAIControl(user))
@@ -695,8 +645,6 @@
 	emergency = TRUE
 	update_icon()
 
-
-
 /obj/machinery/door/airlock/proc/emergency_off(mob/user)
 	if(!canAIControl(user))
 		return
@@ -707,7 +655,6 @@
 
 	emergency = FALSE
 	update_icon()
-
 
 /obj/machinery/door/airlock/proc/bolt_raise(mob/user)
 	if(!canAIControl(user))
@@ -727,8 +674,6 @@
 
 	unbolt()
 
-
-
 /obj/machinery/door/airlock/proc/bolt_drop(mob/user)
 	if(!canAIControl(user))
 		return
@@ -739,7 +684,6 @@
 
 	bolt()
 
-
 /obj/machinery/door/airlock/proc/bolt()
 	if(locked)
 		return
@@ -749,7 +693,6 @@
 	audible_message(span_notice("You hear a click from the bottom of the door."), null,  1)
 	update_icon()
 
-
 /obj/machinery/door/airlock/proc/unbolt()
 	if(!locked)
 		return
@@ -758,7 +701,6 @@
 	playsound(src, 'sound/machines/boltsup.ogg', 30, 0, 3)
 	audible_message(span_notice("You hear a click from the bottom of the door."), null,  1)
 	update_icon()
-
 
 /obj/machinery/door/airlock/proc/weld_checks()
 	return !operating && density

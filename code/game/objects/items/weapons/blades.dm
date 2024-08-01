@@ -1,6 +1,276 @@
+/* Weapons
+* Contains:
+*		Claymore
+*		mercsword
+*		Energy Shield
+*		Energy Shield
+*		Energy Shield
+*		Ceremonial Sword
+*		M2132 machete
+*		Officers sword
+*		Commissars sword
+*		Katana
+*		M5 survival knife
+*		Upp Type 30 survival knife
+*		M11 throwing knife
+*		Chainsword
+*/
+
+
+/obj/item/weapon/claymore
+	name = "claymore"
+	desc = "What are you standing around staring at this for? Get to killing!"
+	icon_state = "claymore"
+	item_state = "claymore"
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
+	force = 40
+	throwforce = 10
+	sharp = IS_SHARP_ITEM_BIG
+	edge = 1
+	w_class = WEIGHT_CLASS_NORMAL
+	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+
+/obj/item/weapon/claymore/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/scalping)
+
+/obj/item/weapon/claymore/suicide_act(mob/user)
+	user.visible_message(span_danger("[user] is falling on the [src.name]! It looks like [user.p_theyre()] trying to commit suicide."))
+	return(BRUTELOSS)
+
+/obj/item/weapon/claymore/mercsword
+	name = "combat sword"
+	desc = "A dusty sword commonly seen in historical museums. Where you got this is a mystery, for sure. Only a mercenary would be nuts enough to carry one of these. Sharpened to deal massive damage."
+	icon_state = "mercsword"
+	item_state = "machete"
+	force = 39
+
+/obj/item/weapon/claymore/mercsword/captain
+	name = "Ceremonial Sword"
+	desc = "A fancy ceremonial sword passed down from generation to generation. Despite this, it has been very well cared for, and is in top condition."
+	icon_state = "mercsword"
+	item_state = "machete"
+	force = 55
+
+/obj/item/weapon/claymore/mercsword/officersword
+	icon_state = "officer_sword"
+	item_state = "officer_sword"
+	force = 80
+	attack_speed = 5
+	sharp = IS_SHARP_ITEM_ACCURATE
+	resistance_flags = UNACIDABLE
+	hitsound = 'sound/weapons/rapierhit.ogg'
+	attack_verb = list("slash", "cut")
+	w_class = WEIGHT_CLASS_BULKY
+
+/obj/item/weapon/claymore/mercsword/officersword/attack(mob/living/carbon/M, mob/living/user)
+	. = ..()
+	if(user.skills.getRating("swordplay") == SKILL_SWORDPLAY_DEFAULT)
+		attack_speed = 20
+		force = 35
+		to_chat(user, span_warning("You try to figure out how to wield [src]..."))
+		if(prob(40))
+			if(HAS_TRAIT_FROM(src, TRAIT_NODROP, STRAPPABLE_ITEM_TRAIT))
+				REMOVE_TRAIT(src, TRAIT_NODROP, STRAPPABLE_ITEM_TRAIT)
+			user.drop_held_item(src)
+			to_chat(user, span_warning("[src] slipped out of your hands!"))
+			playsound(src.loc, 'sound/misc/slip.ogg', 25, 1)
+	if(user.skills.getRating("swordplay") == SKILL_SWORDPLAY_TRAINED)
+		attack_speed = initial(attack_speed)
+		force = initial(force)
+
+/obj/item/weapon/claymore/mercsword/officersword/equipped(mob/user, slot)
+	. = ..()
+	toggle_item_bump_attack(user, TRUE)
+
+/obj/item/weapon/claymore/mercsword/officersword/dropped(mob/user)
+	. = ..()
+	toggle_item_bump_attack(user, FALSE)
+
+/obj/item/weapon/claymore/mercsword/officersword/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/strappable)
+
+/obj/item/weapon/claymore/mercsword/officersword/sabre
+	name = "\improper ceremonial officer sabre"
+	desc = "Gold plated, smoked dark wood handle, your name on it, what else do you need?"
+	icon = 'icons/obj/items/weapons.dmi'
+	item_icons = list(
+		slot_l_hand_str = 'icons/mob/inhands/weapons/melee_left.dmi',
+		slot_r_hand_str = 'icons/mob/inhands/weapons/melee_right.dmi',
+	)
+	icon_state = "saber"
+	item_state = "saber"
+
+/obj/item/weapon/claymore/mercsword/machete
+	name = "\improper M2132 machete"
+	desc = "Latest issue of the TGMC Machete. Great for clearing out jungle or brush on outlying colonies. Found commonly in the hands of scouts and trackers, but difficult to carry with the usual kit."
+	icon_state = "machete"
+	attack_speed = 12
+	w_class = WEIGHT_CLASS_BULKY
+	force = 90
+	penetration = 15
+	icon = 'icons/obj/items/weapons.dmi'
+	item_icons = list(
+		slot_back_str = 'icons/mob/clothing/back.dmi',
+		slot_l_hand_str = 'icons/mob/inhands/weapons/melee_left.dmi',
+		slot_r_hand_str = 'icons/mob/inhands/weapons/melee_right.dmi',
+		slot_belt_str = 'icons/mob/suit_slot.dmi'
+	)
+	flags_equip_slot = ITEM_SLOT_BELT|ITEM_SLOT_BACK
+
+/obj/item/weapon/claymore/mercsword/machete/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/strappable)
+
+/obj/item/weapon/claymore/mercsword/machete/equipped(mob/user, slot)
+	. = ..()
+	toggle_item_bump_attack(user, TRUE)
+
+/obj/item/weapon/claymore/mercsword/machete/dropped(mob/user)
+	. = ..()
+	toggle_item_bump_attack(user, FALSE)
+
+/obj/item/weapon/claymore/mercsword/machete/alt
+	name = "machete"
+	desc = "A nice looking machete. Great for clearing out jungle or brush on outlying colonies. Found commonly in the hands of scouts and trackers, but difficult to carry with the usual kit."
+	icon_state = "machete_alt"
+
+/obj/item/weapon/claymore/tomahawk
+	name = "Tomahawk H23"
+	desc = "A specialist tactical weapon, ancient and beloved by many. Issued to TGMC by CAU."
+	icon = 'icons/obj/items/weapons.dmi'
+	icon_state = "tomahawk_tactic"
+	item_state = "tomahawk_tactic"
+	item_icons = list(
+		slot_back_str = 'icons/mob/clothing/back.dmi',
+		slot_l_hand_str = 'icons/mob/items_lefthand_64.dmi',
+		slot_r_hand_str = 'icons/mob/items_righthand_64.dmi',
+	)
+	inhand_x_dimension = 64
+	inhand_y_dimension = 32
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT|ITEM_SLOT_BACK
+	force = 70
+	attack_speed = 8
+	throwforce = 130 //throw_dmg = throwforce * (throw_speed * 0.2)
+	throw_range = 9
+	throw_speed = 5
+	sharp = IS_SHARP_ITEM_BIG
+	edge = 1
+	w_class = WEIGHT_CLASS_BULKY
+
+	///The person throwing tomahawk
+	var/mob/living/living_user
+
+/obj/item/weapon/claymore/tomahawk/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/strappable)
+
+/obj/item/weapon/claymore/tomahawk/equipped(mob/user, slot)
+	. = ..()
+	toggle_item_bump_attack(user, TRUE)
+	if(!living_user)
+		living_user = user
+		RegisterSignal(user, COMSIG_MOB_MOUSEDOWN, PROC_REF(try_throw))
+
+/obj/item/weapon/claymore/tomahawk/dropped(mob/user)
+	. = ..()
+	toggle_item_bump_attack(user, FALSE)
+	if(living_user)
+		living_user = null
+		UnregisterSignal(user, COMSIG_MOB_MOUSEDOWN)
+
+/obj/item/weapon/claymore/tomahawk/proc/try_throw(datum/source, atom/object, turf/location, control, params, bypass_checks = FALSE)
+	SIGNAL_HANDLER
+
+	var/list/modifiers = params2list(params)
+	if(modifiers["shift"])
+		return
+
+	if(modifiers["middle"])
+		return
+
+	if(living_user.get_active_held_item() != src) // If the object in our active hand is not atomahawk, abort
+		return
+
+	if(modifiers["right"])
+		//handle strapping
+		if(HAS_TRAIT_FROM(src, TRAIT_NODROP, STRAPPABLE_ITEM_TRAIT))
+			REMOVE_TRAIT(src, TRAIT_NODROP, STRAPPABLE_ITEM_TRAIT)
+		living_user.throw_item(get_turf_on_clickcatcher(object, living_user, params))
+		return
+
+/obj/item/weapon/claymore/tomahawk/classic
+	name = "Tomahawk H17"
+	desc = "A specialist tactical weapon, very ancient and beloved by many. Issued to Delta by CAU."
+	icon_state = "tomahawk_classic"
+	item_state = "tomahawk_classic"
+
+//FC's sword.
+
+/obj/item/weapon/claymore/mercsword/machete/officersword
+	name = "\improper Officers sword"
+	desc = "This appears to be a rather old blade that has been well taken care of, it is probably a family heirloom. Oddly despite its probable non-combat purpose it is sharpened and not blunt."
+	icon_state = "officer_sword"
+	item_state = "officer_sword"
+	attack_speed = 11
+	penetration = 15
+
+/obj/item/weapon/claymore/mercsword/commissar_sword
+	name = "\improper commissars sword"
+	desc = "The pride of an imperial commissar, held high as they charge into battle."
+	icon_state = "comsword"
+	item_state = "comsword"
+	force = 80
+	attack_speed = 10
+	w_class = WEIGHT_CLASS_BULKY
+
+/obj/item/weapon/claymore/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 25, 1)
+	return ..()
+
+/obj/item/weapon/katana
+	name = "katana"
+	desc = "A finely made Japanese sword, with a well sharpened blade. The blade has been filed to a molecular edge, and is extremely deadly. Commonly found in the hands of mercenaries and yakuza."
+	icon_state = "katana"
+	flags_atom = CONDUCT
+	force = 50
+	throwforce = 10
+	sharp = IS_SHARP_ITEM_BIG
+	edge = 1
+	w_class = WEIGHT_CLASS_NORMAL
+	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+
+/obj/item/weapon/katana/suicide_act(mob/user)
+	user.visible_message(span_danger("[user] is slitting [user.p_their()] stomach open with the [name]! It looks like [user.p_theyre()] trying to commit seppuku."))
+	return(BRUTELOSS)
+
+//To do: replace the toys.
+/obj/item/weapon/katana/replica
+	name = "replica katana"
+	desc = "A cheap knock-off commonly found in regular knife stores. Can still do some damage."
+	force = 27
+	throwforce = 7
+
+/obj/item/weapon/katana/samurai
+	name = "\improper tachi"
+	desc = "A genuine replica of an ancient blade. This one is in remarkably good condition. It could do some damage to everyone, including yourself."
+	icon_state = "samurai_open"
+	force = 60
+	attack_speed = 12
+	w_class = WEIGHT_CLASS_BULKY
+
+
+/obj/item/weapon/katana/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 25, 1)
+	return ..()
+
+
 /obj/item/tool/kitchen/knife/shiv
 	name = "glass shiv"
-	icon = 'icons/obj/items/weapons/knives.dmi'
+	icon = 'icons/obj/items/weapons.dmi'
 	icon_state = "shiv"
 	desc = "A makeshift glass shiv."
 	attack_verb = list("shanked", "shived")
@@ -20,11 +290,15 @@
 
 /obj/item/weapon/combat_knife
 	name = "\improper M5 survival knife"
+	icon = 'icons/obj/items/weapons.dmi'
+	item_icons = list(
+		slot_l_hand_str = 'icons/mob/inhands/weapons/melee_left.dmi',
+		slot_r_hand_str = 'icons/mob/inhands/weapons/melee_right.dmi',
+	)
 	icon_state = "combat_knife"
-	worn_icon_state = "combat_knife"
-	icon = 'icons/obj/items/weapons/knives.dmi'
+	item_state = "combat_knife"
 	desc = "A standard survival knife of high quality. You can slide this knife into your boots, and can be field-modified to attach to the end of a rifle with cable coil."
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	sharp = IS_SHARP_ITEM_ACCURATE
 	force = 30
 	w_class = WEIGHT_CLASS_SMALL
@@ -54,6 +328,7 @@
 /obj/item/weapon/combat_knife/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/scalping)
+	AddElement(/datum/element/shrapnel_removal, 12 SECONDS, 12 SECONDS, 10)
 
 /obj/item/weapon/combat_knife/suicide_act(mob/user)
 	user.visible_message(pick(span_danger("[user] is slitting [user.p_their()] wrists with the [name]! It looks like [user.p_theyre()] trying to commit suicide."), \
@@ -64,20 +339,30 @@
 /obj/item/weapon/combat_knife/upp
 	name = "\improper Type 30 survival knife"
 	icon_state = "upp_knife"
-	worn_icon_state = "knife"
+	item_state = "knife"
 	desc = "The standard issue survival knife of the UPP forces, the Type 30 is effective, but humble. It is small enough to be non-cumbersome, but lethal none-the-less."
 	force = 20
 	throwforce = 10
 	throw_speed = 2
 	throw_range = 8
 
+/obj/item/weapon/combat_knife/nkvd
+	name = "\improper Finka NKVD"
+	icon_state = "upp_knife"
+	item_state = "combat_knife"
+	desc = "Legendary Finka NKVD model 1934 with a 10-year warranty and delivery within 2 days."
+	force = 40
+	throwforce = 50
+	throw_speed = 2
+	throw_range = 8
+
 /obj/item/weapon/karambit
 	name = "karambit"
-	icon = 'icons/obj/items/weapons/knives.dmi'
+	icon = 'icons/obj/items/weapons.dmi'
 	icon_state = "karambit"
-	worn_icon_state = "karambit"
+	item_state = "karambit"
 	desc = "A small high quality knife with a curved blade, good for slashing and hooking. This one has a mottled red finish."
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	sharp = IS_SHARP_ITEM_ACCURATE
 	force = 30
 	w_class = WEIGHT_CLASS_SMALL
@@ -102,23 +387,25 @@
 	do_trick(user)
 
 /obj/item/weapon/karambit/fade
+	icon = 'icons/obj/items/weapons.dmi'
 	icon_state = "karambit_fade"
-	worn_icon_state = "karambit_fade"
+	item_state = "karambit_fade"
 	desc = "A small high quality knife with a curved blade, good for slashing and hooking. This one has been painted by airbrushing transparent paints that fade together over a chrome base coat."
 
 /obj/item/weapon/karambit/case_hardened
+	icon = 'icons/obj/items/weapons.dmi'
 	icon_state = "karambit_case_hardened"
-	worn_icon_state = "karambit_case_hardened"
+	item_state = "karambit_case_hardened"
 	desc = "A small high quality knife with a curved blade, good for slashing and hooking. This one has been color case-hardened through the application of wood charcoal at high temperatures."
 
 /obj/item/stack/throwing_knife
 	name ="\improper M11 throwing knife"
-	icon='icons/obj/items/weapons/throwing.dmi'
+	icon='icons/obj/items/weapons.dmi'
 	icon_state = "throwing_knife"
 	desc="A military knife designed to be thrown at the enemy. Much quieter than a firearm, but requires a steady hand to be used effectively."
 	stack_name = "pile"
 	singular_name = "knife"
-	atom_flags = CONDUCT|DIRLOCK
+	flags_atom = CONDUCT|DIRLOCK
 	sharp = IS_SHARP_ITEM_ACCURATE
 	force = 20
 	w_class = WEIGHT_CLASS_TINY
@@ -127,7 +414,8 @@
 	throw_range = 7
 	hitsound = 'sound/weapons/slash.ogg'
 	attack_verb = list("slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
-	equip_slot_flags = ITEM_SLOT_POCKET
+	flags_equip_slot = ITEM_SLOT_POCKET
+
 	max_amount = 5
 	amount = 5
 	///Delay between throwing.
@@ -136,8 +424,6 @@
 	var/current_target
 	///The person throwing knives
 	var/mob/living/living_user
-	///Do we change sprite depending on the amount left?
-	var/update_on_throwing = TRUE
 
 /obj/item/stack/throwing_knife/Initialize(mapload, new_amount)
 	. = ..()
@@ -146,8 +432,7 @@
 
 /obj/item/stack/throwing_knife/update_icon_state()
 	. = ..()
-	if(update_on_throwing)
-		icon_state = "throwing_knife_[amount]"
+	icon_state = "throwing_knife_[amount]"
 
 /obj/item/stack/throwing_knife/equipped(mob/user, slot)
 	. = ..()
@@ -195,9 +480,9 @@
 ///Throws a knife from the stack, or, if the stack is one, throws the stack.
 /obj/item/stack/throwing_knife/proc/throw_knife()
 	SIGNAL_HANDLER
-	if(living_user?.get_active_held_item() != src)
+	if(living_user?.get_active_held_item() != src) // RUTGMC ADDITION, added "?"
 		return
-	if(living_user.Adjacent(current_target))
+	if(living_user?.Adjacent(current_target)) // RUTGMC ADDITION, added "?"
 		return AUTOFIRE_CONTINUE
 	var/thrown_thing = src
 	if(amount == 1)
@@ -238,21 +523,26 @@
 		UnregisterSignal(current_target, COMSIG_QDELETING)
 	current_target = object
 
+/obj/item/stack/throwing_knife/melee_attack_chain(mob/user, atom/target, params, rightclick)
+	if(target == user && !user.do_self_harm)
+		return
+	return ..()
+
 /obj/item/weapon/chainsword
 	name = "chainsword"
 	desc = "chainsword thing"
-	icon_state = "chainsword_off"
+	icon = 'icons/obj/items/weapons.dmi'
+	icon_state = "chainsword"
 	attack_verb = list("gored", "slashed", "cut")
 	force = 10
 	throwforce = 5
 	var/on = FALSE
-	var/icon_state_on = "chainsword_on"
 
 /obj/item/weapon/chainsword/attack_self(mob/user)
 	. = ..()
 	if(!on)
 		on = !on
-		icon_state = icon_state_on
+		icon_state = "[initial(icon_state)]_on"
 		force = 80
 		throwforce = 30
 	else
@@ -272,5 +562,4 @@
 /obj/item/weapon/chainsword/civilian
 	name = "chainsaw"
 	desc = "A chainsaw. Good for turning big things into little things."
-	icon_state = "chainsaw_off"
-	icon_state_on = "chainsaw_on"
+	icon_state = "chainsaw"

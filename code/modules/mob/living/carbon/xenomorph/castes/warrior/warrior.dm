@@ -1,5 +1,5 @@
 /mob/living/carbon/xenomorph/warrior
-	caste_base_type = /datum/xeno_caste/warrior
+	caste_base_type = /mob/living/carbon/xenomorph/warrior
 	name = "Warrior"
 	desc = "A beefy, alien with an armored carapace."
 	icon = 'icons/Xeno/castes/warrior.dmi'
@@ -9,6 +9,7 @@
 	maxHealth = 200
 	plasma_stored = 50
 	pixel_x = -16
+	old_x = -16
 	tier = XENO_TIER_TWO
 	upgrade = XENO_UPGRADE_NORMAL
 	bubble_icon = "alienroyal"
@@ -20,7 +21,7 @@
 /mob/living/carbon/xenomorph/warrior/handle_special_state()
 	var/datum/action/ability/xeno_action/toggle_agility/agility_action = actions_by_path[/datum/action/ability/xeno_action/toggle_agility]
 	if(agility_action?.ability_active)
-		icon_state = "[xeno_caste.caste_name][(xeno_flags & XENO_ROUNY) ? " rouny" : ""] Agility"
+		icon_state = "[xeno_caste.caste_name][is_a_rouny ? " rouny" : ""] Agility"
 		return TRUE
 	return FALSE
 

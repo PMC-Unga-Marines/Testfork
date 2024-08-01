@@ -16,20 +16,25 @@
 
 	// *** Plasma *** //
 	plasma_max = 925
-	plasma_gain = 40
+	plasma_gain = 30
 
 	// *** Health *** //
-	max_health = 360
+	max_health = 310
 
 	// *** Evolution *** //
 	evolution_threshold = 225
-	upgrade_threshold = TIER_TWO_THRESHOLD
 
-	deevolves_to = /datum/xeno_caste/sentinel
+	evolves_to = list(
+		/mob/living/carbon/xenomorph/boiler,
+		/mob/living/carbon/xenomorph/praetorian,
+	)
+	deevolves_to = list(
+		/mob/living/carbon/xenomorph/sentinel,
+	)
 
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_RIDE_CRUSHER
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_RIDE_CRUSHER|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_HOLD_JELLY
 	caste_traits = list(TRAIT_CAN_VENTCRAWL)
 
 	// *** Defense *** //
@@ -40,11 +45,11 @@
 
 	// *** Ranged Attack *** //
 	spit_delay = 0.5 SECONDS
-	spit_types = list(/datum/ammo/xeno/acid/medium) //Gotta give them their own version of heavy acid; kludgy but necessary as 100 plasma is way too costly.
+	spit_types = list(/datum/ammo/xeno/acid/medium/passthrough) //Gotta give them their own version of heavy acid; kludgy but necessary as 100 plasma is way too costly.
 
 	acid_spray_duration = 10 SECONDS
-	acid_spray_damage_on_hit = 45
-	acid_spray_damage = 20
+	acid_spray_damage_on_hit = 35
+	acid_spray_damage = 16
 	acid_spray_structure_damage = 45
 
 	// *** Abilities *** //
@@ -69,4 +74,4 @@
 	caste_flags = CASTE_EVOLUTION_ALLOWED|CASTE_ACID_BLOOD
 
 	spit_delay = 0.3 SECONDS
-	spit_types = list(/datum/ammo/xeno/acid/auto, /datum/ammo/xeno/acid/medium)
+	spit_types = list(/datum/ammo/xeno/acid/medium/passthrough, /datum/ammo/xeno/acid/auto)

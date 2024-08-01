@@ -158,7 +158,7 @@
 	else
 		for(var/i in 1 to amount)
 			var/atom/A = new chosen(T)
-			A.atom_flags |= ADMIN_SPAWNED
+			A.flags_atom |= ADMIN_SPAWNED
 
 	log_admin("[key_name(usr)] spawned [amount] x [chosen] at [AREACOORD(usr)]")
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Spawn Atom") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -247,7 +247,7 @@
 		return
 
 	var/dat = "<br>"
-	for(var/i in L.GetAllContents())
+	for(var/i in L.get_contents())
 		var/atom/A = i
 		dat += "[A] [ADMIN_VV(A)]<br>"
 
@@ -354,6 +354,7 @@
 		message_admins("[ADMIN_TPMONTY(H)] became a spatial agent.")
 
 
+/* RUTGMC REMOVAL
 /datum/admins/proc/check_bomb_impacts()
 	set name = "Check Bomb Impact"
 	set category = "Debug"
@@ -515,6 +516,7 @@
 			affected_turf.maptext = "N (null)"
 
 	addtimer(CALLBACK(GLOBAL_PROC, PROC_REF(wipe_color_and_text), wipe_colours), 10 SECONDS)
+*/
 
 /datum/admins/proc/wipe_color_and_text(list/atom/wiping)
 	for(var/i in wiping)

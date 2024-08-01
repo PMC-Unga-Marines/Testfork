@@ -396,7 +396,7 @@
 	},
 /area/lv624/lazarus/medbay)
 "IB" = (
-/obj/vehicle/ridden/wheelchair,
+/obj/structure/bed/chair/wheelchair,
 /obj/effect/landmark/weed_node,
 /obj/effect/ai_node,
 /turf/open/floor/tile/blue/whitebluecorner{

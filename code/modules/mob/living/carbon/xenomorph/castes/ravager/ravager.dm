@@ -1,5 +1,5 @@
 /mob/living/carbon/xenomorph/ravager
-	caste_base_type = /datum/xeno_caste/ravager
+	caste_base_type = /mob/living/carbon/xenomorph/ravager
 	name = "Ravager"
 	desc = "A huge, nasty red alien with enormous scythed claws."
 	icon = 'icons/Xeno/castes/ravager.dmi'
@@ -12,6 +12,7 @@
 	tier = XENO_TIER_THREE
 	upgrade = XENO_UPGRADE_NORMAL
 	pixel_x = -16
+	old_x = -16
 	bubble_icon = "alienroyal"
 
 /mob/living/carbon/xenomorph/ravager/Initialize(mapload)
@@ -21,10 +22,13 @@
 // ***************************************
 // *********** Mob overrides
 // ***************************************
-/mob/living/carbon/xenomorph/ravager/fire_act(burn_level)
+
+/mob/living/carbon/xenomorph/ravager/flamer_fire_act(burnlevel)
 	. = ..()
 	if(stat)
 		return
+	if(pass_flags & PASS_FIRE) // RUTGMC ADDITION START
+		return FALSE // RUTGMC ADDITION END
 	if(TIMER_COOLDOWN_CHECK(src, COOLDOWN_RAVAGER_FLAMER_ACT))
 		return FALSE
 	gain_plasma(50)
@@ -50,3 +54,15 @@
 	var/datum/action/ability/xeno_action/endure/endure_ability = actions_by_path[/datum/action/ability/xeno_action/endure]
 	return endure_ability.endure_threshold
 
+/mob/living/carbon/xenomorph/ravager/med_hud_set_health()
+	var/image/holder = hud_list[HEALTH_HUD_XENO]
+	if(!holder)
+		return
+	if(stat == DEAD)
+		holder.icon_state = "xenohealth0"
+		return
+
+	var/amount = health > 0 ? round(health * 100 / maxHealth, 10) : CEILING(health, 10)
+	if(!amount && health < 0)
+		amount = -1 //don't want the 'zero health' icon when we are crit
+	holder.icon_state = "ravagerhealth[amount]"

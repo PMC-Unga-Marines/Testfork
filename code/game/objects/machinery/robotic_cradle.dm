@@ -8,8 +8,8 @@
 /obj/machinery/robotic_cradle
 	name = "robotic cradle"
 	desc = "A highly experimental robotic maintenence machine using a bath of industrial nanomachines to quickly restore any robotic machine inserted."
-	icon = 'icons/obj/machines/suit_cycler.dmi'
-	icon_state = "suit_cycler"
+	icon = 'icons/obj/machines/robotic_cradle.dmi'
+	icon_state = "robotic_cradle"
 	density = TRUE
 	max_integrity = 350
 	soft_armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 100, BOMB = 0, BIO = 100, FIRE = 30, ACID = 30)
@@ -17,7 +17,6 @@
 	use_power = ACTIVE_POWER_USE
 	idle_power_usage = 15
 	active_power_usage = 10000 // It rebuilds you from nothing...
-
 	///This var is used to see if the machine is currently repairing or not.
 	var/repairing = FALSE
 	///This var is the reference used for the patient
@@ -34,7 +33,7 @@
 /obj/machinery/robotic_cradle/Destroy()
 	if(occupant)
 		visible_message("\The [src] malfunctions as it is destroyed mid-repair, ejecting [occupant] with unfinished repair wounds and showering them in debris.")
-		occupant.take_limb_damage(rand(30,50),rand(30,50))
+		occupant.take_limb_damage(rand(30, 50),rand(30, 50))
 		remove_occupant()
 	if(radio)
 		QDEL_NULL(radio)
@@ -42,9 +41,9 @@
 
 /obj/machinery/robotic_cradle/update_icon_state()
 	if(occupant && !(machine_stat & NOPOWER))
-		icon_state = "suit_cycler_active"
+		icon_state = "robotic_cradle_active"
 		return ..()
-	icon_state = "suit_cycler"
+	icon_state = "robotic_cradle"
 
 /obj/machinery/robotic_cradle/power_change()
 	. = ..()
@@ -65,7 +64,7 @@
 	if(!repairing)
 		return
 
-/obj/machinery/robotic_cradle/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/robotic_cradle/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount, damage_type, damage_flag, effects, armor_penetration, isrightclick)
 	if(!occupant)
 		to_chat(xeno_attacker, span_xenowarning("There is nothing of interest in there."))
 		return
@@ -89,7 +88,7 @@
 			playsound(src, 'sound/machines/warning-buzzer.ogg', 50, FALSE)
 			reason = "Reason for discharge: Unauthorized manual release. Alerting security advised."
 		if(CRADLE_NOTICE_EARLY_EJECT)
-			playsound(src,'sound/machines/buzz-two.ogg',50,FALSE)
+			playsound(src,'sound/machines/buzz-two.ogg', 50,FALSE)
 			reason = "Reason for discharge: Operation manually terminated by end user."
 	if(!radio)//The radio shouldn't ever be deleted, but this is a sanity check just in case
 		return
@@ -121,7 +120,7 @@
 		return FALSE
 	var/mob/living/carbon/human/patient = target_mob
 	if(!(patient.species.species_flags & ROBOTIC_LIMBS))
-		visible_message(span_warning("[src] buzzes. Subject is biological, cannot repair"))
+		visible_message(span_warning("[src] buzzes. Subject is biological, cannot repair."))
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, FALSE)
 		return FALSE
 	if(patient.abiotic())
@@ -139,7 +138,7 @@
 		operating_mob.visible_message(span_notice("[operating_mob] starts placing [patient] \the [src]."),
 		span_notice("You start placing [patient] into \the [src]."))
 
-	if(!do_after(patient, 1 SECONDS, IGNORE_HELD_ITEM, src, BUSY_ICON_GENERIC))
+	if(!do_after(operating_mob, 1 SECONDS, IGNORE_HELD_ITEM, src, BUSY_ICON_GENERIC))
 		return FALSE
 	if(occupant) //In case someone tried climbing in earlier than us, while the cradle was empty
 		to_chat(operating_mob, span_notice("[src] is already occupied!"))
@@ -199,7 +198,7 @@
 
 /obj/machinery/robotic_cradle/verb/move_inside()
 	set name = "Enter Cradle"
-	set category = "Object"
+	set category = "Object.Mob"
 	set src in oview(1)
 
 	if(place_mob_inside(usr, usr))
@@ -243,12 +242,11 @@
 
 	if(place_mob_inside(grabbed_mob,user))
 		start_repair_operation()
-
 	return TRUE
 
 /obj/machinery/robotic_cradle/verb/eject()
 	set name = "Eject cradle"
-	set category = "Object"
+	set category = "Object.Mob"
 	set src in oview(1)
 	if(usr.incapacitated())
 		return

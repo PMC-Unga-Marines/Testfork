@@ -11,14 +11,14 @@
 	desc = "A cutting edge piece of technology designed to disrupt long range bluespace interference in a given radius. The SOM's long range teleporters are unlikely to work here while this is active."
 	density = TRUE
 	anchored = TRUE
-	atom_flags = CRITICAL_ATOM
+	flags_atom = CRITICAL_ATOM
 	allow_pass_flags = PASS_PROJECTILE|PASS_AIR
 	destroy_sound = 'sound/effects/meteorimpact.ogg'
 	icon = 'icons/obj/structures/campaign/tele_blocker.dmi'
 	icon_state = "tele_blocker"
 	pixel_x = -16
 	///What flag this removes from the mission
-	var/to_remove_flags = MISSION_DISALLOW_TELEPORT
+	var/flags_to_remove = MISSION_DISALLOW_TELEPORT
 	///The faction this belongs to
 	var/faction = FACTION_TERRAGOV
 	var/owning_faction_notification = "A teleportation disruptor has been deployed in this area. Protect the disruptor to ensure hostile forces cannot deploy via teleportation. "
@@ -44,15 +44,12 @@
 /obj/structure/campaign_deployblocker/ex_act()
 	return
 
-/obj/structure/campaign_deployblocker/plastique_act(mob/living/plastique_user)
-	if(plastique_user && plastique_user.ckey)
-		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[plastique_user.ckey]
-		personal_statistics.mission_blocker_destroyed += (faction != plastique_user.faction ? 1 : -1)
+/obj/structure/campaign_deployblocker/plastique_act()
 	qdel(src)
 
 ///Signals its destruction, enabling the use of the teleporter asset
 /obj/structure/campaign_deployblocker/proc/deactivate()
-	SEND_SIGNAL(SSdcs, COMSIG_GLOB_CAMPAIGN_TELEBLOCKER_DISABLED, src, to_remove_flags, faction)
+	SEND_SIGNAL(SSdcs, COMSIG_GLOB_CAMPAIGN_TELEBLOCKER_DISABLED, src, flags_to_remove, faction)
 	SSminimaps.remove_marker(src)
 	GLOB.campaign_structures -= src
 
@@ -60,17 +57,13 @@
 	name = "TELEBLOCKER"
 	icon = 'icons/obj/structures/campaign_structures.dmi'
 	icon_state = "drop_block"
-	mission_types = list(
-		/datum/campaign_mission/destroy_mission/supply_raid,
-		/datum/campaign_mission/destroy_mission/fire_support_raid,
-		/datum/campaign_mission/raiding_base,
-	)
+	mission_types = list(/datum/campaign_mission/destroy_mission/supply_raid, /datum/campaign_mission/destroy_mission/fire_support_raid)
 	spawn_object = /obj/structure/campaign_deployblocker/drop_blocker
 
 /obj/structure/campaign_deployblocker/drop_blocker
 	name = "drop pod guidance disruptor array"
 	desc = "A sophisticated device intended to severely disrupt drop pod guidance systems, rendering them unusable while the tower stands."
-	to_remove_flags = MISSION_DISALLOW_DROPPODS
+	flags_to_remove = MISSION_DISALLOW_DROPPODS
 	faction = FACTION_SOM
 	owning_faction_notification = "A drop pod disruptor has been deployed in this area. Protect the disruptor to ensure hostile forces cannot deploy via drop pod. "
 	hostile_faction_notification = "The enemy has a device in this area that will prevent the use of our drop pods. Destroy this first to allow for drop pod assault against primary objectives. "

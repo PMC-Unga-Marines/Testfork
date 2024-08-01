@@ -2,14 +2,14 @@
 	icon = 'icons/obj/items/radio.dmi'
 	name = "station bounced radio"
 	icon_state = "walkietalkie"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/tools_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/tools_right.dmi',
 	)
-	worn_icon_state = "radio"
+	item_state = "radio"
 
-	atom_flags = CONDUCT
-	equip_slot_flags = ITEM_SLOT_BELT
+	flags_atom = CONDUCT
+	flags_equip_slot = ITEM_SLOT_BELT
 	throw_speed = 2
 	throw_range = 9
 	w_class = WEIGHT_CLASS_SMALL
@@ -292,21 +292,10 @@
 		return
 
 	var/area/A = get_area(src)
-	var/radio_disruption = CAVE_NO_INTERFERENCE
-	if(!isnull(A) && (A.ceiling >= CEILING_UNDERGROUND) && !(A.area_flags & ALWAYS_RADIO))
-		radio_disruption = CAVE_MINOR_INTERFERENCE
+	if(!isnull(A) && (A.ceiling >= CEILING_UNDERGROUND) && !(A.flags_area & ALWAYS_RADIO))
 		if(A.ceiling >= CEILING_DEEP_UNDERGROUND)
-			radio_disruption = CAVE_FULL_INTERFERENCE
-
-	var/list/inplace_interference = list(radio_disruption)
-	SEND_SIGNAL(talking_movable, COMSIG_CAVE_INTERFERENCE_CHECK, inplace_interference)
-	radio_disruption = inplace_interference[1]
-
-	switch(radio_disruption)
-		if(CAVE_MINOR_INTERFERENCE)
-			signal.data["compression"] += rand(20, 40)
-		if(CAVE_FULL_INTERFERENCE)
 			return
+		signal.data["compression"] += rand(20, 40)
 
 	// All non-independent radios make an attempt to use the subspace system first
 	signal.send_to_receivers()
@@ -356,23 +345,8 @@
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in levels))
 			return FALSE
-		var/radio_disruption = CAVE_NO_INTERFERENCE
 		var/area/A = get_area(src)
-		if(A?.ceiling >= CEILING_UNDERGROUND && !(A.area_flags & ALWAYS_RADIO))
-			radio_disruption = CAVE_MINOR_INTERFERENCE //Unused for this case but may aswell create parity on what the value of the var is.
-			if(A.ceiling >= CEILING_DEEP_UNDERGROUND)
-				radio_disruption = CAVE_FULL_INTERFERENCE
-		var/list/potential_owners = get_nested_locs(src) //Sometimes not equipped, sometimes not even equippable, sometimes in storage, this feels like it's an okay way to do it.
-		var/mob/living/found_owner
-		for(var/mob/living/candidate in potential_owners)
-			found_owner = candidate
-			break
-
-		if(found_owner)
-			var/inplace_interference = list(radio_disruption)
-			SEND_SIGNAL(found_owner, COMSIG_CAVE_INTERFERENCE_CHECK, inplace_interference)
-			radio_disruption = inplace_interference[1]
-		if(radio_disruption == CAVE_FULL_INTERFERENCE)
+		if(A?.ceiling >= CEILING_DEEP_UNDERGROUND)
 			return FALSE
 
 	// allow checks: are we listening on that frequency?
@@ -398,8 +372,6 @@
 
 /obj/item/radio/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(isscrewdriver(I) && !subspace_transmission)
 		unscrewed = !unscrewed
 		if(unscrewed)

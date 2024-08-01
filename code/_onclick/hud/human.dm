@@ -139,12 +139,6 @@
 		hotkeybuttons += pull_icon
 
 	if(hud_data.has_warnings)
-		oxygen_icon = new /atom/movable/screen/oxygen(null, src)
-		infodisplay += oxygen_icon
-
-		toxin_icon = new /atom/movable/screen/toxin(null, src)
-		infodisplay += toxin_icon
-
 		fire_icon = new /atom/movable/screen/fire(null, src)
 		infodisplay += fire_icon
 
@@ -154,14 +148,9 @@
 		staminas = new /atom/movable/screen/stamina_hud(null, src)
 		infodisplay += staminas
 
-	if(hud_data.has_pressure)
-		pressure_icon = new /atom/movable/screen/pressure(null, src)
-		infodisplay += pressure_icon
-
 	if(hud_data.has_bodytemp)
 		bodytemp_icon = new /atom/movable/screen/bodytemp(null, src)
 		infodisplay += bodytemp_icon
-
 
 	if(hud_data.has_nutrition)
 		nutrition_icon = new /atom/movable/screen/nutrition(null, src)

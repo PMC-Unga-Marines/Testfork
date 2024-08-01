@@ -5,7 +5,8 @@
 	icon_closed = "bio"
 	icon_opened = "bioopen"
 
-/obj/structure/closet/l3closet/PopulateContents()
+/obj/structure/closet/l3closet/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/suit/bio_suit( src )
 	new /obj/item/clothing/head/bio_hood( src )
 
@@ -15,7 +16,9 @@
 	icon_closed = "bio_general"
 	icon_opened = "bio_generalopen"
 
-/obj/structure/closet/l3closet/general/PopulateContents()
+/obj/structure/closet/l3closet/general/Initialize(mapload)
+	. = ..()
+	contents = list()
 	new /obj/item/clothing/suit/bio_suit( src )
 	new /obj/item/clothing/head/bio_hood( src )
 
@@ -25,7 +28,9 @@
 	icon_closed = "bio_virology"
 	icon_opened = "bio_virologyopen"
 
-/obj/structure/closet/l3closet/virology/PopulateContents()
+/obj/structure/closet/l3closet/virology/Initialize(mapload)
+	. = ..()
+	contents = list()
 	new /obj/item/clothing/suit/bio_suit/virology( src )
 	new /obj/item/clothing/head/bio_hood/virology( src )
 	new /obj/item/clothing/mask/breath(src)
@@ -37,7 +42,9 @@
 	icon_closed = "bio_security"
 	icon_opened = "bio_securityopen"
 
-/obj/structure/closet/l3closet/security/PopulateContents()
+/obj/structure/closet/l3closet/security/Initialize(mapload)
+	. = ..()
+	contents = list()
 	new /obj/item/clothing/suit/bio_suit/security( src )
 	new /obj/item/clothing/head/bio_hood/security( src )
 
@@ -47,7 +54,9 @@
 	icon_closed = "bio_janitor"
 	icon_opened = "bio_janitoropen"
 
-/obj/structure/closet/l3closet/janitor/PopulateContents()
+/obj/structure/closet/l3closet/janitor/Initialize(mapload)
+	. = ..()
+	contents = list()
 	new /obj/item/clothing/suit/bio_suit/janitor( src )
 	new /obj/item/clothing/head/bio_hood/janitor( src )
 
@@ -57,6 +66,8 @@
 	icon_closed = "bio_scientist"
 	icon_opened = "bio_scientistopen"
 
-/obj/structure/closet/l3closet/scientist/PopulateContents()
+/obj/structure/closet/l3closet/scientist/Initialize(mapload)
+	. = ..()
+	contents = list()
 	new /obj/item/clothing/suit/bio_suit/scientist( src )
 	new /obj/item/clothing/head/bio_hood/scientist( src )

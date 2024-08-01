@@ -4,7 +4,8 @@
 //Just about ALL the procs are tied to the parent, not to the children
 //This is so they can be easily transferred between them without copypasta
 
-/mob/living/carbon/xenomorph/Initialize(mapload, do_not_set_as_ruler)
+/mob/living/carbon/xenomorph/Initialize(mapload)
+	setup_verbs()
 	if(mob_size == MOB_SIZE_BIG)
 		move_resist = MOVE_FORCE_EXTREMELY_STRONG
 		move_force = MOVE_FORCE_EXTREMELY_STRONG
@@ -23,7 +24,7 @@
 	if(is_centcom_level(z) && hivenumber == XENO_HIVE_NORMAL)
 		hivenumber = XENO_HIVE_ADMEME //so admins can safely spawn xenos in Thunderdome for tests.
 
-	set_initial_hivenumber(prevent_ruler=do_not_set_as_ruler)
+	set_initial_hivenumber()
 	voice = "Woman (Journalist)" // TODO when we get tagging make this pick female only
 
 	switch(stat)
@@ -54,6 +55,10 @@
 
 	regenerate_icons()
 
+	hud_set_plasma()
+	med_hud_set_health()
+	hud_update_primo()
+
 	toggle_xeno_mobhud() //This is a verb, but fuck it, it just werks
 
 	update_spits()
@@ -71,12 +76,11 @@
 	if(CONFIG_GET(flag/xenos_on_strike))
 		replace_by_ai()
 	if(z) //Larva are initiated in null space
-		SSminimaps.add_marker(src, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, xeno_caste.minimap_icon))
+		SSminimaps.add_marker(src, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, xeno_caste.minimap_icon)) //RUTGMC edit - icon change
 	handle_weeds_on_movement()
 
 	AddElement(/datum/element/footstep, footstep_type, mob_size >= MOB_SIZE_BIG ? 0.8 : 0.5)
 	set_jump_component()
-	AddComponent(/datum/component/seethrough_mob)
 
 /mob/living/carbon/xenomorph/register_init_signals()
 	. = ..()
@@ -150,29 +154,22 @@
 /mob/living/carbon/xenomorph/proc/generate_name()
 	var/playtime_mins = client?.get_exp(xeno_caste.caste_name)
 	var/rank_name
-	var/prefix = (hive.prefix || xeno_caste.upgrade_name) ? "[hive.prefix][xeno_caste.upgrade_name] " : ""
-	if(!client?.prefs.show_xeno_rank || !client)
-		name = prefix + "[xeno_caste.display_name] ([nicknumber])"
-		real_name = name
-		if(mind)
-			mind.name = name
-		return
 	switch(playtime_mins)
-		if(0 to 600)
+		if(0 to 300)
 			rank_name = "Young"
-		if(601 to 1500) //10 hours
+		if(301 to 1500)
 			rank_name = "Mature"
-		if(1501 to 4200) //25 hours
+		if(1501 to 4200)
 			rank_name = "Elder"
-		if(4201 to 10500) //70 hours
+		if(4201 to 9000)
 			rank_name = "Ancient"
-		if(10501 to INFINITY) //175 hours
+		if(9001 to INFINITY)
 			rank_name = "Prime"
 		else
 			rank_name = "Young"
+	var/prefix = (hive.prefix || xeno_caste.upgrade_name) ? "[hive.prefix][xeno_caste.upgrade_name] " : ""
 	name = prefix + "[rank_name ? "[rank_name] " : ""][xeno_caste.display_name] ([nicknumber])"
 
-	//Update linked data so they show up properly
 	real_name = name
 	if(mind)
 		mind.name = name
@@ -186,26 +183,23 @@
 		if(XENO_UPGRADE_PRIMO)
 			return 1
 
-///Returns the playtime as a number, used for rank icons
 /mob/living/carbon/xenomorph/proc/playtime_as_number()
 	var/playtime_mins = client?.get_exp(xeno_caste.caste_name)
 	switch(playtime_mins)
-		if(0 to 600)
+		if(0 to 300)
 			return 0
-		if(601 to 1500)
+		if(301 to 1500)
 			return 1
 		if(1501 to 4200)
 			return 2
-		if(4201 to 10500)
+		if(4201 to 9000)
 			return 3
-		if(10501 to INFINITY)
+		if(9001 to INFINITY)
 			return 4
 		else
 			return 0
 
 /mob/living/carbon/xenomorph/proc/upgrade_next()
-	if(!(upgrade in GLOB.xenoupgradetiers))
-		CRASH("Invalid upgrade tier set for caste!")
 	switch(upgrade)
 		if(XENO_UPGRADE_INVALID)
 			return XENO_UPGRADE_INVALID
@@ -213,14 +207,8 @@
 			return XENO_UPGRADE_PRIMO
 		if(XENO_UPGRADE_PRIMO)
 			return XENO_UPGRADE_PRIMO
-		if(XENO_UPGRADE_BASETYPE)
-			return XENO_UPGRADE_BASETYPE
-		else
-			stack_trace("Logic for handling this Upgrade tier wasn't written")
 
 /mob/living/carbon/xenomorph/proc/upgrade_prev()
-	if(!(upgrade in GLOB.xenoupgradetiers))
-		CRASH("Invalid upgrade tier set for caste!")
 	switch(upgrade)
 		if(XENO_UPGRADE_INVALID)
 			return XENO_UPGRADE_INVALID
@@ -228,10 +216,6 @@
 			return XENO_UPGRADE_NORMAL
 		if(XENO_UPGRADE_PRIMO)
 			return XENO_UPGRADE_NORMAL
-		if(XENO_UPGRADE_BASETYPE)
-			return XENO_UPGRADE_BASETYPE
-		else
-			stack_trace("Logic for handling this Upgrade tier wasn't written")
 
 /mob/living/carbon/xenomorph/proc/setup_job()
 	var/datum/job/xenomorph/xeno_job = SSjob.type_occupations[xeno_caste.job_type]
@@ -257,10 +241,9 @@
 /mob/living/carbon/xenomorph/examine(mob/user)
 	. = ..()
 	. += xeno_caste.caste_desc
-	. += "<span class='notice'>"
 
 	if(stat == DEAD)
-		. += "<span class='deadsay'>It is DEAD. Kicked the bucket. Off to that great hive in the sky.</span>"
+		. += "It is DEAD. Kicked the bucket. Off to that great hive in the sky."
 	else if(stat == UNCONSCIOUS)
 		. += "It quivers a bit, but barely moves."
 	else
@@ -277,8 +260,6 @@
 			if(1 to 24)
 				. += "It is heavily injured and limping badly."
 
-	. += "</span>"
-
 	if(hivenumber != XENO_HIVE_NORMAL)
 		var/datum/hive_status/hive = GLOB.hive_datums[hivenumber]
 		. += "It appears to belong to the [hive.prefix]hive"
@@ -286,8 +267,7 @@
 
 /mob/living/carbon/xenomorph/Destroy()
 	if(mind) mind.name = name //Grabs the name when the xeno is getting deleted, to reference through hive status later.
-	if(xeno_flags & XENO_ZOOMED)
-		zoom_out()
+	if(is_zoomed) zoom_out()
 
 	GLOB.alive_xeno_list -= src
 	LAZYREMOVE(GLOB.alive_xeno_list_hive[hivenumber], src)
@@ -324,10 +304,10 @@
 		return FALSE //to stop xeno from pulling marines on roller beds.
 	if(ishuman(L))
 		if(L.stat == DEAD) //Can't drag dead human bodies.
-			to_chat(usr,span_xenowarning("This looks gross, better not touch it."))
+			to_chat(usr, span_xenowarning("This looks gross, better not touch it."))
 			return FALSE
-		pull_speed += XENO_DEADHUMAN_DRAG_SLOWDOWN
-	do_attack_animation(L, ATTACK_EFFECT_GRAB)
+		if(L != pulling)
+			pull_speed += XENO_DEADHUMAN_DRAG_SLOWDOWN
 	SEND_SIGNAL(src, COMSIG_XENOMORPH_GRAB)
 	return ..()
 
@@ -339,7 +319,7 @@
 /mob/living/carbon/xenomorph/pull_response(mob/puller)
 	if(stat != CONSCIOUS) // If the Xeno is unconscious, don't fight back against a grab/pull
 		return TRUE
-	if(!ishuman(puller))
+	if(!ishuman(puller) || isyautja(puller))
 		return TRUE
 	var/mob/living/carbon/human/H = puller
 	H.Paralyze(rand(xeno_caste.tacklemin,xeno_caste.tacklemax) * 20)
@@ -429,12 +409,22 @@
 
 
 /mob/living/carbon/xenomorph/Moved(atom/old_loc, movement_dir)
-	if(xeno_flags & XENO_ZOOMED)
-		zoom_out()
+	if(is_zoomed)
+		if(!can_walk_zoomed)
+			zoom_out()
 	handle_weeds_on_movement()
 	return ..()
 
+/mob/living/carbon/xenomorph/Move(NewLoc, direct, glide_size_override)
+	. = ..()
+	if(!.)
+		return
+	if(interactee)// moving stops any kind of interaction
+		unset_interaction()
+
 /mob/living/carbon/xenomorph/CanAllowThrough(atom/movable/mover, turf/target)
+	if(mover.pass_flags & PASS_XENO)
+		return TRUE
 	if(mover.throwing && ismob(mover) && isxeno(mover.thrower)) //xenos can throw mobs past other xenos
 		return TRUE
 	return ..()
@@ -486,13 +476,14 @@ Returns TRUE when loc_weeds_type changes. Returns FALSE when it doesn’t change
 	var/datum/action/ability/xeno_action/xeno_resting/resting_action = actions_by_path[/datum/action/ability/xeno_action/xeno_resting]
 	if(!resting_action || !resting_action.can_use_action())
 		return
+
 	if(resting)
 		if(!COOLDOWN_CHECK(src, xeno_resting_cooldown))
-			balloon_alert(src, "Cannot get up so soon after resting!")
+			balloon_alert(src, "Too soon!")
 			return
 
 	if(!COOLDOWN_CHECK(src, xeno_unresting_cooldown))
-		balloon_alert(src, "Cannot rest so soon after getting up!")
+		balloon_alert(src, "Wait a bit!")
 		return
 	return ..()
 
@@ -503,17 +494,21 @@ Returns TRUE when loc_weeds_type changes. Returns FALSE when it doesn’t change
 	else
 		COOLDOWN_START(src, xeno_unresting_cooldown, XENO_UNRESTING_COOLDOWN)
 
-/mob/living/carbon/xenomorph/set_jump_component(duration = 0.5 SECONDS, cooldown = 1 SECONDS, cost = 0, height = 16, sound = null, flags = JUMP_SHADOW, jump_pass_flags = PASS_LOW_STRUCTURE|PASS_FIRE|PASS_TANK)
+/mob/living/carbon/xenomorph/set_jump_component(duration = 0.5 SECONDS, cooldown = 2 SECONDS, cost = 0, height = 16, sound = null, flags = JUMP_SHADOW, flags_pass = PASS_LOW_STRUCTURE|PASS_FIRE|PASS_TANK)
 	var/gravity = get_gravity()
 	if(gravity < 1) //low grav
 		duration *= 2.5 - gravity
 		cooldown *= 2 - gravity
 		height *= 2 - gravity
 		if(gravity <= 0.75)
-			jump_pass_flags |= PASS_DEFENSIVE_STRUCTURE
+			flags_pass |= PASS_DEFENSIVE_STRUCTURE
 	else if(gravity > 1) //high grav
 		duration *= gravity * 0.5
 		cooldown *= gravity
 		height *= gravity * 0.5
 
-	AddComponent(/datum/component/jump, _jump_duration = duration, _jump_cooldown = cooldown, _stamina_cost = 0, _jump_height = height, _jump_sound = sound, _jump_flags = flags, _jumper_allow_pass_flags = jump_pass_flags)
+	AddComponent(/datum/component/jump, _jump_duration = duration, _jump_cooldown = cooldown, _stamina_cost = 0, _jump_height = height, _jump_sound = sound, _jump_flags = flags, _jumper_allow_pass_flags = flags_pass)
+
+/mob/living/carbon/xenomorph/send_speech(message_raw, message_range = 7, obj/source = src, bubble_type = bubble_icon, list/spans, datum/language/message_language=null, message_mode, tts_message, list/tts_filter)
+	. = ..()
+	playsound(loc, talk_sound, 25, 1)

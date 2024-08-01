@@ -11,29 +11,34 @@
 	wound_type = "defender" //used to match appropriate wound overlays
 
 	// *** Melee Attacks *** //
-	melee_damage = 22
+	melee_damage = 21
 
 	// *** Speed *** //
-	speed = -0.5
+	speed = -0.6
 
 	// *** Plasma *** //
 	plasma_max = 200
-	plasma_gain = 20
+	plasma_gain = 15
 
 	// *** Health *** //
-	max_health = 420
+	max_health = 320
 
 	// *** Evolution *** //
 	evolution_threshold = 100
-	upgrade_threshold = TIER_ONE_THRESHOLD
+	evolves_to = list(
+		/mob/living/carbon/xenomorph/warrior,
+		/mob/living/carbon/xenomorph/bull,
+	)
+
+	deevolves_to = /mob/living/carbon/xenomorph/larva
 
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED
-	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER
+	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_HOLD_FACEHUGGERS|CASTE_CAN_HOLD_JELLY
 	caste_traits = null
 
 	// *** Defense *** //
-	soft_armor = list(MELEE = 45, BULLET = 45, LASER = 45, ENERGY = 45, BOMB = 30, BIO = 30, FIRE = 40, ACID = 30)
+	soft_armor = list(MELEE = 40, BULLET = 40, LASER = 40, ENERGY = 40, BOMB = 20, BIO = 30, FIRE = 40, ACID = 30)
 
 	// *** Minimap Icon *** //
 	minimap_icon = "defender"
@@ -41,7 +46,7 @@
 	// *** Defender Abilities *** //
 	crest_defense_armor = 30
 	crest_defense_slowdown = 0.8
-	fortify_armor = 50
+	fortify_armor = 55
 
 	actions = list(
 		/datum/action/ability/xeno_action/xeno_resting,

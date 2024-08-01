@@ -13,10 +13,10 @@
 	density = TRUE
 	anchored = TRUE
 	coverage = 20
-	atom_flags = CRITICAL_ATOM
+	flags_atom = CRITICAL_ATOM
 	resistance_flags = RESIST_ALL
 	layer = BELOW_MOB_LAYER
-	interaction_flags = INTERACT_MACHINE_TGUI
+	interaction_flags = INTERACT_OBJ_UI
 	var/deployable = TRUE
 	var/extended = FALSE
 	var/lighthack = FALSE
@@ -103,8 +103,6 @@
 
 /obj/machinery/nuclearbomb/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(!extended)
 		return
 	if(!istype(I, /obj/item/disk/nuclear))
@@ -121,7 +119,7 @@
 	if(r_auth && g_auth && b_auth)
 		has_auth = TRUE
 
-/obj/machinery/nuclearbomb/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/nuclearbomb/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
@@ -198,8 +196,7 @@
 	data["red"] = r_auth
 	data["green"] = g_auth
 	data["blue"] = b_auth
-	data["current_site"] = get_area_name(get_area(src))
-	data["nuke_ineligible_site"] = GLOB.nuke_ineligible_site
+
 	var/safe_text = (safety) ? "Safe" : "Engaged"
 	var/status = "Unknown"
 
@@ -258,10 +255,7 @@
 	if(!anchored)
 		balloon_alert(user, "anchors not set")
 		return
-	var/area/area = get_area(src)
-	if(get_area_name(area) in GLOB.nuke_ineligible_site)
-		balloon_alert(user, "ineligible detonation site")
-		return
+
 	if(!timer_enabled)
 		enable()
 		balloon_alert(user, "timer started")

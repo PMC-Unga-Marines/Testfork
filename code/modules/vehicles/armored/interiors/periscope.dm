@@ -1,4 +1,3 @@
-
 /obj/structure/periscope
 	name = "tank periscope"
 	desc = "A periscope for viewing the outside of the vehicle. Resist or move to stop looking through it."
@@ -36,16 +35,3 @@
 /obj/structure/periscope/apc
 	name = "apc periscope"
 
-/obj/structure/periscope/som
-	icon = 'icons/obj/armored/3x4/som_interior_small_props.dmi'
-	icon_state = "periscope"
-	layer = ABOVE_LYING_MOB_LAYER
-	pixel_x = -5
-
-/obj/structure/periscope/som/Initialize(mapload)
-	. = ..()
-	update_appearance(UPDATE_OVERLAYS)
-
-/obj/structure/periscope/som/update_overlays()
-	. = ..()
-	. += emissive_appearance(icon, "[icon_state]_emissive")

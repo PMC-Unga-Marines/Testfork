@@ -9,7 +9,6 @@
 	density = TRUE
 	anchored = TRUE
 	layer = TABLE_LAYER
-	obj_flags = CAN_BE_HIT | IGNORE_DENSITY
 	climbable = TRUE
 	resistance_flags = XENO_DAMAGEABLE
 	allow_pass_flags = PASS_LOW_STRUCTURE|PASSABLE|PASS_WALKOVER
@@ -30,6 +29,28 @@
 	smoothing_groups = list(SMOOTH_GROUP_TABLES_GENERAL)
 	canSmoothWith = list(SMOOTH_GROUP_TABLES_GENERAL)
 
+/obj/structure/table/deconstruct(disassembled)
+	if(disassembled)
+		new parts(loc)
+	else
+		if(reinforced)
+			if(prob(50))
+				new /obj/item/stack/rods(loc)
+		if(dropmetal)
+			new sheet_type(src)
+	return ..()
+
+/obj/structure/table/proc/update_adjacent(location = loc)
+	for(var/direction in CARDINAL_ALL_DIRS)
+		var/obj/structure/table/table = locate(/obj/structure/table, get_step(location,direction))
+		if(!table)
+			continue
+		INVOKE_NEXT_TICK(table, TYPE_PROC_REF(/atom, update_icon))
+
+/obj/structure/table/Destroy()
+	update_adjacent(loc) //so neighbouring tables get updated correctly
+	return ..()
+
 /obj/structure/table/Initialize(mapload)
 	. = ..()
 	for(var/obj/structure/table/evil_table in loc)
@@ -43,26 +64,17 @@
 		COMSIG_ATOM_ENTERED = PROC_REF(on_cross),
 		COMSIG_ATOM_EXIT = PROC_REF(on_try_exit),
 		COMSIG_OBJ_TRY_ALLOW_THROUGH = PROC_REF(can_climb_over),
-		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override),
-		COMSIG_TURF_CHECK_COVERED = TYPE_PROC_REF(/atom/movable, turf_cover_check),
 	)
 	AddElement(/datum/element/connect_loc, connections)
 
-/obj/structure/table/Destroy()
-	update_adjacent(loc) //so neighbouring tables get updated correctly
-	return ..()
-
-/obj/structure/table/deconstruct(disassembled)
-	if(disassembled)
-		new parts(loc)
-		return ..()
-
-	if(reinforced)
-		if(prob(50))
-			new /obj/item/stack/rods(loc)
-	if(dropmetal)
-		new sheet_type(src)
-	return ..()
+/obj/structure/table/proc/on_cross(datum/source, atom/movable/O, oldloc, oldlocs)
+	SIGNAL_HANDLER
+	if(!istype(O,/mob/living/carbon/xenomorph/ravager))
+		return
+	var/mob/living/carbon/xenomorph/M = O
+	if(!M.stat) //No dead xenos jumpin on the bed~
+		visible_message(span_danger("[O] plows straight through [src]!"))
+		deconstruct(FALSE)
 
 /obj/structure/table/update_icon_state()
 	. = ..()
@@ -121,7 +133,34 @@
 
 /obj/structure/table/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
+
+	if(istype(I, /obj/item/grab) && get_dist(src, user) <= 1)
+		if(isxeno(user))
+			return
+
+		var/obj/item/grab/G = I
+		if(!isliving(G.grabbed_thing))
+			return
+
+		var/mob/living/M = G.grabbed_thing
+		if(user.a_intent == INTENT_HARM)
+			if(user.grab_state <= GRAB_AGGRESSIVE)
+				to_chat(user, span_warning("You need a better grip to do that!"))
+				return
+
+			if(prob(15))
+				M.Paralyze(10 SECONDS)
+			M.apply_damage(8, BRUTE, "head", blocked = MELEE, updating_health = TRUE)
+			user.visible_message(span_danger("[user] slams [M]'s face against [src]!"),
+			span_danger("You slam [M]'s face against [src]!"))
+			log_combat(user, M, "slammed", "", "against \the [src]")
+			playsound(loc, 'sound/weapons/tablehit1.ogg', 25, 1)
+
+		else if(user.grab_state >= GRAB_AGGRESSIVE)
+			M.forceMove(loc)
+			M.Paralyze(10 SECONDS)
+			user.visible_message(span_danger("[user] throws [M] on [src]."),
+			span_danger("You throw [M] on [src]."))
 		return
 
 	if(user.a_intent != INTENT_HARM)
@@ -135,42 +174,6 @@
 			I.pixel_y = clamp(text2num(click_params["icon-y"]) - 16, -(world.icon_size/2), world.icon_size/2)
 			return TRUE
 
-/obj/structure/table/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_OBJ_SLAM_DAMAGE, is_sharp = FALSE)
-	. = ..()
-	if(.)
-		playsound(loc, 'sound/weapons/tablehit1.ogg', 25, 1)
-		return
-	if(user.a_intent == INTENT_HARM)
-		return
-	if(user.grab_state < GRAB_AGGRESSIVE)
-		return
-	if(!isliving(grab.grabbed_thing))
-		return
-
-	var/mob/living/grabbed_mob = grab.grabbed_thing
-	grabbed_mob.forceMove(loc)
-	grabbed_mob.Paralyze(2 SECONDS)
-	user.visible_message(span_danger("[user] throws [grabbed_mob] on [src]."),
-	span_danger("You throw [grabbed_mob] on [src]."))
-	return TRUE
-
-///Updates connected tables when required
-/obj/structure/table/proc/update_adjacent(location = loc)
-	for(var/direction in CARDINAL_ALL_DIRS)
-		var/obj/structure/table/table = locate(/obj/structure/table, get_step(location,direction))
-		if(!table)
-			continue
-		INVOKE_NEXT_TICK(table, TYPE_PROC_REF(/atom, update_icon))
-
-///Snowflake check to let ravagers kill tables
-/obj/structure/table/proc/on_cross(datum/source, atom/movable/O, oldloc, oldlocs)
-	SIGNAL_HANDLER
-	if(!istype(O,/mob/living/carbon/xenomorph/ravager))
-		return
-	var/mob/living/carbon/xenomorph/M = O
-	if(!M.stat) //No dead xenos jumpin on the bed~
-		visible_message(span_danger("[O] plows straight through [src]!"))
-		deconstruct(FALSE)
 
 /obj/structure/table/proc/straight_table_check(direction)
 	var/obj/structure/table/T
@@ -229,7 +232,7 @@
 			if(T.flipped && T.dir == src.dir && !T.unflipping_check(new_dir))
 				return FALSE
 	for(var/obj/structure/S in loc)
-		if((S.atom_flags & ON_BORDER) && S.density && S != src) //We would put back on a structure that wouldn't allow it
+		if((S.flags_atom & ON_BORDER) && S.density && S != src) //We would put back on a structure that wouldn't allow it
 			return FALSE
 	return TRUE
 
@@ -275,7 +278,7 @@
 		layer = FLY_LAYER
 	flipped = TRUE
 	coverage = 60
-	atom_flags |= ON_BORDER
+	flags_atom |= ON_BORDER
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && !T.flipped)
@@ -295,7 +298,7 @@
 	flipped = FALSE
 	coverage = 10
 	climbable = initial(climbable)
-	atom_flags &= ~ON_BORDER
+	flags_atom &= ~ON_BORDER
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
 		var/obj/structure/table/T = locate() in get_step(src.loc,D)
 		if(T?.flipped && T.dir == src.dir)
@@ -327,7 +330,7 @@
 /*
 * Wooden tables
 */
-/obj/structure/table/wood
+/obj/structure/table/woodentable
 	name = "wooden table"
 	desc = "A square wood surface resting on four legs. Useful to put stuff on. Can be flipped in emergencies to act as cover."
 	icon = 'icons/obj/smooth_objects/wood_table_reinforced.dmi'
@@ -339,13 +342,10 @@
 	hit_sound = 'sound/effects/woodhit.ogg'
 	max_integrity = 20
 
-/obj/structure/table/wood/add_debris_element()
+/obj/structure/table/woodentable/add_debris_element()
 	AddElement(/datum/element/debris, DEBRIS_WOOD, -10, 5)
 
-/obj/structure/table/wood/footstep_override(atom/movable/source, list/footstep_overrides)
-	footstep_overrides[FOOTSTEP_WOOD] = layer
-
-/obj/structure/table/wood/fancy
+/obj/structure/table/fancywoodentable
 	name = "fancy wooden table"
 	desc = "An expensive fancy wood surface resting on four legs. Useful to put stuff on. Can be flipped in emergencies to act as cover."
 	icon = 'icons/obj/smooth_objects/fancy_table.dmi'
@@ -354,7 +354,10 @@
 	table_prefix = "fwood"
 	parts = /obj/item/frame/table/fancywood
 
-/obj/structure/table/wood/rustic
+/obj/structure/table/fancywoodentable/add_debris_element()
+	AddElement(/datum/element/debris, DEBRIS_WOOD, -10, 5)
+
+/obj/structure/table/rusticwoodentable
 	name = "rustic wooden table"
 	desc = "A rustic wooden surface resting on four legs. Useful to put stuff on. Can be flipped in emergencies to act as cover."
 	icon = 'icons/obj/smooth_objects/rustic_table.dmi'
@@ -363,29 +366,8 @@
 	table_prefix = "pwood"
 	parts = /obj/item/frame/table/rusticwood
 
-/obj/structure/table/wood/gambling
-	name = "gambling table"
-	desc = "A curved wood and carpet surface resting on four legs. Used for gambling games. Can be flipped in emergencies to act as cover."
-	icon = 'icons/obj/smooth_objects/pool_table.dmi'
-	icon_state = "pool_table-0"
-	base_icon_state = "pool_table"
-	sheet_type = /obj/item/stack/sheet/wood
-	parts = /obj/item/frame/table/gambling
-	table_prefix = "gamble"
-	hit_sound = 'sound/effects/woodhit.ogg'
-	max_integrity = 20
-
-/obj/structure/table/wood/gambling/urban
-	icon = 'icons/obj/smooth_objects/urban_table_gambling.dmi'
-	icon_state = "urban_table_gambling-0"
-	base_icon_state = "urban_table_gambling"
-	parts = /obj/item/frame/table/gambling
-
-/obj/structure/table/wood/gambling/urban/black
-	icon = 'icons/obj/smooth_objects/urban_table_gambling_black.dmi'
-	icon_state = "urban_table_gambling_black-0"
-	base_icon_state = "urban_table_gambling_black"
-	parts = /obj/item/frame/table/gambling
+/obj/structure/table/rusticwoodentable/add_debris_element()
+	AddElement(/datum/element/debris, DEBRIS_WOOD, -10, 5)
 
 /obj/structure/table/black
 	name = "black metal table"
@@ -396,24 +378,23 @@
 	table_prefix = "black"
 	parts = /obj/item/frame/table
 
-/obj/structure/table/urban/shiny_black
-	name = "shiny black metal table"
-	desc = "A shiny black metallic surface resting on four legs, looks like it belongs in a boardroom. Useful to put stuff on. Can be flipped in emergencies to act as cover."
-	icon = 'icons/obj/smooth_objects/urban_table_black.dmi'
-	icon_state = "urban_table_black-0"
-	base_icon_state = "urban_table_black"
-	table_prefix = "urban_table_black"
-	parts = /obj/item/frame/table
-
-/obj/structure/table/urban/shiny_brown
-	name = "shiny brown metal table"
-	desc = "A shiny brown metallic surface resting on four legs, looks like it belongs in a boardroom. Useful to put stuff on. Can be flipped in emergencies to act as cover."
-	icon = 'icons/obj/smooth_objects/urban_table_brown.dmi'
-	icon_state = "urban_table_brown-0"
-	base_icon_state = "urban_table_brown"
-	table_prefix = "urban_table_brown"
-	parts = /obj/item/frame/table
-
+/*
+* Gambling tables
+*/
+/obj/structure/table/gamblingtable
+	name = "gambling table"
+	desc = "A curved wood and carpet surface resting on four legs. Used for gambling games. Can be flipped in emergencies to act as cover."
+	icon = 'icons/obj/smooth_objects/pool_table.dmi'
+	icon_state = "pool_table-0"
+	base_icon_state = "pool_table"
+	sheet_type = /obj/item/stack/sheet/wood
+	parts = /obj/item/frame/table/gambling
+	table_prefix = "gamble"
+	hit_sound = 'sound/effects/woodhit.ogg'
+	max_integrity = 20
+/*
+* Reinforced tables
+*/
 /obj/structure/table/reinforced
 	name = "reinforced table"
 	desc = "A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip."
@@ -484,10 +465,6 @@
 	table_status = TABLE_STATUS_FIRM
 	return TRUE
 
-/obj/structure/table/reinforced/weak //used for the icon, functionally similar to a table.
-	name = "rickety reinforced table"
-	desc = "A square metal surface resting on four legs. It has seen better days to whence it was strong."
-	max_integrity = 40
 
 /obj/structure/table/reinforced/prison
 	desc = "A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip."
@@ -541,8 +518,6 @@
 	var/static/list/connections = list(
 		COMSIG_ATOM_ENTERED = PROC_REF(on_cross),
 		COMSIG_OBJ_TRY_ALLOW_THROUGH = PROC_REF(can_climb_over),
-		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override),
-		COMSIG_TURF_CHECK_COVERED = TYPE_PROC_REF(/atom/movable, turf_cover_check),
 	)
 	AddElement(/datum/element/connect_loc, connections)
 
@@ -555,8 +530,6 @@
 
 /obj/structure/rack/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(iswrench(I))
 		deconstruct(TRUE)
@@ -587,9 +560,13 @@
 /obj/structure/rack/nometal
 	dropmetal = FALSE
 
-/obj/structure/rack/wood
-	color = "#8B7B5B"
-	dropmetal = FALSE
+/obj/structure/surface/table/get_explosion_resistance(direction)
+	if(flags_atom & ON_BORDER)
+		if(direction == turn(dir, 90) || direction == turn(dir, -90))
+			return 0
+		else
+			return min(obj_integrity, 40)
+	return 0
 
 #undef TABLE_STATUS_WEAKENED
 #undef TABLE_STATUS_FIRM

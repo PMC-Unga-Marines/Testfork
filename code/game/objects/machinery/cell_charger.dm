@@ -37,8 +37,6 @@
 
 /obj/machinery/cell_charger/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(machine_stat & BROKEN)
 		return
@@ -93,9 +91,11 @@
 
 
 /obj/machinery/cell_charger/emp_act(severity)
-	. = ..()
+	if(machine_stat & (BROKEN|NOPOWER))
+		return
 	if(charging)
 		charging.emp_act(severity)
+	..(severity)
 
 
 /obj/machinery/cell_charger/process()
@@ -103,7 +103,7 @@
 	if((machine_stat & (BROKEN|NOPOWER)) || !anchored)
 		return
 
-	if (charging && !charging.is_fully_charged())
+	if (charging && !charging.fully_charged())
 		charging.give(active_power_usage*GLOB.CELLRATE)
 
 		updateicon()

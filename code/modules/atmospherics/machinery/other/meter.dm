@@ -56,8 +56,6 @@
 
 /obj/machinery/meter/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(iswrench(I))
 		return wrench_act(user, I)
 
@@ -72,7 +70,7 @@
 	return TRUE
 
 /obj/machinery/meter/deconstruct(disassembled = TRUE)
-	if(!(atom_flags & NODECONSTRUCT))
+	if(!(flags_atom & NODECONSTRUCT))
 		new /obj/item/pipe_meter(loc)
 	return ..()
 

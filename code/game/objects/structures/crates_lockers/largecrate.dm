@@ -29,11 +29,9 @@
 	spawn_stuff()
 	return ..()
 
-
 /obj/structure/largecrate/examine(mob/user)
 	. = ..()
 	. += span_notice("You need a crowbar to pry this open!")
-
 
 /obj/structure/largecrate/crowbar_act(mob/living/user, obj/item/I)
 	. = ..()
@@ -44,7 +42,6 @@
 	deconstruct(TRUE)
 	return TRUE
 
-
 /obj/structure/largecrate/proc/spawn_stuff()
 	var/turf/T = get_turf(src)
 	if(spawn_type && spawn_amount)
@@ -52,7 +49,6 @@
 			new spawn_type(T)
 	for(var/obj/O in contents)
 		O.forceMove(loc)
-
 
 /obj/structure/largecrate/mule
 	icon_state = "mulecrate"
@@ -62,13 +58,11 @@
 	spawn_type = /mob/living/simple_animal/corgi/lisa
 	spawn_amount = 1
 
-
 /obj/structure/largecrate/cow
 	name = "cow crate"
 	icon_state = "lisacrate"
 	spawn_type = /mob/living/simple_animal/cow
 	spawn_amount = 1
-
 
 /obj/structure/largecrate/goat
 	name = "goat crate"
@@ -76,38 +70,34 @@
 	spawn_type = /mob/living/simple_animal/hostile/retaliate/goat
 	spawn_amount = 1
 
-
 /obj/structure/largecrate/chick
 	name = "chicken crate"
 	icon_state = "lisacrate"
 	spawn_type = /mob/living/simple_animal/chick
 	spawn_amount = 4
 
-
 ///////////CM largecrates ///////////////////////
-
-
 
 //Possibly the most generically named procs in history. congrats
 /obj/structure/largecrate/random
 	name = "supply crate"
 	var/num_things = 0
 	var/list/stuff = list(
-						/obj/item/cell/high,
-						/obj/item/storage/belt/utility/full,
-						/obj/item/tool/multitool,
-						/obj/item/tool/crowbar,
-						/obj/item/flashlight,
-						/obj/item/reagent_containers/food/snacks/donkpocket,
-						/obj/item/explosive/grenade/smokebomb,
-						/obj/item/circuitboard/airlock,
-						/obj/item/assembly/igniter,
-						/obj/item/tool/weldingtool,
-						/obj/item/tool/wirecutters,
-						/obj/item/tool/analyzer,
-						/obj/item/clothing/under/marine,
-						/obj/item/clothing/shoes/marine
-						)
+		/obj/item/cell/high,
+		/obj/item/storage/belt/utility/full,
+		/obj/item/tool/multitool,
+		/obj/item/tool/crowbar,
+		/obj/item/flashlight,
+		/obj/item/reagent_containers/food/snacks/donkpocket,
+		/obj/item/explosive/grenade/smokebomb,
+		/obj/item/circuitboard/airlock,
+		/obj/item/assembly/igniter,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/wirecutters,
+		/obj/item/tool/analyzer,
+		/obj/item/clothing/under/marine,
+		/obj/item/clothing/shoes/marine
+	)
 
 /obj/structure/largecrate/random/Initialize(mapload)
 	. = ..()
@@ -140,79 +130,17 @@
 	desc = "Two small black storage cases."
 	icon_state = "case_small"
 
-/obj/structure/largecrate/random/mini
-	name = "small crate"
-	desc = "The large supply crate's cousin, 1st removed."
-	icon_state = "mini_crate"
-	density = FALSE
-
-/obj/structure/largecrate/random/mini/chest
-	desc = "A small plastic crate wrapped with securing elastic straps."
-	icon_state = "mini_chest"
-	name = "small chest"
-
-/obj/structure/largecrate/random/mini/chest/b
-	icon_state = "mini_chest_b"
-	name = "small chest"
-
-/obj/structure/largecrate/random/mini/chest/c
-	icon_state = "mini_chest_c"
-	name = "small chest"
-
-/obj/structure/largecrate/random/mini/wooden
-	desc = "A small wooden crate. Two supporting ribs cross this one's frame."
-	icon_state = "mini_wooden"
-	name = "wooden crate"
-
-/obj/structure/largecrate/random/mini/small_case
-	desc = "A small hard-shell case. What could be inside?"
+/obj/structure/largecrate/random/case/small/mini
 	icon_state = "mini_case"
-	name = "small case"
 
-/obj/structure/largecrate/random/mini/small_case/b
-	icon_state = "mini_case_b"
-	name = "small case"
-
-/obj/structure/largecrate/random/mini/small_case/c
-	icon_state = "mini_case_c"
-	name = "small case"
-
-/obj/structure/largecrate/random/mini/ammo
-	desc = "A small metal crate. Here, Freeman ammo!"
-	name = "small ammocase"
-	icon_state = "mini_ammo"
-	stuff = list(
-		/obj/item/ammo_magazine/pistol,
-		/obj/item/ammo_magazine/revolver,
-		/obj/item/ammo_magazine/rifle,
-		/obj/item/ammo_magazine/rifle/extended,
-		/obj/item/ammo_magazine/shotgun,
-		/obj/item/ammo_magazine/shotgun/buckshot,
-		/obj/item/ammo_magazine/shotgun/flechette,
-	)
-
-/obj/structure/largecrate/random/mini/med
-	desc = "A small metal crate containing medical supplies."
-	icon_state = "mini_medcase"
-	name = "small medcase"
-	num_things = 1 //funny lootbox tho.
-	stuff = list(
-		/obj/item/storage/pill_bottle/packet/tricordrazine,
-		/obj/item/tool/crowbar/red,
-		/obj/item/flashlight,
-		/obj/item/storage/pill_bottle/packet/tramadol,
-		/obj/item/stack/medical/splint,
-		/obj/item/healthanalyzer,
-		/obj/item/tool/extinguisher/mini,
-		/obj/item/tool/shovel/etool,
-		/obj/item/tool/screwdriver,
-	)
+/obj/structure/largecrate/random/case/small/mini/Initialize(mapload)
+	. = ..()
+	icon_state = pick("mini_case", "mini_case_b", "mini_case_c")
 
 /obj/structure/largecrate/random/barrel/deconstruct(disassembled = TRUE)
 	if(dropmetal)
 		new /obj/item/stack/sheet/metal/small_stack(src)
 	return ..()
-
 
 /obj/structure/largecrate/random/barrel/welder_act(mob/living/user, obj/item/tool/weldingtool/welder)
 	if(!welder.isOn())
@@ -227,7 +155,6 @@
 	playsound(loc, 'sound/items/welder2.ogg', 25, TRUE)
 	deconstruct(TRUE)
 	return TRUE
-
 
 /obj/structure/largecrate/random/barrel/examine(mob/user)
 	. = ..()
@@ -268,28 +195,16 @@
 	desc = "A white storage barrel"
 	icon_state = "barrel_white"
 
-/obj/structure/largecrate/random/barrel/black
-	name = "black barrel"
-	desc = "A black storage barrel"
-	icon_state = "barrel_black"
-
-/obj/structure/largecrate/random/barrel/brown
-	name = "black brown"
-	desc = "A black storage barrel"
-	icon_state = "barrel_brown"
-
 /obj/structure/largecrate/random/secure
 	name = "secure supply crate"
 	desc = "A secure crate."
 	icon_state = "secure_crate_strapped"
 	var/strapped = 1
 
-
 /obj/structure/largecrate/random/secure/crowbar_act(mob/living/user, obj/item/I)
 	if(strapped)
 		return FALSE
 	return ..()
-
 
 /obj/structure/largecrate/random/secure/wirecutter_act(mob/living/user, obj/item/I)
 	. = ..()
@@ -302,7 +217,6 @@
 	strapped = FALSE
 	return TRUE
 
-
 /obj/structure/largecrate/random/secure/examine(mob/user)
 	. = ..()
 	. += span_notice("You need something sharp to cut off the straps.")
@@ -312,19 +226,19 @@
 	var/num_guns = 3
 	var/num_mags = 3
 	var/list/stuff = list(
-					/obj/item/weapon/gun/pistol/rt3 = /obj/item/ammo_magazine/pistol/hp,
-					/obj/item/weapon/gun/pistol/rt3 = /obj/item/ammo_magazine/pistol/ap,
-					/obj/item/weapon/gun/revolver/single_action/m44 = /obj/item/ammo_magazine/revolver/marksman,
-					/obj/item/weapon/gun/revolver/single_action/m44 = /obj/item/ammo_magazine/revolver/heavy,
-					/obj/item/weapon/gun/shotgun/pump/t35 = /obj/item/ammo_magazine/shotgun,
-					/obj/item/weapon/gun/shotgun/pump/t35 = /obj/item/ammo_magazine/shotgun/incendiary,
-					/obj/item/weapon/gun/shotgun/combat = /obj/item/ammo_magazine/shotgun,
-					/obj/item/weapon/gun/flamer/big_flamer = /obj/item/ammo_magazine/flamer_tank,
-					/obj/item/weapon/gun/pistol/rt3 = /obj/item/ammo_magazine/pistol/incendiary,
-					/obj/item/weapon/gun/rifle/standard_assaultrifle = /obj/item/ammo_magazine/rifle/standard_assaultrifle,
-					/obj/item/weapon/gun/rifle/standard_lmg = /obj/item/ammo_magazine/standard_lmg,
-					/obj/item/weapon/gun/grenade_launcher/single_shot = /obj/item/explosive/grenade/phosphorus
-					)
+		/obj/item/weapon/gun/pistol/rt3 = /obj/item/ammo_magazine/pistol/hp,
+		/obj/item/weapon/gun/pistol/rt3 = /obj/item/ammo_magazine/pistol/ap,
+		/obj/item/weapon/gun/revolver/single_action/m44 = /obj/item/ammo_magazine/revolver/marksman,
+		/obj/item/weapon/gun/revolver/single_action/m44 = /obj/item/ammo_magazine/revolver/heavy,
+		/obj/item/weapon/gun/shotgun/pump/t35 = /obj/item/ammo_magazine/shotgun,
+		/obj/item/weapon/gun/shotgun/pump/t35 = /obj/item/ammo_magazine/shotgun/incendiary,
+		/obj/item/weapon/gun/shotgun/combat = /obj/item/ammo_magazine/shotgun,
+		/obj/item/weapon/gun/flamer/big_flamer = /obj/item/ammo_magazine/flamer_tank,
+		/obj/item/weapon/gun/pistol/rt3 = /obj/item/ammo_magazine/pistol/incendiary,
+		/obj/item/weapon/gun/rifle/standard_assaultrifle = /obj/item/ammo_magazine/rifle/standard_assaultrifle,
+		/obj/item/weapon/gun/rifle/standard_lmg = /obj/item/ammo_magazine/standard_lmg,
+		/obj/item/weapon/gun/grenade_launcher/single_shot = /obj/item/explosive/grenade/phosphorus
+	)
 
 /obj/structure/largecrate/guns/Initialize(mapload)
 	. = ..()

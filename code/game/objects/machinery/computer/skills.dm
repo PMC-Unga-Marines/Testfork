@@ -23,8 +23,6 @@
 
 /obj/machinery/computer/skills/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/card/id) && !scan)
 		if(!user.drop_held_item())
@@ -129,6 +127,7 @@
 							dat += "<td>[crimstat]</td></tr>"
 						dat += "</table><hr width='75%' />"
 						dat += "<br><A href='?src=[text_ref(src)];choice=Return'>Return to index.</A>"
+				else
 		else
 			dat += "<A href='?src=[text_ref(src)];choice=Log In'>{Log In}</A>"
 
@@ -319,7 +318,8 @@ What a mess.*/
 
 /obj/machinery/computer/skills/emp_act(severity)
 	if(machine_stat & (BROKEN|NOPOWER))
-		return ..()
+		..(severity)
+		return
 
 	for(var/datum/data/record/R in GLOB.datacore.security)
 		if(prob(10/severity))
@@ -343,4 +343,4 @@ What a mess.*/
 			qdel(R)
 			continue
 
-	return ..()
+	..(severity)

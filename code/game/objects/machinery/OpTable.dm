@@ -3,6 +3,7 @@
 	desc = "Used for advanced medical procedures."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "table2-idle"
+	base_icon_state = "table2"
 	density = TRUE
 	coverage = 10
 	layer = TABLE_LAYER
@@ -17,7 +18,6 @@
 	buckle_flags = CAN_BUCKLE
 	buckle_lying = 90
 	var/obj/item/tank/anesthetic/anes_tank
-
 	var/obj/machinery/computer/operating/computer = null
 
 /obj/machinery/optable/Initialize(mapload)
@@ -25,13 +25,10 @@
 
 	var/static/list/connections = list(
 		COMSIG_OBJ_TRY_ALLOW_THROUGH = PROC_REF(can_climb_over),
-		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override),
-		COMSIG_TURF_CHECK_COVERED = TYPE_PROC_REF(/atom/movable, turf_cover_check),
 	)
 	AddElement(/datum/element/connect_loc, connections)
 
 	return INITIALIZE_HINT_LATELOAD
-
 
 /obj/machinery/optable/LateInitialize()
 	for(dir in list(NORTH, EAST, SOUTH, WEST))
@@ -41,23 +38,15 @@
 			break
 
 /obj/machinery/optable/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if (prob(50))
-				qdel(src)
-
-
-
-
+	if(prob(severity / 3))
+		qdel(src)
 
 /obj/machinery/optable/examine(mob/user)
 	. = ..()
 	if(get_dist(user, src) > 2 && !isobserver(user))
 		return
 	if(anes_tank)
-		. += span_information("It has an [anes_tank] connected with the gauge showing [round(anes_tank.pressure,0.1)] kPa.")
+		. += span_information("It has an [anes_tank].")
 
 /obj/machinery/optable/attack_hand(mob/living/user)
 	. = ..()
@@ -68,7 +57,6 @@
 		to_chat(user, span_notice("You remove \the [anes_tank] from \the [src]."))
 		playsound(loc, 'sound/effects/air_release.ogg', 25, 1)
 		anes_tank = null
-
 
 /obj/machinery/optable/user_buckle_mob(mob/living/buckling_mob, mob/user, check_loc = TRUE, silent)
 	if(!ishuman(buckling_mob))
@@ -120,7 +108,6 @@
 	if(!silent)
 		buckled_mob.visible_message(span_notice("[user] turns off the anesthetic and removes the mask from [buckled_mob]."))
 
-
 /obj/machinery/optable/post_unbuckle_mob(mob/living/buckled_mob)
 	if(!ishuman(buckled_mob)) // sanity check
 		return
@@ -128,8 +115,12 @@
 	var/obj/item/anesthetic_mask = buckled_human.wear_mask
 	buckled_human.dropItemToGround(anesthetic_mask)
 	qdel(anesthetic_mask)
-	addtimer(TRAIT_CALLBACK_REMOVE(buckled_mob, TRAIT_KNOCKEDOUT, OPTABLE_TRAIT), rand(2 SECONDS, 4 SECONDS))
+	addtimer(CALLBACK(src, PROC_REF(remove_knockout), buckled_mob), rand(2 SECONDS, 4 SECONDS))
 	return ..()
+
+///Wakes the buckled mob back up after they're released
+/obj/machinery/optable/proc/remove_knockout(mob/living/buckled_mob)
+	REMOVE_TRAIT(buckled_mob, TRAIT_KNOCKEDOUT, OPTABLE_TRAIT)
 
 /obj/machinery/optable/MouseDrop_T(atom/A, mob/user)
 
@@ -148,11 +139,11 @@
 		var/mob/living/carbon/human/M = locate(/mob/living/carbon/human, loc)
 		if(M.lying_angle)
 			victim = M
-			icon_state = M.handle_pulse() ? "table2-active" : "table2-idle"
+			icon_state = M.handle_pulse() ? "[base_icon_state]-active" : "[base_icon_state]-idle"
 			return 1
 	victim = null
 	stop_processing()
-	icon_state = "table2-idle"
+	icon_state = "[base_icon_state]-idle"
 	return 0
 
 /obj/machinery/optable/process()
@@ -170,13 +161,13 @@
 		var/mob/living/carbon/human/H = C
 		victim = H
 		start_processing()
-		icon_state = H.handle_pulse() ? "table2-active" : "table2-idle"
+		icon_state = H.handle_pulse() ? "[base_icon_state]-active" : "[base_icon_state]-idle"
 	else
-		icon_state = "table2-idle"
+		icon_state = "[base_icon_state]-idle"
 
 /obj/machinery/optable/verb/climb_on()
 	set name = "Climb On Table"
-	set category = "Object"
+	set category = "Object.Mob"
 	set src in oview(1)
 
 	if(usr.stat || !ishuman(usr) || usr.restrained() || !check_table(usr))
@@ -186,8 +177,6 @@
 
 /obj/machinery/optable/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/tank/anesthetic))
 		if(anes_tank)
@@ -196,33 +185,32 @@
 		anes_tank = I
 		to_chat(user, span_notice("You connect \the [anes_tank] to \the [src]."))
 
-/obj/machinery/optable/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_OBJ_SLAM_DAMAGE, is_sharp = FALSE)
-	. = ..()
-	if(.)
+	if(!istype(I, /obj/item/grab))
 		return
-	if(victim && victim != grab.grabbed_thing)
+
+	var/obj/item/grab/G = I
+	if(victim && victim != G.grabbed_thing)
 		to_chat(user, span_warning("The table is already occupied!"))
 		return
-	var/mob/living/carbon/grabbed_mob
-	if(iscarbon(grab.grabbed_thing))
-		grabbed_mob = grab.grabbed_thing
-		if(grabbed_mob.buckled)
+	var/mob/living/carbon/M
+	if(iscarbon(G.grabbed_thing))
+		M = G.grabbed_thing
+		if(M.buckled)
 			to_chat(user, span_warning("Unbuckle first!"))
 			return
-	else if(istype(grab.grabbed_thing, /obj/structure/closet/bodybag/cryobag))
-		var/obj/structure/closet/bodybag/cryobag/cryobag = grab.grabbed_thing
-		if(!cryobag.bodybag_occupant)
+	else if(istype(G.grabbed_thing, /obj/structure/closet/bodybag/cryobag))
+		var/obj/structure/closet/bodybag/cryobag/C = G.grabbed_thing
+		if(!C.bodybag_occupant)
 			return
-		grabbed_mob = cryobag.bodybag_occupant
-		cryobag.open()
+		M = C.bodybag_occupant
+		C.open()
 		user.stop_pulling()
-		user.start_pulling(grabbed_mob)
+		user.start_pulling(M)
 
-	if(!grabbed_mob)
+	if(!M)
 		return
 
-	take_victim(grabbed_mob, user)
-	return TRUE
+	take_victim(M, user)
 
 /obj/machinery/optable/proc/check_table(mob/living/carbon/patient as mob)
 	if(victim)
@@ -234,3 +222,10 @@
 		return 0
 
 	return 1
+
+/obj/machinery/optable/yautja
+	icon = 'icons/obj/machines/yautja_machines.dmi'
+
+/obj/machinery/optable/alt
+	icon_state = "alt_table2-idle"
+	base_icon_state = "alt_table"

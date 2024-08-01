@@ -124,15 +124,48 @@
 	hard_armor = null
 	soft_armor = null
 
-
-//This proc is used for mobs which are affected by pressure to calculate the amount of pressure that actually
-//affects them once clothing is factored in. ~Errorage
-/mob/living/proc/calculate_affecting_pressure(pressure)
+/mob/proc/get_contents()
 	return
 
 
+//Recursive function to find everything a mob is holding.
+/mob/living/get_contents(obj/item/storage/Storage = null)
+	var/list/L = list()
+
+	if(Storage) //If it called itself
+		L += Storage.return_inv()
+
+		for(var/obj/item/gift/G in Storage.return_inv()) //Check for gift-wrapped items
+			L += G.gift
+			if(istype(G.gift, /obj/item/storage))
+				L += get_contents(G.gift)
+
+		for(var/obj/item/smallDelivery/D in Storage.return_inv()) //Check for package wrapped items
+			L += D.wrapped
+			if(istype(D.wrapped, /obj/item/storage)) //this should never happen
+				L += get_contents(D.wrapped)
+		return L
+
+	else
+
+		L += contents
+		for(var/obj/item/storage/S in contents)	//Check for storage items
+			L += get_contents(S)
+
+		for(var/obj/item/gift/G in contents) //Check for gift-wrapped items
+			L += G.gift
+			if(istype(G.gift, /obj/item/storage))
+				L += get_contents(G.gift)
+
+		for(var/obj/item/smallDelivery/D in contents) //Check for package wrapped items
+			L += D.wrapped
+			if(istype(D.wrapped, /obj/item/storage)) //this should never happen
+				L += get_contents(D.wrapped)
+		return L
+
+
 /mob/living/proc/check_contents_for(A)
-	var/list/L = GetAllContents()
+	var/list/L = get_contents()
 
 	for(var/obj/O in L)
 		if(O.type == A)
@@ -191,13 +224,13 @@
 			var/mob/living/living_puller = pulledby
 			living_puller.set_pull_offsets(src)
 
-	if(s_active && !(s_active.parent in contents) && !CanReach(s_active.parent))
+	if(s_active && !(s_active in contents) && !CanReach(s_active))
 		s_active.close(src)
 
 
-/mob/living/Moved(atom/old_loc, movement_dir, forced = FALSE, list/old_locs)
+/mob/living/Moved(oldLoc, dir)
 	. = ..()
-	update_camera_location(old_loc)
+	update_camera_location(oldLoc)
 
 
 /mob/living/forceMove(atom/destination)
@@ -215,6 +248,14 @@
 
 /mob/living/proc/update_camera_location(oldLoc)
 	return
+
+
+/mob/living/vv_get_dropdown()
+	. = ..()
+	. += "---"
+	.["Add Language"] = "?_src_=vars;[HrefToken()];addlanguage=[REF(src)]"
+	.["Remove Language"] = "?_src_=vars;[HrefToken()];remlanguage=[REF(src)]"
+
 
 /mob/proc/resist_grab()
 	return //returning 1 means we successfully broke free
@@ -318,20 +359,19 @@
 
 		if(!L.buckled && !L.anchored)
 			var/mob_swap_mode = NO_SWAP
-			//the puller can always swap with its victim if on grab intent
+			// the puller can always swap with its victim if on grab intent
 			if(L.pulledby == src && a_intent == INTENT_GRAB)
 				mob_swap_mode = SWAPPING
-			//restrained people act if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
-			else if((L.restrained() || L.a_intent == INTENT_HELP) && (restrained() || a_intent == INTENT_HELP) && L.move_force < MOVE_FORCE_VERY_STRONG)
-				mob_swap_mode = SWAPPING
-			else if(get_xeno_hivenumber() == L.get_xeno_hivenumber() && (L.pass_flags & PASS_XENO || pass_flags & PASS_XENO))
-				mob_swap_mode = PHASING
-			else if((move_resist >= MOVE_FORCE_VERY_STRONG || move_resist > L.move_force) && a_intent == INTENT_HELP) //Larger mobs can shove aside smaller ones. Xenos can always shove xenos
-				mob_swap_mode = SWAPPING
-			/* If we're moving diagonally, but the mob isn't on the diagonal destination turf and the destination turf is enterable we have no reason to shuffle/push them
-			 * However we also do not want mobs of smaller move forces being able to pass us diagonally if our move resist is larger, unless they're the same faction as us
-			*/
-			if(moving_diagonally && (get_dir(src, L) in GLOB.cardinals) && (L.faction == faction || L.move_resist <= move_force) && get_step(src, dir).Enter(src, loc))
+			// Restrained people act if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
+			else if(a_intent == INTENT_HELP || restrained())
+				// xenos swap with xenos and almost whoever they want
+				if(isxeno(src) && (isxeno(L) || move_force > L.move_resist))
+					mob_swap_mode = SWAPPING
+				// if target isn't xeno and both are on help intents, but we don't want xenos to move petrified humans ,then we swap
+				else if(!isxeno(L) && move_force > L.move_resist && (L.a_intent == INTENT_HELP || L.restrained()))
+					mob_swap_mode = SWAPPING
+			/// if we're moving diagonally, but the mob isn't on the diagonal destination turf we have no reason to shuffle/push them
+			if(moving_diagonally && (get_dir(src, L) in GLOB.cardinals) && get_step(src, dir).Enter(src, loc))
 				mob_swap_mode = PHASING
 			if(mob_swap_mode)
 				//switch our position with L
@@ -368,13 +408,15 @@
 
 	if(ismovableatom(A))
 		if(isxeno(src) && ishuman(A))
+			var/datum/action/bump_attack_toggle/bump_action = actions_by_path[/datum/action/bump_attack_toggle] // there should be a better way to do this
+			if(a_intent != INTENT_DISARM && !bump_action.attacking)
+				return
 			var/mob/living/carbon/human/H = A
-			if(!COOLDOWN_CHECK(H,  xeno_push_delay))
+			if(!COOLDOWN_CHECK(H, xeno_push_delay))
 				return
 			COOLDOWN_START(H, xeno_push_delay, XENO_HUMAN_PUSHED_DELAY)
 		if(PushAM(A))
 			return TURF_ENTER_ALREADY_MOVED
-
 
 //Called when we want to push an atom/movable
 /mob/living/proc/PushAM(atom/movable/AM, force = move_force)
@@ -438,11 +480,6 @@
 		stop_pulling() //being thrown breaks pulls.
 	if(pulledby)
 		pulledby.stop_pulling()
-	if(LAZYLEN(buckled_mobs) && !flying)
-		unbuckle_all_mobs(force = TRUE)
-	if(buckled)
-		buckled.unbuckle_mob(src)
-
 	return ..()
 
 /**
@@ -462,14 +499,6 @@
 //used in datum/reagents/reaction() proc
 /mob/living/proc/get_permeability_protection()
 	return LIVING_PERM_COEFF
-
-/// Returns the overall SOFT acid protection of a mob.
-/mob/living/proc/get_soft_acid_protection()
-	return soft_armor?.getRating(ACID)/100
-
-/// Returns the overall HARD acid protection of a mob.
-/mob/living/proc/get_hard_acid_protection()
-	return hard_armor?.getRating(ACID)
 
 /mob/proc/flash_act(intensity = 1, bypass_checks, type = /atom/movable/screen/fullscreen/flash, duration)
 	return
@@ -733,19 +762,46 @@ below 100 is not dizzy
 //for more info on why this is not atom/pull, see examinate() in mob.dm
 /mob/living/verb/pulled(atom/movable/AM as mob|obj in oview(1))
 	set name = "Pull"
-	set category = "Object"
+	set category = "Object.Mob"
 
 	if(istype(AM) && Adjacent(AM))
 		start_pulling(AM)
 	else
 		stop_pulling()
 
+
+/mob/living/vv_edit_var(var_name, var_value)
+	switch(var_name)
+		if("maxHealth")
+			if(!isnum(var_value) || var_value <= 0)
+				return FALSE
+		if("stat")
+			if((stat == DEAD) && (var_value < DEAD))//Bringing the dead back to life
+				GLOB.dead_mob_list -= src
+				GLOB.alive_living_list += src
+			if((stat < DEAD) && (var_value == DEAD))//Kill he
+				GLOB.alive_living_list -= src
+				GLOB.dead_mob_list += src
+	. = ..()
+	switch(var_name)
+		if("eye_blind")
+			set_blindness(var_value)
+		if("eye_blurry")
+			set_blurriness(var_value)
+		if("maxHealth")
+			updatehealth()
+		if("resize")
+			update_transform()
+		if("lighting_alpha")
+			sync_lighting_plane_alpha()
+
+
 /mob/living/can_interact_with(datum/D)
 	return D == src || D.Adjacent(src)
 
 /mob/living/onTransitZ(old_z, new_z)
+	. = ..()
 	set_jump_component()
-	return ..()
 
 /**
  * Changes the inclination angle of a mob, used by humans and others to differentiate between standing up and prone positions.
@@ -812,12 +868,12 @@ below 100 is not dizzy
 ///Swap the active hand
 /mob/living/proc/swap_hand()
 	var/obj/item/wielded_item = get_active_held_item()
-	if(wielded_item && (wielded_item.item_flags & WIELDED)) //this segment checks if the item in your hand is twohanded.
+	if(wielded_item && (wielded_item.flags_item & WIELDED)) //this segment checks if the item in your hand is twohanded.
 		var/obj/item/weapon/twohanded/offhand/offhand = get_inactive_held_item()
-		if(offhand && (offhand.item_flags & WIELDED))
+		if(offhand && (offhand.flags_item & WIELDED))
 			wielded_item.unwield(src) //Get rid of it.
 	hand = !hand
-	SEND_SIGNAL(src, COMSIG_LIVING_SWAPPED_HANDS)
+	SEND_SIGNAL(src, COMSIG_CARBON_SWAPPED_HANDS)
 	if(hud_used.l_hand_hud_object && hud_used.r_hand_hud_object)
 		hud_used.l_hand_hud_object.update_icon()
 		hud_used.r_hand_hud_object.update_icon()
@@ -883,17 +939,7 @@ below 100 is not dizzy
 		get_up()
 
 ///Sets up the jump component for the mob. Proc args can be altered so different mobs have different 'default' jump settings
-/mob/living/proc/set_jump_component(duration = 0.5 SECONDS, cooldown = 1 SECONDS, cost = 8, height = 16, sound = null, flags = JUMP_SHADOW, jump_pass_flags = PASS_LOW_STRUCTURE|PASS_FIRE|PASS_TANK)
-	var/list/arg_list = list(duration, cooldown, cost, height, sound, flags, jump_pass_flags)
-	if(SEND_SIGNAL(src, COMSIG_LIVING_SET_JUMP_COMPONENT, arg_list))
-		duration = arg_list[1]
-		cooldown = arg_list[2]
-		cost = arg_list[3]
-		height = arg_list[4]
-		sound = arg_list[5]
-		flags = arg_list[6]
-		jump_pass_flags = arg_list[7]
-
+/mob/living/proc/set_jump_component(duration = 0.5 SECONDS, cooldown = 1 SECONDS, cost = 8, height = 16, sound = null, flags = JUMP_SHADOW, flags_pass = PASS_LOW_STRUCTURE|PASS_FIRE|PASS_TANK)
 	var/gravity = get_gravity()
 	if(gravity < 1) //low grav
 		duration *= 2.5 - gravity
@@ -901,122 +947,11 @@ below 100 is not dizzy
 		cost *= gravity * 0.5
 		height *= 2 - gravity
 		if(gravity <= 0.75)
-			jump_pass_flags |= PASS_DEFENSIVE_STRUCTURE
+			flags_pass |= PASS_DEFENSIVE_STRUCTURE
 	else if(gravity > 1) //high grav
 		duration *= gravity * 0.5
 		cooldown *= gravity
 		cost *= gravity
 		height *= gravity * 0.5
 
-	AddComponent(/datum/component/jump, _jump_duration = duration, _jump_cooldown = cooldown, _stamina_cost = cost, _jump_height = height, _jump_sound = sound, _jump_flags = flags, _jumper_allow_pass_flags = jump_pass_flags)
-
-/mob/living/vv_edit_var(var_name, var_value)
-	switch(var_name)
-		if (NAMEOF(src, maxHealth))
-			if (!isnum(var_value) || var_value <= 0)
-				return FALSE
-		if(NAMEOF(src, health)) //this doesn't work. gotta use procs instead.
-			return FALSE
-		if(NAMEOF(src, stat))
-			if((stat == DEAD) && (var_value < DEAD))//Bringing the dead back to life
-				GLOB.dead_mob_list -= src
-				GLOB.alive_living_list += src
-			if((stat < DEAD) && (var_value == DEAD))//Kill he
-				GLOB.alive_living_list -= src
-				GLOB.dead_mob_list += src
-		if(NAMEOF(src, resting))
-			set_resting(var_value)
-			. = TRUE
-		if(NAMEOF(src, lying_angle))
-			set_lying_angle(var_value)
-			. = TRUE
-		if(NAMEOF(src, eye_blind))
-			set_blindness(var_value)
-		if(NAMEOF(src, eye_blurry))
-			set_blurriness(var_value)
-		if(NAMEOF(src, lighting_alpha))
-			sync_lighting_plane_alpha()
-		if(NAMEOF(src, resize))
-			if(var_value == 0) //prevents divisions of and by zero.
-				return FALSE
-			update_transform(var_value/resize)
-			. = TRUE
-
-	if(!isnull(.))
-		datum_flags |= DF_VAR_EDITED
-		return
-
-	. = ..()
-
-	switch(var_name)
-		if(NAMEOF(src, maxHealth))
-			updatehealth()
-
-/mob/living/vv_get_header()
-	. = ..()
-	var/refid = REF(src)
-	. += {"
-		<br><font size='1'>[VV_HREF_TARGETREF(refid, VV_HK_GIVE_DIRECT_CONTROL, "[ckey || "no ckey"]")] / [VV_HREF_TARGETREF_1V(refid, VV_HK_BASIC_EDIT, "[real_name || "no real name"]", NAMEOF(src, real_name))]</font>
-		<br><font size='1'>
-			BRUTE:<font size='1'><a href='?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=brute' id='brute'>[getBruteLoss()]</a>
-			FIRE:<font size='1'><a href='?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=fire' id='fire'>[getFireLoss()]</a>
-			TOXIN:<font size='1'><a href='?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=toxin' id='toxin'>[getToxLoss()]</a>
-			OXY:<font size='1'><a href='?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=oxygen' id='oxygen'>[getOxyLoss()]</a>
-			CLONE:<font size='1'><a href='?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=clone' id='clone'>[getCloneLoss()]</a>
-			STAMINA:<font size='1'><a href='?_src_=vars;[HrefToken()];mobToDamage=[refid];adjustDamage=stamina' id='stamina'>[getStaminaLoss()]</a>
-		</font>
-	"}
-
-/mob/living/vv_get_dropdown()
-	. = ..()
-	VV_DROPDOWN_OPTION("", "---------")
-	VV_DROPDOWN_OPTION(VV_HK_ADD_LANGUAGE, "Add Language")
-	VV_DROPDOWN_OPTION(VV_HK_REMOVE_LANGUAGE, "Remove Language")
-	VV_DROPDOWN_OPTION(VV_HK_GIVE_SPEECH_IMPEDIMENT, "Impede Speech (Slurring, stuttering, etc)")
-
-/mob/living/vv_do_topic(list/href_list)
-	. = ..()
-
-	if(!.)
-		return
-
-	if(href_list[VV_HK_ADD_LANGUAGE])
-		if(!check_rights(NONE))
-			return
-		var/choice = tgui_input_list(usr, "Grant which language?", "Languages", GLOB.all_languages)
-		if(!choice)
-			return
-		grant_language(choice)
-	if(href_list[VV_HK_REMOVE_LANGUAGE])
-		if(!check_rights(NONE))
-			return
-		var/choice = tgui_input_list(usr, "Remove which language?", "Known Languages", src.language_holder.languages)
-		if(!choice)
-			return
-		remove_language(choice)
-	if(href_list[VV_HK_GIVE_SPEECH_IMPEDIMENT])
-		if(!check_rights(NONE))
-			return
-		admin_give_speech_impediment(usr)
-
-/// Admin only proc for giving a certain speech impediment to this mob
-/mob/living/proc/admin_give_speech_impediment(mob/admin)
-	if(!admin || !check_rights(NONE))
-		return
-
-	var/list/impediments = list()
-	for(var/datum/status_effect/possible as anything in typesof(/datum/status_effect/speech))
-		if(!initial(possible.id))
-			continue
-
-		impediments[initial(possible.id)] = possible
-
-	var/chosen = tgui_input_list(admin, "What speech impediment?", "Impede Speech", impediments)
-	if(!chosen || !ispath(impediments[chosen], /datum/status_effect/speech) || QDELETED(src) || !check_rights(NONE))
-		return
-
-	var/duration = tgui_input_number(admin, "How long should it last (in seconds)? Max is infinite duration.", "Duration", 0, INFINITY, 0 SECONDS)
-	if(!isnum(duration) || duration <= 0 || QDELETED(src) || !check_rights(NONE))
-		return
-
-	adjust_timed_status_effect(duration * 1 SECONDS, impediments[chosen])
+	AddComponent(/datum/component/jump, _jump_duration = duration, _jump_cooldown = cooldown, _stamina_cost = cost, _jump_height = height, _jump_sound = sound, _jump_flags = flags, _jumper_allow_pass_flags = flags_pass)

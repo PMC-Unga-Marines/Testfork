@@ -27,6 +27,7 @@
 /turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "i" = (
+/obj/structure/barricade/plasteel,
 /obj/machinery/door/poddoor/shutters/transit/nonsmoothing{
 	dir = 1
 	},
@@ -112,6 +113,7 @@
 /turf/open/floor/mainship/mono,
 /area/shuttle/minidropship)
 "C" = (
+/obj/structure/barricade/plasteel,
 /obj/machinery/door/poddoor/shutters/transit/nonsmoothing{
 	dir = 1
 	},
@@ -126,6 +128,16 @@
 	dir = 1
 	},
 /turf/open/floor/mainship/mono,
+/area/shuttle/minidropship)
+"E" = (
+/obj/structure/barricade/plasteel{
+	dir = 8
+	},
+/obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
+/obj/machinery/door/poddoor/mainship/open{
+	id = "minidropship_podlock"
+	},
+/turf/open/floor/plating/plating_catwalk,
 /area/shuttle/minidropship)
 "J" = (
 /obj/machinery/holopad,
@@ -151,6 +163,9 @@
 	},
 /area/shuttle/minidropship)
 "S" = (
+/obj/structure/barricade/plasteel{
+	dir = 4
+	},
 /obj/machinery/door/poddoor/shutters/transit/nonsmoothing,
 /obj/machinery/door/poddoor/mainship/open{
 	id = "minidropship_podlock"
@@ -206,7 +221,7 @@ A
 b
 b
 b
-S
+E
 b
 b
 b

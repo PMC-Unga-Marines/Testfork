@@ -2,12 +2,12 @@
 /obj/machinery/line_nexter
 	name = "Turnstile"
 	desc = "a one way barrier combined with a bar to pull people out of line."
-	icon = 'icons/obj/structures/barricades/misc.dmi'
+	icon = 'icons/Marine/barricades.dmi'
 	density = TRUE
 	icon_state = "turnstile"
 	anchored = TRUE
 	allow_pass_flags = PASS_DEFENSIVE_STRUCTURE|PASSABLE
-	atom_flags = ON_BORDER
+	flags_atom = ON_BORDER
 	dir = 8
 	var/last_use
 	var/id

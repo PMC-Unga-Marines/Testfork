@@ -11,31 +11,37 @@
 	gib_anim = "gibbed-a-corpse-runner"
 	gib_flick = "gibbed-a-runner"
 
+	deevolves_to = /mob/living/carbon/xenomorph/larva
+
 	// *** Melee Attacks *** //
-	melee_damage = 23
+	melee_damage = 21
 	attack_delay = 6
 
 	// *** Speed *** //
-	speed = -1.4
+	speed = -1.5
 
 	// *** Plasma *** //
 	plasma_max = 200
 	plasma_gain = 11
 
 	// *** Health *** //
-	max_health = 300
+	max_health = 240
 
 	// *** Evolution *** //
 	evolution_threshold = 100
-	upgrade_threshold = TIER_ONE_THRESHOLD
 
+	evolves_to = list(
+		/mob/living/carbon/xenomorph/hunter,
+		/mob/living/carbon/xenomorph/bull,
+		/mob/living/carbon/xenomorph/panther,
+	)
 	// *** Flags *** //
 	caste_flags = CASTE_EVOLUTION_ALLOWED
 	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER|CASTE_CAN_RIDE_CRUSHER
 	caste_traits = list(TRAIT_CAN_VENTCRAWL)
 
 	// *** Defense *** //
-	soft_armor = list(MELEE = 30, BULLET = 30, LASER = 30, ENERGY = 30, BOMB = 0, BIO = 5, FIRE = 20, ACID = 5)
+	soft_armor = list(MELEE = 20, BULLET = 20, LASER = 20, ENERGY = 20, BOMB = 0, BIO = 5, FIRE = 19, ACID = 5)
 
 	// *** Minimap Icon *** //
 	minimap_icon = "runner"

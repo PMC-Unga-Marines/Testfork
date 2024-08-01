@@ -1,18 +1,14 @@
-
-
 /turf/closed/wall
 	name = "wall"
 	desc = "A huge chunk of metal used to seperate rooms."
 	icon = 'icons/turf/walls/regular_wall.dmi'
 	icon_state = "metal-0"
+	base_icon_state = "metal"
 	baseturfs = /turf/open/floor/plating
 	opacity = TRUE
 	explosion_block = 2
-
 	walltype = "metal"
-
 	soft_armor = list(MELEE = 0, BULLET = 50, LASER = 50, ENERGY = 100, BOMB = 0, BIO = 0, FIRE = 0, ACID = 0)
-
 	var/wall_integrity
 	var/max_integrity = 1000 //Wall will break down to girders if damage reaches this point
 
@@ -21,9 +17,7 @@
 	base_icon_state = "metal"
 
 	var/max_temperature = 1800 //K, walls will take damage if they're next to a fire hotter than this
-
 	var/d_state = 0 //Normal walls are now as difficult to remove as reinforced walls
-
 	var/obj/effect/acid_hole/acided_hole //the acid hole inside the wall
 
 	///The current number of bulletholes in this turf
@@ -102,8 +96,6 @@
 			if(istype(O, /obj/alien/weeds))
 				qdel(O)
 
-
-
 /turf/closed/wall/MouseDrop_T(mob/M, mob/user)
 	if(acided_hole)
 		if(M == user && isxeno(user))
@@ -111,17 +103,13 @@
 			return
 	..()
 
-
-/turf/closed/wall/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/turf/closed/wall/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return
 	if(acided_hole && (xeno_attacker.mob_size == MOB_SIZE_BIG || xeno_attacker.xeno_caste.caste_flags & CASTE_IS_STRONG)) //Strong and/or big xenos can tear open acided walls
 		acided_hole.expand_hole(xeno_attacker)
 	else
 		return ..()
-
-
-
 
 //Appearance
 /turf/closed/wall/examine(mob/user)
@@ -190,23 +178,16 @@
 		bullethole_overlay = image('icons/effects/bulletholes.dmi', src, "bhole_[bullethole_variation]_[current_bulletholes]")
 	. += bullethole_overlay
 
-/turf/closed/wall/do_acid_melt()
-	. = ..()
-	if(acided_hole)
-		ScrapeAway()
-		return
-	new /obj/effect/acid_hole(src)
-
 ///Applies damage to the wall
-/turf/closed/wall/proc/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, armour_penetration = 0)
+/turf/closed/wall/proc/take_damage(damage_amount, damage_type = BRUTE, damage_flag = MELEE, armour_penetration = 0)
 	if(resistance_flags & INDESTRUCTIBLE) //Hull is literally invincible
 		return
 
 	if(!damage_amount)
 		return
 
-	if(armor_type)
-		damage_amount = modify_by_armor(damage_amount, armor_type, armour_penetration)
+	if(damage_flag)
+		damage_amount = modify_by_armor(damage_amount, damage_flag, armour_penetration)
 
 	wall_integrity = max(0, wall_integrity - damage_amount)
 
@@ -231,11 +212,9 @@
 	if(user?.client)
 		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[user.ckey]
 		personal_statistics.integrity_repaired += repair_amount
-		personal_statistics.mission_integrity_repaired += repair_amount
 		personal_statistics.times_repaired++
 	wall_integrity += repair_amount
 	update_icon()
-
 
 /turf/closed/wall/proc/make_girder(destroyed_girder = FALSE)
 	var/obj/structure/girder/G = new /obj/structure/girder(src)
@@ -243,8 +222,6 @@
 
 	if(destroyed_girder)
 		G.deconstruct(FALSE)
-
-
 
 // Devastated and Explode causes the wall to spawn a damaged girder
 // Walls no longer spawn a metal sheet when destroyed to reduce clutter and
@@ -258,25 +235,30 @@
 		make_girder(TRUE)
 	else
 		make_girder(FALSE)
-
 	ScrapeAway()
 
-
-/turf/closed/wall/ex_act(severity)
+/turf/closed/wall/ex_act(severity, explosion_direction)
 	if(resistance_flags & INDESTRUCTIBLE)
 		return
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			dismantle_wall(FALSE, TRUE)
-		if(EXPLODE_HEAVY)
-			if(prob(75))
-				take_damage(rand(150, 250), BRUTE, BOMB)
-			else
-				dismantle_wall(TRUE, TRUE)
-		if(EXPLODE_LIGHT)
-			take_damage(rand(0, 250), BRUTE, BOMB)
-		if(EXPLODE_WEAK)
-			take_damage(rand(0, 50), BRUTE, BOMB)
+
+	var/location = get_step(get_turf(src), explosion_direction) // shrapnel will just collide with the wall otherwise
+	if(wall_integrity + severity > max_integrity * 2)
+		dismantle_wall(FALSE, TRUE)
+		create_shrapnel(location, rand(2, 5), explosion_direction, shrapnel_type = /datum/ammo/bullet/shrapnel/light)
+	else
+		if(prob(25))
+			create_shrapnel(location, rand(2, 5), explosion_direction, shrapnel_type = /datum/ammo/bullet/shrapnel/spall)
+			if(prob(50)) // prevents spam in close corridors etc
+				src.visible_message(span_warning("The explosion causes shards to spall off of [src]!"))
+		take_damage(severity * EXPLOSION_DAMAGE_MULTIPLIER_WALL, BRUTE, BOMB)
+
+/turf/closed/wall/get_explosion_resistance()
+	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
+		return EXPLOSION_MAX_POWER
+	return (max_integrity - (max_integrity - wall_integrity)) / EXPLOSION_DAMAGE_MULTIPLIER_WALL
+
+/turf/closed/wall/plastique_act()
+	ex_act(5000)
 
 /turf/closed/wall/attack_animal(mob/living/M as mob)
 	if(M.wall_smash)
@@ -295,15 +277,16 @@
 				take_damage(rand(25, 75))
 				return
 
-
 /turf/closed/wall/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(!ishuman(user))
 		to_chat(user, span_warning("You don't have the dexterity to do this!"))
 		return
+
+	else if(istype(I, /obj/item/frame/torch_frame))
+		var/obj/item/frame/torch_frame/AH = I
+		AH.try_build(src)
 
 	else if(istype(I, /obj/item/frame/apc))
 		var/obj/item/frame/apc/AH = I
@@ -332,7 +315,7 @@
 	else if(resistance_flags & INDESTRUCTIBLE)
 		to_chat(user, "[span_warning("[src] is much too tough for you to do anything to it with [I]")].")
 
-	else if(isplasmacutter(I) && !user.do_actions)
+	else if(istype(I, /obj/item/tool/pickaxe/plasmacutter) && !user.do_actions)
 		return
 
 	else if(wall_integrity < max_integrity && iswelder(I))
@@ -501,34 +484,3 @@
 
 /turf/closed/wall/dissolvability(acid_strength)
 	return 0.5
-
-/turf/closed/wall/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_WALL_SLAM_DAMAGE, is_sharp = FALSE)
-	if(!isliving(grab.grabbed_thing))
-		return
-
-	var/mob/living/grabbed_mob = grab.grabbed_thing
-	step_towards(grabbed_mob, src)
-	var/damage = (user.skills.getRating(SKILL_UNARMED) * UNARMED_SKILL_DAMAGE_MOD)
-	var/state = user.grab_state
-	switch(state)
-		if(GRAB_PASSIVE)
-			damage += base_damage
-			grabbed_mob.visible_message(span_warning("[user] slams [grabbed_mob] against [src]!"))
-			log_combat(user, grabbed_mob, "slammed", "", "against [src]")
-		if(GRAB_AGGRESSIVE)
-			damage += base_damage * 1.5
-			grabbed_mob.visible_message(span_danger("[user] bashes [grabbed_mob] against [src]!"))
-			log_combat(user, grabbed_mob, "bashed", "", "against [src]")
-			if(prob(50))
-				grabbed_mob.Paralyze(2 SECONDS)
-				user.drop_held_item()
-		if(GRAB_NECK)
-			damage += base_damage * 2
-			grabbed_mob.visible_message(span_danger("<big>[user] crushes [grabbed_mob] against [src]!</big>"))
-			log_combat(user, grabbed_mob, "crushed", "", "against [src]")
-			grabbed_mob.Paralyze(2 SECONDS)
-			user.drop_held_item()
-	grabbed_mob.apply_damage(damage, blocked = MELEE, updating_health = TRUE)
-	take_damage(damage, BRUTE, MELEE)
-	playsound(src, SFX_SLAM, 40)
-	return TRUE

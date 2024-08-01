@@ -49,26 +49,44 @@ Instead of being uniform, it starts out a littler slower, goes fast in the middl
 
 //Basic megaman-like animation. No bells or whistles, but looks nice.
 /proc/animation_teleport_quick_out(atom/A, speed = 10)
+	A.status_flags |= INCORPOREAL
+	var/initial_matrix = A.transform
 	animate(A, transform = matrix(0, 4, MATRIX_SCALE), alpha = 0, time = speed, easing = BACK_EASING)
+	spawn(speed)
+		A.transform = initial_matrix
+		A.status_flags &= ~INCORPOREAL
 	return speed
 
 //We want to make sure to reset color here as it can be changed by other animations.
 /proc/animation_teleport_quick_in(atom/A, speed = 10)
+	A.status_flags |= INCORPOREAL
+	var/initial_matrix = A.transform
 	A.transform = matrix(0, 4, MATRIX_SCALE)
 	A.alpha = 0 //Start with transparency, just in case.
 	animate(A, alpha = 255, transform = null, color = "#FFFFFF", time = speed, easing = BACK_EASING)
+	spawn(speed)
+		A.transform = initial_matrix
+		A.status_flags &= ~INCORPOREAL
+	return speed
 
 /*A magical teleport animation, for when the person is transported with some magic. Good for Halloween type events.
 Can look good elsewhere as well.*/
 /proc/animation_teleport_magic_out(atom/A, speed = 6)
+	A.status_flags |= INCORPOREAL
+	var/initial_matrix = A.transform
 	animate(A, transform = matrix(1.5, 0, MATRIX_SCALE), time = speed, easing = BACK_EASING)
 	animate(transform = matrix(0, 4, MATRIX_SCALE) * matrix(0, 6, MATRIX_TRANSLATE), color = "#FFFF00", time = speed, alpha = 100, easing = BOUNCE_EASING|EASE_IN)
 	animate(alpha = 0, time = speed)
 	var/image/I = image('icons/effects/effects.dmi',A,"sparkle")
 	flick_overlay_view(I, A, 9)
+	spawn(speed)
+		A.transform = initial_matrix
+		A.status_flags &= ~INCORPOREAL
 	return speed*3
 
 /proc/animation_teleport_magic_in(atom/A, speed = 6)
+	A.status_flags |= INCORPOREAL
+	var/initial_matrix = A.transform
 	A.transform = matrix(0,3.5, MATRIX_SCALE)
 	A.alpha = 0
 	animate(A, alpha = 255, color = "#FFFF00", time = speed, easing = BACK_EASING)
@@ -76,27 +94,42 @@ Can look good elsewhere as well.*/
 	animate(transform = null, time = speed-1)
 	var/image/I = image('icons/effects/effects.dmi',A,"sparkle")
 	flick_overlay_view(I, A, 10)
+	spawn(speed)
+		A.transform = initial_matrix
+		A.status_flags &= ~INCORPOREAL
+	return speed
 
 //A spooky teleport for evil dolls, horrors, and whatever else. Halloween type stuff.
 /proc/animation_teleport_spooky_out(atom/A, speed = 6, sleep_duration = 0)
+	A.status_flags |= INCORPOREAL
+	var/initial_matrix = A.transform
 	animate(A, transform = matrix() * 1.5, color = "#551a8b", time = speed, easing = BACK_EASING)
 	animate(transform = matrix() * 0.2, alpha = 100, color = "#000000", time = speed, easing = BACK_EASING)
 	animate(alpha = 0, time = speed)
 	var/image/I = image('icons/effects/effects.dmi',A,"spooky")
 	flick_overlay_view(I, A, 9)
+	spawn(speed)
+		A.transform = initial_matrix
+		A.status_flags &= ~INCORPOREAL
 	return speed*3
 
 /proc/animation_teleport_spooky_in(atom/A, speed = 4)
+	A.status_flags |= INCORPOREAL
+	var/initial_matrix = A.transform
 	A.transform *= 1.2
 	A.alpha = 0
 	animate(A, alpha = 255, color = "#551a8b", time = speed)
 	animate(transform = null, color = "#FFFFFF", time = speed, easing = QUAD_EASING|EASE_OUT)
 	var/image/I = image('icons/effects/effects.dmi',A,"spooky")
 	flick_overlay_view(I, A, 10)
+	spawn(speed)
+		A.transform = initial_matrix
+		A.status_flags &= ~INCORPOREAL
+	return speed
 
 //Regular fadeout disappear, for most objects.
 /proc/animation_destruction_fade(atom/A, speed = 12)
-	A.atom_flags |= NOINTERACT
+	A.flags_atom |= NOINTERACT
 	A.mouse_opacity = MOUSE_OPACITY_TRANSPARENT //We don't want them to click this while the animation is still playing.
 	A.density = FALSE //So it doesn't block anything.
 	var/i = 1 + (0.1 * rand(1,5))
@@ -106,7 +139,7 @@ Can look good elsewhere as well.*/
 
 //Fadeout when something gets hit. Not completely done yet, as offset doesn't want to cooperate.
 /proc/animation_destruction_knock_fade(atom/A, speed = 7, x_n = rand(10,18), y_n = rand(10,18))
-	A.atom_flags |= NOINTERACT
+	A.flags_atom |= NOINTERACT
 	A.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	A.density = FALSE
 	var/x_o = initial(A.pixel_x)

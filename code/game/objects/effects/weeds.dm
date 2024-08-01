@@ -19,7 +19,6 @@
 	plane = FLOOR_PLANE
 	max_integrity = 25
 	ignore_weed_destruction = TRUE
-
 	var/obj/alien/weeds/node/parent_node
 	///The color variant of the sprite
 	var/color_variant = NORMAL_COLOR
@@ -36,7 +35,7 @@
 /obj/alien/weeds/Initialize(mapload, obj/alien/weeds/node/node, swapped = FALSE)
 	. = ..()
 	var/static/list/connections = list(
-		COMSIG_FIND_FOOTSTEP_SOUND = TYPE_PROC_REF(/atom/movable, footstep_override)
+		COMSIG_FIND_FOOTSTEP_SOUND = PROC_REF(footstep_override)
 	)
 	AddElement(/datum/element/connect_loc, connections)
 
@@ -86,6 +85,7 @@
 /obj/alien/weeds/proc/check_for_parent_node()
 	if(parent_node)
 		return
+	obj_integrity = 0 // used for xeno structures, such as acid wells and traps, to destroy with effects
 	qdel(src)
 
 /obj/alien/weeds/update_icon_state()
@@ -125,7 +125,8 @@
 	parent_node = null
 
 ///overrides the turf's normal footstep sound
-/obj/alien/weeds/footstep_override(atom/movable/source, list/footstep_overrides)
+/obj/alien/weeds/proc/footstep_override(atom/movable/source, list/footstep_overrides)
+	SIGNAL_HANDLER
 	footstep_overrides[FOOTSTEP_RESIN] = layer
 
 /obj/alien/weeds/sticky
@@ -150,6 +151,9 @@
 		vehicle.last_move_time += WEED_SLOWDOWN
 		return
 
+	if(HAS_TRAIT(crosser, TRAIT_SUPER_STRONG))
+		return
+
 	if(isxeno(crosser))
 		var/mob/living/carbon/xenomorph/X = crosser
 		X.next_move_slowdown += X.xeno_caste.weeds_speed_mod
@@ -165,9 +169,7 @@
 
 	if(victim.lying_angle)
 		return
-
 	victim.next_move_slowdown += WEED_SLOWDOWN
-
 
 /obj/alien/weeds/resting
 	name = "resting weeds"
@@ -217,11 +219,11 @@
 		return ..()
 	return window.MouseDrop_T(dropping, user)
 
-/obj/alien/weeds/weedwall/window/CtrlClick(mob/living/carbon/user)
+/obj/alien/weeds/weedwall/window/specialclick(mob/living/carbon/user)
 	var/obj/structure/window = locate(window_type) in loc
 	if(!window)
 		return ..()
-	return window.CtrlClick(user)
+	return window.specialclick(user)
 
 /obj/alien/weeds/weedwall/window/attackby(obj/item/I, mob/user, params) //yes, this blocks attacking the weed itself, but if you destroy the frame you destroy the weed!
 	var/obj/structure/window = locate(window_type) in loc
@@ -229,11 +231,11 @@
 		return ..()
 	return window.attackby(I, user, params)
 
-/obj/alien/weeds/weedwall/window/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/alien/weeds/weedwall/window/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount, damage_type, damage_flag, effects, armor_penetration, isrightclick)
 	var/obj/structure/window = locate(window_type) in loc
 	if(!window)
 		return ..()
-	return window.attack_alien(xeno_attacker, damage_amount, damage_type, armor_type, effects, armor_penetration, isrightclick)
+	return window.attack_alien(xeno_attacker, damage_amount, damage_type, damage_flag, effects, armor_penetration, isrightclick)
 
 /obj/alien/weeds/weedwall/window/frame
 	window_type = /obj/structure/window_frame
@@ -323,6 +325,9 @@
 	if(isvehicle(crosser))
 		var/obj/vehicle/vehicle = crosser
 		vehicle.last_move_time += WEED_SLOWDOWN
+		return
+
+	if(HAS_TRAIT(crosser, TRAIT_SUPER_STRONG))
 		return
 
 	if(!ishuman(crosser))

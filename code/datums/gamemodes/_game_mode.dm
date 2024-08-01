@@ -17,8 +17,8 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	var/list/job_points_needed_by_job_type = list()
 
 	var/round_time_fog
-	var/round_type_flags = NONE
-	var/xeno_abilities_flags = NONE
+	var/flags_round_type = NONE
+	var/flags_xeno_abilities = NONE
 
 	///Determines whether rounds with the gamemode will be factored in when it comes to persistency
 	var/allow_persistence_save = TRUE
@@ -46,6 +46,17 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	///What factions are used in this gamemode, typically TGMC and xenos
 	var/list/factions = list(FACTION_TERRAGOV, FACTION_ALIEN)
 
+	var/list/predators = list()
+
+	var/pred_current_num = 0 //How many are there now?
+	var/pred_per_players = 20 //Preds per player
+	var/pred_start_count = 0 //The initial count of predators
+
+	var/pred_additional_max = 0
+	var/pred_leader_count = 0 //How many Leader preds are active
+	var/pred_leader_max = 1 //How many Leader preds are permitted. Currently fixed to 1. May add admin verb to adjust this later.
+	var/quickbuild_points_flags = NONE
+
 //Distress call variables.
 	var/list/datum/emergency_call/all_calls = list() //initialized at round start and stores the datums.
 	var/datum/emergency_call/picked_call = null //Which distress call is currently active
@@ -61,7 +72,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	///If the gamemode has a whitelist of valid ground maps. Whitelist overrides the blacklist
 	var/list/whitelist_ground_maps
 	///If the gamemode has a blacklist of disallowed ground maps
-	var/list/blacklist_ground_maps = list(MAP_DELTA_STATION, MAP_RESEARCH_OUTPOST, MAP_PRISON_STATION, MAP_LV_624, MAP_WHISKEY_OUTPOST, MAP_OSCAR_OUTPOST, MAP_FORT_PHOBOS)
+	var/list/blacklist_ground_maps = list(MAP_DELTA_STATION, MAP_WHISKEY_OUTPOST, MAP_OSCAR_OUTPOST, MAP_FORT_PHOBOS)
 	///if fun tads are enabled by default
 	var/enable_fun_tads = FALSE
 
@@ -102,12 +113,6 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 		GLOB.landmarks_round_start.len--
 		L.after_round_start()
 
-	for(var/datum/job/job AS in valid_job_types)
-		job = SSjob.GetJobType(job)
-		if(!job) //dunno how or why but it errored in ci and i couldnt reproduce on local
-			continue
-		job.on_pre_setup()
-
 	return TRUE
 
 /datum/game_mode/proc/setup()
@@ -116,7 +121,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 	create_characters()
 	spawn_characters()
 	transfer_characters()
-	SSpoints.prepare_supply_packs_list(CHECK_BITFIELD(round_type_flags, MODE_HUMAN_ONLY))
+	SSpoints.prepare_supply_packs_list(CHECK_BITFIELD(flags_round_type, MODE_HUMAN_ONLY))
 	SSpoints.dropship_points = 0
 	SSpoints.supply_points[FACTION_TERRAGOV] = 0
 
@@ -128,9 +133,6 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 ///Gamemode setup run after the game has started
 /datum/game_mode/proc/post_setup()
 	addtimer(CALLBACK(src, PROC_REF(display_roundstart_logout_report)), ROUNDSTART_LOGOUT_REPORT_TIME)
-	if(round_type_flags & MODE_FORCE_CUSTOMSQUAD_UI)
-		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(send_global_signal), COMSIG_GLOB_DEPLOY_TIMELOCK_ENDED), deploy_time_lock)
-
 	if(!SSdbcore.Connect())
 		return
 	var/sql
@@ -144,6 +146,9 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 		var/datum/db_query/query_round_game_mode = SSdbcore.NewQuery("UPDATE [format_table_name("round")] SET [sql] WHERE id = :roundid", list("roundid" = GLOB.round_id))
 		query_round_game_mode.Execute()
 		qdel(query_round_game_mode)
+	if(flags_round_type & MODE_SILO_RESPAWN)
+		var/datum/hive_status/normal/HN = GLOB.hive_datums[XENO_HIVE_NORMAL]
+		HN.RegisterSignals(SSdcs, list(COMSIG_GLOB_OPEN_TIMED_SHUTTERS_LATE, COMSIG_GLOB_OPEN_SHUTTERS_EARLY), TYPE_PROC_REF(/datum/hive_status/normal, set_siloless_collapse_timer))
 
 /datum/game_mode/proc/new_player_topic(mob/new_player/NP, href, list/href_list)
 	return FALSE
@@ -177,10 +182,10 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 		var/mob/living = player.transfer_character()
 		if(!living)
 			continue
+
 		qdel(player)
 		living.client.init_verbs()
 		living.notransform = TRUE
-		SEND_GLOBAL_SIGNAL(COMSIG_GLOB_PLAYER_ROUNDSTART_SPAWNED, living)
 		log_manifest(living.ckey, living.mind, living)
 		livings += living
 
@@ -199,7 +204,7 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 
 
 /datum/game_mode/proc/declare_completion()
-	end_round_fluff()
+	to_chat(world, span_round_body("Thus ends the story of the brave men and women of the [SSmapping.configs[SHIP_MAP].map_name] and their struggle on [SSmapping.configs[GROUND_MAP].map_name]."))
 	log_game("The round has ended.")
 	SSdbcore.SetRoundEnd()
 	if(time_between_round)
@@ -209,11 +214,9 @@ GLOBAL_VAR(common_report) //Contains common part of roundend report
 		SSpersistence.CollectData()
 	display_report()
 	addtimer(CALLBACK(src, PROC_REF(end_of_round_deathmatch)), ROUNDEND_EORG_DELAY)
+	//end_of_round_deathmatch()
 	return TRUE
 
-///End of round messaging
-/datum/game_mode/proc/end_round_fluff()
-	to_chat(world, span_round_body("Thus ends the story of the brave men and women of the [SSmapping.configs[SHIP_MAP].map_name] and their struggle on [SSmapping.configs[GROUND_MAP].map_name]."))
 
 /datum/game_mode/proc/display_roundstart_logout_report()
 	var/msg = "<hr>[span_notice("<b>Roundstart logout report</b>")]<br>"
@@ -273,11 +276,11 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 /datum/game_mode/proc/setup_blockers()
 	set waitfor = FALSE
 
-	if(round_type_flags & MODE_LATE_OPENING_SHUTTER_TIMER)
+	if(flags_round_type & MODE_LATE_OPENING_SHUTTER_TIMER)
 		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(send_global_signal), COMSIG_GLOB_OPEN_TIMED_SHUTTERS_LATE), SSticker.round_start_time + shutters_drop_time)
 			//Called late because there used to be shutters opened earlier. To re-add them just copy the logic.
 
-	if(round_type_flags & MODE_XENO_SPAWN_PROTECT)
+	if(flags_round_type & MODE_XENO_SPAWN_PROTECT)
 		var/turf/T
 		while(length(GLOB.xeno_spawn_protection_locations))
 			T = GLOB.xeno_spawn_protection_locations[length(GLOB.xeno_spawn_protection_locations)]
@@ -396,8 +399,6 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		parts += "[GLOB.round_statistics.howitzer_shells_fired] howitzer shells were fired."
 	if(GLOB.round_statistics.rocket_shells_fired)
 		parts += "[GLOB.round_statistics.rocket_shells_fired] rocket artillery shells were fired."
-	if(GLOB.round_statistics.obs_fired)
-		parts += "[GLOB.round_statistics.obs_fired] orbital bombardements were fired."
 	if(GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV])
 		parts += "[GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV]] people were killed, among which [GLOB.round_statistics.total_human_revives[FACTION_TERRAGOV]] were revived and [GLOB.round_statistics.total_human_respawns] respawned. For a [(GLOB.round_statistics.total_human_revives[FACTION_TERRAGOV] / max(GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV], 1)) * 100]% revival rate and a [(GLOB.round_statistics.total_human_respawns / max(GLOB.round_statistics.total_human_deaths[FACTION_TERRAGOV], 1)) * 100]% respawn rate."
 	if(SSevacuation.human_escaped)
@@ -481,25 +482,14 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		parts += "[GLOB.round_statistics.points_from_mining] requisitions points gained from mining."
 	if(GLOB.round_statistics.points_from_research)
 		parts += "[GLOB.round_statistics.points_from_research] requisitions points gained from research."
-	if(GLOB.round_statistics.points_from_xenos)
-		parts += "[GLOB.round_statistics.points_from_xenos] requisitions points gained from xenomorph sales."
-	if(GLOB.round_statistics.runner_items_stolen)
-		parts += "[GLOB.round_statistics.runner_items_stolen] items stolen by runners."
-
-	if(GLOB.round_statistics.sandevistan_uses)
-		var/sandevistan_text = "[GLOB.round_statistics.sandevistan_uses] number of times someone was boosted by a sandevistan"
-		if(GLOB.round_statistics.sandevistan_gibs)
-			sandevistan_text += ", of which [GLOB.round_statistics.sandevistan_gibs] resulted in a gib!"
-		else
-			sandevistan_text += ", and nobody was gibbed by it!"
-		parts += sandevistan_text
-
 	if(length(GLOB.round_statistics.req_items_produced))
-		parts += ""  // make it special from other stats above
 		parts += "Requisitions produced: "
 		for(var/atom/movable/path AS in GLOB.round_statistics.req_items_produced)
-			var/last = GLOB.round_statistics.req_items_produced[length(GLOB.round_statistics.req_items_produced)]
-			parts += "[GLOB.round_statistics.req_items_produced[path]] [initial(path.name)][last ? "." : ","]"
+			parts += "[GLOB.round_statistics.req_items_produced[path]] [initial(path.name)]"
+			if(path == GLOB.round_statistics.req_items_produced[length(GLOB.round_statistics.req_items_produced)]) //last element
+				parts += "."
+			else
+				parts += ","
 
 	if(length(parts))
 		return "<div class='panel stationborder'>[parts.Join("<br>")]</div>"
@@ -517,6 +507,8 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 			var/mob/living/carbon/human/H = i
 			if(!istype(H)) // Small fix?
 				continue
+			if(isyautja(H)) //RU TGMC EDIT
+				continue
 			if(count_flags & COUNT_IGNORE_HUMAN_SSD && !H.client && H.afk_status == MOB_DISCONNECTED)
 				continue
 			if(H.status_flags & XENO_HOST)
@@ -532,7 +524,7 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 	for(var/z in z_levels)
 		for(var/i in GLOB.hive_datums[XENO_HIVE_NORMAL].xenos_by_zlevel["[z]"])
 			var/mob/living/carbon/xenomorph/X = i
-			if(!istype(X)) // Small fix?
+			if(!istype(X) || isxenohellhound(X)) // Small fix? and // RU TGMC EDIT
 				continue
 			if(count_flags & COUNT_IGNORE_XENO_SSD && !X.client && X.afk_status == MOB_DISCONNECTED)
 				continue
@@ -594,7 +586,7 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		if(job.job_flags & JOB_FLAG_SPECIALNAME)
 			name_to_check = job.get_special_name(NP.client)
 		if(CONFIG_GET(flag/prevent_dupe_names) && GLOB.real_names_joined.Find(name_to_check))
-			to_chat(usr, span_warning("Someone has already joined the round with this character name. Please pick another."))
+			to_chat(usr, "<span class='warning'>Someone has already joined the round with this character name. Please pick another.<spawn>")
 			return FALSE
 	if(!SSjob.AssignRole(NP, job, TRUE))
 		to_chat(usr, "<span class='warning'>Failed to assign selected role.<spawn>")
@@ -608,7 +600,6 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 	player.create_character()
 	SSjob.spawn_character(player, TRUE)
 	player.mind.transfer_to(player.new_character, TRUE)
-	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_PLAYER_LATE_SPAWNED, player.new_character)
 	log_manifest(player.new_character.ckey, player.new_character.mind, player.new_character, latejoin = TRUE)
 	var/datum/job/job = player.assigned_role
 	job.on_late_spawn(player.new_character)
@@ -968,6 +959,17 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		handle_larva_timer(dcs, source, items)
 		handle_xeno_respawn_timer(dcs, source, items)
 
+	if(isobserver(source))
+		var/siloless_countdown = SSticker.mode.get_siloless_collapse_countdown()
+		if(siloless_countdown)
+			items +="Silo less hive collapse timer: [siloless_countdown]"
+	else if(isxeno(source))
+		var/mob/living/carbon/xenomorph/xeno_source = source
+		if(xeno_source.hivenumber == XENO_HIVE_NORMAL)
+			var/siloless_countdown = SSticker.mode.get_siloless_collapse_countdown()
+			if(siloless_countdown)
+				items +="Silo less hive collapse timer: [siloless_countdown]"
+
 /// Displays the orphan hivemind collapse timer, if applicable
 /datum/game_mode/proc/handle_collapse_timer(datum/dcs, mob/source, list/items)
 	if (isxeno(source))
@@ -980,7 +982,7 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 
 /// Displays your position in the larva queue and how many burrowed larva there are, if applicable
 /datum/game_mode/proc/handle_larva_timer(datum/dcs, mob/source, list/items)
-	if(!(round_type_flags & MODE_INFESTATION))
+	if(!(flags_round_type & MODE_INFESTATION))
 		return
 	var/larva_position = SEND_SIGNAL(source.client, COMSIG_CLIENT_GET_LARVA_QUEUE_POSITION)
 	if (larva_position) // If non-zero, we're in queue
@@ -1000,10 +1002,112 @@ GLOBAL_LIST_INIT(bioscan_locations, list(
 		else
 			items += "Xeno respawn timer: [(status_value / 60) % 60]:[add_leading(num2text(status_value % 60), 2, "0")]"
 
-///Returns a list of verbs to give ghosts in this gamemode
-/datum/game_mode/proc/ghost_verbs(mob/dead/observer/observer)
+/// called to check for updates that might require starting/stopping the siloless collapse timer
+/datum/game_mode/proc/update_silo_death_timer(datum/hive_status/silo_owner)
 	return
 
-///Returns the armor color variant applicable for this mode
-/datum/game_mode/proc/get_map_color_variant()
-	return SSmapping.configs[GROUND_MAP].armor_style
+///starts the timer to end the round when no silo is left
+/datum/game_mode/proc/get_siloless_collapse_countdown()
+	return
+
+/datum/game_mode/proc/predator_round()
+	switch(CONFIG_GET(number/pred_round))
+		if(0)
+			return
+		if(1)
+			if(!prob(CONFIG_GET(number/pred_round_chance)))
+				return
+
+	var/datum/job/PJ = SSjob.GetJobType(/datum/job/predator)
+	var/new_pred_max = min(max(round(length(GLOB.clients) * PREDATOR_TO_TOTAL_SPAWN_RATIO), 1), 4)
+	PJ.total_positions = new_pred_max
+	PJ.max_positions = new_pred_max
+	flags_round_type |= MODE_PREDATOR
+
+/datum/game_mode/proc/initialize_predator(mob/living/carbon/human/new_predator, client/player, ignore_pred_num = FALSE)
+	predators[lowertext(player.ckey)] = list("Name" = new_predator.real_name, "Status" = "Alive")
+	if(!ignore_pred_num)
+		pred_current_num++
+
+/datum/game_mode/proc/get_whitelisted_predators(readied = 1)
+	// Assemble a list of active players who are whitelisted.
+	var/players[] = new
+
+	var/mob/new_player/new_pred
+	for(var/mob/player in GLOB.player_list)
+		if(!player.client) continue //No client. DCed.
+		if(isyautja(player)) continue //Already a predator. Might be dead, who knows.
+		if(readied) //Ready check for new players.
+			new_pred = player
+			if(!istype(new_pred)) continue //Have to be a new player here.
+			if(!new_pred.ready) continue //Have to be ready.
+		else
+			if(!istype(player,/mob/dead)) continue //Otherwise we just want to grab the ghosts.
+
+		if(GLOB.roles_whitelist[player.ckey] & WHITELIST_PREDATOR)  //Are they whitelisted?
+			if(!player.client.prefs)
+				player.client.prefs = new /datum/preferences(player.client) //Somehow they don't have one.
+
+			if(player.client.prefs.job_preferences[JOB_PREDATOR] > 0) //Are their prefs turned on?
+				if(!player.mind) //They have to have a key if they have a client.
+					player.mind_initialize() //Will work on ghosts too, but won't add them to active minds.
+				players += player.mind
+	return players
+
+#define calculate_pred_max (length(GLOB.player_list) / pred_per_players + pred_additional_max + pred_start_count)
+
+/datum/game_mode/proc/check_predator_late_join(mob/pred_candidate, show_warning = TRUE)
+	if(!pred_candidate?.client) // Nigga, how?!
+		return
+
+	var/datum/job/job = SSjob.GetJobType(/datum/job/predator)
+
+	if(!job)
+		if(show_warning)
+			to_chat(pred_candidate, span_warning("Something went wrong!"))
+		return
+
+	if(show_warning && alert(pred_candidate, "Confirm joining the hunt. You will join as \a [lowertext(job.get_whitelist_status(GLOB.roles_whitelist, pred_candidate.client))] predator", "Confirm", "Yes", "No") != "Yes")
+		return
+
+	if(!(GLOB.roles_whitelist[pred_candidate.ckey] & WHITELIST_PREDATOR))
+		if(show_warning)
+			to_chat(pred_candidate, span_warning("You are not whitelisted! You may apply on the forums to be whitelisted as a predator."))
+		return
+
+	if(is_banned_from(ckey(pred_candidate.key), JOB_PREDATOR))
+		if(show_warning)
+			to_chat(pred_candidate, span_warning("You are banned."))
+		return
+
+	if(!(flags_round_type & MODE_PREDATOR))
+		if(show_warning)
+			to_chat(pred_candidate, span_warning("There is no Hunt this round! Maybe the next one."))
+		return
+
+	if(pred_candidate.ckey in predators)
+		if(show_warning)
+			to_chat(pred_candidate, span_warning("You already were a Yautja! Give someone else a chance."))
+		return
+
+	if(get_desired_status(pred_candidate.client.prefs.yautja_status, WHITELIST_COUNCIL) == WHITELIST_NORMAL)
+		var/pred_max = calculate_pred_max
+		if(pred_current_num >= pred_max)
+			if(show_warning)
+				to_chat(pred_candidate, span_warning("Only [pred_max] predators may spawn this round, but Councillors and Ancients do not count."))
+			return
+
+	return TRUE
+
+#undef calculate_pred_max
+
+/datum/game_mode/proc/join_predator(mob/pred_candidate)
+	var/datum/job/job = SSjob.GetJobType(/datum/job/predator)
+	var/datum/preferences/prefs = pred_candidate.client.prefs
+	var/spawn_type = job.return_spawn_type(prefs)
+	var/mob/living/carbon/human/new_predator = new spawn_type()
+	new_predator.forceMove(job.return_spawn_turf(pred_candidate, pred_candidate.client))
+	new_predator.ckey = pred_candidate.ckey
+	new_predator.apply_assigned_role_to_spawn(job)
+	job.after_spawn(new_predator)
+	qdel(pred_candidate)

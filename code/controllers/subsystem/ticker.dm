@@ -179,7 +179,6 @@ SUBSYSTEM_DEF(ticker)
 
 	CHECK_TICK
 	PostSetup()
-	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_GAMEMODE_LOADED)
 	return TRUE
 
 
@@ -346,7 +345,7 @@ SUBSYSTEM_DEF(ticker)
 		tip = pick(SSstrings.get_list_from_file("tips/meme"))
 
 	if(tip)
-		to_chat(world, examine_block("[span_tip("<big>Tip of the round:</big>")][EXAMINE_SECTION_BREAK][html_encode(tip)]"))
+		to_chat(world, "<br>[span_tip(examine_block("[html_encode(tip)]"))]<br>")
 
 
 /datum/controller/subsystem/ticker/proc/check_queue()

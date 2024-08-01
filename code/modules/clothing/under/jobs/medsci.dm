@@ -5,7 +5,7 @@
 	desc = "It's a jumpsuit worn by those with the know-how to achieve the position of \"Research Director\". Its fabric provides minor protection from biological contaminants."
 	name = "research director's jumpsuit"
 	icon_state = "director"
-	worn_icon_state = "g_suit"
+	item_state = "g_suit"
 
 /obj/item/clothing/under/rank/research_director/rdalt
 	desc = "A simple blue utilitarian jumpsuit that serves as the standard issue service uniform of support synthetics onboard TGMC facilities."
@@ -16,20 +16,20 @@
 	name = "research director dress uniform"
 	desc = "Feminine fashion for the style concious RD. Its fabric provides minor protection from biological contaminants."
 	icon_state = "dress_rd"
-	armor_protection_flags = CHEST|GROIN|ARMS
+	flags_armor_protection = CHEST|GROIN|ARMS
 
 /obj/item/clothing/under/rank/scientist
 	desc = "It's made of a special fiber that provides minor protection against small explosions. It has markings that denote the wearer as a scientist."
 	name = "scientist's jumpsuit"
 	icon_state = "science"
-	worn_icon_state = "w_suit"
+	item_state = "w_suit"
 	permeability_coefficient = 0.50
 
 /obj/item/clothing/under/rank/chemist
 	desc = "It's made of a special fiber that gives special protection against biohazards. It has a chemist rank stripe on it."
 	name = "chemist's jumpsuit"
 	icon_state = "chemistry"
-	worn_icon_state = "w_suit"
+	item_state = "w_suit"
 	permeability_coefficient = 0.50
 
 /*
@@ -39,21 +39,21 @@
 	desc = "It's a jumpsuit worn by those with the experience to be \"Chief Medical Officer\". It provides minor biological protection."
 	name = "chief medical officer's jumpsuit"
 	icon_state = "cmo"
-	worn_icon_state = "w_suit"
+	item_state = "w_suit"
 	permeability_coefficient = 0.50
 
 /obj/item/clothing/under/rank/geneticist
 	desc = "It's made of a special fiber that gives special protection against biohazards. It has a genetics rank stripe on it."
 	name = "geneticist's jumpsuit"
 	icon_state = "genetics"
-	worn_icon_state = "w_suit"
+	item_state = "w_suit"
 	permeability_coefficient = 0.50
 
 /obj/item/clothing/under/rank/virologist
 	desc = "It's made of a special fiber that gives special protection against biohazards. It has a virologist rank stripe on it."
 	name = "virologist's jumpsuit"
 	icon_state = "virology"
-	worn_icon_state = "w_suit"
+	item_state = "w_suit"
 	permeability_coefficient = 0.50
 
 /obj/item/clothing/under/rank/nursesuit
@@ -61,14 +61,14 @@
 	name = "nurse's suit"
 	icon_state = "nursesuit"
 	permeability_coefficient = 0.50
-	armor_protection_flags = CHEST|GROIN
+	flags_armor_protection = CHEST|GROIN
 
 /obj/item/clothing/under/rank/nurse
 	desc = "A dress commonly worn by the nursing staff in the medical department."
 	name = "nurse's dress"
 	icon_state = "nurse"
 	permeability_coefficient = 0.50
-	armor_protection_flags = CHEST|GROIN
+	flags_armor_protection = CHEST|GROIN
 	adjustment_variants = list()
 
 /obj/item/clothing/under/rank/orderly
@@ -82,7 +82,7 @@
 	desc = "It's made of a special fiber that provides minor protection against biohazards. It has a cross on the chest denoting that the wearer is trained medical personnel."
 	name = "medical doctor's jumpsuit"
 	icon_state = "medical"
-	worn_icon_state = "w_suit"
+	item_state = "w_suit"
 	permeability_coefficient = 0.50
 
 /obj/item/clothing/under/rank/medical/blue
@@ -113,7 +113,7 @@
 	desc = "A basic white jumpsuit. It has turqouise markings that denote the wearer as a psychiatrist."
 	name = "psychiatrist's jumpsuit"
 	icon_state = "psych"
-	worn_icon_state = "w_suit"
+	item_state = "w_suit"
 	adjustment_variants = list()
 
 
@@ -121,5 +121,5 @@
 	desc = "A turqouise turtleneck and a pair of dark blue slacks, belonging to a psychologist."
 	name = "psychologist's turtleneck"
 	icon_state = "psychturtle"
-	worn_icon_state = "b_suit"
+	item_state = "b_suit"
 	adjustment_variants = list()

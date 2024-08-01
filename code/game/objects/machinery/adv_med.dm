@@ -1,6 +1,4 @@
 // Pretty much everything here is stolen from the dna scanner FYI
-
-
 /obj/machinery/bodyscanner
 	name = "Body Scanner"
 	icon = 'icons/obj/machines/cryogenics.dmi'
@@ -52,10 +50,9 @@
 		return
 	go_out()
 
-
 /obj/machinery/bodyscanner/verb/eject()
 	set src in oview(1)
-	set category = "Object"
+	set category = "Object.Mob"
 	set name = "Eject Body Scanner"
 
 	if (usr.stat != CONSCIOUS)
@@ -83,7 +80,7 @@
 
 /obj/machinery/bodyscanner/verb/move_inside()
 	set src in oview(1)
-	set category = "Object"
+	set category = "Object.Mob"
 	set name = "Enter Body Scanner"
 
 	move_inside_wrapper(usr, usr)
@@ -110,49 +107,46 @@
 
 /obj/machinery/bodyscanner/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/healthanalyzer) && occupant) //Allows us to use the analyzer on the occupant without taking him out; this is here mainly for consistency's sake.
 		var/obj/item/healthanalyzer/J = I
 		J.attack(occupant, user)
 		return
 
-/obj/machinery/bodyscanner/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_OBJ_SLAM_DAMAGE, is_sharp = FALSE)
-	. = ..()
-	if(.)
+	var/mob/M
+	if(!istype(I, /obj/item/grab))
 		return
-	if(occupant)
+
+	else if(occupant)
 		to_chat(user, span_warning("The scanner is already occupied!"))
 		return
 
-	var/mob/grabbed_mob
-	if(ismob(grab.grabbed_thing))
-		grabbed_mob = grab.grabbed_thing
-	else if(istype(grab.grabbed_thing, /obj/structure/closet/bodybag/cryobag))
-		var/obj/structure/closet/bodybag/cryobag/cryobag = grab.grabbed_thing
-		if(!cryobag.bodybag_occupant)
+	var/obj/item/grab/G = I
+	if(istype(G.grabbed_thing,/obj/structure/closet/bodybag/cryobag))
+		var/obj/structure/closet/bodybag/cryobag/C = G.grabbed_thing
+		if(!C.bodybag_occupant)
 			to_chat(user, span_warning("The stasis bag is empty!"))
 			return
-		grabbed_mob = cryobag.bodybag_occupant
-		cryobag.open()
-		user.start_pulling(grabbed_mob)
+		M = C.bodybag_occupant
+		C.open()
+		user.start_pulling(M)
+	else if(ismob(G.grabbed_thing))
+		M = G.grabbed_thing
 
-	if(!grabbed_mob)
+	if(!M)
 		return
 
-	if(grabbed_mob.abiotic())
+	if(M.abiotic())
 		to_chat(user, span_warning("Subject cannot have abiotic items on."))
 		return
 
-	grabbed_mob.forceMove(src)
-	occupant = grabbed_mob
+	M.forceMove(src)
+	occupant = M
 	update_icon()
 	for(var/obj/O in src)
 		O.forceMove(loc)
-	return TRUE
 
-/obj/machinery/bodyscanner/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/bodyscanner/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount, damage_type, damage_flag, effects, armor_penetration, isrightclick)
 	if(!occupant)
 		to_chat(xeno_attacker, span_xenowarning("There is nothing of interest in there."))
 		return
@@ -166,27 +160,13 @@
 	go_out()
 
 /obj/machinery/bodyscanner/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
-				ex_act(severity)
-			qdel(src)
-			return
-		if(EXPLODE_HEAVY)
-			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
-					ex_act(severity)
-				qdel(src)
-				return
-		if(EXPLODE_LIGHT)
-			if(!prob(75))
-				return
-			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
-				ex_act(severity)
-			qdel(src)
+	if(!prob(severity / 3))
+		return
+
+	for(var/atom/movable/our_atom as mob|obj in src)
+		our_atom.loc = src.loc
+		ex_act(severity)
+	qdel(src)
 
 /obj/machinery/computer/body_scanconsole
 	name = "Body Scanner Console"
@@ -206,12 +186,8 @@
 	set_connected(locate(/obj/machinery/bodyscanner, get_step(src, REVERSE_DIR(dir))))
 
 /obj/machinery/computer/body_scanconsole/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			if (prob(50))
-				qdel(src)
+	if(prob(severity / 3))
+		qdel(src)
 
 /obj/machinery/computer/body_scanconsole/can_interact(mob/user)
 	. = ..()
@@ -225,7 +201,6 @@
 		return FALSE
 
 	return TRUE
-
 
 /obj/machinery/computer/body_scanconsole/interact(mob/user)
 	. = ..()
@@ -242,7 +217,6 @@
 	var/datum/browser/popup = new(user, "scanconsole", "<div align='center'>Body Scanner Console</div>", 430, 600)
 	popup.set_content(dat)
 	popup.open(FALSE)
-
 
 /obj/machinery/bodyscanner/examine(mob/living/user)
 	. = ..()
@@ -261,7 +235,6 @@
 			. += span_deptradio("<a href='?src=[text_ref(src)];scanreport=1'>It contains [occupant]: Scan from [R.fields["last_scan_time"]].</a>")
 		break
 
-
 ///Wrapper to guarantee connected bodyscanner references are properly nulled and avoid hard deletes.
 /obj/machinery/computer/body_scanconsole/proc/set_connected(obj/machinery/bodyscanner/new_connected)
 	if(connected)
@@ -270,8 +243,19 @@
 	if(connected)
 		RegisterSignal(connected, COMSIG_QDELETING, PROC_REF(on_bodyscanner_deletion))
 
-
 ///Called by the deletion of the connected bodyscanner.
 /obj/machinery/computer/body_scanconsole/proc/on_bodyscanner_deletion(obj/machinery/bodyscanner/source, force)
 	SIGNAL_HANDLER
 	set_connected(null)
+
+/obj/machinery/computer/body_scanconsole/pred
+	icon = 'icons/obj/machines/yautja_machines.dmi'
+	icon_state = "sleeperconsole"
+	base_icon_state = "sleeperconsole"
+
+/obj/machinery/bodyscanner/alt
+	icon_state = "alt_body_scanner"
+
+/obj/machinery/computer/body_scanconsole/alt
+	icon_state = "alt_body_scannerconsole"
+	screen_overlay = "alt_body_scannerconsole_emissive"

@@ -117,6 +117,9 @@
 		return O.relaymove(L, direction)
 
 	var/add_delay = mob.cached_multiplicative_slowdown + mob.next_move_slowdown
+	//Preds
+	if(mob.shield_slowdown)
+		add_delay += mob.shield_slowdown
 	mob.next_move_slowdown = 0
 	mob.set_glide_size(DELAY_TO_GLIDE_SIZE(add_delay * ( (NSCOMPONENT(direction) && EWCOMPONENT(direction)) ? DIAG_MOVEMENT_ADDED_DELAY_MULTIPLIER : 1 ) )) // set it now in case of pulled objects
 	//If the move was recent, count using old_move_delay
@@ -179,7 +182,7 @@
 
 		if(istype(src,/mob/living/carbon/human/))  // Only humans can wear magboots, so we give them a chance to.
 			var/mob/living/carbon/human/H = src
-			if((istype(turf,/turf/open/floor)) && !(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.inventory_flags & NOSLIPPING)))
+			if((istype(turf,/turf/open/floor)) && !(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags_inventory & NOSLIPPING)))
 				continue
 
 

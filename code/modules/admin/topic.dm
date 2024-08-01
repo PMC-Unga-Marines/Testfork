@@ -125,7 +125,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 			if(response.body == "[]")
 				dat += "<center><b>0 bans detected for [ckey]</b></center>"
 			else
-				bans = json_decode(response.body)
+				bans = json_decode(response["body"])
 				dat += "<center><b>[length(bans)] ban\s detected for [ckey]</b></center>"
 				for(var/list/ban in bans)
 					dat += "<b>Server: </b> [sanitize(ban["sourceName"])]<br>"
@@ -426,8 +426,6 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/boiler, location, null, delmob)
 			if("crusher")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/crusher, location, null, delmob)
-			if("widow")
-				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/widow, location, null, delmob)
 			if("defiler")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/defiler, location, null, delmob)
 			if("gorger")
@@ -442,12 +440,6 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/queen, location, null, delmob)
 			if("king")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/king, location, null, delmob)
-			if("wraith")
-				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/wraith, location, null, delmob)
-			if("puppeteer")
-				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/puppeteer, location, null, delmob)
-			if("pyrogen")
-				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/pyrogen, location,null , delmob)
 			if("behemoth")
 				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/behemoth, location, null, delmob)
 			if("human")
@@ -474,6 +466,21 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				newmob = M.change_mob_type(/mob/living/carbon/human/species/zombie, location, null, delmob, "Zombie")
 			if("ai")
 				newmob = M.change_mob_type(/mob/living/silicon/ai, location, null, delmob)
+			if("facehugger")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/facehugger, location, null, delmob)
+			if("panther")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/panther, location, null, delmob)
+			if("chimera")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/chimera, location, null, delmob)
+			//PREDS
+			if("hellhound")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/hellhound, location, null, delmob)
+			if("predalien_larva")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/larva/predalien, location, null, delmob)
+			if("predalien")
+				newmob = M.change_mob_type(/mob/living/carbon/xenomorph/predalien, location, null, delmob)
+			if("yautja")
+				newmob = M.change_mob_type(/mob/living/carbon/human/species/yautja, location, null, delmob)
 
 		C.holder.show_player_panel(newmob)
 
@@ -858,7 +865,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		if(!F)
 			return
 
-		var/dat = "<html><head><title>Fax Message: [F.title]</title></head>"
+		var/dat = "<html><meta charset='UTF-8'><head><title>Fax Message: [F.title]</title></head>"
 		dat += "<body>[F.message]</body></html>"
 
 		usr << browse(dat, "window=fax")
@@ -1088,9 +1095,9 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				message_admins("[ADMIN_TPMONTY(usr)] canceled an evacuation.")
 
 			if("toggle_evac")
-				SSevacuation.scuttle_flags ^= FLAGS_EVACUATION_DENY
-				log_admin("[key_name(src)] has [SSevacuation.scuttle_flags & FLAGS_EVACUATION_DENY ? "forbidden" : "allowed"] ship-wide evacuation.")
-				message_admins("[ADMIN_TPMONTY(usr)] has [SSevacuation.scuttle_flags & FLAGS_EVACUATION_DENY ? "forbidden" : "allowed"] ship-wide evacuation.")
+				SSevacuation.flags_scuttle ^= FLAGS_EVACUATION_DENY
+				log_admin("[key_name(src)] has [SSevacuation.flags_scuttle & FLAGS_EVACUATION_DENY ? "forbidden" : "allowed"] ship-wide evacuation.")
+				message_admins("[ADMIN_TPMONTY(usr)] has [SSevacuation.flags_scuttle & FLAGS_EVACUATION_DENY ? "forbidden" : "allowed"] ship-wide evacuation.")
 
 			if("force_evac")
 				if(!SSevacuation.begin_launch())
@@ -1128,10 +1135,23 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				message_admins("[ADMIN_TPMONTY(usr)] forced the self-destruct system, destroying the [SSmapping.configs[SHIP_MAP].map_name].")
 
 			if("toggle_dest")
-				SSevacuation.scuttle_flags ^= FLAGS_SELF_DESTRUCT_DENY
-				log_admin("[key_name(src)] has [SSevacuation.scuttle_flags & FLAGS_SELF_DESTRUCT_DENY ? "forbidden" : "allowed"] the self-destruct system.")
-				message_admins("[ADMIN_TPMONTY(usr)] has [SSevacuation.scuttle_flags & FLAGS_SELF_DESTRUCT_DENY ? "forbidden" : "allowed"] the self-destruct system.")
+				SSevacuation.flags_scuttle ^= FLAGS_SELF_DESTRUCT_DENY
+				log_admin("[key_name(src)] has [SSevacuation.flags_scuttle & FLAGS_SELF_DESTRUCT_DENY ? "forbidden" : "allowed"] the self-destruct system.")
+				message_admins("[ADMIN_TPMONTY(usr)] has [SSevacuation.flags_scuttle & FLAGS_SELF_DESTRUCT_DENY ? "forbidden" : "allowed"] the self-destruct system.")
 
+//RU TGMC EDIT
+	else if(href_list["admincancelpredsd"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/obj/item/clothing/gloves/yautja/hunter/bracer = locate(href_list["bracer"])
+		var/mob/living/carbon/victim = locate(href_list["victim"])
+		if (!istype(bracer))
+			return
+		if (alert("Are you sure you want to cancel this pred SD?",,"Yes","No") != "Yes")
+			return
+		bracer.exploding = FALSE
+		message_admins("[src.owner] has cancelled the predator self-destruct sequence [victim ? "of [victim] ([victim.key])":""].")
+//RU TGMC EDIT
 
 	else if(href_list["object_list"])
 		if(!check_rights(R_SPAWN))
@@ -1770,7 +1790,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 		var/dat
 
-		for(var/i in L.GetAllContents())
+		for(var/i in L.get_contents())
 			var/atom/A = i
 			dat += "[A] [ADMIN_VV(A)]<br>"
 
@@ -1812,7 +1832,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				change = input("Select the hair color.", "Edit Appearance") as null|color
 				if(!change || !istype(H))
 					return
-				previous = "#[num2hex(H.r_hair, 2)][num2hex(H.g_hair, 2)][num2hex(H.b_hair, 2)]"
+				previous = "#[num2hex(H.r_hair)][num2hex(H.g_hair)][num2hex(H.b_hair)]"
 				H.r_hair = hex2num(copytext(change, 2, 4))
 				H.g_hair = hex2num(copytext(change, 4, 6))
 				H.b_hair = hex2num(copytext(change, 6, 8))
@@ -1826,7 +1846,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				change = input("Select the facial hair color.", "Edit Appearance") as null|color
 				if(!change || !istype(H))
 					return
-				previous = "#[num2hex(H.r_facial, 2)][num2hex(H.g_facial, 2)][num2hex(H.b_facial, 2)]"
+				previous = "#[num2hex(H.r_facial)][num2hex(H.g_facial)][num2hex(H.b_facial)]"
 				H.r_facial = hex2num(copytext(change, 2, 4))
 				H.g_facial = hex2num(copytext(change, 4, 6))
 				H.b_facial = hex2num(copytext(change, 6, 8))
@@ -1834,7 +1854,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				change = input("Select the eye color.", "Edit Appearance") as null|color
 				if(!change || !istype(H))
 					return
-				previous = "#[num2hex(H.r_eyes, 2)][num2hex(H.g_eyes, 2)][num2hex(H.b_eyes, 2)]"
+				previous = "#[num2hex(H.r_eyes)][num2hex(H.g_eyes)][num2hex(H.b_eyes)]"
 				H.r_eyes = hex2num(copytext(change, 2, 4))
 				H.g_eyes = hex2num(copytext(change, 4, 6))
 				H.b_eyes = hex2num(copytext(change, 6, 8))
@@ -1842,7 +1862,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				change = input("Select the body color.", "Edit Appearance") as null|color
 				if(!change || !istype(H))
 					return
-				previous = "#[num2hex(H.r_skin, 2)][num2hex(H.g_skin, 2)][num2hex(H.b_skin, 2)]"
+				previous = "#[num2hex(H.r_skin)][num2hex(H.g_skin)][num2hex(H.b_skin)]"
 				H.r_skin = hex2num(copytext(change, 2, 4))
 				H.g_skin = hex2num(copytext(change, 4, 6))
 				H.b_skin = hex2num(copytext(change, 6, 8))
@@ -1853,7 +1873,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 				previous = H.gender
 				H.gender = change
 			if("ethnicity")
-				change = input("Select the ethnicity.", "Edit Appearance") as null|anything in sortList(GLOB.ethnicities_list)
+				change = input("Select the ethnicity.", "Edit Appearance") as null|anything in sortList(GLOB.human_ethnicities_list)
 				if(!change || !istype(H))
 					return
 				previous = H.ethnicity
@@ -2074,9 +2094,6 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 					return
 
 				X.upgrade_xeno(change)
-				if(change != XENO_UPGRADE_NORMAL)
-					var/datum/xeno_caste/previous_maturity = GLOB.xeno_caste_datums[X.caste_base_type][X.upgrade_prev()]
-					X.upgrade_stored = previous_maturity.upgrade_threshold
 
 		DIRECT_OUTPUT(usr, browse(null, "window=xeno_panel_[old_keyname]"))
 		usr.client.holder.xeno_panel(X)
@@ -2119,7 +2136,7 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 
 	else if(href_list["clearpollvotes"])
 		var/datum/poll_question/poll = locate(href_list["clearpollvotes"]) in GLOB.polls
-		poll.cleaR_POLLS_votes()
+		poll.cleaR_DBRANKS_votes()
 		poll_management_panel(poll)
 
 	else if(href_list["addpolloption"])
@@ -2148,37 +2165,18 @@ Status: [status ? status : "Unknown"] | Damage: [health ? health : "None"]
 		message_admins(logtext)
 		log_admin(logtext)
 
-	else if(href_list["cancelsummon"])
-		GLOB.active_summons.Cut()
-		var/logtext = "[key_name(usr)] has cancelled all psychic summons"
-		message_admins(logtext)
-		log_admin(logtext)
-
-	else if(href_list["tag_datum"])
+	else if(href_list["adminunbanish"])
 		if(!check_rights(R_ADMIN))
 			return
-		var/datum/datum_to_tag = locate(href_list["tag_datum"])
-		if(!datum_to_tag)
+		var/mob/living/carbon/xenomorph/target = locate(href_list["target"])
+		if(!HAS_TRAIT(target, TRAIT_BANISHED))
+			to_chat(usr, span_warning("Target already is unbanished."))
 			return
-		return add_tagged_datum(datum_to_tag)
-
-	else if(href_list["del_tag"])
-		if(!check_rights(R_ADMIN))
+		if(alert("Are you sure you want to unbanish [target]?",,"Yes","No") != "Yes")
 			return
-		var/datum/datum_to_remove = locate(href_list["del_tag"])
-		if(!datum_to_remove)
-			return
-		return remove_tagged_datum(datum_to_remove)
-
-	else if(href_list["show_tags"])
-		if(!check_rights(R_ADMIN))
-			return
-		return display_tags()
-
-	else if(href_list["mark_datum"])
-		if(!check_rights(R_ADMIN))
-			return
-		var/datum/datum_to_mark = locate(href_list["mark_datum"])
-		if(!datum_to_mark)
-			return
-		return usr.client?.mark_datum(datum_to_mark)
+		var/reason = stripped_input(src.owner, "Provide a reason for unbunish this xenomorph, [target]", default = "I will not allow meaningless death in my hive!")
+		REMOVE_TRAIT(target, TRAIT_BANISHED, TRAIT_BANISHED)
+		target.hud_set_banished()
+		xeno_message("QUEEN MOTHER BANISHMENT", "xenobanishtitleannonce", 5, target.hivenumber, sound= sound(get_sfx("queen"), channel = CHANNEL_ANNOUNCEMENTS))
+		xeno_message("By Queen Mother's will, [target] has been unbanished!\n[reason]", "xenobanishannonce", 5, target.hivenumber)
+		message_admins("[src.owner] has unbanish [ADMIN_TPMONTY(target)]. Reason: [reason ? "[reason]" : "no reason"]")

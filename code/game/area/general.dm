@@ -7,12 +7,9 @@
 	power_light = 0
 	power_equip = 0
 	power_environ = 0
-	max_ambience_cooldown = 180 SECONDS
-	min_ambience_cooldown = 180 SECONDS
 	ambience = list('sound/ambience/ambispace.ogg')
 	temperature = TCMB
-	pressure = 0
-	area_flags = NO_DROPPOD
+	flags_area = NO_DROPPOD
 	///What type of debuff do we apply when someone enters this area?
 	var/debuff_type = /datum/status_effect/spacefreeze
 
@@ -44,7 +41,7 @@
 /area/shuttle //DO NOT TURN THE dynamic_lighting STUFF ON FOR SHUTTLES. IT BREAKS THINGS.
 	requires_power = FALSE
 	outside = FALSE
-	area_flags = OB_CAS_IMMUNE
+	flags_area = OB_CAS_IMMUNE
 	minimap_color = MINIMAP_AREA_LZ
 
 /area/shuttle/arrival
@@ -1203,7 +1200,7 @@
 	requires_power = 0
 	name = "Abandoned Test Room"
 	icon_state = "storage"
-	area_flags = NO_DROPPOD
+	flags_area = NO_DROPPOD
 
 
 //DJSTATION
@@ -1283,10 +1280,6 @@
 	name = "Abandoned AI Chamber"
 	icon_state = "ai_chamber"
 	ambience = list('sound/ambience/ambimalf.ogg')
-
-/area/turret_protected/ai_cyborg_station
-	name = "Abandoned Cyborg Station"
-	icon_state = "ai_cyborg"
 
 /area/turret_protected/aisat
 	name = "Abandoned AI Satellite"

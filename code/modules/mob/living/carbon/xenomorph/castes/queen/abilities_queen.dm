@@ -4,7 +4,6 @@
 /datum/action/ability/xeno_action/hive_message
 	name = "Hive Message" // Also known as Word of Queen.
 	action_icon_state = "queen_order"
-	action_icon = 'icons/Xeno/actions/leader.dmi'
 	desc = "Announces a message to the hive."
 	ability_cost = 50
 	cooldown_duration = 10 SECONDS
@@ -37,20 +36,20 @@
 	deadchat_broadcast(" has messaged the hive: \"[input]\"", Q, Q)
 	var/queens_word = "<span class='maptext' style=font-size:18pt;text-align:center valign='top'><u>HIVE MESSAGE:</u><br></span>" + input
 
-	var/sound/queen_sound = sound(get_sfx(SFX_QUEEN), channel = CHANNEL_ANNOUNCEMENTS)
+	var/sound/queen_sound = sound(get_sfx("queen"), channel = CHANNEL_ANNOUNCEMENTS)
 	var/sound/king_sound = sound('sound/voice/alien/xenos_roaring.ogg', channel = CHANNEL_ANNOUNCEMENTS)
 	for(var/mob/living/carbon/xenomorph/X AS in Q.hive.get_all_xenos())
-		to_chat(X, assemble_alert(
-			title = "Hive Announcement",
-			subtitle = "From [Q.name]",
-			message = input,
-			color_override = "purple"
-		))
-		switch(Q.caste_base_type) // TODO MAKE DYING SOUND A CASTE VAR????
-			if(/datum/xeno_caste/queen, /datum/xeno_caste/shrike)
+		switch(Q.caste_base_type)
+			if(/mob/living/carbon/xenomorph/queen)
 				SEND_SOUND(X, queen_sound)
-			if(/datum/xeno_caste/king)
+				//In case in combat, couldn't read fast enough, or needs to copy paste into a translator. Here's the old hive message.
+				to_chat(X, span_xenoannounce("<h2 class='alert'>The words of the queen reverberate in your head...</h2><br>[span_alert(input)]<br><br>"))
+			if(/mob/living/carbon/xenomorph/king)
 				SEND_SOUND(X, king_sound)
+				to_chat(X, span_xenoannounce("<h2 class='alert'>The words of the king reverberate in your head...</h2><br>[span_alert(input)]<br><br>"))
+			if(/mob/living/carbon/xenomorph/shrike)
+				SEND_SOUND(X, queen_sound)
+				to_chat(X, span_xenoannounce("<h2 class='alert'>The words of the shrike reverberate in your head...</h2><br>[span_alert(input)]<br><br>"))
 		//Display the ruler's hive message at the top of the game screen.
 		X.play_screen_text(queens_word, /atom/movable/screen/text/screen_text/queen_order)
 
@@ -64,10 +63,9 @@
 /datum/action/ability/activable/xeno/screech
 	name = "Screech"
 	action_icon_state = "screech"
-	action_icon = 'icons/Xeno/actions/queen.dmi'
 	desc = "A large area knockdown that causes pain and screen-shake."
 	ability_cost = 250
-	cooldown_duration = 100 SECONDS
+	cooldown_duration = 90 SECONDS
 	keybind_flags = ABILITY_KEYBIND_USE_ABILITY
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_SCREECH,
@@ -78,42 +76,48 @@
 	return ..()
 
 /datum/action/ability/activable/xeno/screech/use_ability(atom/A)
-	var/mob/living/carbon/xenomorph/queen/xeno_owner = owner
+	var/mob/living/carbon/xenomorph/queen/X = owner
 
 	//screech is so powerful it kills huggers in our hands
-	if(istype(xeno_owner.r_hand, /obj/item/clothing/mask/facehugger))
-		var/obj/item/clothing/mask/facehugger/FH = xeno_owner.r_hand
+	if(istype(X.r_hand, /obj/item/clothing/mask/facehugger))
+		var/obj/item/clothing/mask/facehugger/FH = X.r_hand
 		if(FH.stat != DEAD)
 			FH.kill_hugger()
 
-	if(istype(xeno_owner.l_hand, /obj/item/clothing/mask/facehugger))
-		var/obj/item/clothing/mask/facehugger/FH = xeno_owner.l_hand
+	if(istype(X.l_hand, /obj/item/clothing/mask/facehugger))
+		var/obj/item/clothing/mask/facehugger/FH = X.l_hand
 		if(FH.stat != DEAD)
 			FH.kill_hugger()
 
 	succeed_activate()
 	add_cooldown()
 
-	playsound(xeno_owner.loc, 'sound/voice/alien/queen_screech.ogg', 75, 0)
-	xeno_owner.visible_message(span_xenohighdanger("\The [xeno_owner] emits an ear-splitting guttural roar!"))
+	playsound(X.loc, 'sound/voice/alien/queen/screech.ogg', 75, 0)
+	X.visible_message(span_xenohighdanger("\The [X] emits an ear-splitting guttural roar!"))
 	GLOB.round_statistics.queen_screech++
 	SSblackbox.record_feedback("tally", "round_statistics", 1, "queen_screech")
-	xeno_owner.create_shriekwave() //Adds the visual effect. Wom wom wom
+	X.create_shriekwave() //Adds the visual effect. Wom wom wom
 
+	var/list/nearby_living = list()
+	for(var/mob/living/L in hearers(WORLD_VIEW, X))
+		nearby_living.Add(L)
 	for(var/obj/vehicle/sealed/armored/tank AS in GLOB.tank_list)
-		if(get_dist(tank, xeno_owner) > WORLD_VIEW_NUM)
+		if(get_dist(tank, X) > WORLD_VIEW_NUM)
 			continue
-		if(tank.z != owner.z)
+		nearby_living += tank.occupants
+
+	for(var/mob/living/L AS in GLOB.mob_living_list)
+		if(get_dist(L, X) > WORLD_VIEW_NUM)
 			continue
-		for(var/mob/living/living_victim AS in tank.occupants)
-			living_victim.screech_act(xeno_owner, WORLD_VIEW_NUM) //todo: The effects of screech are weird due to relying on get_dist for a mob on a diff z-level
+		L.screech_act(X, WORLD_VIEW_NUM, L in nearby_living)
 
-	var/list/nearby_living = list() //if you're a hearer you get effected more severely
-	for(var/mob/living/living_victim in hearers(WORLD_VIEW, xeno_owner))
-		nearby_living.Add(living_victim)
+	var/datum/action/ability/xeno_action/plasma_screech = X.actions_by_path[/datum/action/ability/activable/xeno/plasma_screech]
+	if(plasma_screech)
+		plasma_screech.add_cooldown(15 SECONDS)
+	var/datum/action/ability/xeno_action/frenzy_screech = X.actions_by_path[/datum/action/ability/activable/xeno/frenzy_screech]
+	if(frenzy_screech)
+		frenzy_screech.add_cooldown(15 SECONDS)
 
-	for(var/mob/living/living_victim AS in cheap_get_living_near(xeno_owner, WORLD_VIEW_NUM))
-		living_victim.screech_act(xeno_owner, WORLD_VIEW_NUM, living_victim in nearby_living)
 
 /datum/action/ability/activable/xeno/screech/ai_should_start_consider()
 	return TRUE
@@ -129,13 +133,94 @@
 		return FALSE
 	return TRUE
 
+/datum/action/ability/activable/xeno/plasma_screech
+	name = "Plasma Screech"
+	action_icon_state = "plasma_screech"
+	desc = "Screech that increases plasma regeneration for nearby xenos."
+	ability_cost = 300
+	cooldown_duration = 45 SECONDS
+	var/screech_range = 5
+	var/bonus_regen = 0.5
+	var/duration = 20 SECONDS
+	keybind_flags = ABILITY_KEYBIND_USE_ABILITY
+	keybinding_signals = list(
+		KEYBINDING_NORMAL = COMSIG_XENOABILITY_PLASMA_SCREECH,
+	)
+
+/datum/action/ability/activable/xeno/plasma_screech/use_ability(atom/A)
+	var/mob/living/carbon/xenomorph/queen/X = owner
+
+	for(var/mob/living/carbon/xenomorph/affected_xeno in cheap_get_xenos_near(X, screech_range))
+		if(!(affected_xeno.xeno_caste.can_flags & CASTE_CAN_BE_GIVEN_PLASMA))
+			continue
+		affected_xeno.apply_status_effect(/datum/status_effect/plasma_surge, affected_xeno.xeno_caste.plasma_max / 3, bonus_regen, duration)
+
+	playsound(X.loc, 'sound/voice/alien/queen/screech_plasma.ogg', 75, 0)
+	X.visible_message(span_xenohighdanger("\The [X] emits an ear-splitting guttural roar!"))
+
+	succeed_activate()
+	add_cooldown()
+
+	var/datum/action/ability/xeno_action/screech = X.actions_by_path[/datum/action/ability/activable/xeno/screech]
+	if(screech)
+		screech.add_cooldown(10 SECONDS)
+	var/datum/action/ability/xeno_action/frenzy_screech = X.actions_by_path[/datum/action/ability/activable/xeno/frenzy_screech]
+	if(frenzy_screech)
+		frenzy_screech.add_cooldown(5 SECONDS)
+
+/datum/action/ability/activable/xeno/frenzy_screech
+	name = "Frenzy Screech"
+	action_icon_state = "frenzy_screech"
+	desc = "Screech that increases damage for nearby xenos."
+	ability_cost = 300
+	cooldown_duration = 45 SECONDS
+	var/screech_range = 5
+	var/buff_duration = 20 SECONDS
+	var/buff_damage_modifier = 0.1
+	keybind_flags = ABILITY_KEYBIND_USE_ABILITY
+	keybinding_signals = list(
+		KEYBINDING_NORMAL = COMSIG_XENOABILITY_FRENZY_SCREECH,
+	)
+
+/datum/action/ability/activable/xeno/frenzy_screech/use_ability(atom/A)
+	var/mob/living/carbon/xenomorph/queen/X = owner
+
+	for(var/mob/living/carbon/xenomorph/affected_xeno in cheap_get_xenos_near(X, screech_range))
+		affected_xeno.apply_status_effect(/datum/status_effect/frenzy_screech, buff_duration, buff_damage_modifier)
+
+	playsound(X.loc, 'sound/voice/alien/queen/screech_frenzy.ogg', 75, 0)
+	X.visible_message(span_xenohighdanger("\The [X] emits an ear-splitting guttural roar!"))
+
+	succeed_activate()
+	add_cooldown()
+
+	var/datum/action/ability/xeno_action/screech = X.actions_by_path[/datum/action/ability/activable/xeno/screech]
+	if(screech)
+		screech.add_cooldown(10 SECONDS)
+	var/datum/action/ability/xeno_action/plasma_screech = X.actions_by_path[/datum/action/ability/activable/xeno/plasma_screech]
+	if(plasma_screech)
+		plasma_screech.add_cooldown(5 SECONDS)
+
+/// Promote the passed xeno to a hive leader, should not be called direct
+/datum/action/ability/xeno_action/set_xeno_lead/proc/set_xeno_leader(mob/living/carbon/xenomorph/selected_xeno)
+	var/mob/living/carbon/xenomorph/xeno_ruler = owner
+	xeno_ruler.balloon_alert(xeno_ruler, "Xeno promoted")
+	selected_xeno.balloon_alert(selected_xeno, "Promoted to leader")
+	to_chat(selected_xeno, span_xenoannounce("[xeno_ruler] has selected us as a Hive Leader. The other Xenomorphs must listen to us. We will also act as a beacon for the Queen's pheromones."))
+
+	xeno_ruler.hive.add_leader(selected_xeno)
+	selected_xeno.hud_set_queen_overwatch()
+	selected_xeno.handle_xeno_leader_pheromones(xeno_ruler)
+	notify_ghosts("\ [xeno_ruler] has designated [selected_xeno] as a Hive Leader", source = selected_xeno, action = NOTIFY_ORBIT)
+
+	selected_xeno.update_leader_icon(TRUE)
+
 // ***************************************
 // *********** Overwatch
 // ***************************************
 /datum/action/ability/xeno_action/watch_xeno
 	name = "Watch Xenomorph"
 	action_icon_state = "watch_xeno"
-	action_icon = 'icons/Xeno/actions/queen.dmi'
 	desc = "See from the target Xenomorphs vision. Click again the ability to stop observing"
 	ability_cost = 0
 	use_state_flags = ABILITY_USE_LYING
@@ -226,23 +311,21 @@
 /datum/action/ability/xeno_action/toggle_queen_zoom
 	name = "Toggle Queen Zoom"
 	action_icon_state = "toggle_queen_zoom"
-	action_icon = 'icons/Xeno/actions/queen.dmi'
 	desc = "Zoom out for a larger view around wherever you are looking."
 	ability_cost = 0
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_TOGGLE_QUEEN_ZOOM,
 	)
-	use_state_flags = ABILITY_USE_LYING
 
 
 /datum/action/ability/xeno_action/toggle_queen_zoom/action_activate()
 	var/mob/living/carbon/xenomorph/queen/xeno = owner
 	if(xeno.do_actions)
 		return
-	if(xeno.xeno_flags & XENO_ZOOMED)
+	if(xeno.is_zoomed)
 		zoom_xeno_out(xeno.observed_xeno ? FALSE : TRUE)
 		return
-	if(!do_after(xeno, 1 SECONDS, IGNORE_HELD_ITEM, null, BUSY_ICON_GENERIC) || (xeno.xeno_flags & XENO_ZOOMED))
+	if(!do_after(xeno, 1 SECONDS, IGNORE_HELD_ITEM, null, BUSY_ICON_GENERIC) || xeno.is_zoomed)
 		return
 	zoom_xeno_in(xeno.observed_xeno ? FALSE : TRUE) //No need for feedback message if our eye is elsewhere.
 
@@ -253,7 +336,7 @@
 	if(message)
 		xeno.visible_message(span_notice("[xeno] emits a broad and weak psychic aura."),
 		span_notice("We start focusing our psychic energy to expand the reach of our senses."), null, 5)
-	xeno.zoom_in(0, 12)
+	xeno.zoom_in(0, 4.5) //RU TGMC EDIT
 
 
 /datum/action/ability/xeno_action/toggle_queen_zoom/proc/zoom_xeno_out(message = TRUE)
@@ -275,7 +358,6 @@
 /datum/action/ability/xeno_action/set_xeno_lead
 	name = "Choose/Follow Xenomorph Leaders"
 	action_icon_state = "xeno_lead"
-	action_icon = 'icons/Xeno/actions/queen.dmi'
 	desc = "Make a target Xenomorph a leader."
 	ability_cost = 200
 	use_state_flags = ABILITY_USE_LYING
@@ -302,7 +384,7 @@
 /datum/action/ability/xeno_action/set_xeno_lead/proc/select_xeno_leader(mob/living/carbon/xenomorph/selected_xeno)
 	var/mob/living/carbon/xenomorph/queen/xeno_ruler = owner
 
-	if(selected_xeno.xeno_flags & XENO_LEADER)
+	if(selected_xeno.queen_chosen_lead)
 		unset_xeno_leader(selected_xeno)
 		return
 
@@ -323,6 +405,7 @@
 
 	selected_xeno.update_leader_icon(FALSE)
 
+/* RUTGMC DELETION
 /// Promote the passed xeno to a hive leader, should not be called direct
 /datum/action/ability/xeno_action/set_xeno_lead/proc/set_xeno_leader(mob/living/carbon/xenomorph/selected_xeno)
 	var/mob/living/carbon/xenomorph/xeno_ruler = owner
@@ -339,6 +422,7 @@
 	notify_ghosts("\ [xeno_ruler] has designated [selected_xeno] as a Hive Leader", source = selected_xeno, action = NOTIFY_ORBIT)
 
 	selected_xeno.update_leader_icon(TRUE)
+*/
 
 // ***************************************
 // *********** Queen Acidic Salve
@@ -346,7 +430,6 @@
 /datum/action/ability/activable/xeno/psychic_cure/queen_give_heal
 	name = "Heal"
 	action_icon_state = "heal_xeno"
-	action_icon = 'icons/Xeno/actions/drone.dmi'
 	desc = "Apply a minor heal to the target."
 	cooldown_duration = 5 SECONDS
 	ability_cost = 150
@@ -355,26 +438,14 @@
 	)
 	heal_range = HIVELORD_HEAL_RANGE
 	target_flags = ABILITY_MOB_TARGET
-	/// Should this ability be usable on moving targets and use an alternative flavortext?
-	var/hivemind_heal = FALSE
 
 /datum/action/ability/activable/xeno/psychic_cure/queen_give_heal/use_ability(atom/target)
 	if(owner.do_actions)
 		return FALSE
-	if(!do_after(owner, 1 SECONDS, hivemind_heal ? IGNORE_TARGET_LOC_CHANGE : NONE, target, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
+	if(!do_after(owner, 1 SECONDS, NONE, target, BUSY_ICON_FRIENDLY, BUSY_ICON_MEDICAL))
 		return FALSE
-	if(!can_use_ability(target, TRUE))
-		return FALSE
-
-	if(!hivemind_heal)
-		target.visible_message(span_xenowarning("\the [owner] vomits acid over [target], mending their wounds!"))
-	else
-		owner.visible_message(span_xenowarning("A faint psychic aura is suddenly emitted from \the [owner]!"), \
-		span_xenowarning("We cure [target] with the power of our mind!"))
-		target.visible_message(span_xenowarning("[target] lightly shimmers in a chill light."), \
-		span_xenowarning("We feel a soothing chill."))
-
-	playsound(target, SFX_ALIEN_DROOL, 25)
+	target.visible_message(span_xenowarning("\the [owner] vomits acid over [target], mending their wounds!"))
+	playsound(target, "alien_drool", 25)
 	new /obj/effect/temp_visual/telekinesis(get_turf(target))
 	var/mob/living/carbon/xenomorph/patient = target
 	patient.salve_healing()
@@ -401,7 +472,6 @@
 /datum/action/ability/activable/xeno/queen_give_plasma
 	name = "Give Plasma"
 	action_icon_state = "queen_give_plasma"
-	action_icon = 'icons/Xeno/actions/queen.dmi'
 	desc = "Give plasma to a target Xenomorph (you must be overwatching them.)"
 	ability_cost = 150
 	cooldown_duration = 8 SECONDS
@@ -464,14 +534,13 @@
 
 
 #define BULWARK_LOOP_TIME 1 SECONDS
-#define BULWARK_RADIUS 4
+#define BULWARK_RADIUS 8 //RUTGMC EDIT
 #define BULWARK_ARMOR_MULTIPLIER 0.25
 
 /datum/action/ability/xeno_action/bulwark
 	name = "Royal Bulwark"
 	action_icon_state = "bulwark"
-	action_icon = 'icons/Xeno/actions/queen.dmi'
-	desc = "Creates a field of defensive energy, filling gaps in the armor of nearby sisters, making them more resilient."
+	desc = "Creates a field of defensive energy, filling chinks in the armor of nearby sisters, making them more resilient."
 	ability_cost = 100
 	cooldown_duration = 20 SECONDS
 	keybinding_signals = list(

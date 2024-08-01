@@ -4,8 +4,6 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 #define DROPPOD_TRANSIT_TIME 10 SECONDS
 ///radius of dispersion for leader pods
 #define LEADER_POD_DISPERSION 5
-///radius of dispersion for pods for randomisation or obstacle avoidance
-#define DROPPOD_BASE_DISPERSION 1
 
 ///base marine drop pod. can be controlled by an attached [/obj/structure/droppod/leader] or [/obj/machinery/computer/droppod_control]
 /obj/structure/droppod
@@ -20,7 +18,7 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 	interaction_flags = INTERACT_OBJ_DEFAULT|INTERACT_POWERLOADER_PICKUP_ALLOWED_BYPASS_ANCHOR
 	soft_armor = list(MELEE = 25, BULLET = 80, LASER = 80, ENERGY = 90, BOMB = 70, BIO = 100, FIRE = 0, ACID = 0)
 	max_integrity = 75
-	atom_flags = PREVENT_CONTENTS_EXPLOSION
+	flags_atom = PREVENT_CONTENTS_EXPLOSION
 	coverage = 75
 	buckle_flags = CAN_BUCKLE|BUCKLE_PREVENTS_PULL
 	light_range = 1
@@ -170,7 +168,7 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 			balloon_alert(user, "Hazardous zone")
 		return FALSE
 	var/area/targetarea = get_area(target)
-	if(targetarea.area_flags & NO_DROPPOD) // Thou shall not pass!
+	if(targetarea.flags_area & NO_DROPPOD) // Thou shall not pass!
 		if(user)
 			balloon_alert(user, "Invalid area")
 		return FALSE
@@ -213,18 +211,13 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 	if(drop_state != DROPPOD_READY)
 		return
 
-	var/turf/target = locate(target_x, target_y, target_z)
-	if(!commanded_drop) //we randomise the landing slightly, its already randomised for mass launch
-		target = find_new_target()
-		target_x = target.x
-		target_y = target.y
-
 	if(!checklanding(user))
 		return
 
 	for(var/mob/podder AS in buckled_mobs)
 		podder.forceMove(src)
 
+	var/turf/target = locate(target_x, target_y, target_z)
 	if(user)
 		log_game("[key_name(user)] launched pod [src] at [AREACOORD(target)]")
 	deadchat_broadcast(" has been launched", src, turf_target = target)
@@ -237,22 +230,6 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 	update_icon()
 	flick("[icon_state]_closing", src)
 	addtimer(CALLBACK(src, PROC_REF(launch_pod), user), 2.5 SECONDS)
-
-///Find a new suitable target turf around the pods initial target
-/obj/structure/droppod/proc/find_new_target(mob/user)
-	var/scatter_radius = DROPPOD_BASE_DISPERSION + GLOB.current_orbit
-	var/turf/T0 = locate(target_x + scatter_radius, target_y + scatter_radius, target_z)
-	var/turf/T1 = locate(target_x - scatter_radius, target_y - scatter_radius, target_z)
-	var/list/block = block(T0,T1)
-	shuffle_inplace(block)
-	for(var/turf/attemptdrop AS in block)
-		if(!checklanding(optional_turf = attemptdrop))
-			continue
-		return attemptdrop
-
-	if(user)
-		to_chat(user, span_warning("[icon2html(src, user)] RECALCULATION FAILED!"))
-	return locate(target_x, target_y, target_z) //no other alt spots found, we return our original target
 
 ///actually launches the pod
 /obj/structure/droppod/proc/launch_pod(mob/user)
@@ -268,10 +245,9 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 
 	playsound(src, 'sound/effects/escape_pod_launch.ogg', 70)
 	playsound(src, 'sound/effects/droppod_launch.ogg', 70)
-	addtimer(CALLBACK(src, PROC_REF(finish_drop), user), ROUND_UP(DROPPOD_TRANSIT_TIME * ((GLOB.current_orbit + 3) / 6)))
+	addtimer(CALLBACK(src, PROC_REF(finish_drop), user), DROPPOD_TRANSIT_TIME)
 	forceMove(pick(reserved_area.reserved_turfs))
 	new /area/arrival(loc)	//adds a safezone so we dont suffocate on the way down, cleaned up with reserved turfs
-
 	var/turf/target = locate(target_x, target_y, 2)
 	var/obj/effect/overlay/blinking_laser/marine/pod_warning/laserpod = new /obj/effect/overlay/blinking_laser/marine/pod_warning(target)
 	laserpod.dir = target
@@ -280,14 +256,26 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 /// Moves the droppod into its target turf, which it updates if needed
 /obj/structure/droppod/proc/finish_drop(mob/user)
 	var/turf/targetturf = locate(target_x, target_y, target_z)
-	for(var/atom/target AS in targetturf.contents)
-		if(!target.density)
-			continue
-		if(user)
-			to_chat(user, span_warning("[icon2html(src, user)] WARNING! TARGET ZONE OCCUPIED! EVADING!"))
-			balloon_alert(user, "EVADING")
-		targetturf = find_new_target(user)
-		break
+	for(var/a in targetturf.contents)
+		var/atom/target = a
+		if(target.density)	//if theres something dense in the turf try to recalculate a new turf
+			if(user)
+				to_chat(user, span_warning("[icon2html(src, user)] WARNING! TARGET ZONE OCCUPIED! EVADING!"))
+				balloon_alert(user, "EVADING")
+			var/turf/T0 = locate(target_x + 2,target_y + 2, target_z)
+			var/turf/T1 = locate(target_x - 2,target_y - 2, target_z)
+			var/list/block = block(T0,T1) - targetturf
+			for(var/t in block)//Randomly selects a free turf in a 5x5 block around the target
+				var/turf/attemptdrop = t
+				if(!attemptdrop.density && !is_type_in_typecache(attemptdrop, GLOB.blocked_droppod_tiles))
+					targetturf = attemptdrop
+					break
+			if(targetturf.density)//We tried and failed, revert to the old one, which has a new dense obj but is at least not dense
+				if(user)
+					to_chat(user, span_warning("[icon2html(src, user)] RECALCULATION FAILED!"))
+				targetturf = locate(target_x, target_y, target_z)
+			break
+
 	forceMove(targetturf)
 	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_DROPPOD_LANDED, targetturf)
 	pixel_y = 500
@@ -337,8 +325,7 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 	for(var/obj/structure/droppod/pod AS in GLOB.droppod_list)
 		if(LAZYLEN(pod.buckled_mobs) || LAZYLEN(pod.contents))
 			occupied_pods++
-	var/dispersion = LEADER_POD_DISPERSION + GLOB.current_orbit
-	dispersion = max(dispersion, dispersion + ((occupied_pods - 10) / 5))
+	var/dispersion = max(LEADER_POD_DISPERSION, LEADER_POD_DISPERSION + ((occupied_pods - 10) / 5))
 	var/turf/topright = locate(new_x + dispersion, new_y + dispersion, target_z)
 	var/turf/bottomleft = locate(new_x - dispersion, new_y - dispersion, target_z)
 	var/list/block = block(bottomleft, topright) - locate()
@@ -485,7 +472,7 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 
 /obj/structure/droppod/nonmob/mech_pod
 	name = "\improper TGMC Zeus mech drop pod"
-	desc = "A menacing metal hunk of steel that is used by the TGMC for quick tactical redeployment. This is a larger model designed specifically to carry mechs. Shift click to enter when inside a mech."
+	desc = "A menacing metal hunk of steel that is used by the TGMC for quick tactical redeployment. This is a larger model designed specifically to carry mechs."
 	icon = 'icons/obj/structures/big_droppod.dmi'
 	icon_state = "mechpod"
 	light_range = 2
@@ -509,12 +496,14 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 			action.remove_action(occupant)
 	return ..()
 
+/* RUTGMC DELETION
 /obj/structure/droppod/nonmob/mech_pod/ex_act(severity)
 	switch(severity)
 		if(EXPLODE_DEVASTATE)
-			take_damage(100, BRUTE, BOMB)
+			take_damage(100, BRUTE, BOMB, 0)
 		if(EXPLODE_HEAVY)
-			take_damage(50, BRUTE, BOMB)
+			take_damage(50, BRUTE, BOMB, 0)
+*/
 
 /obj/structure/droppod/nonmob/mech_pod/mech_shift_click(obj/vehicle/sealed/mecha/mecha_clicker, mob/living/user)
 	if(mecha_clicker == stored_object)
@@ -570,17 +559,19 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 	owner.client.screen += map
 	choosing = TRUE
 	var/list/polled_coords = map.get_coords_from_click(owner)
-	owner?.client?.screen -= map
-	choosing = FALSE
 	if(!polled_coords)
+		owner.client?.screen -= map
+		choosing = FALSE
 		return
+	owner.client?.screen -= map
+	choosing = FALSE
 	pod.set_target(polled_coords[1], polled_coords[2])
 
 /datum/action/innate/set_drop_target/remove_action(mob/M)
 	if(choosing)
 		var/obj/structure/droppod/pod = target
 		var/atom/movable/screen/minimap/map = SSminimaps.fetch_minimap_object(pod.target_z, MINIMAP_FLAG_MARINE)
-		owner?.client?.screen -= map
+		owner.client?.screen -= map
 		map.UnregisterSignal(owner, COMSIG_MOB_CLICKON)
 		choosing = FALSE
 	return ..()
@@ -625,12 +616,3 @@ GLOBAL_LIST_INIT(blocked_droppod_tiles, typecacheof(list(/turf/open/space/transi
 
 /obj/structure/drop_pod_launcher/leader
 	pod_type = /obj/structure/droppod/leader
-
-/obj/structure/drop_pod_launcher/mech
-	pod_type = /obj/structure/droppod/nonmob/mech_pod
-
-/obj/structure/drop_pod_launcher/supply
-	pod_type = /obj/structure/droppod/nonmob/supply_pod
-
-/obj/structure/drop_pod_launcher/sentry
-	pod_type = /obj/structure/droppod/nonmob/turret_pod

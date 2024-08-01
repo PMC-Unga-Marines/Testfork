@@ -7,6 +7,8 @@
 	coverage = 25
 	light_system = STATIC_LIGHT
 	light_power = SQRTWO
+	max_integrity = 250
+	resistance_flags = XENO_DAMAGEABLE
 	///The brightness of the floodlight
 	var/brightness_on = 8
 
@@ -134,7 +136,7 @@
 	icon = 'icons/obj/machines/floodlight.dmi'
 	icon_state = "floodlightcombat"
 	max_integrity = 200
-	item_flags = IS_DEPLOYABLE
+	flags_item = IS_DEPLOYABLE
 	w_class = WEIGHT_CLASS_NORMAL
 	var/deployable_item = /obj/machinery/deployable/floodlight
 

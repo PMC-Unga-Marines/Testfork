@@ -10,33 +10,31 @@
 	wound_type = "crusher" //used to match appropriate wound overlays
 
 	// *** Melee Attacks *** //
-	melee_damage = 25
+	melee_damage = 24
 	attack_delay = 8
 
 	// *** Speed *** //
 	speed = -0.1
 
+	// *** Sunder *** //
+	sunder_recover = 2
+
 	// *** Plasma *** //
-	plasma_max = 520
-	plasma_gain = 40
+	plasma_max = 400
+	plasma_gain = 30
 
 	// *** Health *** //
-	max_health = 525
+	max_health = 400
 
 	// *** Evolution *** //
-	upgrade_threshold = TIER_THREE_THRESHOLD
-
-	deevolves_to = /datum/xeno_caste/bull
+	deevolves_to = /mob/living/carbon/xenomorph/bull
 
 	// *** Flags *** //
 	can_flags = CASTE_CAN_BE_QUEEN_HEALED|CASTE_CAN_BE_GIVEN_PLASMA|CASTE_CAN_BE_LEADER
 	caste_traits = list(TRAIT_STOPS_TANK_COLLISION)
 
 	// *** Defense *** //
-	soft_armor = list(MELEE = 90, BULLET = 75, LASER = 75, ENERGY = 75, BOMB = 130, BIO = 100, FIRE = 50, ACID = 100)
-
-	// *** Sunder *** //
-	sunder_multiplier = 0.7
+	soft_armor = list(MELEE = 90, BULLET = 75, LASER = 75, ENERGY = 75, BOMB = 130, BIO = 100, FIRE = 40, ACID = 100)
 
 	// *** Minimap Icon *** //
 	minimap_icon = "crusher"
@@ -52,7 +50,10 @@
 		/datum/action/ability/activable/xeno/stomp,
 		/datum/action/ability/xeno_action/ready_charge,
 		/datum/action/ability/activable/xeno/cresttoss,
+		/datum/action/ability/activable/xeno/cresttoss/behind,
+		/datum/action/ability/xeno_action/regenerate_skin/crusher,
 	)
+
 
 /datum/xeno_caste/crusher/on_caste_applied(mob/xenomorph)
 	. = ..()
@@ -80,5 +81,7 @@
 		/datum/action/ability/activable/xeno/stomp,
 		/datum/action/ability/xeno_action/ready_charge,
 		/datum/action/ability/activable/xeno/cresttoss,
+		/datum/action/ability/activable/xeno/cresttoss/behind,
 		/datum/action/ability/activable/xeno/advance,
+		/datum/action/ability/xeno_action/regenerate_skin/crusher,
 	)

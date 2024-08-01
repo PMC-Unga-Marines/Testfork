@@ -2,7 +2,6 @@
 /area/patricks_rest
 	name = "Patricks Rest"
 	icon_state = "dark"
-	area_flags = ALWAYS_RADIO
 
 /area/patricks_rest/ground
 	name = "Ground"
@@ -31,7 +30,7 @@
 /area/patricks_rest/surface/landing_pad
 	name = "Landing Pad 1"
 	icon_state = "landing_pad"
-	area_flags = NO_DROPPOD
+	flags_area = NO_DROPPOD
 	ceiling = CEILING_METAL
 	outside = FALSE
 	minimap_color = MINIMAP_AREA_LZ
@@ -46,7 +45,7 @@
 /area/patricks_rest/surface/landing_pad_2
 	name = "Landing Pad 2"
 	icon_state = "landing_pad"
-	area_flags = NO_DROPPOD
+	flags_area = NO_DROPPOD
 	ceiling = CEILING_METAL
 	outside = FALSE
 	minimap_color = MINIMAP_AREA_LZ

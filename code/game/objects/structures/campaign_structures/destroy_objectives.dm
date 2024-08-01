@@ -5,17 +5,12 @@
 	soft_armor = list(MELEE = 200, BULLET = 200, LASER = 200, ENERGY = 200, BOMB = 200, BIO = 200, FIRE = 200, ACID = 200) //require c4 normally
 	///explosion smoke particle holder
 	var/obj/effect/abstract/particle_holder/explosion_smoke
-	///The faction this belongs to
-	var/faction = FACTION_TERRAGOV
 
 /obj/structure/campaign_objective/destruction_objective/Destroy()
 	QDEL_NULL(explosion_smoke)
 	return ..()
 
-/obj/structure/campaign_objective/destruction_objective/plastique_act(mob/living/plastique_user)
-	if(plastique_user && plastique_user.ckey)
-		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[plastique_user.ckey]
-		personal_statistics.mission_objective_destroyed += (faction != plastique_user.faction ? 1 : -1)
+/obj/structure/campaign_objective/destruction_objective/plastique_act()
 	qdel(src)
 
 /obj/structure/campaign_objective/destruction_objective/plastique_time_mod(time)
@@ -24,7 +19,7 @@
 //Howitzer
 /obj/effect/landmark/campaign_structure/howitzer_objective
 	name = "howitzer objective"
-	icon = 'icons/obj/machines/deployable/howitzer.dmi'
+	icon = 'icons/Marine/howitzer.dmi'
 	icon_state = "howitzer_deployed"
 	mission_types = list(/datum/campaign_mission/destroy_mission/fire_support_raid)
 	spawn_object = /obj/structure/campaign_objective/destruction_objective/howitzer
@@ -32,10 +27,9 @@
 /obj/structure/campaign_objective/destruction_objective/howitzer
 	name = "\improper TA-100Y howitzer"
 	desc = "A manual, crew-operated and towable howitzer, will rain down 150mm laserguided and accurate shells on any of your foes."
-	icon = 'icons/obj/machines/deployable/howitzer.dmi'
+	icon = 'icons/Marine/howitzer.dmi'
 	icon_state = "howitzer_deployed"
 	pixel_x = -16
-	faction = FACTION_SOM
 
 //MLRS
 /obj/effect/landmark/campaign_structure/mlrs
@@ -73,13 +67,10 @@
 
 /obj/structure/campaign_objective/destruction_objective/mlrs/update_overlays()
 	. = ..()
-	var/image/new_overlay = image(icon, src, "[icon_state]_overlay", ABOVE_ALL_MOB_LAYER, dir)
+	var/image/new_overlay = image(icon, src, "[icon_state]_overlay", ABOVE_MOB_LAYER, dir)
 	. += new_overlay
 
-/obj/structure/campaign_objective/destruction_objective/mlrs/plastique_act(mob/living/plastique_user)
-	if(plastique_user && plastique_user.ckey)
-		var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[plastique_user.ckey]
-		personal_statistics.mission_objective_destroyed += (faction != plastique_user.faction ? 1 : -1)
+/obj/structure/campaign_objective/destruction_objective/mlrs/plastique_act()
 	disable()
 
 /obj/structure/campaign_objective/destruction_objective/mlrs/disable()
@@ -124,8 +115,8 @@
 	spawn_object = /obj/structure/campaign_objective/destruction_objective/mlrs/tank
 
 /obj/structure/campaign_objective/destruction_objective/mlrs/tank
-	name = "\improper M34A2 Longstreet Light Tank"
-	desc = "A giant piece of armor with a big gun, good for blowing stuff up."
+	name = "\improper tank"
+	desc = "A massive multi launch rocket system on a tracked chassis. Can unleash a tremendous amount of firepower in a short amount of time."
 	icon_state = "tank"
 
 /obj/effect/landmark/campaign_structure/apc
@@ -137,8 +128,8 @@
 	spawn_object = /obj/structure/campaign_objective/destruction_objective/mlrs/apc
 
 /obj/structure/campaign_objective/destruction_objective/mlrs/apc
-	name = "\improper M577 armored personnel carrier"
-	desc = "A giant piece of armor for carrying troops in relative safety. Still has a pretty big gun."
+	name = "\improper APC"
+	desc = "A massive multi launch rocket system on a tracked chassis. Can unleash a tremendous amount of firepower in a short amount of time."
 	icon_state = "apc"
 	smoke_type = /particles/tank_wreck_smoke/apc
 
@@ -146,9 +137,16 @@
 	position = list(87, 60, 0)
 
 //Supply depot objectives
+/obj/effect/landmark/campaign_structure/supply_objective
+	name = "howitzer objective"
+	icon = 'icons/Marine/howitzer.dmi'
+	icon_state = "howitzer_deployed"
+	mission_types = list(/datum/campaign_mission/destroy_mission/fire_support_raid)
+	spawn_object = /obj/structure/campaign_objective/destruction_objective/howitzer
+
 /obj/structure/campaign_objective/destruction_objective/supply_objective
 	name = "SUPPLY_OBJECTIVE"
-	icon = 'icons/obj/machines/deployable/howitzer.dmi'
+	icon = 'icons/Marine/howitzer.dmi'
 	icon_state = "howitzer_deployed"
 
 //Train
@@ -166,15 +164,6 @@
 	icon_state = "maglev"
 	allow_pass_flags = PASS_PROJECTILE|PASS_AIR
 	bound_width = 128
-
-/obj/structure/campaign_objective/destruction_objective/supply_objective/train/Initialize(mapload)
-	. = ..()
-	update_icon()
-
-/obj/structure/campaign_objective/destruction_objective/supply_objective/train/update_overlays()
-	. = ..()
-	var/image/new_overlay = image(icon, src, "[icon_state]_overlay", ABOVE_ALL_MOB_LAYER, dir)
-	. += new_overlay
 
 /obj/effect/landmark/campaign_structure/train/carriage
 	name = "carriage objective"
@@ -201,7 +190,6 @@
 	icon_state = "phoron_stack"
 	bound_height = 32
 	bound_width = 64
-	faction = FACTION_SOM
 
 /obj/structure/campaign_objective/destruction_objective/supply_objective/phoron_stack/Initialize(mapload)
 	. = ..()
@@ -209,36 +197,26 @@
 
 /obj/structure/campaign_objective/destruction_objective/supply_objective/phoron_stack/update_overlays()
 	. = ..()
-	var/image/new_overlay = image(icon, src, "[icon_state]_overlay", ABOVE_ALL_MOB_LAYER, dir)
+	var/image/new_overlay = image(icon, src, "[icon_state]_overlay", ABOVE_MOB_LAYER, dir)
 	. += new_overlay
 
 //NT base
 /obj/effect/landmark/campaign_structure/nt_pod
 	name = "Mysterious pod"
-	icon = 'icons/obj/structures/campaign/campaign_big.dmi'
-	icon_state = "alien_pod_mapper"
+	icon = 'icons/obj/structures/campaign/tall_structures.dmi'
+	icon_state = "nt_pod"
 	mission_types = list(/datum/campaign_mission/destroy_mission/base_rescue)
 	spawn_object = /obj/structure/campaign_objective/destruction_objective/nt_pod
 
 /obj/structure/campaign_objective/destruction_objective/nt_pod
 	name = "Mysterious pod"
-	desc = "A large sealed pod, containing something huge and monstrous in its murky center."
-	icon = 'icons/obj/structures/campaign/campaign_big.dmi'
-	icon_state = "alien_pod"
-	bound_height = 64
-	bound_width = 64
-	pixel_y = 10
-
-/obj/structure/campaign_objective/destruction_objective/nt_pod/Initialize(mapload)
-	. = ..()
-	update_appearance(UPDATE_OVERLAYS)
-
-/obj/structure/campaign_objective/destruction_objective/nt_pod/update_overlays()
-	. = ..()
-	. += image(icon, icon_state = "alien_pod_overlay", layer = ABOVE_MOB_LAYER)
+	desc = "A large sealed pod, completely lacking any identifying markings. Who knows what's in it?."
+	icon = 'icons/obj/structures/campaign/tall_structures.dmi'
+	icon_state = "nt_pod"
+	layer = ABOVE_MOB_LAYER
 
 /obj/structure/campaign_objective/destruction_objective/nt_pod/Destroy()
-	playsound(loc, 'sound/voice/predalien/death.ogg', 75, 0)
+	playsound(loc, 'sound/voice/alien/predalien/death.ogg', 75, 0)
 	return ..()
 
 //teleporter core
@@ -264,7 +242,6 @@
 	bound_width = 64
 	pixel_y = -18
 	pixel_x = -16
-	faction = FACTION_SOM
 	var/status = BLUESPACE_CORE_OK
 
 /obj/structure/campaign_objective/destruction_objective/bluespace_core/Initialize(mapload)
@@ -299,20 +276,17 @@
 	if(status == BLUESPACE_CORE_BROKEN)
 		disable()
 
-/obj/structure/campaign_objective/destruction_objective/bluespace_core/plastique_act(mob/living/plastique_user)
+/obj/structure/campaign_objective/destruction_objective/bluespace_core/plastique_act()
 	if(status == BLUESPACE_CORE_OK)
 		change_status(BLUESPACE_CORE_UNSTABLE)
 	else if(status == BLUESPACE_CORE_UNSTABLE)
-		if(plastique_user && plastique_user.ckey)
-			var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[plastique_user.ckey]
-			personal_statistics.mission_objective_destroyed += (faction != plastique_user.faction ? 1 : -1)
 		change_status(BLUESPACE_CORE_BROKEN)
 
 //airbase
 /obj/structure/prop/som_fighter
-	name = "harbinger"
+	name = "\improper Harbinger"
 	desc = "A state of the art Harbinger class fighter. The premier fighter for SOM forces in space and atmosphere, bristling with high tech systems and weapons."
-	icon = 'icons/obj/structures/prop/mainship_96.dmi'
+	icon = 'icons/Marine/mainship_props96.dmi'
 	icon_state = "SOM_fighter"
 	pixel_x = -33
 	pixel_y = -10
@@ -320,8 +294,8 @@
 	allow_pass_flags = PASS_AIR
 
 /obj/effect/landmark/campaign_structure/harbinger
-	name = "harbinger"
-	icon = 'icons/obj/structures/prop/mainship_96.dmi'
+	name = "\improper Harbinger"
+	icon = 'icons/Marine/mainship_props96.dmi'
 	icon_state = "SOM_fighter"
 	pixel_x = -33
 	pixel_y = -10
@@ -329,9 +303,9 @@
 	spawn_object = /obj/structure/campaign_objective/destruction_objective/harbinger
 
 /obj/structure/campaign_objective/destruction_objective/harbinger
-	name = "harbinger"
+	name = "\improper Harbinger"
 	desc = "A state of the art harbinger class fighter. The premier fighter for SOM forces in space and atmosphere, bristling with high tech systems and weapons."
-	icon = 'icons/obj/structures/prop/mainship_96.dmi'
+	icon = 'icons/Marine/mainship_props96.dmi'
 	icon_state = "SOM_fighter"
 	pixel_x = -33
 	pixel_y = -10
@@ -339,11 +313,10 @@
 	bound_width = 3
 	bound_x = -32
 	layer = ABOVE_MOB_LAYER
-	faction = FACTION_SOM
 
 /obj/effect/landmark/campaign_structure/viper
 	name = "\improper Viper"
-	icon = 'icons/obj/structures/prop/mainship_96.dmi'
+	icon = 'icons/Marine/mainship_props96.dmi'
 	icon_state = "fighter_loaded"
 	pixel_x = -33
 	pixel_y = -10
@@ -353,7 +326,7 @@
 /obj/structure/campaign_objective/destruction_objective/viper
 	name = "\improper Viper"
 	desc = "A viper MK.III fightcraft. Effective in atmosphere and space, the viper has been a reliable and versatile workhorse in the TerraGov navy for decades."
-	icon = 'icons/obj/structures/prop/mainship_96.dmi'
+	icon = 'icons/Marine/mainship_props96.dmi'
 	icon_state = "fighter_loaded"
 	pixel_x = -33
 	pixel_y = -10

@@ -6,7 +6,7 @@
 /turf/open/floor/plating/ground/snow
 	name = "snow layer"
 	icon = 'icons/turf/snow2.dmi'
-	icon_state = "snow_0_1"
+	icon_state = "snow_0"
 	hull_floor = TRUE
 	shoefootstep = FOOTSTEP_SNOW
 	barefootstep = FOOTSTEP_SNOW
@@ -19,23 +19,14 @@
 	update_appearance()
 	update_sides()
 
-/turf/open/floor/plating/ground/snow/fire_act(burn_level)
-	if(!slayer || !burn_level)
-		return
-
-	switch(burn_level)
-		if(1 to 10)
-			slayer = max(0, slayer - 1)
-		if(11 to 24)
-			slayer = max(0, slayer - 2)
-		if(25 to INFINITY)
-			slayer = 0
-
+// Melting snow
+/turf/open/floor/plating/ground/snow/fire_act(exposed_temperature, exposed_volume)
+	slayer = 0
 	update_appearance()
 	update_sides()
 
 //Xenos digging up snow
-/turf/open/floor/plating/ground/snow/attack_alien(mob/living/carbon/xenomorph/M, damage_amount = M.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
+/turf/open/floor/plating/ground/snow/attack_alien(mob/living/carbon/xenomorph/M, damage_amount = M.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(M.status_flags & INCORPOREAL)
 		return
 
@@ -63,8 +54,6 @@
 //PLACING/REMOVING/BUILDING
 /turf/open/floor/plating/ground/snow/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	//Light Stick
 	if(istype(I, /obj/item/lightstick))
 		var/obj/item/lightstick/L = I
@@ -155,22 +144,28 @@
 			//Update turfs that are near us, but only once
 			D.update_appearance(ALL)
 
-//Explosion act
 /turf/open/floor/plating/ground/snow/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			if(slayer)
-				slayer = 0
-		if(EXPLODE_HEAVY)
-			if(slayer && prob(60))
-				slayer = max(slayer - 2, 0)
-		if(EXPLODE_LIGHT)
-			if(slayer && prob(20))
-				slayer = max(slayer - 1, 0)
-
+	if(slayer && prob(severity / 5))
+		slayer = rand(0, 3)
 	update_appearance()
 	update_sides()
 	return ..()
+
+//Fire act; fire now melts snow as it should; fire beats ice
+/turf/open/floor/plating/ground/snow/flamer_fire_act(burnlevel)
+	if(!slayer || !burnlevel) //Don't bother if there's no snow to melt or if there's no burn stacks
+		return
+
+	switch(burnlevel)
+		if(1 to 10)
+			slayer = max(0, slayer - 1)
+		if(11 to 24)
+			slayer = max(0, slayer - 2)
+		if(25 to INFINITY)
+			slayer = 0
+
+	update_appearance()
+	update_sides()
 
 /turf/open/floor/plating/ground/snow/proc/acidspray_act()
 	SIGNAL_HANDLER
@@ -179,26 +174,51 @@
 		return
 
 	slayer = max(0, slayer - 1) //Melt a layer
-	update_appearance()
-	update_sides()
+	update_icon(TRUE, FALSE)
 
+/turf/open/floor/plating/ground/snow/attack_hand(mob/living/carbon/human/user)
+	. = ..()
+	if(!istype(user)) //Nonhumans don't have the balls to fight in the snow
+		return
+	if(src.slayer == 0)
+		return
+	user.changeNext_move(CLICK_CD_MELEE)
+	var/obj/item/snowball/SB = new(get_turf(user))
+	user.put_in_hands(SB)
+	if(src.slayer > 0)
+		if(prob(50))
+			src.slayer -= 1
+			update_icon(TRUE, FALSE)
+	user.balloon_alert(user, "You scoop up some snow and make a snowball!")
+
+//SNOW BALL
+/obj/item/snowball
+	name = "snowball"
+	desc = "Get ready for a snowball fight!"
+	icon = 'icons/obj/items/toy.dmi'
+	icon_state = "snowball"
+
+/obj/item/snowball/throw_impact(atom/target, speed = 1)
+	new /obj/item/stack/snow(loc, 1)
+	playsound(target, 'sound/weapons/tap.ogg', 20, TRUE)
+	qdel(src)
 
 //SNOW LAYERS-----------------------------------//
 /turf/open/floor/plating/ground/snow/layer0
-	icon_state = "snow_0_1"
+	icon_state = "snow_0"
 	slayer = 0
 	minimap_color = MINIMAP_DIRT
 
 /turf/open/floor/plating/ground/snow/layer1
-	icon_state = "snow_1_1"
+	icon_state = "snow_1"
 	slayer = 1
 
 /turf/open/floor/plating/ground/snow/layer2
-	icon_state = "snow_2_1"
+	icon_state = "snow_2"
 	slayer = 2
 
 /turf/open/floor/plating/ground/snow/layer3
-	icon_state = "snow_3_1"
+	icon_state = "snow_3"
 	slayer = 3
 
 

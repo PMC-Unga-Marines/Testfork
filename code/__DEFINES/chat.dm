@@ -3,11 +3,6 @@
  * SPDX-License-Identifier: MIT
  */
 
-/// How many chat payloads to keep in history
-#define CHAT_RELIABILITY_HISTORY_SIZE 5
-/// How many resends to allow before giving up
-#define CHAT_RELIABILITY_MAX_RESENDS 3
-
 #define MESSAGE_TYPE_SYSTEM "system"
 #define MESSAGE_TYPE_LOCALCHAT "localchat"
 #define MESSAGE_TYPE_RADIO "radio"
@@ -42,5 +37,3 @@
 #define debug_world_log(msg) if (GLOB.Debug2) log_world("DEBUG: [msg]")
 /// Adds a generic box around whatever message you're sending in chat. Really makes things stand out.
 #define examine_block(str) ("<div class='examine_block'>" + str + "</div>")
-
-#define EXAMINE_SECTION_BREAK "<hr>"

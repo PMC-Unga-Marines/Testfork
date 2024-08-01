@@ -4,7 +4,10 @@
 
 
 /mob/living/carbon/xenomorph/death(gibbing, deathmessage = "lets out a waning guttural screech, green blood bubbling from its maw.", silent)
-	return ..() //we're just changing the death message
+	if(stat == DEAD)
+		return ..()
+	return ..() //Just a different standard deathmessage
+
 
 /mob/living/carbon/xenomorph/on_death()
 	GLOB.alive_xeno_list -= src
@@ -17,13 +20,11 @@
 	hive?.on_xeno_death(src)
 	hive?.update_tier_limits() //Update our tier limits.
 
-	if(xeno_flags & XENO_ZOOMED)
+	if(is_zoomed)
 		zoom_out()
 
-	if(GLOB.xeno_stat_multiplicator_buff == 1) //if autobalance is on, it won't equal 1, so xeno respawn timer is not set
-		switch(tier)
-			if(XENO_TIER_ZERO, XENO_TIER_ONE, XENO_TIER_TWO, XENO_TIER_THREE) //minions and tier fours have no respawn timer
-				GLOB.key_to_time_of_xeno_death[key] = world.time
+	if(tier != XENO_TIER_MINION)
+		GLOB.key_to_time_of_xeno_death[key] = world.time
 
 	SSminimaps.remove_marker(src)
 	set_light_on(FALSE)
@@ -34,10 +35,11 @@
 		if(hud_used.staminas)
 			hud_used.staminas.icon_state = "staminaloss200"
 		if(hud_used.alien_plasma_display)
-			hud_used.alien_plasma_display.icon_state = "power_display_empty"
+			hud_used.alien_plasma_display.icon_state = "power_display_0"
+		if(hud_used.alien_evolve_display)
+			hud_used.alien_evolve_display.icon_state = "evolve0"
+
 	update_icons()
-	hud_set_plasma()
-	hud_update_rank()
 
 	death_cry()
 

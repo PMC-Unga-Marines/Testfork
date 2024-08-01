@@ -14,20 +14,23 @@
 	desc = "Designed to mount a variety of modular armor components and support systems. It comes installed with light-plating and a shoulder lamp. Mount armor pieces to it by clicking on the frame with the components. Use Alt-Click to remove any attached items."
 	icon = 'icons/mob/modular/modular_armor.dmi'
 	icon_state = "underarmor"
-	worn_icon_state = "underarmor"
+	item_state = "underarmor"
 	item_state_worn = TRUE
-	worn_icon_list = list(slot_wear_suit_str = 'icons/mob/modular/modular_armor.dmi')
+	item_icons = list(slot_wear_suit_str = 'icons/mob/modular/modular_armor.dmi')
 
-	atom_flags = CONDUCT
-	armor_protection_flags = CHEST|GROIN|ARMS|LEGS|FEET|HANDS
-	item_flags = SYNTH_RESTRICTED|IMPEDE_JETPACK
+	flags_atom = CONDUCT|DIRLOCK
+	flags_armor_protection = CHEST|GROIN|ARMS|LEGS|FEET|HANDS
+	flags_item = SYNTH_RESTRICTED|IMPEDE_JETPACK
 	/// What is allowed to be equipped in suit storage
 	allowed = list(
 		/obj/item/weapon/gun,
 		/obj/item/instrument,
 		/obj/item/storage/belt/sparepouch,
 		/obj/item/storage/holster/blade,
-		/obj/item/weapon/sword,
+		//RUTGMC EDIT CHANGE BEGIN - SWORDS
+		///obj/item/weapon/claymore, RUTGMC EDIT - ORIGINAL
+		/obj/item/weapon/claymore/harvester,
+		//RUTGMC EDIT CHANGE END
 		/obj/item/storage/holster/belt,
 		/obj/item/storage/belt/knifepouch,
 		/obj/item/weapon/twohanded,
@@ -35,7 +38,7 @@
 		/obj/item/tool/shovel/etool,
 		/obj/item/weapon/energy/sword,
 	)
-	equip_slot_flags = ITEM_SLOT_OCLOTHING
+	flags_equip_slot = ITEM_SLOT_OCLOTHING
 	w_class = WEIGHT_CLASS_BULKY
 	equip_delay_self = 2 SECONDS
 	unequip_delay_self = 1 SECONDS
@@ -93,9 +96,17 @@
 		/obj/item/armor_module/armor/legs/marine/ranger,
 		/obj/item/armor_module/armor/arms/marine/ranger,
 
-		/obj/item/armor_module/armor/chest/marine/mjolnir,
-		/obj/item/armor_module/armor/legs/marine/mjolnir,
-		/obj/item/armor_module/armor/arms/marine/mjolnir,
+		/obj/item/armor_module/armor/chest/marine/kabuto,
+		/obj/item/armor_module/armor/legs/marine/kabuto,
+		/obj/item/armor_module/armor/arms/marine/kabuto,
+
+		/obj/item/armor_module/armor/chest/marine/hotaru,
+		/obj/item/armor_module/armor/legs/marine/hotaru,
+		/obj/item/armor_module/armor/arms/marine/hotaru,
+
+		/obj/item/armor_module/armor/chest/marine/dashe,
+		/obj/item/armor_module/armor/arms/marine/dashe,
+		/obj/item/armor_module/armor/legs/marine/dashe,
 
 		/obj/item/armor_module/module/better_shoulder_lamp,
 		/obj/item/armor_module/module/valkyrie_autodoc,
@@ -135,7 +146,7 @@
 	var/obj/item/armor_module/storage/storage_module = attachments_by_slot[ATTACHMENT_SLOT_STORAGE]
 	if(!storage_module.show_storage)
 		return standing
-	for(var/obj/item/stored AS in storage_module.contents)
+	for(var/obj/item/stored AS in storage_module.storage.contents)
 		standing.overlays += mutable_appearance(storage_module.show_storage_icon, icon_state = initial(stored.icon_state))
 	return standing
 
@@ -147,6 +158,7 @@
 			to_chat(user, span_warning("You must be wearing a marine jumpsuit to equip this."))
 			return FALSE
 	return ..()
+
 
 /obj/item/clothing/suit/modular/attack_self(mob/user)
 	. = ..()
@@ -160,8 +172,8 @@
 	var/mob/living/carbon/human/H = user
 	if(H.wear_suit != src)
 		return
-	if(turn_light(user, !light_on) == CHECKS_PASSED)
-		return TRUE
+	turn_light(user, !light_on)
+	return TRUE
 
 /obj/item/clothing/suit/modular/item_action_slot_check(mob/user, slot)
 	if(!light_range) // No light no ability
@@ -189,29 +201,11 @@
 	if(attachments_by_slot[ATTACHMENT_SLOT_STORAGE])
 		. += "<br> It has a [attachments_by_slot[ATTACHMENT_SLOT_STORAGE]] installed."
 
-/obj/item/clothing/suit/modular/examine(mob/user)
-	. = ..()
-	var/armor_info
-	var/obj/item/clothing/suit/modular/wear_modular_suit = src
-	if(wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_CHESTPLATE])
-		armor_info += "	- [wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_CHESTPLATE]].\n"
-	if(wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_SHOULDER])
-		armor_info += "	- [wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_SHOULDER]].\n"
-	if(wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_KNEE])
-		armor_info += "	- [wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_KNEE]].\n"
-	if(wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_STORAGE])
-		armor_info += "	- [wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_STORAGE]].\n"
-	if(wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_MODULE])
-		armor_info += "	- [wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_MODULE]].\n"
-	if(armor_info)
-		. += "	It has the following attachments:"
-		. += armor_info
-
 /obj/item/clothing/suit/modular/rownin
 	name = "\improper Rownin Skeleton"
 	desc = "A light armor, if you can even call it that, for marines that want to have agility in exchange for protection. Alt-Click to remove attached items. Use it to toggle the built-in flashlight."
 	icon_state = "rownin_skeleton"
-	worn_icon_state = "rownin_skeleton"
+	item_state = "rownin_skeleton"
 	allowed_uniform_type = /obj/item/clothing/under
 	attachments_allowed = list(
 		/obj/item/armor_module/module/better_shoulder_lamp,
@@ -243,11 +237,11 @@
 	name = "FleckTex WY-01 modular exoskeleton"
 	desc = "FleckTex Dynamics brand new modular hardsuit exoskeleton, designed for full compatiability with jaeger modules. Comes with pre-installed light armour-plating and a shoulder lamp. Mount armor pieces to it by clicking on the frame with the components. Use Alt-Click to remove any attached items."
 	icon_state = "exoskeleton"
-	worn_icon_state = "exoskeleton"
+	item_state = "exoskeleton"
 	greyscale_config = /datum/greyscale_config/exoskeleton
 	colorable_allowed = PRESET_COLORS_ALLOWED
 	colorable_colors = ARMOR_PALETTES_LIST
-	greyscale_colors = ARMOR_PALETTE_BLACK
+	greyscale_colors = ARMOR_PALETTE_DRAB
 	allowed_uniform_type = /obj/item/clothing/under
 	attachments_allowed = list(
 
@@ -293,18 +287,19 @@
 	name = "Jaeger Pattern Helmet"
 	desc = "Usually paired with the Jaeger Combat Exoskeleton. Can mount utility functions on the helmet hard points."
 	icon_state = "helm"
-	worn_icon_state = "helm"
+	item_state = "helm"
 	item_state_worn = TRUE
 
 	greyscale_config = /datum/greyscale_config/armor_mk1
-	greyscale_colors = ARMOR_PALETTE_BLACK
+	greyscale_colors = ARMOR_PALETTE_DESERT
 
-	armor_protection_flags = HEAD
-	armor_features_flags = ARMOR_NO_DECAP
-	inventory_flags = BLOCKSHARPOBJ
-	inv_hide_flags = HIDEEARS|HIDE_EXCESS_HAIR
+	flags_atom = PREVENT_CONTENTS_EXPLOSION|DIRLOCK
+	flags_armor_protection = HEAD
+	flags_armor_features = ARMOR_NO_DECAP
+	flags_inventory = BLOCKSHARPOBJ
+	flags_inv_hide = HIDEEARS|HIDE_EXCESS_HAIR
 	allowed = null
-	equip_slot_flags = ITEM_SLOT_HEAD
+	flags_equip_slot = ITEM_SLOT_HEAD
 	w_class = WEIGHT_CLASS_NORMAL
 
 	soft_armor = list(MELEE = 15, BULLET = 15, LASER = 15, ENERGY = 15, BOMB = 15, BIO = 15, FIRE = 15, ACID = 15)
@@ -329,12 +324,15 @@
 		/obj/item/armor_module/module/night_vision,
 		/obj/item/armor_module/storage/helmet,
 		/obj/item/armor_module/armor/badge,
+		//RUTGMC EDIT ADDITION  BEGIN - MOTION_DETECTOR
+		/obj/item/armor_module/module/motion_detector,
+		//RUTGMC EDIT ADDITION  END
 	)
 
 
 
 	colorable_colors = ARMOR_PALETTES_LIST
-	colorable_allowed = PRESET_COLORS_ALLOWED
+	colorable_allowed = PRESET_COLORS_ALLOWED|HAIR_CONCEALING_CHANGE_ALLOWED
 
 	///Pixel offset on the X axis for how the helmet sits on the mob without a visor.
 	var/visorless_offset_x = 0
@@ -348,7 +346,7 @@
 	if(attachments_by_slot[ATTACHMENT_SLOT_STORAGE] && istype(attachments_by_slot[ATTACHMENT_SLOT_STORAGE], /obj/item/armor_module/storage))
 		var/obj/item/armor_module/storage/storage_module = attachments_by_slot[ATTACHMENT_SLOT_STORAGE]
 		if(storage_module.show_storage)
-			for(var/obj/item/stored AS in storage_module.contents)
+			for(var/obj/item/stored AS in storage_module.storage.contents)
 				if(istype(stored, /obj/item/ammo_magazine/handful))
 					standing.overlays += mutable_appearance(storage_module.show_storage_icon, icon_state = stored.icon_state, layer = COLLAR_LAYER)
 				else
@@ -359,7 +357,11 @@
 	standing.pixel_y = visorless_offset_y
 	return standing
 
-/obj/item/clothing/head/modular/update_icon(updates)
+/obj/item/clothing/head/modular/on_pocket_insertion()
+	. = ..()
+	update_clothing_icon()
+
+/obj/item/clothing/head/modular/on_pocket_removal()
 	. = ..()
 	update_clothing_icon()
 
@@ -368,26 +370,17 @@
 	. += "<br><br />This is a piece of modular armor, It can equip different attachments.<br />"
 	. += "<br>It currently has [attachments_by_slot[ATTACHMENT_SLOT_HEAD_MODULE] ? attachments_by_slot[ATTACHMENT_SLOT_HEAD_MODULE] : "nothing"] installed."
 
-/obj/item/clothing/head/modular/examine(mob/user)
-	. = ..()
-	var/armor_info
-	var/obj/item/clothing/head/modular/wear_modular_suit = src
-	if(wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_HEAD_MODULE])
-		armor_info += "	- [wear_modular_suit.attachments_by_slot[ATTACHMENT_SLOT_HEAD_MODULE]].\n"
-	if(armor_info)
-		. += "	It has the following attachments:"
-		. += armor_info
-
 /** Colorable masks */
 /obj/item/clothing/mask/gas/modular
 	name = "style mask"
 	desc = "A cool sylish mask that through some arcane magic blocks gas attacks. How? Who knows. How did you even get this?"
 	breathy = FALSE
+	voice_filter = null
 	icon_state = "gas_alt"
-	worn_icon_state = "gas_alt"
-	worn_icon_list = list(slot_wear_mask_str)
+	item_state = "gas_alt"
+	item_icons = list(slot_wear_mask_str)
 	item_state_worn = TRUE
-	greyscale_colors = ARMOR_PALETTE_BLACK
+	greyscale_colors = ARMOR_PALETTE_DRAB
 
 	colorable_colors = ARMOR_PALETTES_LIST
 	colorable_allowed = PRESET_COLORS_ALLOWED

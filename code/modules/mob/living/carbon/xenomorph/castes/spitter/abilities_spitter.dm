@@ -3,6 +3,7 @@
 // ***************************************
 /datum/action/ability/activable/xeno/spray_acid/line
 	name = "Spray Acid"
+	action_icon_state = "spray_acid"
 	desc = "Spray a line of dangerous acid at your target."
 	ability_cost = 250
 	cooldown_duration = 30 SECONDS
@@ -60,7 +61,7 @@
 		for(var/obj/O in T)
 			if(is_type_in_typecache(O, GLOB.acid_spray_hit) && O.acid_spray_act(owner))
 				return // returned true if normal density applies
-			if(O.density && !(O.allow_pass_flags & PASS_PROJECTILE) && !(O.atom_flags & ON_BORDER))
+			if(O.density && !(O.allow_pass_flags & PASS_PROJECTILE) && !(O.flags_atom & ON_BORDER))
 				blocked = TRUE
 				break
 
@@ -102,7 +103,6 @@
 /datum/action/ability/activable/xeno/scatter_spit
 	name = "Scatter Spit"
 	action_icon_state = "scatter_spit"
-	action_icon = 'icons/Xeno/actions/spitter.dmi'
 	desc = "Spits a spread of acid projectiles that splatter on the ground."
 	ability_cost = 280
 	cooldown_duration = 5 SECONDS
@@ -125,7 +125,7 @@
 	newspit.generate_bullet(scatter_spit, scatter_spit.damage * SPIT_UPGRADE_BONUS(X))
 	newspit.def_zone = X.get_limbzone_target()
 
-	newspit.fire_at(target, X, X, newspit.ammo.max_range)
+	newspit.fire_at(target, X, null, newspit.ammo.max_range)
 
 	succeed_activate()
 	add_cooldown()

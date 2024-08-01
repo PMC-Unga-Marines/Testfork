@@ -1,5 +1,5 @@
 SUBSYSTEM_DEF(advanced_pathfinding)
-	name = "Advanced Pathfinding"
+	name = "Advanced_pathfinding"
 	priority = FIRE_PRIORITY_ADVANCED_PATHFINDING
 	wait = 1 SECONDS
 	///List of ai_behaviour datum asking for a tile pathfinding
@@ -113,7 +113,7 @@ GLOBAL_LIST_EMPTY(goal_nodes)
 					atom_to_check = current_node.adjacent_nodes[direction]
 				if(TILE_PATHING)
 					var/turf/turf_to_check = get_step(current_atom, direction)
-					if(turf_to_check.density || turf_to_check.atom_flags & AI_BLOCKED)
+					if(turf_to_check.density || turf_to_check.flags_atom & AI_BLOCKED)
 						continue
 					atom_to_check = turf_to_check
 			if(paths_to_check[atom_to_check] || paths_checked[atom_to_check] || !atom_to_check) //We already found a better path to get to this atom
@@ -158,7 +158,7 @@ GLOBAL_LIST_EMPTY(goal_nodes)
 		return
 	src.creator = creator
 	RegisterSignal(creator, COMSIG_QDELETING, PROC_REF(clean_creator))
-	goal_image = image('icons/Xeno/actions/leader.dmi', src, "minion_rendez_vous")
+	goal_image = image('icons/Xeno/actions.dmi', src, "minion_rendez_vous")
 	goal_image.layer = HUD_PLANE
 	goal_image.alpha = 180
 	goal_image.pixel_y += 10

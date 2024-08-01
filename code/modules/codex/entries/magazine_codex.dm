@@ -26,7 +26,7 @@
 	if(wield_delay_mod)
 		traits += "Wield delay modifier: [wield_delay_mod] seconds<br>"
 
-	if(magazine_flags & MAGAZINE_WORN)
+	if(flags_magazine & MAGAZINE_WORN)
 		traits += "This magazine is worn instead of inserted into a gun.<br>"
 
 	traits += "<U>Basic statistics for ammunition in this magazine are as follows</U>:<br>"
@@ -42,6 +42,9 @@
 	if(default_ammo.penetration)
 		traits += "Armor penetration: [default_ammo.penetration]<br>"
 
+	if(default_ammo.additional_xeno_penetration)
+		traits += "Xenomorph additional armor penetration: [default_ammo.additional_xeno_penetration]<br>"
+
 	if(default_ammo.sundering)
 		traits += "Sundering amount: [default_ammo.sundering]<br>"
 
@@ -56,16 +59,16 @@
 	if(default_ammo.max_range)
 		traits += "Maximum range: [default_ammo.max_range]<br>"
 
-	if(default_ammo.ammo_behavior_flags & AMMO_INCENDIARY)
+	if(default_ammo.flags_ammo_behavior & AMMO_INCENDIARY)
 		traits += "Secondary effect: Set target on fire<br>"
 
-	if(default_ammo.ammo_behavior_flags & AMMO_TARGET_TURF)
-		traits += "Secondary effect: Targets turfs<br>"
+	if(default_ammo.flags_ammo_behavior & AMMO_EXPLOSIVE)
+		traits += "Secondary effect: Explosive<br>"
 
-	if(default_ammo.ammo_behavior_flags & AMMO_SPECIAL_PROCESS)
+	if(default_ammo.flags_ammo_behavior & AMMO_SPECIAL_PROCESS)
 		traits += "Secondary effect: Hits nearby targets in-flight<br>"
 
-	if(default_ammo.ammo_behavior_flags & AMMO_LEAVE_TURF)
+	if(default_ammo.flags_ammo_behavior & AMMO_LEAVE_TURF)
 		traits += "Secondary effect: Affects tiles travelled through<br>"
 
 	if(default_ammo.accuracy)

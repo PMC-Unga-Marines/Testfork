@@ -15,11 +15,11 @@
 	name = "card"
 	desc = "Does card things."
 	icon = 'icons/obj/items/card.dmi'
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/id_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/id_right.dmi',
 	)
-	worn_icon_state = "card-id"
+	item_state = "card-id"
 	item_state_worn = TRUE
 	w_class = WEIGHT_CLASS_TINY
 	var/associated_account_number = 0
@@ -67,7 +67,7 @@
 	desc = "It's a card with a magnetic strip attached to some circuitry."
 	name = "cryptographic sequencer"
 	icon_state = "emag"
-	item_flags = NOBLUDGEON
+	flags_item = NOBLUDGEON
 
 
 /obj/item/card/id
@@ -76,17 +76,17 @@
 	icon_state = "id"
 	var/access = list()
 	var/registered_name = "Unknown" // The name registered_name on the card
-	equip_slot_flags = ITEM_SLOT_ID
-	///Miscelaneous ID flags
-	var/id_flags = CAN_BUY_LOADOUT
+	flags_equip_slot = ITEM_SLOT_ID
 
 	var/blood_type = "\[UNSET\]"
 
 	///How many points you can use to buy items
 	var/marine_points = list()
 
-	///What category of items can you buy - used for armor and pouches
+	///What category of items can you buy - used for armor and poucehs
 	var/marine_buy_choices = list()
+
+	var/can_buy_loadout = TRUE
 
 	//alt titles are handled a bit weirdly in order to unobtrusively integrate into existing ID system
 	var/assignment = null	//can be alt title or the actual job
@@ -126,27 +126,36 @@
 		var/mob/living/L = loc
 		L.name = L.get_visible_name()
 
+/obj/item/card/id/proc/set_user_data(mob/living/carbon/human/human_user)
+	if(!istype(human_user))
+		return
+
+	registered_name = human_user.real_name
+	blood_type = human_user.blood_type
 
 /obj/item/card/id/verb/read()
 	set name = "Read ID Card"
-	set category = "Object"
+	set category = "Object.Clothing"
 	set src in usr
 
 	to_chat(usr, "[icon2html(src, usr)] [name]: The current assignment on the card is [assignment].")
 	to_chat(usr, "The blood type on the card is [blood_type].")
 
-
 /obj/item/card/id/silver
 	name = "identification card"
 	desc = "A silver card which shows honour and dedication."
 	icon_state = "silver"
-	worn_icon_state = "silver_id"
+	item_state = "silver_id"
 
 /obj/item/card/id/gold
 	name = "identification card"
 	desc = "A golden card which shows power and might."
 	icon_state = "gold"
-	worn_icon_state = "gold_id"
+	item_state = "gold_id"
+
+	marine_points = list(
+		CAT_SYNTH = SYNTH_TOTAL_BUY_POINTS,
+	)
 
 /obj/item/card/id/syndicate
 	name = "agent card"
@@ -221,7 +230,7 @@
 	name = "captain's spare ID"
 	desc = "The spare ID of the High Lord himself."
 	icon_state = "gold"
-	worn_icon_state = "gold_id"
+	item_state = "gold_id"
 	registered_name = CAPTAIN
 	assignment = CAPTAIN
 	access = ALL_MARINE_ACCESS
@@ -246,8 +255,11 @@
 	name = "dog tag"
 	desc = "A marine dog tag."
 	icon_state = "dogtag"
-	worn_icon_state = "dogtag"
+	item_state = "dogtag"
 	iff_signal = TGMC_LOYALIST_IFF
+	marine_points = list(
+		CAT_MARINE = DEFAULT_TOTAL_BUY_POINTS,
+	)
 	var/dogtag_taken = FALSE
 
 /obj/item/card/id/dogtag/update_icon_state()
@@ -287,6 +299,11 @@
 		CAT_SGSUP = DEFAULT_TOTAL_BUY_POINTS,
 	)
 
+/obj/item/card/id/dogtag/robo
+	marine_points = list(
+		CAT_ROBO = DEFAULT_TOTAL_BUY_POINTS,
+	)
+
 /obj/item/card/id/dogtag/engineer
 	marine_points = list(
 		CAT_ENGSUP = ENGINEER_TOTAL_BUY_POINTS,
@@ -309,18 +326,21 @@
 
 /obj/item/card/id/dogtag/full
 	marine_points = list(
+		CAT_MARINE = DEFAULT_TOTAL_BUY_POINTS,
 		CAT_SGSUP = DEFAULT_TOTAL_BUY_POINTS,
 		CAT_ENGSUP = ENGINEER_TOTAL_BUY_POINTS,
 		CAT_LEDSUP = DEFAULT_TOTAL_BUY_POINTS,
 		CAT_MEDSUP = MEDIC_TOTAL_BUY_POINTS,
 		CAT_FCSUP = COMMANDER_TOTAL_BUY_POINTS,
+		CAT_SYNTH = SYNTH_TOTAL_BUY_POINTS,
+		CAT_ROBO = DEFAULT_TOTAL_BUY_POINTS, //necessary to correctly show max points
 	)
 
 /obj/item/card/id/dogtag/som
 	name = "\improper Sons of Mars dogtag"
 	desc = "Used by the Sons of Mars."
 	icon_state = "dogtag_som"
-	worn_icon_state = "dogtag_som"
+	item_state = "dogtag_som"
 	iff_signal = SOM_IFF
 
 
@@ -341,8 +361,6 @@
 
 /obj/item/dogtag/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/dogtag))
 		var/obj/item/dogtag/D = I

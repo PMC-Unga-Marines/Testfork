@@ -1,5 +1,4 @@
 import { BooleanLike, classes } from 'common/react';
-
 import { useBackend } from '../backend';
 import { Button, Flex, Table } from '../components';
 import { Window } from '../layouts';
@@ -35,25 +34,25 @@ type Unavailable = {
 };
 
 const SLOTS: Record<string, string> = {
-  left_hand: 'Left hand',
-  right_hand: 'Right hand',
-  back: 'Backpack',
-  head: 'Headwear',
-  mask: 'Mask',
-  neck: 'Neckwear',
-  parrot_headset: 'Headset',
-  eyes: 'Eyewear',
-  ears: 'Earwear',
-  suit: 'Suit',
-  suit_storage: 'Suit storage',
-  shoes: 'Shoes',
-  gloves: 'Gloves',
-  uniform: 'Uniform',
-  belt: 'Belt',
-  left_pocket: 'Left pocket',
-  right_pocket: 'Right pocket',
-  id: 'ID',
-  handcuffs: 'Handcuffs',
+  'left_hand': 'Left hand',
+  'right_hand': 'Right hand',
+  'back': 'Backpack',
+  'head': 'Headwear',
+  'mask': 'Mask',
+  'neck': 'Neckwear',
+  'parrot_headset': 'Headset',
+  'eyes': 'Eyewear',
+  'ears': 'Earwear',
+  'suit': 'Suit',
+  'suit_storage': 'Suit storage',
+  'shoes': 'Shoes',
+  'gloves': 'Gloves',
+  'uniform': 'Uniform',
+  'belt': 'Belt',
+  'left_pocket': 'Left pocket',
+  'right_pocket': 'Right pocket',
+  'id': 'ID',
+  'handcuffs': 'Handcuffs',
 };
 
 type Layout = Array<
@@ -176,8 +175,8 @@ interface StripMenuRowProps {
   unavailable: BooleanLike;
 }
 
-const StripMenuRow = (props: StripMenuRowProps) => {
-  const { act, data } = useBackend<StripMenuData>();
+const StripMenuRow = (props: StripMenuRowProps, context) => {
+  const { act, data } = useBackend<StripMenuData>(context);
 
   const name = props.obscured
     ? 'Obscured'
@@ -193,8 +192,7 @@ const StripMenuRow = (props: StripMenuRowProps) => {
         props.obscured === ObscuringLevel.Hidden && 'obscured-hidden',
         props.unavailable && 'unavailable',
         props.empty && 'empty',
-      ])}
-    >
+      ])}>
       <Table.Cell pl={1.5}>{props.slotName}:</Table.Cell>
       <Table.Cell pr={1.5} position="relative">
         <Flex direction="column">
@@ -228,8 +226,8 @@ const StripMenuRow = (props: StripMenuRowProps) => {
   );
 };
 
-export const StripMenu = (props) => {
-  const { act, data } = useBackend<StripMenuData>();
+export const StripMenu = (props, context) => {
+  const { act, data } = useBackend<StripMenuData>(context);
 
   const items = data.items;
   const layout = data.layout || DEFAULT_LAYOUT;
@@ -267,7 +265,7 @@ export const StripMenu = (props) => {
         <Table.Row className="spacer">
           <Table.Cell />
           <Table.Cell />
-        </Table.Row>,
+        </Table.Row>
       );
     }
 

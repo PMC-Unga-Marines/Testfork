@@ -16,17 +16,17 @@
 	desc = "It has some sort of a tube at the end of its tail."
 	icon = 'icons/Xeno/Effects.dmi'
 	icon_state = "facehugger"
-	worn_icon_state = "facehugger"
+	item_state = "facehugger"
 	w_class = WEIGHT_CLASS_TINY //Note: can be picked up by aliens unlike most other items of w_class below 4
 	resistance_flags = NONE
-	inventory_flags = COVEREYES|COVERMOUTH
-	armor_protection_flags = FACE|EYES
-	atom_flags = CRITICAL_ATOM
-	item_flags = NOBLUDGEON
+	flags_inventory = COVEREYES|COVERMOUTH
+	flags_armor_protection = FACE|EYES
+	flags_atom = CRITICAL_ATOM
+	flags_item = NOBLUDGEON
 	throw_range = 1
 	worn_layer = FACEHUGGER_LAYER
 	layer = FACEHUGGER_LAYER
-
+	pass_flags = PASS_XENO
 	///Whether the hugger is dead, active or inactive
 	var/stat = CONSCIOUS
 	///"Freezes" the hugger in for example, eggs
@@ -50,7 +50,7 @@
 	///The timer to go active
 	var/activetimer
 	///Time to become active after impacting on a direct thrown hit
-	var/impact_time = 1.5 SECONDS
+	var/impact_time = 1.25 SECONDS
 	///Time to become active again
 	var/activate_time = 2 SECONDS
 	///Time to recover after jumping
@@ -61,7 +61,6 @@
 	var/about_to_jump = FALSE
 	///Time to become active after moving into the facehugger's space.
 	var/proximity_time = 0.75 SECONDS
-
 
 /obj/item/clothing/mask/facehugger/Initialize(mapload, input_hivenumber, input_source)
 	. = ..()
@@ -79,6 +78,7 @@
 		COMSIG_ATOM_EXITED = PROC_REF(on_exited),
 	)
 	AddElement(/datum/element/connect_loc, connections)
+	AddComponent(/datum/component/clothing_tint, TINT_BLIND)
 
 ///Registers the source of our facehugger for the purpose of anti-shuffle mechanics
 /obj/item/clothing/mask/facehugger/proc/facehugger_register_source(mob/living/carbon/xenomorph/S)
@@ -114,16 +114,15 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
-
 //Deal with picking up facehuggers. "attack_alien" is the universal 'xenos click something while unarmed' proc.
-/obj/item/clothing/mask/facehugger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/item/clothing/mask/facehugger/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return
 
 	if(!issamexenohive(xeno_attacker) && stat != DEAD)
 		xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_SMASH)
-		xeno_attacker.visible_message("<span class='xenowarning'>[xeno_attacker] crushes \the [src]",
-			"<span class='xenowarning'>We crush \the [src]")
+		xeno_attacker.visible_message(span_xenowarning("[xeno_attacker] crushes \the [src]"),
+			span_xenowarning("We crush \the [src]"))
 		kill_hugger()
 		return
 	else
@@ -133,6 +132,8 @@
 /obj/item/clothing/mask/facehugger/attack_hand(mob/living/user)
 	if(isxeno(user))
 		var/mob/living/carbon/xenomorph/X = user
+		if(X.agility || X.fortify)
+			return FALSE
 		if(X.xeno_caste.can_flags & CASTE_CAN_HOLD_FACEHUGGERS)
 			deltimer(jumptimer)
 			deltimer(activetimer)
@@ -390,17 +391,13 @@
 		if(!Attach(carbon_victim))
 			go_idle()
 	else
+		//step(src, REVERSE_DIR(dir)) // RUTGMC DELETION
 		if(!issamexenohive(carbon_victim))
 			carbon_victim.adjust_stagger(3 SECONDS)
 			carbon_victim.add_slowdown(3)
 		pre_leap(activate_time)
 
 	leaping = FALSE
-
-/obj/item/clothing/mask/facehugger/throw_bounce(atom/hit_atom, turf/old_throw_source)
-	if(ismob(hit_atom))
-		return
-	return ..()
 
 /obj/item/clothing/mask/facehugger/stop_throw(flying, original_layer)
 	. = ..()
@@ -475,7 +472,7 @@
 /////////////////////////////
 // ATTACHING AND IMPREGNATION
 //////////////////////////////
-/obj/item/clothing/mask/facehugger/proc/Attach(mob/living/carbon/M)
+/obj/item/clothing/mask/facehugger/proc/Attach(mob/living/carbon/M, can_catch = TRUE)
 
 	set_throwing(FALSE)
 	leaping = FALSE
@@ -495,7 +492,7 @@
 		X.dropItemToGround(src)
 		X.update_icons()
 
-	if(M.in_throw_mode && M.dir != dir && !M.incapacitated() && !M.get_active_held_item())
+	if(M.in_throw_mode && M.dir != dir && !M.incapacitated() && !M.get_active_held_item() && can_catch)
 		var/catch_chance = 50
 		if(M.dir == REVERSE_DIR(dir))
 			catch_chance += 20
@@ -559,7 +556,11 @@
 		reset_attach_status(FALSE)
 		return
 	if(ishuman(user))
-		var/hugsound = user.gender == FEMALE ? SFX_FEMALE_HUGGED : SFX_MALE_HUGGED
+		var/hugsound
+		if(isyautja(user))
+			hugsound = get_sfx("pred_hugged")
+		else
+			hugsound = user.gender == FEMALE ? get_sfx("female_hugged") : get_sfx("male_hugged")
 		playsound(loc, hugsound, 25, 0)
 	if(!sterile && !issynth(user))
 		var/stamina_dmg = user.maxHealth + user.max_stamina
@@ -568,6 +569,8 @@
 	attached = TRUE
 	go_idle(FALSE, TRUE)
 	addtimer(CALLBACK(src, PROC_REF(Impregnate), user), IMPREGNATION_TIME)
+	if(isxenofacehugger(source))
+		ADD_TRAIT(source, TRAIT_HANDS_BLOCKED, REF(src))
 
 /obj/item/clothing/mask/facehugger/proc/Impregnate(mob/living/carbon/target)
 	ADD_TRAIT(src, TRAIT_NODROP, HUGGER_TRAIT)
@@ -581,6 +584,12 @@
 			if(source?.client)
 				var/datum/personal_statistics/personal_statistics = GLOB.personal_statistics_list[source.ckey]
 				personal_statistics.impregnations++
+			if(isyautja(target))
+				var/datum/hive_status/hive = GLOB.hive_datums[embryo.hivenumber]
+				if(!istype(hive))
+					return
+				hive.max_thick_nests++
+				xeno_message("The hive senses that a headhunter has been infected! The thick resin nest is now available in the mother's blessing!", hivenumber = hive.hivenumber)
 			sterile = TRUE
 		kill_hugger()
 	else
@@ -595,7 +604,9 @@
 		else //Huggered but not impregnated, deal damage.
 			target.visible_message(span_danger("[src] frantically claws at [target]'s face before falling down!"),span_danger("[src] frantically claws at your face before falling down! Auugh!"))
 			target.apply_damage(15, BRUTE, BODY_ZONE_HEAD, updating_health = TRUE)
-
+	//If hugger sentient, then we drop player's hugger
+	if(isxenofacehugger(source) && as_planned)
+		dropped(target)
 
 /obj/item/clothing/mask/facehugger/proc/kill_hugger(melt_timer = 1 MINUTES)
 	reset_attach_status()
@@ -617,6 +628,8 @@
 	addtimer(CALLBACK(src, PROC_REF(melt_away)), melt_timer)
 
 /obj/item/clothing/mask/facehugger/proc/reset_attach_status(forcedrop = TRUE)
+	if(isxenofacehugger(source))
+		return
 	REMOVE_TRAIT(src, TRAIT_NODROP, HUGGER_TRAIT)
 	attached = FALSE
 	if(isliving(loc) && forcedrop) //Make it fall off the person so we can update their icons. Won't update if they're in containers thou
@@ -636,20 +649,24 @@
 	kill_hugger()
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/I, mob/user, params)
-	if(I.item_flags & NOBLUDGEON || attached)
+	if(I.flags_item & NOBLUDGEON || attached)
 		return
 	kill_hugger()
 
 /obj/item/clothing/mask/facehugger/bullet_act(obj/projectile/P)
 	..()
-	if(P.ammo.ammo_behavior_flags & AMMO_XENO)
+	if(P.ammo.flags_ammo_behavior & AMMO_XENO)
 		return FALSE //Xeno spits ignore huggers.
 	if(P.damage && !(P.ammo.damage_type in list(OXY, STAMINA)))
 		kill_hugger()
 	P.ammo.on_hit_obj(src,P)
 	return TRUE
 
-/obj/item/clothing/mask/facehugger/fire_act(burn_level)
+/obj/item/clothing/mask/facehugger/fire_act(exposed_temperature, exposed_volume)
+	if(exposed_temperature > 300)
+		kill_hugger()
+
+/obj/item/clothing/mask/facehugger/flamer_fire_act(burnlevel)
 	kill_hugger()
 
 /obj/item/clothing/mask/facehugger/dropped(mob/user)
@@ -657,7 +674,17 @@
 	go_idle()
 	if(isxeno(user)) //Set the source mob
 		facehugger_register_source(user)
-
+	if(isxenofacehugger(source))
+		var/mob/living/M = user
+		REMOVE_TRAIT(source, TRAIT_HANDS_BLOCKED, REF(src))
+		source.forceMove(get_turf(M))
+		if(source in M.client_mobs_in_contents)
+			M.client_mobs_in_contents -= source
+		if(sterile || M.status_flags & XENO_HOST)
+			if(source?.client && isnormalhive(source.hive))
+				source.client.facehugger_exp_update(4)
+			source.death()
+		qdel(src)
 
 /////////////////////////////
 // SUBTYPES
@@ -670,7 +697,6 @@
 	. = ..()
 	update_icon()
 
-
 /obj/item/clothing/mask/facehugger/dead
 	desc = "It has some sort of a tube at the end of its tail. What the hell is this thing?"
 	name = "????"
@@ -681,7 +707,6 @@
 	. = ..()
 	update_icon()
 
-
 /obj/item/clothing/mask/facehugger/larval
 	name = "larval hugger"
 
@@ -689,55 +714,40 @@
 /obj/item/clothing/mask/facehugger/combat
 	sterile = TRUE
 	combat_hugger = TRUE
-	equip_slot_flags = NONE
+	flags_equip_slot = NONE
 
-/obj/item/clothing/mask/facehugger/combat/chem_injector
+/obj/item/clothing/mask/facehugger/combat/neuro
+	name = "neuro hugger"
 	desc = "This strange creature has a single prominent sharp proboscis."
-	impact_time = 1 SECONDS
-	activate_time = 1.5 SECONDS
-	jump_cooldown = 1.5 SECONDS
-	proximity_time = 0.5 SECONDS
-	///The type of chemical we inject
-	var/datum/reagent/toxin/injected_chemical_type
-	///The amount of chemical we should inject, in units
-	var/amount_injected = 10
+	color = COLOR_DARK_ORANGE
+	impact_time = 0.5 SECONDS
+	activate_time = 1 SECONDS
+	jump_cooldown = 1 SECONDS
+	proximity_time = 0.25 SECONDS
 
-/obj/item/clothing/mask/facehugger/combat/chem_injector/Attach(mob/living/carbon/M, mob/user)
+/obj/item/clothing/mask/facehugger/combat/neuro/Attach(mob/M, mob/user)
 	if(!combat_hugger_check_target(M))
 		return FALSE
 
+	var/mob/living/victim = M
 	do_attack_animation(M)
-	M.apply_damage(1, BRUTE, sharp = TRUE, updating_health = TRUE) //Token brute for the injection
-	M.reagents.add_reagent(injected_chemical_type, amount_injected, no_overdose = TRUE)
-	playsound(M, 'sound/effects/spray3.ogg', 25, 1)
-	M.visible_message(span_danger("[src] penetrates [M] with its sharp probscius!"), span_danger("[src] penetrates you with a sharp probscius before falling down!"))
+	victim.apply_damage(100, STAMINA, BODY_ZONE_HEAD, BIO) //This should prevent sprinting
+	victim.apply_damage(1, BRUTE, sharp = TRUE, updating_health = TRUE) //Token brute for the injection
+	victim.reagents.add_reagent(/datum/reagent/toxin/xeno_neurotoxin, 10, no_overdose = TRUE)
+	playsound(victim, 'sound/effects/spray3.ogg', 25, 1)
+	victim.visible_message(span_danger("[src] penetrates [victim] with its sharp probscius!"),span_danger("[src] penetrates you with a sharp probscius before falling down!"))
 	leaping = FALSE
 	go_idle() //We're a bit slow on the recovery
 	return TRUE
-
-/obj/item/clothing/mask/facehugger/combat/chem_injector/neuro
-	name = "neurotoxin hugger"
-	color = COLOR_DARK_ORANGE
-	injected_chemical_type = /datum/reagent/toxin/xeno_neurotoxin
-
-/obj/item/clothing/mask/facehugger/combat/chem_injector/neuro/Attach(mob/living/carbon/M)
-	if(!..())
-		return
-	M.apply_damage(100, STAMINA, BODY_ZONE_HEAD, BIO) //This should prevent sprinting
-
-/obj/item/clothing/mask/facehugger/combat/chem_injector/ozelomelyn
-	name = "ozelomelyn hugger"
-	injected_chemical_type = /datum/reagent/toxin/xeno_ozelomelyn
-	color = COLOR_MAGENTA
 
 /obj/item/clothing/mask/facehugger/combat/acid
 	name = "acid hugger"
 	desc = "This repulsive looking thing is bloated with throbbing, putrescent green sacks of flesh."
 	color = COLOR_GREEN
-	impact_time = 1 SECONDS
-	activate_time = 1.5 SECONDS
-	jump_cooldown = 1.5 SECONDS
-	proximity_time = 0.5 SECONDS
+	impact_time = 0.5 SECONDS
+	activate_time = 1 SECONDS
+	jump_cooldown = 1 SECONDS
+	proximity_time = 0.25 SECONDS
 
 /obj/item/clothing/mask/facehugger/combat/acid/Attach(mob/M, mob/user)
 	if(!combat_hugger_check_target(M))
@@ -751,7 +761,6 @@
 		if(!locate(/obj/effect/xenomorph/spray) in acid_tile.contents)
 			new /obj/effect/xenomorph/spray(acid_tile, 6 SECONDS, 16)
 
-
 	var/datum/effect_system/smoke_spread/xeno/acid/light/A = new(get_turf(src)) //Spawn acid smoke
 	A.set_up(1,src)
 	A.start()
@@ -759,22 +768,21 @@
 
 	return TRUE
 
-
 /obj/item/clothing/mask/facehugger/combat/resin
 	name = "resin hugger"
 	desc = "This truly bizzare, bloated creature drips with purple, viscous resin."
 	color = COLOR_STRONG_VIOLET
-	impact_time = 1 SECONDS
-	activate_time = 1.5 SECONDS
-	jump_cooldown = 1.5 SECONDS
-	proximity_time = 0.5 SECONDS
+	impact_time = 0.5 SECONDS
+	activate_time = 1 SECONDS
+	jump_cooldown = 1 SECONDS
+	proximity_time = 0.25 SECONDS
 
 /obj/item/clothing/mask/facehugger/combat/resin/Attach(mob/M, mob/user)
 	if(!combat_hugger_check_target(M))
 		return FALSE
 
 	visible_message(span_danger("[src] explodes into a mess of viscous resin!"))
-	playsound(loc, SFX_ALIEN_RESIN_BUILD, 50, 1)
+	playsound(loc, get_sfx("alien_resin_build"), 50, 1)
 
 	for(var/turf/sticky_tile AS in RANGE_TURFS(1, loc))
 		if(!locate(/obj/effect/xenomorph/spray) in sticky_tile.contents)
@@ -792,7 +800,6 @@
 
 	return TRUE
 
-
 /obj/item/clothing/mask/facehugger/combat/slash
 	name = "clawed hugger"
 	desc = "This nasty little creature is a nightmarish scrabble of muscle and sharp, long claws."
@@ -808,7 +815,7 @@
 
 	var/mob/living/victim = M
 	do_attack_animation(M, ATTACK_EFFECT_REDSLASH)
-	playsound(loc, SFX_ALIEN_CLAW_FLESH, 25, 1)
+	playsound(loc, "alien_claw_flesh", 25, 1)
 	var/affecting = ran_zone(null, 0)
 	if(!affecting) //Still nothing??
 		affecting = BODY_ZONE_CHEST //Gotta have a torso?!
@@ -828,7 +835,6 @@
 		var/mob/living/carbon/xenomorph/X = M
 		if(hivenumber == X.hive.hivenumber) //No friendly fire
 			return FALSE
-
 	return TRUE
 
 #undef FACEHUGGER_DEATH

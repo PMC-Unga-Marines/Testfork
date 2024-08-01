@@ -2,7 +2,7 @@
 	name = "athletic shorts"
 	desc = "95% Polyester, 5% Spandex!"
 	gender = PLURAL
-	armor_protection_flags = GROIN
+	flags_armor_protection = GROIN
 
 /obj/item/clothing/under/shorts/red
 	name = "red athletic shorts"

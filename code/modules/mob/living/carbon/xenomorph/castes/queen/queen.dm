@@ -1,5 +1,5 @@
 /mob/living/carbon/xenomorph/queen
-	caste_base_type = /datum/xeno_caste/queen
+	caste_base_type = /mob/living/carbon/xenomorph/queen
 	name = "Queen"
 	desc = "A huge, looming alien creature. The biggest and the baddest."
 	icon = 'icons/Xeno/castes/queen.dmi'
@@ -11,11 +11,13 @@
 	maxHealth = 300
 	plasma_stored = 300
 	pixel_x = -16
+	old_x = -16
 	mob_size = MOB_SIZE_BIG
 	drag_delay = 6 //pulling a big dead xeno is hard
 	tier = XENO_TIER_FOUR //Queen doesn't count towards population limit.
 	upgrade = XENO_UPGRADE_NORMAL
 	bubble_icon = "alienroyal"
+	footstep_type = FOOTSTEP_XENO_STOMPY
 
 	var/breathing_counter = 0
 	inherent_verbs = list(
@@ -29,7 +31,7 @@
 	RegisterSignal(src, COMSIG_HIVE_BECOME_RULER, PROC_REF(on_becoming_ruler))
 	. = ..()
 	hive.RegisterSignal(src, COMSIG_HIVE_XENO_DEATH, TYPE_PROC_REF(/datum/hive_status, on_queen_death))
-	playsound(loc, 'sound/voice/alien/queen_command.ogg', 75, 0)
+	playsound(loc, 'sound/voice/alien/queen/command.ogg', 75, 0)
 
 // ***************************************
 // *********** Mob overrides
@@ -37,7 +39,7 @@
 
 /mob/living/carbon/xenomorph/queen/handle_special_state()
 	if(is_charging >= CHARGE_ON)
-		icon_state = "[xeno_caste.caste_name][(xeno_flags & XENO_ROUNY) ? " rouny" : ""] Charging"
+		icon_state = "Queen Charging"
 		return TRUE
 	return FALSE
 
@@ -73,22 +75,16 @@
 /mob/living/carbon/xenomorph/queen/generate_name()
 	var/playtime_mins = client?.get_exp(xeno_caste.caste_name)
 	var/prefix = (hive.prefix || xeno_caste.upgrade_name) ? "[hive.prefix][xeno_caste.upgrade_name] " : ""
-	if(!client?.prefs.show_xeno_rank || !client)
-		name = prefix + "Queen ([nicknumber])"
-		real_name = name
-		if(mind)
-			mind.name = name
-		return
 	switch(playtime_mins)
-		if(0 to 600)
+		if(0 to 300)
 			name = prefix + "Young Queen ([nicknumber])"
-		if(601 to 1500)
+		if(301 to 1500)
 			name = prefix + "Mature Queen ([nicknumber])"
 		if(1501 to 4200)
 			name = prefix + "Elder Empress ([nicknumber])"
-		if(4201 to 10500)
+		if(4201 to 9000)
 			name = prefix + "Ancient Empress ([nicknumber])"
-		if(10501 to INFINITY)
+		if(9001 to INFINITY)
 			name = prefix + "Prime Empress ([nicknumber])"
 		else
 			name = prefix + "Young Queen ([nicknumber])"
@@ -102,7 +98,7 @@
 // *********** Death
 // ***************************************
 /mob/living/carbon/xenomorph/queen/death_cry()
-	playsound(loc, 'sound/voice/alien/queen_died.ogg', 75, 0)
+	playsound(loc, 'sound/voice/alien/queen/died.ogg', 75, 0)
 
 /mob/living/carbon/xenomorph/queen/xeno_death_alert()
 	return

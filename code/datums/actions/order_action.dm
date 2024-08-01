@@ -9,7 +9,7 @@
 	///What skill is needed to have this action
 	var/skill_name = SKILL_LEADERSHIP
 	///What minimum level in that skill is needed to have that action
-	var/skill_min = SKILL_LEAD_TRAINED
+	var/skill_min = SKILL_LEAD_EXPERT
 
 /datum/action/innate/order/give_action(mob/M)
 	. = ..()
@@ -39,8 +39,6 @@
 	. = ..()
 	if(!.)
 		return
-	if(!should_show())
-		return FALSE
 	if(owner.stat != CONSCIOUS || TIMER_COOLDOWN_CHECK(owner, COOLDOWN_CIC_ORDERS))
 		return FALSE
 
@@ -121,7 +119,7 @@
 /datum/action/innate/order/attack_order/personal/action_activate()
 	var/mob/living/carbon/human/human = owner
 	if(send_order(human, human.assigned_squad, human.faction))
-		var/message = pick(";MARINES, FIGHT! SHOOT! KILL!!", ";BLAST THEM!", ";MAKE THEM EAT LEAD!", ";END THEM!", ";ATTACK HERE!", ";CHARGE!", ";RUN THEM OVER!")
+		var/message = pick(";ДОБЕЙТЕ ВЫЖИВШИХ!", ";РАЗОТРИТЕ ИХ В ПЫЛЬ!", ";НАКОРМИТЕ ИХ СВИНЦОМ!", ";ВПЕРЁД! В РУКОПАШНУЮ!", ";АТАКОВАТЬ!", ";В АТАКУ!", ";ПЕРЕБЕЙТЕ ИХ!")
 		owner.say(message)
 
 /datum/action/innate/order/defend_order
@@ -142,7 +140,7 @@
 /datum/action/innate/order/defend_order/personal/action_activate()
 	var/mob/living/carbon/human/human = owner
 	if(send_order(human, human.assigned_squad, human.faction))
-		var/message = pick(";DUCK AND COVER!", ";HOLD THE LINE!", ";HOLD POSITION!", ";STAND YOUR GROUND!", ";STAND AND FIGHT!", ";TAKE COVER!", ";COVER THE AREA!", ";BRACE FOR COVER!", ";BRACE!", ";INCOMING!", ";DON'T PUSH! STAY HERE!")
+		var/message = pick(";ПРИГНИТЕСЬ!", ";ДЕРЖИМ ЛИНИЮ!", ";ДЕРЖИМ ПОЗИЦИЮ!", ";НИ ШАГУ НАЗАД!", ";СТОЯТЬ И СРАЖАТЬСЯ!", ";В УКРЫТИЕ!", ";ЗАЩИЩАЙТЕ ПОЗИЦИЮ!", ";ПРИГОТОВИТЬСЯ К УДАРУ!", ";ДЕРЖИТЕСЬ!", ";ОНИ ИДУТ!", ";НЕ АТАКОВАТЬ! ЗАЩИЩАТЬСЯ!")
 		owner.say(message)
 
 /datum/action/innate/order/retreat_order
@@ -162,7 +160,7 @@
 /datum/action/innate/order/retreat_order/personal/action_activate()
 	var/mob/living/carbon/human/human = owner
 	if(send_order(human, human.assigned_squad, human.faction))
-		var/message = pick(";RETREAT! RETREAT!", ";GET OUT OF HERE!", ";DON'T DIE HERE! RUN!", ";RUN! RUN FOR YOUR LIFE!", ";DISENGAGE! I REPEAT, DISENGAGE!", ";GIVE UP GROUND! GIVE IT UP!")
+		var/message = pick(";НАЗАД! НАЗАД!", ";ТАКТИЧЕСКОЕ ОТСТУПЛЕНИЕ!", ";НЕ УМРИТЕ! УБЕГАЕМ!", ";БЕГИ ПОКА МОЖЕШЬ!", ";ОТСТУПАЕМ! ПОВТОРЯЮ, ОТСТУПАЕМ!", ";ОТСТУПАЕМ! УХОДИМ!")
 		owner.say(message)
 
 /datum/action/innate/order/rally_order
@@ -183,5 +181,5 @@
 /datum/action/innate/order/rally_order/personal/action_activate()
 	var/mob/living/carbon/human/human = owner
 	if(send_order(human, human.assigned_squad, human.faction))
-		var/message = pick(";TO ME MY MEN!", ";REGROUP TO ME!", ";FOLLOW MY LEAD!", ";RALLY ON ME!", ";FORWARD!")
+		var/message = pick("ВСЕ КО МНЕ!", "ПЕРЕГРУППИРОВАТЬСЯ!", "ВСЕМ ЗА МНОЙ!", "СОБРАТЬСЯ ВОЗЛЕ МЕНЯ!")
 		owner.say(message)

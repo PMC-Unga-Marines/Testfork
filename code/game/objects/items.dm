@@ -10,16 +10,14 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 	light_system = MOVABLE_LIGHT
 	allow_pass_flags = PASS_LOW_STRUCTURE
-	atom_flags = PREVENT_CONTENTS_EXPLOSION
+	flags_atom = PREVENT_CONTENTS_EXPLOSION
 	resistance_flags = PROJECTILE_IMMUNE
-	move_resist = MOVE_FORCE_WEAK
-
 	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
 	///The iconstate that the items use for blood on blood.dmi when drawn on the mob.
 	var/blood_sprite_state
-
-	///Icon state for mob worn overlays, if null the normal icon_state will be used.
-	var/worn_icon_state = null
+	var/item_state = null //if you don't want to use icon_state for onmob inhand/belt/back/ear/suitstorage/glove sprite.
+						//e.g. most headsets have different icon_state but they all use the same sprite when shown on the mob's ears.
+						//also useful for items with many icon_state values when you don't want to make an inhand sprite for each value.
 	///The icon state used to represent this image in "icons/obj/items/items_mini.dmi" Used in /obj/item/storage/box/visual to display tiny items in the box
 	var/icon_state_mini = "item"
 	///Byond tick delay between left click attacks
@@ -27,30 +25,23 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	///Byond tick delay between right click alternate attacks
 	var/attack_speed_alternate = 11
 	var/list/attack_verb //Used in attackby() to say how something was attacked "[x] has been [z.attack_verb] by [y] with [z]"
-
 	var/sharp = FALSE		// whether this item cuts
 	var/edge = FALSE		// whether this item is more likely to dismember
 	var/pry_capable = FALSE //whether this item can be used to pry things open.
 	var/heat = 0 //whether this item is a source of heat, and how hot it is (in Kelvin).
-
 	var/hitsound = null
 	var/w_class = WEIGHT_CLASS_NORMAL
-	var/item_flags = NONE	//flags for item stuff that isn't clothing/equipping specific.
-	var/equip_slot_flags = NONE		//This is used to determine on which slots an item can fit.
-
+	var/flags_item = NONE	//flags for item stuff that isn't clothing/equipping specific.
+	var/flags_equip_slot = NONE		//This is used to determine on which slots an item can fit.
 	//Since any item can now be a piece of clothing, this has to be put here so all items share it.
-	var/inventory_flags = NONE //This flag is used for various clothing/equipment item stuff
-	var/inv_hide_flags = NONE //This flag is used to determine when items in someone's inventory cover others. IE helmets making it so you can't see glasses, etc.
-
+	var/flags_inventory = NONE //This flag is used for various clothing/equipment item stuff
+	var/flags_inv_hide = NONE //This flag is used to determine when items in someone's inventory cover others. IE helmets making it so you can't see glasses, etc.
 	var/obj/item/master = null
-
-	var/armor_protection_flags = NONE //see setup.dm for appropriate bit flags
-	var/heat_protection_flags = NONE //flags which determine which body parts are protected from heat. Use the HEAD, CHEST, GROIN, etc. flags. See setup.dm
-	var/cold_protection_flags = NONE //flags which determine which body parts are protected from cold. Use the HEAD, CHEST, GROIN, etc. flags. See setup.dm
-
-	var/max_heat_protection_temperature //Set this variable to determine up to which temperature (IN KELVIN) the item protects against heat damage. Keep at null to disable protection. Only protects areas set by heat_protection_flags flags
-	var/min_cold_protection_temperature //Set this variable to determine down to which temperature (IN KELVIN) the item protects against cold damage. 0 is NOT an acceptable number due to if(varname) tests!! Keep at null to disable protection. Only protects areas set by cold_protection_flags flags
-
+	var/flags_armor_protection = NONE //see setup.dm for appropriate bit flags
+	var/flags_heat_protection = NONE //flags which determine which body parts are protected from heat. Use the HEAD, CHEST, GROIN, etc. flags. See setup.dm
+	var/flags_cold_protection = NONE //flags which determine which body parts are protected from cold. Use the HEAD, CHEST, GROIN, etc. flags. See setup.dm
+	var/max_heat_protection_temperature //Set this variable to determine up to which temperature (IN KELVIN) the item protects against heat damage. Keep at null to disable protection. Only protects areas set by flags_heat_protection flags
+	var/min_cold_protection_temperature //Set this variable to determine down to which temperature (IN KELVIN) the item protects against cold damage. 0 is NOT an acceptable number due to if(varname) tests!! Keep at null to disable protection. Only protects areas set by flags_cold_protection flags
 	///list of /datum/action's that this item has.
 	var/list/actions
 	///list of paths of action datums to give to the item on Initialize().
@@ -60,10 +51,8 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	var/siemens_coefficient = 1 // for electrical admittance/conductance (electrocution checks and shit)
 	var/slowdown = 0 // How much clothing is slowing you down. Negative values speeds you up
 	var/breakouttime = 0
-
 	///list() of species types, if a species cannot put items in a certain slot, but species type is in list, it will be able to wear that item
 	var/list/species_exception = null
-
 	var/list/allowed = null //suit storage stuff.
 	///name used for message when binoculars/scope is used
 	var/zoomdevicename = null
@@ -71,14 +60,12 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	var/zoom = FALSE
 	///how much tiles the zoom offsets to the direction it zooms to.
 	var/zoom_tile_offset = 6
-	///how much tiles the zoom zooms out, 7 is the default view.
-	var/zoom_viewsize = 7
+	///how much tiles the zoom zooms out, 5 is the default view.
+	var/zoom_viewsize = 5 //RU TGMC EDIT
 	///if you can move with the zoom on, only works if zoom_view_size is 7 otherwise CRASH() is called due to maptick performance reasons.
 	var/zoom_allow_movement = FALSE
-
 	var/datum/embedding_behavior/embedding
 	var/mob/living/embedded_into
-
 	///How long it takes to equip this item yoursef
 	var/equip_delay_self = 0 SECONDS
 	/// How long it takes to unequip this item yourself
@@ -87,21 +74,17 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	var/equip_delay_other = 2 SECONDS
 	///How long an item takes to remove from another person
 	var/strip_delay = 4 SECONDS
-
 	var/reach = 1
-
 	/// Species-specific sprites, concept stolen from Paradise//vg/. Ex: sprite_sheets = list("Combat Robot" = 'icons/mob/species/robot/backpack.dmi') If index term exists and icon_override is not set, this sprite sheet will be used.
 	var/list/sprite_sheets = null
-
 	//** These specify item/icon overrides for _slots_
-
-	///>Lazylist< that overrides the default worn_icon_state for particular slots.
-	var/list/worn_item_state_slots
+	///>Lazylist< that overrides the default item_state for particular slots.
+	var/list/item_state_slots
 	///>LazyList< Used to specify the icon file to be used when the item is worn in a certain slot. icon_override or sprite_sheets are set they will take precendence over this, assuming they apply to the slot in question.
-	var/list/worn_icon_list
+	var/list/item_icons
 	///specific layer for on-mob icon.
 	var/worn_layer
-	///tells if the item shall use worn_icon_state for non-inhands, needed due to some items using worn_icon_state only for inhands and not worn.
+	///tells if the item shall use item_state for non-inhands, needed due to some items using item_state only for inhands and not worn.
 	var/item_state_worn = FALSE
 	///overrides the icon file which the item will be used to render on mob, if its in hands it will add _l or _r to the state depending if its on left or right hand.
 	var/icon_override = null
@@ -121,18 +104,12 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	var/inhand_x_offset = 0
 	///Worn inhand overlay will be shifted by this along y axis
 	var/inhand_y_offset = 0
-
-	var/item_map_variant_flags = NONE
-
+	var/flags_item_map_variant = NONE
 	//TOOL RELATED VARS
 	var/tool_behaviour = FALSE
 	var/toolspeed = 1
 	var/usesound = null
-
 	var/active = FALSE
-
-
-
 	//Coloring vars
 	///Some defines to determine if the item is allowed to be recolored.
 	var/colorable_allowed = NONE
@@ -142,11 +119,11 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	var/list/icon_state_variants = list()
 	///Current variant selected.
 	var/current_variant
-
-
-
+	///Current hair concealing option selected.
+	var/current_hair_concealment
 
 /obj/item/Initialize(mapload)
+
 	if(species_exception)
 		species_exception = string_list(species_exception)
 	if(length(colorable_colors))
@@ -155,9 +132,6 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 		icon_state_variants = string_list(icon_state_variants)
 
 	. = ..()
-
-	if(loc?.storage_datum)
-		on_enter_storage()
 
 	for(var/path in actions_types)
 		new path(src)
@@ -169,11 +143,24 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	else if(islist(embedding))
 		embedding = getEmbeddingBehavior(arglist(embedding))
 
-	if(item_map_variant_flags)
+	if(flags_item_map_variant)
 		update_item_sprites()
 
 	if(current_variant)
 		update_icon()
+
+/obj/item/ex_act(severity, explosion_direction)
+	explosion_throw(severity, explosion_direction)
+
+	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
+		return
+
+	if(!prob(severity / 3))
+		return
+
+	var/msg = pick("is destroyed by the blast!", "is obliterated by the blast!", "shatters as the explosion engulfs it!", "disintegrates in the blast!", "perishes in the blast!", "is mangled into uselessness by the blast!")
+	visible_message(span_danger("<u>\The [src] [msg]</u>"))
+	deconstruct(FALSE)
 
 /obj/item/Destroy()
 	if(ismob(loc))
@@ -184,37 +171,11 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	master = null
 	embedding = null
 	embedded_into = null //Should have been removed by temporarilyRemoveItemFromInventory, but let's play it safe.
-	GLOB.cryoed_item_list_gun -= src
-	GLOB.cryoed_item_list_ammo -= src
-	GLOB.cryoed_item_list_explosive -= src
-	GLOB.cryoed_item_list_melee -= src
-	GLOB.cryoed_item_list_clothing -= src
-	GLOB.cryoed_item_list_food -= src
-	GLOB.cryoed_item_list_drugs -= src
-	GLOB.cryoed_item_list_containers -= src
-	GLOB.cryoed_item_list_other -= src
+	GLOB.cryoed_item_list -= src
 	return ..()
 
-/obj/item/grab_interact(obj/item/grab/grab, mob/user, base_damage = BASE_OBJ_SLAM_DAMAGE, is_sharp = FALSE)
-	return
-
 /obj/item/proc/update_item_state(mob/user)
-	worn_icon_state = "[initial(icon_state)][item_flags & WIELDED ? "_w" : ""]"
-
-/**
- * Checks if an item is allowed to be used on an atom/target
- * Returns TRUE if allowed.
- *
- * Args:
- * target_self - Whether we will check if we (src) are in target, preventing people from using items on themselves.
- * not_inside - Whether target (or target's loc) has to be a turf.
- */
-/obj/item/proc/check_allowed_items(atom/target, not_inside = FALSE, target_self = FALSE)
-	if(!target_self && (src in target))
-		return FALSE
-	if(not_inside && !isturf(target.loc) && !isturf(target))
-		return FALSE
-	return TRUE
+	item_state = "[initial(icon_state)][flags_item & WIELDED ? "_w" : ""]"
 
 //user: The mob that is suiciding
 //damagetype: The type of damage the item will inflict on the user
@@ -226,10 +187,9 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 /obj/item/proc/suicide_act(mob/user)
 	return
 
-
 /obj/item/verb/move_to_top()
 	set name = "Move To Top"
-	set category = "Object"
+	set category = "Object.Mob"
 	set src in oview(1)
 
 	if(!isturf(loc) || usr.stat || usr.restrained())
@@ -253,7 +213,6 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 
 /obj/item/examine(mob/user)
 	. = ..()
-	. += EXAMINE_SECTION_BREAK
 	. += "[gender == PLURAL ? "They are" : "It is"] a [weight_class_to_text(w_class)] item."
 
 /obj/item/attack_ghost(mob/dead/observer/user)
@@ -261,7 +220,6 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	if(. || !can_interact(user))
 		return
 	return interact(user)
-
 
 /obj/item/attack_hand(mob/living/user)
 	. = ..()
@@ -277,9 +235,9 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 
 	set_throwing(FALSE)
 
-	if(item_flags & IN_STORAGE)
-		var/datum/storage/current_storage = loc.storage_datum
-		if(!current_storage.remove_from_storage(src, user.loc, user))
+	if(istype(loc, /obj/item/storage))
+		var/obj/item/storage/S = loc
+		if(!S.remove_from_storage(src, user.loc, user))
 			return
 
 	if(loc == user && !user.temporarilyRemoveItemFromInventory(src))
@@ -293,33 +251,30 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 		user.dropItemToGround(src)
 		dropped(user)
 
-
 /obj/item/update_icon_state()
 	. = ..()
 	if(current_variant)
 		icon_state = initial(icon_state) + "_[current_variant]"
-		worn_icon_state = initial(worn_icon_state) + "_[current_variant]"
+		item_state = initial(item_state) + "_[current_variant]"
 
 // Due to storage type consolidation this should get used more now.
 // I have cleaned it up a little, but it could probably use more.  -Sayu
-/obj/item/attackby(obj/item/attacking_item, mob/user, params)
-	if(istype(attacking_item, /obj/item/facepaint) && colorable_allowed != NONE)
-		color_item(attacking_item, user)
-		return TRUE
-
+/obj/item/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return TRUE
 
-	if(!istype(attacking_item, /obj/item/storage))
+	if(istype(I, /obj/item/facepaint) && colorable_allowed != NONE)
+		color_item(I, user)
 		return
 
-	var/obj/item/storage/S = attacking_item
-
-	if(!S.storage_datum.use_to_pickup || !isturf(loc))
+	if(!istype(I, /obj/item/storage))
 		return
 
-	if(S.storage_datum.collection_mode) //Mode is set to collect all items on a tile and we clicked on a valid one.
+	var/obj/item/storage/S = I
+
+	if(!S.use_to_pickup || !isturf(loc))
+		return
+
+	if(S.collection_mode) //Mode is set to collect all items on a tile and we clicked on a valid one.
 		var/list/rejections = list()
 		var/success = FALSE
 		var/failure = FALSE
@@ -327,12 +282,12 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 		for(var/obj/item/IM in loc)
 			if(IM.type in rejections) // To limit bag spamming: any given type only complains once
 				continue
-			if(!S.storage_datum.can_be_inserted(IM, user))	// Note can_be_inserted still makes noise when the answer is no
+			if(!S.can_be_inserted(IM))	// Note can_be_inserted still makes noise when the answer is no
 				rejections += IM.type	// therefore full bags are still a little spammy
 				failure = TRUE
 				continue
 			success = TRUE
-			S.storage_datum.handle_item_insertion(IM, TRUE, user)	//The 1 stops the "You put the [src] into [S]" insertion message from being displayed.
+			S.handle_item_insertion(IM, TRUE, user)	//The 1 stops the "You put the [src] into [S]" insertion message from being displayed.
 		if(success && !failure)
 			to_chat(user, span_notice("You put everything in [S]."))
 		else if(success)
@@ -340,17 +295,16 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 		else
 			to_chat(user, span_notice("You fail to pick anything up with [S]."))
 
-	else if(S.storage_datum.can_be_inserted(src, user))
-		S.storage_datum.handle_item_insertion(src, FALSE, user)
+	else if(S.can_be_inserted(src))
+		S.handle_item_insertion(src, FALSE, user)
 
-/obj/item/attackby_alternate(obj/item/attacking_item, mob/user, params)
-	if(istype(attacking_item, /obj/item/facepaint))
-		alternate_color_item(attacking_item, user)
-		return TRUE
-
+/obj/item/attackby_alternate(obj/item/I, mob/user, params)
 	. = ..()
 	if(.)
-		return TRUE
+		return
+	if(!istype(I, /obj/item/facepaint))
+		return
+	alternate_color_item(I, user)
 
 /obj/item/proc/talk_into(mob/M, input, channel, spans, datum/language/language)
 	return ITALICS | REDUCE_RANGE
@@ -364,9 +318,9 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 // apparently called whenever an item is removed from a slot, container, or anything else.
 //the call happens after the item's potential loc change.
 /obj/item/proc/dropped(mob/user)
-	if((item_flags & DELONDROP) && !QDELETED(src))
+	if((flags_item & DELONDROP) && !QDELETED(src))
 		qdel(src)
-	item_flags &= ~IN_INVENTORY
+	flags_item &= ~IN_INVENTORY
 	SEND_SIGNAL(src, COMSIG_ITEM_DROPPED, user)
 
 ///Called whenever an item is unequipped to a new loc (IE, not when the item ends up in the hands)
@@ -374,11 +328,31 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	SHOULD_CALL_PARENT(TRUE)
 	SEND_SIGNAL(src, COMSIG_ITEM_REMOVED_INVENTORY, user)
 
-///Called just as an item is picked up (loc is not yet changed)
+// called just as an item is picked up (loc is not yet changed)
 /obj/item/proc/pickup(mob/user)
-	SEND_SIGNAL(src, COMSIG_ITEM_ATTEMPT_PICK_UP, user)
-	SEND_SIGNAL(user, COMSIG_LIVING_PICKED_UP_ITEM, src)
-	item_flags |= IN_INVENTORY
+	if(current_acid) //handle acid removal
+		if(!ishuman(user)) //gotta have limbs Morty
+			return
+		user.visible_message(span_danger("Corrosive substances seethe all over [user] as it retrieves the acid-soaked [src]!"),
+		span_danger("Corrosive substances burn and seethe all over you upon retrieving the acid-soaked [src]!"))
+		playsound(user, "acid_hit", 25)
+		var/mob/living/carbon/human/H = user
+		H.emote("pain")
+		var/raw_damage = current_acid.acid_damage * 0.25 //It's spread over 4 areas.
+		var/list/affected_limbs = list("l_hand", "r_hand", "l_arm", "r_arm")
+		var/limb_count = null
+		for(var/datum/limb/X in H.limbs)
+			if(limb_count > 4) //All target limbs affected
+				break
+			if(!affected_limbs.Find(X.name) )
+				continue
+			if(istype(X) && X.take_damage_limb(0, H.modify_by_armor(raw_damage * randfloat(0.75, 1.25), ACID, def_zone = X.name)))
+				H.UpdateDamageIcon()
+			limb_count++
+		UPDATEHEALTH(H)
+		QDEL_NULL(current_acid)
+	flags_item |= IN_INVENTORY
+	return
 
 ///Called to return an item to equip using the quick equip hotkey. Base proc returns the item itself, overridden for storage behavior.
 /obj/item/proc/do_quick_equip(mob/user)
@@ -386,15 +360,11 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 
 ///called when this item is removed from a storage item, which is passed on as S. The loc variable is already set to the new destination before this is called.
 /obj/item/proc/on_exit_storage(obj/item/storage/S as obj)
-	item_flags &= ~IN_STORAGE
 	return
-
 
 ///called when this item is added into a storage item, which is passed on as S. The loc variable is already set to the storage item.
 /obj/item/proc/on_enter_storage(obj/item/storage/S as obj)
-	item_flags |= IN_STORAGE
 	return
-
 
 ///called when "found" in pockets and storage items. Returns 1 if the search should end.
 /obj/item/proc/on_found(mob/finder as mob)
@@ -411,8 +381,8 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	SHOULD_CALL_PARENT(TRUE) // no exceptions
 	SEND_SIGNAL(src, COMSIG_ITEM_EQUIPPED, user, slot)
 
-	var/equipped_to_slot = equip_slot_flags & slotdefine2slotbit(slot)
-	if(equipped_to_slot) // equip_slot_flags is a bitfield
+	var/equipped_to_slot = flags_equip_slot & slotdefine2slotbit(slot)
+	if(equipped_to_slot) // flags_equip_slot is a bitfield
 		SEND_SIGNAL(src, COMSIG_ITEM_EQUIPPED_TO_SLOT, user, slot)
 	else
 		SEND_SIGNAL(src, COMSIG_ITEM_EQUIPPED_NOT_IN_SLOT, user, slot)
@@ -421,25 +391,24 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 		if(item_action_slot_check(user, slot)) //some items only give their actions buttons when in a specific slot.
 			A.give_action(user)
 
-	item_flags |= IN_INVENTORY
+	flags_item |= IN_INVENTORY
 
 	if(!equipped_to_slot)
 		return
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/human_user = user
-		if(armor_protection_flags)
+		if(flags_armor_protection)
 			human_user.add_limb_armor(src)
 		if(slowdown)
-			human_user.add_movespeed_modifier(type, TRUE, 0, (item_flags & IMPEDE_JETPACK) ? SLOWDOWN_IMPEDE_JETPACK : NONE, TRUE, slowdown)
-
+			human_user.add_movespeed_modifier(type, TRUE, 0, (flags_item & IMPEDE_JETPACK) ? SLOWDOWN_IMPEDE_JETPACK : NONE, TRUE, slowdown)
 
 ///Called when an item is removed from an equipment slot. The loc should still be in the unequipper.
 /obj/item/proc/unequipped(mob/unequipper, slot)
 	SHOULD_CALL_PARENT(TRUE)
 	SEND_SIGNAL(src, COMSIG_ITEM_UNEQUIPPED, unequipper, slot)
 
-	var/equipped_from_slot = equip_slot_flags & slotdefine2slotbit(slot)
+	var/equipped_from_slot = flags_equip_slot & slotdefine2slotbit(slot)
 
 	for(var/datum/action/A AS in actions)
 		A.remove_action(unequipper)
@@ -449,11 +418,10 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 
 	if(ishuman(unequipper))
 		var/mob/living/carbon/human/human_unequipper = unequipper
-		if(armor_protection_flags)
+		if(flags_armor_protection)
 			human_unequipper.remove_limb_armor(src)
 		if(slowdown)
 			human_unequipper.remove_movespeed_modifier(type)
-
 
 //sometimes we only want to grant the item's action if it's equipped in a specific slot.
 /obj/item/proc/item_action_slot_check(mob/user, slot)
@@ -471,12 +439,12 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 ///Used to enable/disable an item's bump attack. Grouped in a proc to make sure the signal or flags aren't missed
 /obj/item/proc/toggle_item_bump_attack(mob/user, enable_bump_attack)
 	SEND_SIGNAL(user, COMSIG_ITEM_TOGGLE_BUMP_ATTACK, enable_bump_attack)
-	if(item_flags & CAN_BUMP_ATTACK && enable_bump_attack)
+	if(flags_item & CAN_BUMP_ATTACK && enable_bump_attack)
 		return
 	if(enable_bump_attack)
-		item_flags |= CAN_BUMP_ATTACK
+		flags_item |= CAN_BUMP_ATTACK
 		return
-	item_flags &= ~CAN_BUMP_ATTACK
+	flags_item &= ~CAN_BUMP_ATTACK
 
 /**
  * The mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.
@@ -513,7 +481,7 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 		if(!is_type_in_list(H.species, species_exception))
 			return FALSE
 
-	if(issynth(H) && CHECK_BITFIELD(item_flags, SYNTH_RESTRICTED) && !CONFIG_GET(flag/allow_synthetic_gun_use))
+	if(issynth(H) && CHECK_BITFIELD(flags_item, SYNTH_RESTRICTED) && !CONFIG_GET(flag/allow_synthetic_gun_use))
 		to_chat(H, span_warning("Your programming prevents you from wearing this."))
 		return FALSE
 
@@ -662,34 +630,30 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 			return FALSE //Unsupported slot
 
 	if(equip_to_slot)
-		if(!(equip_slot_flags & slotdefine2slotbit(slot)))
+		if(!(flags_equip_slot & slotdefine2slotbit(slot)))
 			return FALSE
 		return TRUE
 
 	if(!selected_slot)
 		return FALSE
 
-	var/datum/storage/current_storage_datum
+	var/obj/item/storage/storage_item
 
-	if(isdatumstorage(selected_slot))
-		current_storage_datum = selected_slot
-
-	else if(selected_slot.storage_datum)
-		current_storage_datum = selected_slot.storage_datum
+	if(isstorage(selected_slot))
+		storage_item = selected_slot
 
 	else if(isclothing(selected_slot))
 		var/obj/item/clothing/selected_clothing = selected_slot
-		for(var/key AS in selected_clothing.attachments_by_slot)
-			var/atom/attachment = selected_clothing.attachments_by_slot[key]
-			if(!attachment?.storage_datum)
-				continue
-			current_storage_datum = attachment.storage_datum
-			break
+		for(var/attachment_slot in selected_clothing.attachments_by_slot)
+			if(ismodulararmorstoragemodule(selected_clothing.attachments_by_slot[attachment_slot]))
+				var/obj/item/armor_module/storage/storage_attachment = selected_clothing.attachments_by_slot[attachment_slot]
+				storage_item = storage_attachment.storage
+				break
 
-	if(!current_storage_datum)
+	if(!storage_item)
 		return FALSE
 
-	return current_storage_datum.can_be_inserted(src, user, warning)
+	return storage_item.can_be_inserted(src, warning)
 
 /// Checks whether the item can be unequipped from owner by stripper. Generates a message on failure and returns TRUE/FALSE
 /obj/item/proc/canStrip(mob/stripper, mob/owner)
@@ -703,42 +667,43 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 	return
 
 /obj/item/proc/update_item_sprites()
-	//we call the config directly for pregame where mode isn't set yet
-	var/armor_style = SSticker.mode ? SSticker.mode.get_map_color_variant() : SSmapping.configs[GROUND_MAP].armor_style
-	switch(armor_style)
+	switch(SSmapping.configs[GROUND_MAP].armor_style)
 		if(MAP_ARMOR_STYLE_JUNGLE)
-			if(item_map_variant_flags & ITEM_JUNGLE_VARIANT)
+			if(flags_item_map_variant & ITEM_JUNGLE_VARIANT)
 				if(colorable_allowed & PRESET_COLORS_ALLOWED)
-					greyscale_colors = ARMOR_PALETTE_DRAB
+					greyscale_colors = ARMOR_PALETTE_BLACK
 				else if(colorable_allowed & ICON_STATE_VARIANTS_ALLOWED)
 					current_variant = JUNGLE_VARIANT
 				else
 					icon_state = "m_[icon_state]"
-					worn_icon_state = "m_[worn_icon_state]"
+					item_state = "m_[item_state]"
 		if(MAP_ARMOR_STYLE_ICE)
-			if(item_map_variant_flags & ITEM_ICE_VARIANT)
+			if(flags_item_map_variant & ITEM_ICE_VARIANT)
 				if(colorable_allowed & PRESET_COLORS_ALLOWED)
 					greyscale_colors = ARMOR_PALETTE_SNOW
 				else if(colorable_allowed & ICON_STATE_VARIANTS_ALLOWED)
 					current_variant = SNOW_VARIANT
 				else
 					icon_state = "s_[icon_state]"
-					worn_icon_state = "s_[worn_icon_state]"
+					item_state = "s_[item_state]"
 		if(MAP_ARMOR_STYLE_PRISON)
-			if(item_map_variant_flags & ITEM_PRISON_VARIANT)
+			if(flags_item_map_variant & ITEM_PRISON_VARIANT)
 				if(colorable_allowed & PRESET_COLORS_ALLOWED)
 					greyscale_colors = ARMOR_PALETTE_BLACK
 				else if(colorable_allowed & ICON_STATE_VARIANTS_ALLOWED)
 					current_variant = PRISON_VARIANT
 				else
 					icon_state = "k_[icon_state]"
-					worn_icon_state = "k_[worn_icon_state]"
+					item_state = "k_[item_state]"
 		if(MAP_ARMOR_STYLE_DESERT)
-			if(item_map_variant_flags & ITEM_DESERT_VARIANT)
+			if(flags_item_map_variant & ITEM_DESERT_VARIANT)
 				if(colorable_allowed & PRESET_COLORS_ALLOWED)
 					greyscale_colors = ARMOR_PALETTE_DESERT
 				else if(colorable_allowed & ICON_STATE_VARIANTS_ALLOWED)
 					current_variant = DESERT_VARIANT
+
+	if(SSmapping.configs[GROUND_MAP].environment_traits[MAP_COLD] && (flags_item_map_variant & ITEM_ICE_PROTECTION))
+		min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROTECTION_TEMPERATURE
 
 	if(!greyscale_colors)
 		return
@@ -820,7 +785,7 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 
 /obj/item/verb/verb_pickup()
 	set src in oview(1)
-	set category = "Object"
+	set category = "Object.Mob"
 	set name = "Pick up"
 
 	if(usr.incapacitated() || !Adjacent(usr))
@@ -836,7 +801,7 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 //The default action is attack_self().
 //Checks before we get to here are: mob is alive, mob is not restrained, paralyzed, asleep, resting, laying, item is on the mob.
 /obj/item/proc/ui_action_click(mob/user, datum/action/item_action/action)
-	return attack_self(user)
+	attack_self(user)
 
 /obj/item/proc/toggle_item_state(mob/user)
 	SHOULD_CALL_PARENT(TRUE)
@@ -845,10 +810,10 @@ GLOBAL_DATUM_INIT(welding_sparks_prepdoor, /mutable_appearance, mutable_appearan
 
 /mob/living/carbon/verb/showoff()
 	set name = "Show Held Item"
-	set category = "Object"
+	set category = "Object.Mob"
 
 	var/obj/item/I = get_active_held_item()
-	if(I && !(I.item_flags & ITEM_ABSTRACT))
+	if(I && !(I.flags_item & ITEM_ABSTRACT))
 		visible_message("[src] holds up [I]. <a HREF=?src=[REF(usr)];lookitem=[REF(I)]>Take a closer look.</a>")
 
 /*
@@ -955,9 +920,9 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 ///called when zoom is activated.
 /obj/item/proc/onzoom(mob/living/user)
 	if(zoom_allow_movement)
-		RegisterSignal(user, COMSIG_LIVING_SWAPPED_HANDS, PROC_REF(zoom_item_turnoff))
+		RegisterSignal(user, COMSIG_CARBON_SWAPPED_HANDS, PROC_REF(zoom_item_turnoff))
 	else
-		RegisterSignals(user, list(COMSIG_MOVABLE_MOVED, COMSIG_LIVING_SWAPPED_HANDS), PROC_REF(zoom_item_turnoff))
+		RegisterSignals(user, list(COMSIG_MOVABLE_MOVED, COMSIG_CARBON_SWAPPED_HANDS), PROC_REF(zoom_item_turnoff))
 	RegisterSignal(user, COMSIG_MOB_FACE_DIR, PROC_REF(change_zoom_offset))
 	RegisterSignals(src, list(COMSIG_ITEM_EQUIPPED, COMSIG_ITEM_DROPPED), PROC_REF(zoom_item_turnoff))
 
@@ -965,9 +930,9 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 ///called when zoom is deactivated.
 /obj/item/proc/onunzoom(mob/living/user)
 	if(zoom_allow_movement)
-		UnregisterSignal(user, list(COMSIG_LIVING_SWAPPED_HANDS, COMSIG_MOB_FACE_DIR))
+		UnregisterSignal(user, list(COMSIG_CARBON_SWAPPED_HANDS, COMSIG_MOB_FACE_DIR))
 	else
-		UnregisterSignal(user, list(COMSIG_MOVABLE_MOVED, COMSIG_LIVING_SWAPPED_HANDS, COMSIG_MOB_FACE_DIR))
+		UnregisterSignal(user, list(COMSIG_MOVABLE_MOVED, COMSIG_CARBON_SWAPPED_HANDS, COMSIG_MOB_FACE_DIR))
 
 	UnregisterSignal(src, list(COMSIG_ITEM_EQUIPPED, COMSIG_ITEM_DROPPED))
 
@@ -1002,20 +967,14 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 				if(-1)
 					to_chat(user, span_danger("Your eyes itch and burn severely."))
 
-
-
-
-
 //This proc is here to prevent Xenomorphs from picking up objects (default attack_hand behaviour)
 //Note that this is overriden by every proc concerning a child of obj unless inherited
-/obj/item/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/item/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, isrightclick = FALSE)
 	return FALSE
-
 
 /obj/item/proc/update_action_button_icons()
 	for(var/datum/action/A AS in actions)
 		A.update_button_icon()
-
 
 /obj/item/proc/extinguish(atom/target, mob/user)
 	if (reagents.total_volume < 1)
@@ -1023,7 +982,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 		return
 
 	user.visible_message(span_danger("[user] sprays water from [src]!"), \
-	span_warning("You spray water from [src]."))
+	span_warning("You spray water from [src]."),)
 
 	playsound(user.loc, 'sound/effects/extinguish.ogg', 52, 1, 7)
 
@@ -1093,15 +1052,19 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 					if(!W.reagents)
 						break
 					W.reagents.reaction(atm)
-					if(isfire(atm))
-						var/obj/fire/FF = atm
-						FF.set_fire(FF.burn_ticks - 20)
+					if(istype(atm, /obj/flamer_fire))
+						var/obj/flamer_fire/FF = atm
+						if(FF.firelevel > 20)
+							FF.firelevel -= 20
+							FF.updateicon()
+						else
+							qdel(atm)
 						continue
 					if(isliving(atm)) //For extinguishing mobs on fire
 						var/mob/living/M = atm
 						M.ExtinguishMob()
 						for(var/obj/item/clothing/mask/cigarette/C in M.contents)
-							if(C.worn_icon_state == C.icon_on)
+							if(C.item_state == C.icon_on)
 								C.die()
 				if(W.loc == my_target)
 					break
@@ -1162,10 +1125,9 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 /obj/item/proc/tool_use_check(mob/living/user, amount)
 	return !amount
 
-/**
- * Generic use proc. Depending on the item, it uses up fuel, charges, sheets, etc.
- * Returns TRUE on success, FALSE on failure.
- */
+
+// Generic use proc. Depending on the item, it uses up fuel, charges, sheets, etc.
+// Returns TRUE on success, FALSE on failure.
 /obj/item/proc/use(used)
 	return !used
 
@@ -1247,14 +1209,16 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 		return icon_override
 
 	//2: species-specific sprite sheets.
-	. = LAZYACCESS(sprite_sheets, species_type)
-	if(. && !inhands)
-		return
+	var/icon = LAZYACCESS(sprite_sheets, species_type)
+	if(icon && !inhands)
+		return icon
 
 	//3: slot-specific sprite sheets
-	. = LAZYACCESS(worn_icon_list, slot_name)
-	if(.)
-		return
+	icon = LAZYACCESS(item_icons, slot_name)
+	if(ispath(icon, /datum/greyscale_config))
+		return SSgreyscale.GetColoredIconByType(icon, greyscale_colors)
+	if(icon)
+		return icon
 
 	//5: provided default_icon
 	if(default_icon)
@@ -1267,14 +1231,14 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 /obj/item/proc/get_worn_icon_state(slot_name, inhands)
 
 	//1: slot-specific sprite sheets
-	. = LAZYACCESS(worn_item_state_slots, slot_name)
+	. = LAZYACCESS(item_state_slots, slot_name)
 	if(.)
 		return
 
-	//2: worn_icon_state variable, some items use it for worn sprite, others for inhands.
+	//2: item_state variable, some items use it for worn sprite, others for inhands.
 	if(inhands || item_state_worn)
-		if(worn_icon_state)
-			return worn_icon_state
+		if(item_state)
+			return item_state
 
 	//3: icon_state variable
 	if(icon_state)
@@ -1390,18 +1354,18 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 ///Handles registering if an item is flagged as deployed or not
 /obj/item/proc/toggle_deployment_flag(deployed)
 	if(deployed)
-		ENABLE_BITFIELD(item_flags, IS_DEPLOYED)
+		ENABLE_BITFIELD(flags_item, IS_DEPLOYED)
 	else
-		DISABLE_BITFIELD(item_flags, IS_DEPLOYED)
+		DISABLE_BITFIELD(flags_item, IS_DEPLOYED)
 
 ///Called by vendors when vending an item. Allows the item to specify what happens when it is given to the player.
 /obj/item/proc/on_vend(mob/user, faction, fill_container = FALSE, auto_equip = FALSE)
 	//Put item into player's currently open storage
-	if(fill_container && user.s_active && user.s_active.can_be_inserted(src, user, FALSE))
+	if (fill_container && user.s_active && user.s_active.can_be_inserted(src, FALSE))
 		user.s_active.handle_item_insertion(src, FALSE, user)
 		return
 	//Equip item onto player
-	if(auto_equip && vendor_equip(user))
+	if (auto_equip && vendor_equip(user))
 		return
 	//Otherwise fall back to putting item in player's hand
 	if(user.put_in_any_hand_if_possible(src, warning = FALSE))
@@ -1412,7 +1376,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	return FALSE
 
 ///Colors the item or selects variants.
-/obj/item/proc/color_item(obj/item/facepaint/paint, mob/user)
+/obj/item/proc/color_item(obj/item/facepaint/paint, mob/living/carbon/human/user)
 
 	if(paint.uses < 1)
 		balloon_alert(user, "\the [paint] is out of color!")
@@ -1425,17 +1389,25 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 		selection_list += PRESET_COLORS
 	if(colorable_allowed & ICON_STATE_VARIANTS_ALLOWED && (length(icon_state_variants)>1))
 		selection_list += VARIANTS
+	if(colorable_allowed & HAIR_CONCEALING_CHANGE_ALLOWED)
+		selection_list += HAIR_CONCEALING_CHANGE
 
 	var/selection
 	if(length(selection_list) == 1)
 		selection = selection_list[1]
 	else
-		selection = tgui_input_list(user, "Choose a color setting", name, selection_list)
+		selection = tgui_input_list(user, "Choose a setting", name, selection_list)
 
 	var/new_color
+	var/hair_concealing_variants = list(
+		HAIR_NO_CONCEALING,
+		TOP_HAIR_CONCEALING,
+		HAIR_PARTIALLY_CONCEALING,
+		HAIR_FULL_CONCEALING,
+	)
 	switch(selection)
 		if(VARIANTS)
-			var/variant = tgui_input_list(user, "Choose a color.", "Color", icon_state_variants)
+			var/variant = tgui_input_list(user, "Choose a variant", "Variant", icon_state_variants)
 
 			if(!variant)
 				return
@@ -1449,8 +1421,7 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 			SEND_SIGNAL(src, COMSIG_ITEM_VARIANT_CHANGE, user, variant)
 			return
 		if(PRESET_COLORS)
-			var/color_selection
-			color_selection = tgui_input_list(user, "Pick a color", "Pick color", colorable_colors)
+			var/color_selection = tgui_input_list(user, "Pick a color", "Pick color", colorable_colors)
 			if(!color_selection)
 				return
 			if(islist(colorable_colors[color_selection]))
@@ -1464,12 +1435,32 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 		if(COLOR_WHEEL)
 			new_color = input(user, "Pick a color", "Pick color") as null|color
 
+		if(HAIR_CONCEALING_CHANGE)
+			var/concealment_variant = tgui_input_list(user, "Choose how much hair you want to conceal?", "Hair Concealment", hair_concealing_variants)
+			if(!concealment_variant || !do_after(user, 1 SECONDS, NONE, src, BUSY_ICON_GENERIC))
+				return
+
+			current_hair_concealment = concealment_variant
+			switch_hair_concealment_flags(user)
+
 	if(!new_color || !do_after(user, 1 SECONDS, NONE, src, BUSY_ICON_GENERIC))
 		return
 
 	set_greyscale_colors(new_color)
 	update_icon()
 	update_greyscale()
+
+/obj/item/proc/switch_hair_concealment_flags(mob/living/carbon/human/user)
+	switch(current_hair_concealment)
+		if(HAIR_NO_CONCEALING) // if you apply it to something that has different inv hide flags it will break it, so just don't i guess?
+			flags_inv_hide = HIDEEARS
+		if(TOP_HAIR_CONCEALING)
+			flags_inv_hide = HIDEEARS|HIDETOPHAIR
+		if(HAIR_PARTIALLY_CONCEALING)
+			flags_inv_hide = HIDEEARS|HIDE_EXCESS_HAIR
+		if(HAIR_FULL_CONCEALING)
+			flags_inv_hide = HIDEEARS|HIDEALLHAIR
+	user.update_hair()
 
 ///Is called when the item is alternate attacked by paint. Handles coloring any secondary colors that are registered to COMSIG_ITEM_SECONDARY_COLOR
 /obj/item/proc/alternate_color_item(obj/item/facepaint/paint, mob/user)
@@ -1488,17 +1479,3 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	update_icon()
 	update_greyscale()
 
-///Returns whether this is considered beneficial if embedded in a mob
-/obj/item/proc/is_beneficial_implant()
-	return FALSE
-
-///Mult on submerge height for changing the alpha of submerged items
-#define ITEM_LIQUID_TURF_ALPHA_MULT 11
-
-/obj/item/set_submerge_level(turf/new_loc, turf/old_loc, submerge_icon, submerge_icon_state, duration)
-	var/old_alpha_mod = istype(old_loc) ? old_loc.get_submerge_height(TRUE) : 0
-	var/new_alpha_mod = istype(new_loc) ? new_loc.get_submerge_height(TRUE) : 0
-
-	alpha -= (new_alpha_mod - old_alpha_mod) * ITEM_LIQUID_TURF_ALPHA_MULT
-
-#undef ITEM_LIQUID_TURF_ALPHA_MULT

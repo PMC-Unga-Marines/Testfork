@@ -6,7 +6,6 @@
 #define FIREDOOR_ALERT_HOT 1
 #define FIREDOOR_ALERT_COLD 2
 
-
 /obj/machinery/door/firedoor
 	name = "\improper Emergency Shutter"
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
@@ -24,7 +23,6 @@
 	use_power = TRUE
 	idle_power_usage = 5
 	active_power_usage = 360
-
 	var/blocked = FALSE
 	var/lockdown = FALSE // When the door has detected a problem, it locks.
 	var/pdiff_alert = FALSE
@@ -34,7 +32,6 @@
 	var/list/areas_added
 	var/list/users_to_open = new
 	var/next_process_time = 0
-
 	var/list/tile_info[4]
 	var/list/dir_alerts[4] // 4 dirs, bitflags
 
@@ -48,7 +45,7 @@
 	. = ..()
 	for(var/obj/machinery/door/firedoor/F in loc)
 		if(F != src)
-			atom_flags |= INITIALIZED
+			flags_atom |= INITIALIZED
 			return INITIALIZE_HINT_QDEL
 	var/area/A = get_area(src)
 	ASSERT(istype(A))
@@ -66,7 +63,6 @@
 	for(var/area/A in areas_added)
 		LAZYREMOVE(A.all_fire_doors, src)
 	return ..()
-
 
 /obj/machinery/door/firedoor/examine(mob/user) // todo remove the shitty o vars
 	. = ..()
@@ -117,7 +113,7 @@
 		return ..()
 	return FALSE
 
-/obj/machinery/door/firedoor/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/door/firedoor/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
@@ -158,7 +154,7 @@
 
 	var/alarmed = lockdown
 	for(var/area/A in areas_added)		//Checks if there are fire alarms in any areas associated with that firedoor
-		if(A.alarm_state_flags & ALARM_WARNING_FIRE || A.air_doors_activated)
+		if(A.flags_alarm_state & ALARM_WARNING_FIRE || A.air_doors_activated)
 			alarmed = TRUE
 
 	var/answer = tgui_alert(user, "Would you like to [density ? "open" : "close"] this [src.name]?[ alarmed && density ? "\nNote that by doing so, you acknowledge any damages from opening this\n[src.name] as being your own fault, and you will be held accountable under the law." : ""]",\
@@ -194,7 +190,7 @@
 		spawn(50)
 			alarmed = FALSE
 			for(var/area/A in areas_added)		//Just in case a fire alarm is turned off while the firedoor is going through an autoclose cycle
-				if(A.alarm_state_flags & ALARM_WARNING_FIRE || A.air_doors_activated)
+				if(A.flags_alarm_state & ALARM_WARNING_FIRE || A.air_doors_activated)
 					alarmed = TRUE
 			if(alarmed)
 				nextstate = FIREDOOR_CLOSED
@@ -202,8 +198,6 @@
 
 /obj/machinery/door/firedoor/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(operating)
 		return
@@ -252,10 +246,8 @@
 		else
 			close()
 
-
 /obj/machinery/door/firedoor/try_to_activate_door(mob/user)
 	return
-
 
 /obj/machinery/door/firedoor/proc/latetoggle()
 	if(operating || !nextstate)
@@ -289,6 +281,7 @@
 			flick("door_closing", src)
 	playsound(loc, 'sound/machines/emergency_shutter.ogg', 25)
 
+
 /obj/machinery/door/firedoor/update_icon_state()
 	. = ..()
 	if(density)
@@ -313,6 +306,7 @@
 		if(blocked)
 			. += "welded_open"
 
+
 /obj/machinery/door/firedoor/mainship
 	name = "\improper Emergency Shutter"
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
@@ -320,15 +314,13 @@
 	icon_state = "door_open"
 	openspeed = 4
 
-
 /obj/machinery/door/firedoor/multi_tile
 	icon = 'icons/obj/doors/DoorHazard2x1.dmi'
 	width = 2
 
-
 /obj/machinery/door/firedoor/border_only
 	icon = 'icons/obj/doors/edge_Doorfire.dmi'
-	atom_flags = ON_BORDER
+	flags_atom = ON_BORDER
 	allow_pass_flags = PASS_GLASS
 
 /obj/machinery/door/firedoor/border_only/Initialize(mapload)

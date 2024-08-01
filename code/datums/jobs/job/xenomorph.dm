@@ -8,7 +8,8 @@
 	jobworth = list(/datum/job/survivor/rambo = SURVIVOR_POINTS_REGULAR)
 	job_points_needed = 10 //Redefined via config.
 	faction = FACTION_XENO
-	exp_type = EXP_TYPE_SPECIAL
+	//exp_type = EXP_TYPE_SPECIAL // ORIGINAL
+	exp_type = EXP_TYPE_XENO // RUTGMC ADDITION
 	html_description = {"
 		<b>Difficulty</b>: Variable<br /><br />
 		<b>You answer to the</b> acting Hive leader<br /><br />
@@ -25,7 +26,7 @@
 /datum/job/xenomorph/return_spawn_type(datum/preferences/prefs)
 	return /mob/living/carbon/xenomorph/larva
 
-/datum/job/xenomorph/return_spawn_turf()
+/datum/job/xenomorph/return_spawn_turf(mob/living/new_character, client/player)
 	if(length(GLOB.xeno_resin_silos_by_hive[XENO_HIVE_NORMAL]))
 		return pick(GLOB.xeno_resin_silos_by_hive[XENO_HIVE_NORMAL])
 	return pick(GLOB.spawns_by_job[/datum/job/xenomorph])
@@ -40,7 +41,7 @@
 	return TRUE
 
 /datum/job/xenomorph/add_job_positions(amount)
-	if(!(SSticker.mode.round_type_flags & MODE_XENO_SPAWN_PROTECT))
+	if(!(SSticker.mode.flags_round_type & MODE_XENO_SPAWN_PROTECT))
 		if(free_xeno_at_start > 0)
 			free_xeno_at_start--
 			return
@@ -52,7 +53,7 @@
 
 /datum/job/xenomorph/after_spawn(mob/living/carbon/xenomorph/xeno, mob/M, latejoin)
 	. = ..()
-	SSminimaps.add_marker(xeno, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, xeno.xeno_caste.minimap_icon))
+	SSminimaps.add_marker(xeno, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, xeno.xeno_caste.minimap_icon)) //RUTGMC edit - icon change
 
 /datum/job/xenomorph/queen
 	title = ROLE_XENO_QUEEN
@@ -60,7 +61,7 @@
 	supervisors = "Queen mother"
 	selection_color = "#8972AA"
 	display_order = JOB_DISPLAY_ORDER_XENO_QUEEN
-	exp_requirements = XP_REQ_EXPERIENCED
+	exp_requirements = XP_REQ_INTERMEDIATE
 	job_flags = JOB_FLAG_ROUNDSTARTJOINABLE|JOB_FLAG_NOHEADSET|JOB_FLAG_OVERRIDELATEJOINSPAWN|JOB_FLAG_BOLD_NAME_ON_SELECTION|JOB_FLAG_HIDE_CURRENT_POSITIONS|JOB_FLAG_LOUDER_TTS
 	jobworth = list(/datum/job/survivor/rambo = SURVIVOR_POINTS_REGULAR)
 	html_description = {"
@@ -74,7 +75,7 @@
 /datum/job/xenomorph/queen/return_spawn_type(datum/preferences/prefs)
 	return /mob/living/carbon/xenomorph/shrike
 
-/datum/job/xenomorph/queen/return_spawn_turf()
+/datum/job/xenomorph/queen/return_spawn_turf(mob/living/new_character, client/player)
 	return pick(GLOB.spawns_by_job[/datum/job/xenomorph])
 
 /datum/job/xenomorph/queen/radio_help_message(mob/M)
@@ -85,3 +86,6 @@
 /datum/job/xenomorph/queen/handle_special_preview(client/parent)
 	parent.show_character_previews(image('icons/Xeno/castes/larva.dmi', icon_state = "Larva", dir = SOUTH))
 	return TRUE
+
+/datum/job/xenomorph/facehugger
+	job_flags = JOB_FLAG_NOHEADSET|JOB_FLAG_OVERRIDELATEJOINSPAWN

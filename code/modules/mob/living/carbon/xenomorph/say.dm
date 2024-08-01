@@ -5,7 +5,7 @@
 	This is also paired with [/mob/living/carbon/xenomorph/hivemind_end]
 */
 /mob/living/carbon/xenomorph/proc/hivemind_start()
-	return "<span class='hivemind [(xeno_flags & XENO_LEADER) ? "xenoleader" : ""]'>Hivemind, <b>[span_name("[name]")]</b>"
+	return "<span class='hivemind [queen_chosen_lead?"xenoleader":""]'>Hivemind, [span_name("[name]")]"
 
 /**
 	Called to create the suffix for xeno hivemind messages
@@ -38,6 +38,11 @@
 		return
 	if(!hive)
 		return
+//RUTGMC EDIT ADDITION BEGIN - Preds
+	if(interference)
+		to_chat(src, span_warning("A headhunter temporarily cut off your psychic connection!"))
+		return
+//RUTGMC EDIT ADDITION END
 	if(hivenumber == XENO_HIVE_NORMAL && !hive.living_xeno_ruler && hive.get_hivemind_conduit_death_timer() && timeleft(hive.get_hivemind_conduit_death_timer()) > hive.get_total_hivemind_conduit_time() * 0.5)
 		to_chat(src, span_warning("The ruler is dead. The hivemind is weakened. Despair!"))
 		return
@@ -51,7 +56,7 @@
 		if(!S?.client?.prefs || !(S.client.prefs.toggles_chat & CHAT_GHOSTHIVEMIND))
 			continue
 		var/track = FOLLOW_LINK(S, src)
-		S.show_message("[track] [hivemind_start()] [span_message("hisses, <b>'[message]'</b>")][hivemind_end()]", 2)
+		S.show_message("[track] [hivemind_start()] [span_message("hisses, '[message]'")][hivemind_end()]", 2)
 
 	hive.hive_mind_message(src, message)
 
@@ -59,7 +64,7 @@
 
 /mob/living/carbon/xenomorph/proc/receive_hivemind_message(mob/living/carbon/xenomorph/X, message)
 	var/follow_link = X != src ? "<a href='byond://?src=[REF(src)];watch_xeno_name=[REF(X)]'>(F)</a> " : ""
-	show_message("[follow_link][X.hivemind_start()][span_message(" hisses, <b>'[message]'</b>")][X.hivemind_end()]", 2)
+	show_message("[follow_link][X.hivemind_start()][span_message(" hisses, '[message]'")][X.hivemind_end()]", 2)
 
 
 /mob/living/carbon/xenomorph/get_saymode(message, talk_key)

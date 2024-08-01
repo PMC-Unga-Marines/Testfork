@@ -135,8 +135,6 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/mute_others_combat_messages = FALSE
 	///Whether to mute xeno health alerts from when other xenos are badly hurt.
 	var/mute_xeno_health_alert_messages = TRUE
-	///Whether we generate a xeno name to show in the chatbox and on the mob.
-	var/show_xeno_rank = TRUE
 
 	///whether the user wants to hear tts
 	var/sound_tts = TTS_SOUND_ENABLED
@@ -164,6 +162,8 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/datum/loadout_manager/loadout_manager
 	///Should we be in the widescreen mode set by the config?
 	var/widescreenpref = TRUE
+	///widescreen resolution
+	var/screen_resolution = "17x15"
 	///What size should pixels be displayed as? 0 is strech to fit
 	var/pixel_size = 0
 	///What scaling method should we use? Distort means nearest neighbor
@@ -189,6 +189,30 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 	///List of slot_draw_order
 	var/list/slot_draw_order_pref = list()
+
+	//Predator specific preferences.
+	var/predator_name = "Undefined"
+	var/predator_gender = MALE
+	var/predator_age = 100
+	var/predator_h_style = "Standard"
+	var/predator_skin_color = "Tan"
+	var/predator_use_legacy = "None"
+	var/predator_translator_type = "Modern"
+	var/predator_mask_type = 1
+	var/predator_armor_type = 1
+	var/predator_boot_type = 1
+	var/predator_armor_material = "ebony"
+	var/predator_mask_material = "ebony"
+	var/predator_greave_material = "ebony"
+	var/predator_caster_material = "ebony"
+	var/predator_cape_type = "None"
+	var/predator_cape_color = "#654321"
+	var/predator_flavor_text = "None"
+	var/pred_r_eyes = 0
+	var/pred_g_eyes = 0
+	var/pred_b_eyes = 0
+	var/yautja_status = WHITELIST_NORMAL
+
 
 /datum/preferences/New(client/C)
 	if(!istype(C))
@@ -237,6 +261,9 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 /datum/preferences/proc/ShowChoices(mob/user)
 	if(!user?.client)
 		return
+	if(!SSticker || SSticker.current_state == GAME_STATE_STARTUP) // RUTGMC ADDITION START
+		to_chat(src, span_warning("The game is still setting up, please try again later."))
+		return // RUTGMC ADDITION END
 
 	update_preview_icon()
 	ui_interact(user)

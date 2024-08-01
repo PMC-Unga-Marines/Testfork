@@ -81,7 +81,7 @@
 
 /datum/action/ability/xeno_action/ready_charge/behemoth_roll
 	name = "Roll"
-	desc = "Toggles Rolling on or off. This can be used to displace talls but won't deal any damage."
+	desc = "Toggles Rolling on or off."
 	charge_type = CHARGE_BEHEMOTH
 	speed_per_step = 0.35
 	steps_for_charge = 4
@@ -229,14 +229,12 @@
 /datum/action/ability/activable/xeno/landslide
 	name = "Landslide"
 	action_icon_state = "landslide"
-	action_icon = 'icons/Xeno/actions/behemoth.dmi'
 	desc = "Rush forward in the selected direction, damaging enemies caught in a wide path."
 	ability_cost = 3 // This is deducted per step taken during the ability.
 	cooldown_duration = 20 SECONDS
 	target_flags = ABILITY_TURF_TARGET
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_LANDSLIDE,
-		KEYBINDING_ALTERNATE = COMSIG_XENOABILITY_CANCEL_LANDSLIDE,
 	)
 	/// Whether this ability is currently active or not.
 	var/ability_active = FALSE
@@ -244,10 +242,6 @@
 	var/current_charges = 1
 	/// The maximum amount of charges we can have.
 	var/maximum_charges = 1
-
-/datum/action/ability/activable/xeno/landslide/alternate_action_activate()
-	if(can_use_ability(null, FALSE, ABILITY_IGNORE_SELECTED_ABILITY))
-		INVOKE_ASYNC(src, PROC_REF(use_ability))
 
 /datum/action/ability/activable/xeno/landslide/give_action(mob/living/L)
 	. = ..()
@@ -327,6 +321,7 @@
 		animate(pixel_y = xeno_owner.pixel_y + (LANDSLIDE_RANGE / 2), time = animation_time / 2, easing = CIRCULAR_EASING|EASE_OUT)
 		animate(pixel_y = initial(xeno_owner.pixel_y), time = animation_time / 2, easing = CIRCULAR_EASING|EASE_IN)
 		return
+	addtimer(CALLBACK(owner, TYPE_PROC_REF(/atom, balloon_alert), owner, "Use [name] again to cancel"), LANDSLIDE_WIND_UP)
 	add_cooldown(LANDSLIDE_WIND_UP)
 	addtimer(CALLBACK(src, PROC_REF(do_charge), owner_turf, direction, charge_damage, which_step), LANDSLIDE_WIND_UP)
 
@@ -412,7 +407,7 @@
 		return
 	which_step = !which_step
 	step(xeno_owner, direction, 1)
-	playsound(owner_turf, SFX_BEHEMOTH_STEP_SOUNDS, 40)
+	playsound(owner_turf, "behemoth_step_sounds", 40)
 	new /obj/effect/temp_visual/behemoth/crack/landslide(owner_turf, direction, which_step)
 	new /obj/effect/temp_visual/behemoth/landslide/dust/charge(owner_turf, direction)
 	addtimer(CALLBACK(src, PROC_REF(do_charge), get_turf(xeno_owner), direction, damage, which_step), LANDSLIDE_STEP_DELAY)
@@ -528,9 +523,9 @@
 		var/obj/structure/reagent_dispensers/fueltank/tank_target = object_target
 		tank_target.explode()
 		return
-	if(istype(object_target, /obj/structure/door/resin))
-		var/obj/structure/door/resin/resin_door = object_target
-		resin_door.open(TRUE, TRUE)
+	if(istype(object_target, /obj/structure/mineral_door/resin))
+		var/obj/structure/mineral_door/resin/resin_door = object_target
+		resin_door.toggle_state()
 		return
 	if(object_target.obj_integrity <= LANDSLIDE_OBJECT_INTEGRITY_THRESHOLD || istype(object_target, /obj/structure/closet))
 		playsound(object_turf, 'sound/effects/meteorimpact.ogg', 30, TRUE)
@@ -586,7 +581,6 @@
 /datum/action/ability/activable/xeno/earth_riser
 	name = "Earth Riser"
 	action_icon_state = "earth_riser"
-	action_icon = 'icons/Xeno/actions/behemoth.dmi'
 	desc = "Raise a pillar of earth at the selected location. This solid structure can be used for defense, and it interacts with other abilities for offensive usage. The pillar can be launched by click-dragging it in a direction. Alternate use destroys active pillars, starting with the oldest one."
 	ability_cost = 20
 	cooldown_duration = 10 SECONDS
@@ -615,8 +609,6 @@
 	. = ..()
 	button.cut_overlay(visual_references[VREF_MUTABLE_EARTH_PILLAR])
 	visual_references[VREF_MUTABLE_EARTH_PILLAR] = null
-	for(var/pillar in active_pillars)
-		UnregisterSignal(pillar, list(COMSIG_QDELETING, COMSIG_XENOABILITY_EARTH_PILLAR_THROW))
 	QDEL_LIST(active_pillars)
 
 /datum/action/ability/activable/xeno/earth_riser/update_button_icon()
@@ -671,10 +663,7 @@
 	if(!target_turf)
 		return
 	var/mob/living/carbon/xenomorph/xeno_owner = owner
-	var/new_pillar = new /obj/structure/earth_pillar(target_turf, xeno_owner, enhanced)
-	RegisterSignal(new_pillar, COMSIG_XENOABILITY_EARTH_PILLAR_THROW, PROC_REF(pillar_thrown))
-	RegisterSignal(new_pillar, COMSIG_QDELETING, PROC_REF(pillar_destroyed))
-	active_pillars += new_pillar
+	active_pillars += new /obj/structure/earth_pillar(target_turf, xeno_owner, enhanced)
 	update_button_icon()
 	if(enhanced)
 		return
@@ -682,20 +671,6 @@
 		if(xeno_owner.issamexenohive(affected_living) || affected_living.stat == DEAD)
 			continue
 		affected_living.knockback(xeno_owner, EARTH_RISER_KNOCKBACK_DISTANCE, EARTH_RISER_KNOCKBACK_SPEED)
-
-///Handles the cooldown when a pillar is actually thrown
-/datum/action/ability/activable/xeno/earth_riser/proc/pillar_thrown(obj/structure/earth_pillar/source)
-	SIGNAL_HANDLER
-	UnregisterSignal(source, COMSIG_XENOABILITY_EARTH_PILLAR_THROW)
-	deltimer(cooldown_timer)
-	cooldown_timer = null
-	add_cooldown()
-
-///removes the pillar from active_pillars
-/datum/action/ability/activable/xeno/earth_riser/proc/pillar_destroyed(obj/structure/earth_pillar/source)
-	SIGNAL_HANDLER
-	UnregisterSignal(source, list(COMSIG_QDELETING, COMSIG_XENOABILITY_EARTH_PILLAR_THROW))
-	active_pillars -= source
 
 /**
  * Changes the maximum amount of Earth Pillars that can be had.
@@ -712,7 +687,7 @@
 		qdel(oldest_pillar)
 	update_button_icon()
 
-
+/* RU TGMC EDIT
 // ***************************************
 // *********** Seismic Fracture
 // ***************************************
@@ -720,7 +695,7 @@
 #define SEISMIC_FRACTURE_ATTACK_RADIUS 3
 #define SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED 5
 #define SEISMIC_FRACTURE_ENHANCED_DELAY 1 SECONDS
-
+RU TGMC EDIT */
 /obj/effect/temp_visual/behemoth/seismic_fracture
 	icon = 'icons/effects/64x64.dmi'
 	icon_state = "seismic_fracture"
@@ -774,36 +749,52 @@
 			pixel_x += 18
 			pixel_y -= 8
 
-/datum/action/ability/xeno_action/seismic_fracture
+
+
+// ***************************************
+// *********** Seismic Fracture
+// ***************************************
+#define SEISMIC_FRACTURE_WIND_UP 1.3 SECONDS
+#define SEISMIC_FRACTURE_RANGE 4
+#define SEISMIC_FRACTURE_ATTACK_RADIUS 2
+#define SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED 5
+#define SEISMIC_FRACTURE_ATTACK_RADIUS_EARTH_PILLAR 2
+#define SEISMIC_FRACTURE_ENHANCED_DELAY 1 SECONDS
+#define SEISMIC_FRACTURE_PARALYZE_DURATION 1 SECONDS
+#define SEISMIC_FRACTURE_DAMAGE_MULTIPLIER 1.2
+#define SEISMIC_FRACTURE_DAMAGE_MECHA_MODIFIER 10
+
+/datum/action/ability/activable/xeno/seismic_fracture
 	name = "Seismic Fracture"
 	action_icon_state = "seismic_fracture"
-	action_icon = 'icons/Xeno/actions/behemoth.dmi'
+	desc = "Blast the earth around the selected location, inflicting heavy damage in a large radius."
 	ability_cost = 50
 	cooldown_duration = 20 SECONDS
+	target_flags = ABILITY_TURF_TARGET
 	keybinding_signals = list(
 		KEYBINDING_NORMAL = COMSIG_XENOABILITY_SEISMIC_FRACTURE,
 	)
 
-/datum/action/ability/xeno_action/seismic_fracture/New(Target)
-	. = ..()
-	desc = "Blast the earth around you, inflicting heavy damage within [SEISMIC_FRACTURE_ATTACK_RADIUS] tiles. Earth Pillars will repeat this ability around them if hit by it."
-
-/datum/action/ability/xeno_action/seismic_fracture/on_cooldown_finish()
-	owner.balloon_alert(owner, "[initial(name)] ready")
+/datum/action/ability/activable/xeno/seismic_fracture/on_cooldown_finish()
+	owner.balloon_alert(owner, "[name] ready")
 	return ..()
 
-/datum/action/ability/xeno_action/seismic_fracture/action_activate()
+/datum/action/ability/activable/xeno/seismic_fracture/use_ability(atom/target)
 	. = ..()
+	if(!line_of_sight(owner, target, SEISMIC_FRACTURE_RANGE))
+		owner.balloon_alert(owner, "Out of range")
+		return
 	var/mob/living/carbon/xenomorph/xeno_owner = owner
 	var/datum/action/ability/xeno_action/ready_charge/behemoth_roll/behemoth_roll_action = xeno_owner.actions_by_path[/datum/action/ability/xeno_action/ready_charge/behemoth_roll]
 	if(behemoth_roll_action?.charge_ability_on)
 		behemoth_roll_action.charge_off()
+	var/target_turf = get_turf(target)
 	var/owner_turf = get_turf(xeno_owner)
 	new /obj/effect/temp_visual/behemoth/stomp/east(owner_turf, owner.dir)
 	new /obj/effect/temp_visual/behemoth/crack(owner_turf, owner.dir)
-	playsound(owner_turf, 'sound/effects/alien/behemoth/stomp.ogg', 30, TRUE)
+	playsound(target_turf, 'sound/effects/alien/behemoth/stomp.ogg', 30, TRUE)
 	var/datum/action/ability/xeno_action/primal_wrath/primal_wrath_action = xeno_owner.actions_by_path[/datum/action/ability/xeno_action/primal_wrath]
-	do_ability(owner_turf, SEISMIC_FRACTURE_WIND_UP, primal_wrath_action?.ability_active)
+	do_ability(target_turf, SEISMIC_FRACTURE_WIND_UP, primal_wrath_action?.ability_active? TRUE : FALSE)
 
 /**
  * Handles the warnings, calling the following procs, as well as any alterations caused by Primal Wrath.
@@ -814,20 +805,20 @@
  * * enhanced: Whether this is enhanced by Primal Wrath or not.
  * * earth_riser: If this proc was called by an Earth Pillar, its attack radius is reduced.
 */
-/datum/action/ability/xeno_action/seismic_fracture/proc/do_ability(turf/target_turf, wind_up, enhanced)
+/datum/action/ability/activable/xeno/seismic_fracture/proc/do_ability(turf/target_turf, wind_up, enhanced, earth_pillar)
 	if(!target_turf)
 		return
-	var/list/turf/turfs_to_attack = filled_turfs(target_turf, SEISMIC_FRACTURE_ATTACK_RADIUS, include_edge = FALSE, bypass_window = TRUE, projectile = TRUE)
+	var/list/turf/turfs_to_attack = filled_turfs(target_turf, earth_pillar? SEISMIC_FRACTURE_ATTACK_RADIUS_EARTH_PILLAR : SEISMIC_FRACTURE_ATTACK_RADIUS, include_edge = FALSE, bypass_window = TRUE, projectile = TRUE)
 	if(!length(turfs_to_attack))
 		owner.balloon_alert(owner, "Unable to use here")
 		return
+	if(wind_up <= 0)
+		do_attack(turfs_to_attack, enhanced, TRUE)
+		return
 	add_cooldown()
 	succeed_activate()
-	if(wind_up <= 0)
-		behemoth_area_attack(owner, turfs_to_attack, enhanced)
-	else
-		do_warning(owner, turfs_to_attack, wind_up)
-		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(behemoth_area_attack), owner, turfs_to_attack, enhanced), wind_up)
+	do_warning(owner, turfs_to_attack, wind_up)
+	addtimer(CALLBACK(src, PROC_REF(do_attack), turfs_to_attack, enhanced), wind_up)
 	if(!enhanced)
 		return
 	new /obj/effect/temp_visual/shockwave/enhanced(get_turf(owner), SEISMIC_FRACTURE_ATTACK_RADIUS, owner.dir)
@@ -845,6 +836,68 @@
 	addtimer(CALLBACK(src, PROC_REF(do_attack_extra), target_turf, extra_turfs, turfs_to_attack, enhanced, SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED, SEISMIC_FRACTURE_ATTACK_RADIUS_ENHANCED - SEISMIC_FRACTURE_ATTACK_RADIUS), wind_up + SEISMIC_FRACTURE_ENHANCED_DELAY)
 
 /**
+ * Checks for any atoms caught in the attack's range, and applies several effects based on the atom's type.
+ * * turfs_to_attack: The turfs affected by this proc.
+ * * enhanced: Whether this is enhanced or not.
+ * * instant: Whether this is done instantly or not.
+*/
+/datum/action/ability/activable/xeno/seismic_fracture/proc/do_attack(list/turf/turfs_to_attack, enhanced, instant)
+	if(!length(turfs_to_attack))
+		return
+	var/mob/living/carbon/xenomorph/xeno_owner = owner
+	var/damage = (xeno_owner.xeno_caste.melee_damage * xeno_owner.xeno_melee_damage_modifier) * SEISMIC_FRACTURE_DAMAGE_MULTIPLIER
+	for(var/turf/target_turf AS in turfs_to_attack)
+		if(isclosedturf(target_turf))
+			continue
+		new /obj/effect/temp_visual/behemoth/crack(target_turf)
+		playsound(target_turf, 'sound/effects/alien/behemoth/seismic_fracture_explosion.ogg', 15)
+		var/attack_vfx = enhanced? /obj/effect/temp_visual/behemoth/seismic_fracture/enhanced : /obj/effect/temp_visual/behemoth/seismic_fracture
+		new attack_vfx(target_turf, enhanced? FALSE : null)
+		for(var/atom/movable/affected_atom AS in target_turf)
+			if(isliving(affected_atom))
+				var/mob/living/affected_living = affected_atom
+				if(xeno_owner.issamexenohive(affected_living) || affected_living.stat == DEAD || CHECK_BITFIELD(affected_living.status_flags, INCORPOREAL|GODMODE))
+					continue
+				affected_living.emote("scream")
+				shake_camera(affected_living, 1, 0.8)
+				affected_living.Paralyze(SEISMIC_FRACTURE_PARALYZE_DURATION)
+				affected_living.apply_damage(damage, BRUTE, blocked = MELEE)
+				if(instant)
+					continue
+				affected_living.layer = ABOVE_MOB_LAYER
+				animate(affected_living, pixel_y = affected_living.pixel_y + 40, time = SEISMIC_FRACTURE_PARALYZE_DURATION / 2, easing = CIRCULAR_EASING|EASE_OUT, flags = ANIMATION_END_NOW)
+				animate(pixel_y = initial(affected_living.pixel_y), time = SEISMIC_FRACTURE_PARALYZE_DURATION / 2, easing = CIRCULAR_EASING|EASE_IN)
+				addtimer(CALLBACK(src, PROC_REF(living_landing), affected_living), SEISMIC_FRACTURE_PARALYZE_DURATION)
+			else if(isearthpillar(affected_atom) || ismecha(affected_atom) || istype(affected_atom, /obj/structure/reagent_dispensers/fueltank))
+				affected_atom.do_jitter_animation()
+				new /obj/effect/temp_visual/behemoth/landslide/hit(affected_atom.loc)
+				playsound(affected_atom.loc, get_sfx("behemoth_earth_pillar_hit"), 40)
+				if(isearthpillar(affected_atom))
+					var/obj/structure/earth_pillar/affected_pillar = affected_atom
+					if(affected_pillar.warning_flashes < initial(affected_pillar.warning_flashes))
+						continue
+					affected_pillar.call_area_attack()
+					do_ability(target_turf, initial(affected_pillar.warning_flashes) * 10, FALSE)
+					continue
+				if(ismecha(affected_atom))
+					var/obj/vehicle/sealed/mecha/affected_mecha = affected_atom
+					affected_mecha.take_damage(damage * SEISMIC_FRACTURE_DAMAGE_MECHA_MODIFIER, MELEE)
+					continue
+				if(istype(affected_atom, /obj/structure/reagent_dispensers/fueltank))
+					var/obj/structure/reagent_dispensers/fueltank/affected_tank = affected_atom
+					affected_tank.explode()
+					continue
+
+/// Living mobs that were previously caught in the attack's radius are subject to a landing effect. Their invincibility is removed, and they receive a reduced amount of damage.
+/datum/action/ability/activable/xeno/seismic_fracture/proc/living_landing(mob/living/affected_living)
+	var/mob/living/carbon/xenomorph/xeno_owner = owner
+	affected_living.layer = initial(affected_living.layer)
+	var/landing_damage = (xeno_owner.xeno_caste.melee_damage * xeno_owner.xeno_melee_damage_modifier) / 2
+	affected_living.apply_damage(landing_damage, BRUTE, blocked = MELEE)
+	//playsound(affected_living.loc, 'sound/effects/alien/behemoth/seismic_fracture_landing.ogg', 10, TRUE)
+	new /obj/effect/temp_visual/behemoth/stomp(affected_living.loc)
+
+/**
  * Handles the additional attacks caused by Primal Wrath. These are done iteratively rather than instantly, with a delay inbetween.
  * * origin_turf: The starting turf.
  * * extra_turfs: Any additional turfs that should be handled.
@@ -853,7 +906,7 @@
  * * range: The range to cover.
  * * iteration: The current iteration.
 */
-/datum/action/ability/xeno_action/seismic_fracture/proc/do_attack_extra(turf/origin_turf, list/turf/extra_turfs, list/turf/excepted_turfs, enhanced, range, iteration)
+/datum/action/ability/activable/xeno/seismic_fracture/proc/do_attack_extra(turf/origin_turf, list/turf/extra_turfs, list/turf/excepted_turfs, enhanced, range, iteration)
 	if(!origin_turf || !range || !iteration || iteration > range)
 		return
 	var/list/turfs_to_attack = list()
@@ -866,12 +919,11 @@
 			if(!line_of_sight(origin_turf, turf_to_check) || LinkBlocked(origin_turf, turf_to_check, TRUE, TRUE))
 				continue
 			extra_turfs += turf_to_check
-	behemoth_area_attack(owner, turfs_to_attack, enhanced)
+	do_attack(turfs_to_attack, enhanced)
 	extra_turfs -= turfs_to_attack
 	excepted_turfs += turfs_to_attack
 	iteration++
 	addtimer(CALLBACK(src, PROC_REF(do_attack_extra), origin_turf, extra_turfs, excepted_turfs, enhanced, range, iteration), SEISMIC_FRACTURE_ENHANCED_DELAY)
-
 
 // ***************************************
 // *********** Primal Wrath
@@ -882,7 +934,7 @@
 #define PRIMAL_WRATH_SPEED_BONUS -0.3
 #define PRIMAL_WRATH_DECAY_MULTIPLIER 1.2
 #define PRIMAL_WRATH_ACTIVE_DECAY_DIVISION 40
-#define PRIMAL_WRATH_GAIN_MULTIPLIER 0.3
+//#define PRIMAL_WRATH_GAIN_MULTIPLIER 0.3 //RUTGMC EDIT
 #define PRIMAL_WRATH_LANDSLIDE_CHARGES 3
 
 /particles/primal_wrath
@@ -923,7 +975,6 @@
 /datum/action/ability/xeno_action/primal_wrath
 	name = "Primal Wrath"
 	action_icon_state = "primal_wrath"
-	action_icon = 'icons/Xeno/actions/behemoth.dmi'
 	desc = "Unleash your wrath. Enhances your abilities, changing their functionality and allowing them to apply a damage over time debuff."
 	cooldown_duration = 1 SECONDS
 	keybind_flags = ABILITY_KEYBIND_USE_ABILITY|ABILITY_IGNORE_SELECTED_ABILITY
@@ -948,12 +999,14 @@
 	block_overlay = new(null, src)
 	owner.vis_contents += block_overlay
 	START_PROCESSING(SSprocessing, src)
-	RegisterSignals(owner, list(COMSIG_MOB_DEATH, COMSIG_XENOMORPH_EVOLVED, COMSIG_XENOMORPH_DEEVOLVED), PROC_REF(stop_ability))
+	RegisterSignals(owner, list(COMSIG_QDELETING, COMSIG_MOB_DEATH, COMSIG_XENOMORPH_EVOLVED, COMSIG_XENOMORPH_DEEVOLVED), PROC_REF(stop_ability))
 	RegisterSignals(owner, list(COMSIG_XENOMORPH_BRUTE_DAMAGE, COMSIG_XENOMORPH_BURN_DAMAGE), PROC_REF(taking_damage))
 
+/datum/action/ability/xeno_action/primal_wrath/remove_action(mob/living/L)
+	. = ..()
+	stop_ability()
+
 /datum/action/ability/xeno_action/primal_wrath/process()
-	if(!owner)
-		return PROCESS_KILL
 	var/mob/living/carbon/xenomorph/xeno_owner = owner
 	if(xeno_owner.hivenumber == XENO_HIVE_FALLEN)
 		if(xeno_owner.wrath_stored < xeno_owner.xeno_caste.wrath_max)
@@ -1044,8 +1097,8 @@
 		var/resolve_time = 0.2 SECONDS
 		animate(floor_plane.get_filter("primal_wrath"), size = 0, time = resolve_time, flags = ANIMATION_PARALLEL)
 		animate(world_plane.get_filter("primal_wrath"), size = 0, time = resolve_time, flags = ANIMATION_PARALLEL)
-		addtimer(CALLBACK(floor_plane, TYPE_PROC_REF(/datum, remove_filter), "primal_wrath"), resolve_time)
-		addtimer(CALLBACK(world_plane, TYPE_PROC_REF(/datum, remove_filter), "primal_wrath"), resolve_time)
+		addtimer(CALLBACK(floor_plane, TYPE_PROC_REF(/atom, remove_filter), "primal_wrath"), resolve_time)
+		addtimer(CALLBACK(world_plane, TYPE_PROC_REF(/atom, remove_filter), "primal_wrath"), resolve_time)
 		return
 	addtimer(CALLBACK(src, PROC_REF(ability_check), affected_living, xeno_source), 0.1 SECONDS)
 
@@ -1067,7 +1120,7 @@
 */
 /datum/action/ability/xeno_action/primal_wrath/proc/taking_damage(datum/source, amount, list/amount_mod)
 	SIGNAL_HANDLER
-	if(amount <= 0 || owner.stat || owner.lying_angle)
+	if(amount <= 0 || owner.stat) //RUTGMC EDIT
 		return
 	var/mob/living/carbon/xenomorph/xeno_owner = owner
 	if(ability_active)
@@ -1118,7 +1171,7 @@
 	earth_riser_action?.cooldown_duration = EARTH_RISER_PRIMAL_WRATH_COOLDOWN
 	earth_riser_action?.change_maximum_pillars()
 	earth_riser_action?.clear_cooldown()
-	var/datum/action/ability/xeno_action/seismic_fracture/seismic_fracture_action = xeno_owner.actions_by_path[/datum/action/ability/xeno_action/seismic_fracture]
+	var/datum/action/ability/activable/xeno/seismic_fracture/seismic_fracture_action = xeno_owner.actions_by_path[/datum/action/ability/activable/xeno/seismic_fracture]
 	seismic_fracture_action?.clear_cooldown()
 	RegisterSignal(xeno_owner, COMSIG_ABILITY_SUCCEED_ACTIVATE, PROC_REF(change_cost))
 
@@ -1137,6 +1190,8 @@
 // ***************************************
 #define EARTH_PILLAR_SPREAD_RADIUS 2
 #define EARTH_PILLAR_SPREAD_DAMAGE_MULTIPLIER 1.2
+
+
 
 /particles/earth_pillar
 	icon = 'icons/effects/particles/generic_particles.dmi'
@@ -1234,13 +1289,21 @@
 	animate(alpha = 0, time = 0.6 SECONDS)
 	QDEL_NULL_IN(src, particle_holder, 1.6 SECONDS)
 	do_jitter_animation(jitter_loops = 5)
-	RegisterSignals(src, list(COMSIG_ATOM_BULLET_ACT, COMSIG_ATOM_EX_ACT, COMSIG_ATOM_ATTACK_HAND, COMSIG_ATOM_ATTACK_HAND_ALTERNATE, COMSIG_ATOM_ATTACKBY), PROC_REF(call_update_icon_state))
+	RegisterSignals(src, list(COMSIG_ATOM_BULLET_ACT, COMSIG_ATOM_ATTACK_HAND, COMSIG_ATOM_ATTACK_HAND_ALTERNATE, COMSIG_ATOM_ATTACKBY), PROC_REF(call_update_icon_state))
 
 /obj/structure/earth_pillar/Destroy()
 	playsound(loc, 'sound/effects/alien/behemoth/earth_pillar_destroyed.ogg', 40, TRUE)
 	new /obj/effect/temp_visual/behemoth/earth_pillar/broken(loc)
+	var/datum/action/ability/activable/xeno/earth_riser/earth_riser_action = xeno_owner?.actions_by_path[/datum/action/ability/activable/xeno/earth_riser]
+	if(earth_riser_action && (src in earth_riser_action.active_pillars))
+		earth_riser_action.active_pillars -= src
 	xeno_owner = null
 	return ..()
+
+/// Calls update_appearance, this exists to discard the arguments we get from the signals.
+/obj/structure/earth_pillar/proc/call_update_icon_state()
+	SIGNAL_HANDLER
+	update_appearance()
 
 /obj/structure/earth_pillar/update_icon_state()
 	. = ..()
@@ -1256,35 +1319,35 @@
 
 /obj/structure/earth_pillar/attacked_by(obj/item/I, mob/living/user, def_zone)
 	. = ..()
-	playsound(src, SFX_BEHEMOTH_EARTH_PILLAR_HIT, 40)
+	playsound(src, get_sfx("behemoth_earth_pillar_hit"), 40)
 	new /obj/effect/temp_visual/behemoth/landslide/hit(get_turf(src))
 
 // Attacking an Earth Pillar as a xeno has a few possible interactions, based on intent:
 // - Harm intent will reduce a counter in this structure. When the counter hits zero, the structure is destroyed, meaning it is much easier to break it as a xeno.
 // - Help intent as a Behemoth will trigger an easter egg. Does nothing, just fluff.
-/obj/structure/earth_pillar/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/structure/earth_pillar/attack_alien(mob/living/carbon/xenomorph/xeno_user, isrightclick = FALSE)
 	var/current_turf = get_turf(src)
-	switch(xeno_attacker.a_intent)
+	switch(xeno_user.a_intent)
 		if(INTENT_DISARM, INTENT_GRAB, INTENT_HARM)
 			if(attacks_to_destroy <= 1)
-				xeno_attacker.do_attack_animation(src)
-				xeno_attacker.balloon_alert(xeno_attacker, "Destroyed")
+				xeno_user.do_attack_animation(src)
+				xeno_user.balloon_alert(xeno_user, "Destroyed")
 				new /obj/effect/temp_visual/behemoth/landslide/hit(current_turf)
 				qdel(src)
 				return TRUE
 			attacks_to_destroy--
-			xeno_attacker.do_attack_animation(src)
+			xeno_user.do_attack_animation(src)
 			do_jitter_animation(jitter_loops = 1)
-			playsound(src, SFX_BEHEMOTH_EARTH_PILLAR_HIT, 40)
-			xeno_attacker.balloon_alert(xeno_attacker, "Attack [attacks_to_destroy] more time(s) to destroy")
+			playsound(src, get_sfx("behemoth_earth_pillar_hit"), 40)
+			xeno_user.balloon_alert(xeno_user, "Attack [attacks_to_destroy] more time(s) to destroy")
 			new /obj/effect/temp_visual/behemoth/landslide/hit(current_turf)
 			return TRUE
 		if(INTENT_HELP)
-			if(isxenobehemoth(xeno_attacker))
-				xeno_attacker.do_attack_animation(src)
+			if(isxenobehemoth(xeno_user))
+				xeno_user.do_attack_animation(src)
 				do_jitter_animation(jitter_loops = 1)
 				playsound(src, 'sound/effects/alien/behemoth/earth_pillar_eating.ogg', 30, TRUE)
-				xeno_attacker.visible_message(span_xenowarning("\The [xeno_attacker] eats away at the [src.name]!"), \
+				xeno_user.visible_message(span_xenowarning("\The [xeno_user] eats away at the [src.name]!"), \
 				span_xenonotice(pick(
 					"We eat away at the stone. It tastes good, as expected of our primary diet.",
 					"Mmmmm... Delicious rock. A fitting meal for the hardiest of creatures.",
@@ -1300,13 +1363,8 @@
 		else return FALSE
 
 /obj/structure/earth_pillar/ex_act(severity)
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-		if(EXPLODE_HEAVY)
-			take_damage(max_integrity / 2)
-		if(EXPLODE_LIGHT)
-			take_damage(max_integrity / 3)
+	. = ..()
+	update_icon_state()
 
 // When clickdragging an Earth Pillar, it fires it as a projectile to whatever we clickdragged it to.
 /obj/structure/earth_pillar/MouseDrop(atom/over_atom)
@@ -1318,24 +1376,20 @@
 	UnregisterSignal(xeno_owner, COMSIG_QDELETING)
 	xeno_owner = null
 
-/// Calls update_appearance, this exists to discard the arguments we get from the signals.
-/obj/structure/earth_pillar/proc/call_update_icon_state()
-	SIGNAL_HANDLER
-	update_appearance()
-
 /// Deletes the pillar and creates a projectile on the same tile, to be fired at the target atom.
 /obj/structure/earth_pillar/proc/throw_pillar(atom/target_atom, landslide)
 	if(!isxeno(usr) || !in_range(src, usr) || target_atom == src || warning_flashes < initial(warning_flashes))
 		return
-	SEND_SIGNAL(src, COMSIG_XENOABILITY_EARTH_PILLAR_THROW)
 	var/source_turf = get_turf(src)
-	playsound(source_turf, SFX_BEHEMOTH_EARTH_PILLAR_HIT, 40)
+	playsound(source_turf, get_sfx("behemoth_earth_pillar_hit"), 40)
 	new /obj/effect/temp_visual/behemoth/landslide/hit(source_turf)
+	var/datum/action/ability/activable/xeno/earth_riser/earth_riser_action = xeno_owner?.actions_by_path[/datum/action/ability/activable/xeno/earth_riser]
+	earth_riser_action?.add_cooldown()
 	qdel(src)
 	var/datum/ammo/xeno/earth_pillar/projectile = landslide? GLOB.ammo_list[/datum/ammo/xeno/earth_pillar/landslide] : GLOB.ammo_list[/datum/ammo/xeno/earth_pillar]
 	var/obj/projectile/new_projectile = new /obj/projectile(source_turf)
 	new_projectile.generate_bullet(projectile)
-	new_projectile.fire_at(get_turf(target_atom), usr, source_turf, new_projectile.ammo.max_range)
+	new_projectile.fire_at(get_turf(target_atom), usr, null, new_projectile.ammo.max_range, loc_override = source_turf)
 
 /// Seismic Fracture (as in the ability) has a special interaction with any Earth Pillars caught in its attack range.
 /// Those Earth Pillars will reflect the same attack in a similar range around it, destroying itself afterwards.
@@ -1358,36 +1412,36 @@
 	icon_state = "earth_pillar"
 	ping = null
 	bullet_color = COLOR_LIGHT_ORANGE
-	ammo_behavior_flags = AMMO_XENO|AMMO_SKIPS_ALIENS
+	flags_ammo_behavior = AMMO_XENO|AMMO_SKIPS_ALIENS
 	shell_speed = 1
 	max_range = 10
 	damage_falloff = 0
 	damage_type = BRUTE
 	armor_type = MELEE
 
-/datum/ammo/xeno/earth_pillar/do_at_max_range(turf/target_turf, obj/projectile/proj)
-	return rock_broke(target_turf, proj)
+/datum/ammo/xeno/earth_pillar/do_at_max_range(turf/hit_turf, obj/projectile/proj)
+	return rock_broke(hit_turf, proj)
 
-/datum/ammo/xeno/earth_pillar/on_hit_turf(turf/target_turf, obj/projectile/proj)
-	return rock_broke(target_turf, proj)
+/datum/ammo/xeno/earth_pillar/on_hit_turf(turf/hit_turf, obj/projectile/proj)
+	return rock_broke(hit_turf, proj)
 
-/datum/ammo/xeno/earth_pillar/on_hit_obj(obj/target_obj, obj/projectile/proj)
-	if(istype(target_obj, /obj/structure/reagent_dispensers/fueltank))
-		var/obj/structure/reagent_dispensers/fueltank/hit_tank = target_obj
+/datum/ammo/xeno/earth_pillar/on_hit_obj(obj/hit_object, obj/projectile/proj)
+	if(istype(hit_object, /obj/structure/reagent_dispensers/fueltank))
+		var/obj/structure/reagent_dispensers/fueltank/hit_tank = hit_object
 		hit_tank.explode()
-	if(ishitbox(target_obj) || ismecha(target_obj)) // These don't hit the vehicles, but rather their hitboxes, so isarmored will not work here
-		return on_hit_anything(get_turf(target_obj), proj)
-	return rock_broke(get_turf(target_obj), proj)
+	if(ishitbox(hit_object) || ismecha(hit_object)) // These don't hit the vehicles, but rather their hitboxes, so isarmored will not work here
+		return on_hit_anything(get_turf(hit_object), proj)
+	return rock_broke(get_turf(hit_object), proj)
 
-/datum/ammo/xeno/earth_pillar/on_hit_mob(mob/target_mob, obj/projectile/proj)
-	if(!isxeno(proj.firer) || !isliving(target_mob))
+/datum/ammo/xeno/earth_pillar/on_hit_mob(mob/hit_mob, obj/projectile/proj)
+	if(!isxeno(proj.firer) || !isliving(hit_mob))
 		return
 	var/mob/living/carbon/xenomorph/xeno_firer = proj.firer
-	var/mob/living/hit_living = target_mob
+	var/mob/living/hit_living = hit_mob
 	if(xeno_firer.issamexenohive(hit_living) || hit_living.stat == DEAD)
-		return on_hit_anything(get_turf(target_mob), proj)
+		return on_hit_anything(get_turf(hit_mob), proj)
 	step_away(hit_living, proj, 1, 1)
-	return on_hit_anything(get_turf(target_mob), proj)
+	return on_hit_anything(get_turf(hit_mob), proj)
 
 /// VFX + SFX for when the rock doesn't hit anything.
 /datum/ammo/xeno/earth_pillar/proc/rock_broke(turf/hit_turf, obj/projectile/proj)
@@ -1401,15 +1455,15 @@
 	var/list/turf/affected_turfs = filled_turfs(hit_turf, EARTH_PILLAR_SPREAD_RADIUS, include_edge = FALSE, bypass_window = TRUE, projectile = TRUE)
 	behemoth_area_attack(proj.firer, affected_turfs, damage_multiplier = EARTH_PILLAR_SPREAD_DAMAGE_MULTIPLIER)
 
-/datum/ammo/xeno/earth_pillar/landslide/do_at_max_range(turf/target_turf, obj/projectile/proj)
-	return on_hit_anything(target_turf, proj)
+/datum/ammo/xeno/earth_pillar/landslide/do_at_max_range(turf/hit_turf, obj/projectile/proj)
+	return on_hit_anything(hit_turf, proj)
 
-/datum/ammo/xeno/earth_pillar/landslide/on_hit_turf(turf/target_turf, obj/projectile/proj)
-	return on_hit_anything(target_turf, proj)
+/datum/ammo/xeno/earth_pillar/landslide/on_hit_turf(turf/hit_turf, obj/projectile/proj)
+	return on_hit_anything(hit_turf, proj)
 
-/datum/ammo/xeno/earth_pillar/landslide/on_hit_obj(obj/target_obj, obj/projectile/proj)
+/datum/ammo/xeno/earth_pillar/landslide/on_hit_obj(obj/hit_object, obj/projectile/proj)
 	. = ..()
-	return on_hit_anything(get_turf(target_obj), proj)
+	return on_hit_anything(get_turf(hit_object), proj)
 
 
 // ***************************************
@@ -1449,7 +1503,7 @@
 			else if(isearthpillar(affected_atom) || isvehicle(affected_atom) || ishitbox(affected_atom) || istype(affected_atom, /obj/structure/reagent_dispensers/fueltank))
 				affected_atom.do_jitter_animation()
 				new /obj/effect/temp_visual/behemoth/landslide/hit(affected_atom.loc)
-				playsound(affected_atom.loc, SFX_BEHEMOTH_EARTH_PILLAR_HIT, 40)
+				playsound(affected_atom.loc, get_sfx("behemoth_earth_pillar_hit"), 40)
 				if(isearthpillar(affected_atom))
 					var/obj/structure/earth_pillar/affected_pillar = affected_atom
 					if(affected_pillar.warning_flashes < initial(affected_pillar.warning_flashes))
@@ -1461,11 +1515,11 @@
 					addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(behemoth_area_attack), xeno_owner, spread_turfs, enhanced), wind_up_duration)
 					continue
 				if(isvehicle(affected_atom) || ishitbox(affected_atom))
-					var/obj/obj_victim = affected_atom
+					var/obj/vehicle/veh_victim = affected_atom
 					var/damage_add = 0
-					if(ismecha(obj_victim))
+					if(ismecha(veh_victim))
 						damage_add = 9.5
-					obj_victim.take_damage(attack_damage * (AREA_ATTACK_DAMAGE_VEHICLE_MODIFIER + damage_add), MELEE)
+					veh_victim.take_damage(attack_damage * (AREA_ATTACK_DAMAGE_VEHICLE_MODIFIER + damage_add), MELEE)
 					continue
 				if(istype(affected_atom, /obj/structure/reagent_dispensers/fueltank))
 					var/obj/structure/reagent_dispensers/fueltank/affected_tank = affected_atom

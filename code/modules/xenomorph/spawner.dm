@@ -1,11 +1,11 @@
-
 /obj/structure/xeno/spawner
+	icon = 'icons/Xeno/2x2building.dmi.dmi'
+	bound_width = 64
+	bound_height = 64
+	plane = FLOOR_PLANE
 	name = "spawner"
 	desc = "A slimy, oozy resin bed filled with foul-looking egg-like ...things."
-	icon = 'icons/Xeno/3x3building.dmi'
 	icon_state = "spawner"
-	bound_width = 96
-	bound_height = 96
 	max_integrity = 500
 	resistance_flags = UNACIDABLE | DROPSHIP_IMMUNE
 	xeno_structure_flags = IGNORE_WEED_REMOVAL | CRITICAL_STRUCTURE
@@ -21,6 +21,7 @@
 	SSspawning.registerspawner(src, INFINITY, GLOB.xeno_ai_spawnable, 0, 0, CALLBACK(src, PROC_REF(on_spawn)))
 	SSspawning.spawnerdata[src].required_increment = max(45 SECONDS, 3 MINUTES - SSmonitor.maximum_connected_players_count * SPAWN_RATE_PER_PLAYER)/SSspawning.wait
 	SSspawning.spawnerdata[src].max_allowed_mobs = max(2, MAX_SPAWNABLE_MOB_PER_PLAYER * SSmonitor.maximum_connected_players_count)
+	set_light(2, 2, LIGHT_COLOR_GREEN)
 	for(var/turfs in RANGE_TURFS(XENO_SILO_DETECTION_RANGE, src))
 		RegisterSignal(turfs, COMSIG_ATOM_ENTERED, PROC_REF(spawner_proxy_alert))
 	update_minimap_icon()
@@ -41,7 +42,7 @@
 			. += span_info("It appears in good shape, pulsating healthily.")
 
 
-/obj/structure/xeno/spawner/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, effects = TRUE, attack_dir, armour_penetration = 0, mob/living/blame_mob)
+/obj/structure/xeno/spawner/take_damage(damage_amount, damage_type, damage_flag, sound_effect, attack_dir, armour_penetration)
 	. = ..()
 	spawner_damage_alert()
 
@@ -94,7 +95,7 @@
 ///Change minimap icon if spawner is under attack or not
 /obj/structure/xeno/spawner/proc/update_minimap_icon()
 	SSminimaps.remove_marker(src)
-	SSminimaps.add_marker(src, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, "spawner[warning ? "_warn" : "_passive"]", ABOVE_FLOAT_LAYER))
+	SSminimaps.add_marker(src, MINIMAP_FLAG_XENO, image('icons/UI_icons/map_blips.dmi', null, "spawner[warning ? "_warn" : "_passive"]", , ABOVE_FLOAT_LAYER)) // RU TGMC edit - map blips
 
 /obj/structure/xeno/spawner/proc/on_spawn(list/squad)
 	if(!isxeno(squad[length(squad)]))

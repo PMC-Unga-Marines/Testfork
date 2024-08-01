@@ -105,23 +105,6 @@
 /obj/effect/overlay/blinking_laser/napalm
 	icon_state = "napalm_target"
 
-/obj/effect/overlay/blinking_laser/monarch
-	icon_state = "monarch_target"
-
-/obj/effect/overlay/blinking_laser/swansong
-	icon_state = "swansong_target"
-
-// Bombs, then bomblets
-
-/obj/effect/overlay/blinking_laser/bomb
-	icon_state = "bomb_target"
-
-/obj/effect/overlay/blinking_laser/bomb_fat
-	icon_state = "fat_bomb_target"
-
-/obj/effect/overlay/blinking_laser/bomblet
-	icon_state = "bomblet_target"
-
 //Marine-only visuals. Prediction HUD, etc. Does not show without marine headset
 /obj/effect/overlay/blinking_laser/marine
 	name = "prediction matrix"
@@ -155,9 +138,7 @@
 	. = ..()
 	dir = pick(CARDINAL_DIRS) //Randomises type, for variation
 
-
-//Drop pod.
-/obj/effect/overlay/blinking_laser/marine/pod_warning
+/obj/effect/overlay/blinking_laser/marine/pod_warning //Used to indicate incoming POD
 	name = "pod warning"
 	icon = 'icons/effects/lases.dmi'
 	icon_state_on = "pod_laser"
@@ -166,7 +147,6 @@
 	var/image/new_hud_list = hud_list[SQUAD_HUD_TERRAGOV]
 	if(!new_hud_list)
 		return
-
 	new_hud_list.icon = 'icons/effects/lases.dmi'
 	new_hud_list.icon_state = icon_state_on
 	hud_list[SQUAD_HUD_TERRAGOV] = new_hud_list
@@ -274,16 +254,16 @@
 	if(ishuman(user))
 		. += span_danger("It's a laser to designate CAS targets, get away from it!")
 
-/obj/effect/overlay/temp/laser_target/ob //This is a subtype of CAS so that CIC gets cameras on the lase
+/obj/effect/overlay/temp/laser_target/OB //This is a subtype of CAS so that CIC gets cameras on the lase
 	icon_state = "laser_target2"
 	lasertype = LASER_TYPE_OB
 
-/obj/effect/overlay/temp/laser_target/ob/Initialize(mapload, effect_duration, named, assigned_squad)
+/obj/effect/overlay/temp/laser_target/OB/Initialize(mapload, effect_duration, named, assigned_squad)
 	. = ..()
 	linked_cam = new(src, name)
 	GLOB.active_laser_targets += src
 
-/obj/effect/overlay/temp/laser_target/ob/Destroy()
+/obj/effect/overlay/temp/laser_target/OB/Destroy()
 	GLOB.active_laser_targets -= src
 	return ..()
 
@@ -414,4 +394,4 @@
 	/// When detected to be unused it gets set to world.time, after a while it gets removed
 	var/unused = 0
 	/// Overlays which go unused for 2 minutes get cleaned up
-	var/cache_expiration = 2 MINUTES
+	var/cache_expiration = 2 MINUTES 

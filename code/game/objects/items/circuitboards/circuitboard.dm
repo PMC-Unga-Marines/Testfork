@@ -3,12 +3,12 @@
 	name = "Circuit board"
 	icon = 'icons/obj/items/circuitboards.dmi'
 	icon_state = "id_mod"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/engineering_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/engineering_right.dmi',
 	)
-	worn_icon_state = "electronic"
-	atom_flags = CONDUCT
+	item_state = "electronic"
+	flags_atom = CONDUCT
 	var/build_path = null
 
 //Called when the circuitboard is used to contruct a new machine.
@@ -58,10 +58,6 @@
 	var/last_configurator = null
 	var/locked = 1
 
-/obj/item/circuitboard/tadpole
-	name = "navigation electronics"
-	desc = "A circuit board used for navigation computers"
-	icon_state = "tadpole"
 
 /obj/item/circuitboard/airlock/interact(mob/user)
 	. = ..()

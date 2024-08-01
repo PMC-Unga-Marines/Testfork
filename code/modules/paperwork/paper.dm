@@ -8,16 +8,16 @@
 	gender = PLURAL
 	icon = 'icons/obj/items/paper.dmi'
 	icon_state = "paper"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/items/civilian_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/items/civilian_right.dmi',
 	)
-	worn_icon_state = "paper"
+	item_state = "paper"
 	w_class = WEIGHT_CLASS_TINY
 	throw_range = 1
 	throw_speed = 1
-	equip_slot_flags = ITEM_SLOT_HEAD
-	armor_protection_flags = HEAD
+	flags_equip_slot = ITEM_SLOT_HEAD
+	flags_armor_protection = HEAD
 	attack_verb = list("bapped")
 
 	var/info		//What's actually written on the paper.
@@ -65,10 +65,10 @@
 		paper_asset.send(user)
 		if(!(isobserver(user) || ishuman(user) || issilicon(user)))
 			// Show scrambled paper if they aren't a ghost, human, or silicone.
-			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
+			usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
 			onclose(user, "[name]")
 		else
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info][stamps]</BODY></HTML>", "window=[name]")
+			user << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info][stamps]</BODY></HTML>", "window=[name]")
 			onclose(user, "[name]")
 	else
 		. += span_notice("It is too far away to read.")
@@ -92,11 +92,11 @@
 	else //cyborg or AI not seeing through a camera
 		dist = get_dist(src, user)
 	if(dist < 2)
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info][stamps]</BODY></HTML>", "window=[name]")
+		usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info][stamps]</BODY></HTML>", "window=[name]")
 		onclose(usr, "[name]")
 	else
 		//Show scrambled paper
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
+		usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
 		onclose(usr, "[name]")
 
 
@@ -105,26 +105,22 @@
 		user.visible_message(span_notice("You show the paper to [M]. "), \
 			span_notice(" [user] holds up a paper and shows it to [M]. "))
 		examine(M)
-		return
 
-	if(user.zone_selected == "mouth") // lipstick wiping
-		if(!ishuman(M))
-			return
-		var/mob/living/carbon/human/H = M
-		if(H == user)
-			to_chat(user, span_notice("You wipe off the lipstick with [src]."))
-			H.makeup_style = null
-			H.update_body()
-			return
-
-		user.visible_message(span_warning("[user] begins to wipe [H]'s lipstick off with \the [src]."), \
-							span_notice("You begin to wipe off [H]'s lipstick."))
-		if(!do_after(user, 10, NONE, H, BUSY_ICON_FRIENDLY))
-			return
-		user.visible_message(span_notice("[user] wipes [H]'s lipstick off with \the [src]."), \
-							span_notice("You wipe off [H]'s lipstick."))
-		H.makeup_style = null
-		H.update_body()
+	else if(user.zone_selected == "mouth") // lipstick wiping
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H == user)
+				to_chat(user, span_notice("You wipe off the lipstick with [src]."))
+				H.lip_style = null
+				H.update_body()
+			else
+				user.visible_message(span_warning("[user] begins to wipe [H]'s lipstick off with \the [src]."), \
+									span_notice("You begin to wipe off [H]'s lipstick."))
+				if(do_after(user, 10, NONE, H, BUSY_ICON_FRIENDLY))
+					user.visible_message(span_notice("[user] wipes [H]'s lipstick off with \the [src]."), \
+										span_notice("You wipe off [H]'s lipstick."))
+					H.lip_style = null
+					H.update_body()
 
 /obj/item/paper/proc/addtofield(id, text, links = 0)
 	var/locid = 0
@@ -197,7 +193,7 @@
 
 
 /obj/item/paper/proc/openhelp(mob/user as mob)
-	user << browse({"<HTML><HEAD><TITLE>Pen Help</TITLE></HEAD>
+	user << browse({"<html><meta charset='UTF-8'><HEAD><TITLE>Pen Help</TITLE></HEAD>
 	<BODY>
 		<b><center>Crayon&Pen commands</center></b><br>
 		<br>
@@ -276,7 +272,7 @@
 			info += t // Oh, he wants to edit to the end of the file, let him.
 			updateinfolinks()
 
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
+		usr << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
 
 		playsound(loc, pick('sound/items/write1.ogg','sound/items/write2.ogg'), 15, 1)
 
@@ -285,8 +281,6 @@
 
 /obj/item/paper/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/paper) || istype(I, /obj/item/photo))
 		if(istype(I, /obj/item/paper/carbon))
@@ -309,7 +303,7 @@
 		user.put_in_hands(B)
 
 	else if(istype(I, /obj/item/tool/pen) || istype(I, /obj/item/toy/crayon))
-		user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]")
+		user << browse("<html><meta charset='UTF-8'><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[info_links][stamps]</BODY></HTML>", "window=[name]")
 
 	else if(istype(I, /obj/item/tool/stamp))
 		if((!in_range(src, user) && loc != user && !(istype(loc, /obj/item/clipboard)) && loc.loc != user && user.get_active_held_item() != I))
@@ -390,7 +384,7 @@ then, for every time you included a field, increment fields. */
 
 /obj/item/paper/flag
 	icon_state = "flag_neutral"
-	worn_icon_state = "paper"
+	item_state = "paper"
 	anchored = TRUE
 
 /obj/item/paper/jobs
@@ -401,7 +395,7 @@ then, for every time you included a field, increment fields. */
 	name = "photo"
 	icon_state = "photo"
 	var/photo_id = 0
-	worn_icon_state = "paper"
+	item_state = "paper"
 
 /obj/item/paper/sop
 	name = "paper- 'Standard Operating Procedure'"
@@ -440,7 +434,6 @@ then, for every time you included a field, increment fields. */
 
 /obj/item/paper/crumpled/update_icon_state()
 	return
-
 
 /obj/item/paper/crumpled/bloody/
 	icon_state = "scrap_bloodied"

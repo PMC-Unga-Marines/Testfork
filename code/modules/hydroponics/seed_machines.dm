@@ -75,8 +75,6 @@
 
 /obj/machinery/botany/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/seeds))
 		if(seed)

@@ -129,7 +129,7 @@
 		output += "</table></div><div id='top'><b>Search:</b> <input type='text' id='filter' value='' style='width:70%;' onkeyup='updateSearch();'></div></body>"
 	if(QDELETED(usr))
 		return
-	usr << browse("<!DOCTYPE html><html>[jointext(output, "")]</html>","window=editrights;size=1000x650")
+	usr << browse("<!DOCTYPE html><html><meta charset='UTF-8'>[jointext(output, "")]</html>","window=editrights;size=1000x650")
 
 /datum/admins/proc/edit_rights_topic(list/href_list)
 	if(!check_rights(R_PERMISSIONS))
@@ -420,14 +420,14 @@
 			return
 		qdel(query_change_rank_flags)
 		var/log_message = "Permissions of [rank_name] changed from[rights2text(old_flags," ")][rights2text(old_exclude_flags," ", "-")][rights2text(old_can_edit_flags," ", "*")] to[rights2text(new_flags," ")][rights2text(new_exclude_flags," ", "-")][rights2text(new_can_edit_flags," ", "*")]"
-		var/datum/db_query/query_change_rank_log_flags = SSdbcore.NewQuery({"
+		var/datum/db_query/query_change_rank_flags_log = SSdbcore.NewQuery({"
 			INSERT INTO [format_table_name("admin_log")] (datetime, round_id, adminckey, adminip, operation, target, log)
 			VALUES (:time, :round_id, :adminckey, INET_ATON(:adminip), 'change rank flags', :rank_name, :log)
 		"}, list("time" = SQLtime(), "round_id" = "[GLOB.round_id]", "adminckey" = usr.ckey, "adminip" = usr.client.address, "rank_name" = rank_name, "log" = log_message))
-		if(!query_change_rank_log_flags.warn_execute())
-			qdel(query_change_rank_log_flags)
+		if(!query_change_rank_flags_log.warn_execute())
+			qdel(query_change_rank_flags_log)
 			return
-		qdel(query_change_rank_log_flags)
+		qdel(query_change_rank_flags_log)
 		for(var/datum/admin_rank/R in GLOB.admin_ranks)
 			if(R.name != D.rank.name)
 				continue

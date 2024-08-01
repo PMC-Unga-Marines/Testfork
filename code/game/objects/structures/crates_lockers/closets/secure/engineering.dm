@@ -9,7 +9,8 @@
 	icon_off = "secureceoff"
 
 
-/obj/structure/closet/secure_closet/engineering_chief/PopulateContents()
+/obj/structure/closet/secure_closet/engineering_chief/Initialize(mapload)
+	. = ..()
 	new /obj/item/armor_module/storage/uniform/webbing(src)
 	new /obj/item/armor_module/storage/uniform/brown_vest(src)
 	new /obj/item/clothing/head/hardhat/white(src)
@@ -45,7 +46,8 @@
 	icon_off = "secureengelecoff"
 
 
-/obj/structure/closet/secure_closet/engineering_electrical/PopulateContents()
+/obj/structure/closet/secure_closet/engineering_electrical/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/gloves/insulated(src)
 	new /obj/item/clothing/gloves/insulated(src)
 	new /obj/item/clothing/gloves/insulated(src)
@@ -71,7 +73,8 @@
 	icon_off = "secureengweldoff"
 
 
-/obj/structure/closet/secure_closet/engineering_welding/PopulateContents()
+/obj/structure/closet/secure_closet/engineering_welding/Initialize(mapload)
+	. = ..()
 	new /obj/item/clothing/head/welding(src)
 	new /obj/item/clothing/head/welding(src)
 	new /obj/item/clothing/head/welding(src)
@@ -92,7 +95,8 @@
 	icon_broken = "secureengbroken"
 	icon_off = "secureengoff"
 
-/obj/structure/closet/secure_closet/engineering_personal/PopulateContents()
+/obj/structure/closet/secure_closet/engineering_personal/Initialize(mapload)
+	. = ..()
 	new /obj/item/armor_module/storage/uniform/brown_vest(src)
 	new /obj/item/storage/toolbox/mechanical(src)
 	if(!is_ground_level(z))
@@ -132,7 +136,8 @@
 	icon_off = "secureatmoff"
 
 
-/obj/structure/closet/secure_closet/atmos_personal/PopulateContents()
+/obj/structure/closet/secure_closet/atmos_personal/Initialize(mapload)
+	. = ..()
 	if (prob(70))
 		new /obj/item/armor_module/storage/uniform/brown_vest(src)
 	else

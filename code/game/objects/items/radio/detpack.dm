@@ -4,12 +4,12 @@
 	gender = PLURAL
 	icon = 'icons/obj/det.dmi'
 	icon_state = "detpack_off"
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/weapons/explosives_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/weapons/explosives_right.dmi',
 		)
-	worn_icon_state = "plasticx"
-	item_flags = NOBLUDGEON
+	item_state = "plasticx"
+	flags_item = NOBLUDGEON
 	w_class = WEIGHT_CLASS_SMALL
 	layer = MOB_LAYER - 0.1
 	var/frequency = 1457
@@ -80,8 +80,6 @@
 
 /obj/item/detpack/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(ismultitool(I) && armed)
 		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_METAL)
@@ -139,9 +137,8 @@
 	if(!signal || !on)
 		return
 
-	var/turf/source_location = get_turf(signal.source)
-	var/turf/det_location = get_turf(src)
-	if(source_location.z != det_location.z)
+	var/turf/location = get_turf(signal.source)
+	if(location.z != z)
 		return
 
 	if(signal.data["code"] != code)
@@ -344,13 +341,11 @@
 	//Time to go boom
 	playsound(src.loc, 'sound/weapons/ring.ogg', 200, FALSE)
 	boom = TRUE
-	var/turf/det_location = get_turf(plant_target)
-	plant_target.ex_act(EXPLODE_DEVASTATE)
-	plant_target = null
 	if(det_mode == TRUE) //If we're on demolition mode, big boom.
-		explosion(det_location, 3, 5, 6, 0, 6)
+		cell_explosion(plant_target, 315, 55)
 	else //if we're not, focused boom.
-		explosion(det_location, 2, 2, 3, 0, 3, throw_range = FALSE)
+		cell_explosion(plant_target, 450, 200, EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL)
+	plant_target.plastique_act()
 	qdel(src)
 
 

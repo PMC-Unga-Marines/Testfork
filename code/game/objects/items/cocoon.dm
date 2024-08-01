@@ -42,12 +42,11 @@
 /obj/structure/cocoon/process()
 	var/psych_points_output = COCOON_PSY_POINTS_REWARD_MIN + ((HIGH_PLAYER_POP - SSmonitor.maximum_connected_players_count) / HIGH_PLAYER_POP * (COCOON_PSY_POINTS_REWARD_MAX - COCOON_PSY_POINTS_REWARD_MIN))
 	psych_points_output = clamp(psych_points_output, COCOON_PSY_POINTS_REWARD_MIN, COCOON_PSY_POINTS_REWARD_MAX)
-	SSpoints.add_strategic_psy_points(hivenumber, psych_points_output)
-	SSpoints.add_tactical_psy_points(hivenumber, psych_points_output*0.25)
+	SSpoints.add_psy_points(hivenumber, psych_points_output)
 	//Gives marine cloneloss for a total of 30.
 	victim.adjustCloneLoss(0.5)
 
-/obj/structure/cocoon/take_damage(damage_amount, damage_type = BRUTE, armor_type = null, effects = TRUE, attack_dir, armour_penetration = 0, mob/living/blame_mob)
+/obj/structure/cocoon/take_damage(damage_amount, damage_type, damage_flag, effects, attack_dir, armour_penetration)
 	. = ..()
 	if(anchored && obj_integrity < max_integrity / 2)
 		unanchor_from_nest()
@@ -57,7 +56,7 @@
 	new /obj/structure/bed/nest(loc)
 	anchored = FALSE
 	update_icon()
-	playsound(loc, SFX_ALIEN_RESIN_MOVE, 35)
+	playsound(loc, "alien_resin_move", 35)
 
 ///Stop producing points and release the victim if needed
 /obj/structure/cocoon/proc/life_draining_over(datum/source, must_release_victim = FALSE)
@@ -87,7 +86,7 @@
 ///Open the cocoon and move the victim out
 /obj/structure/cocoon/proc/release_victim(gib = FALSE)
 	REMOVE_TRAIT(victim, TRAIT_STASIS, TRAIT_STASIS)
-	playsound(loc, SFX_ALIEN_RESIN_MOVE, 35)
+	playsound(loc, "alien_resin_move", 35)
 	victim.forceMove(loc)
 	victim.setDir(NORTH)
 	victim.med_hud_set_status()

@@ -8,12 +8,8 @@
 	layer = BELOW_OBJ_LAYER
 	idle_power_usage = 300
 	active_power_usage = 300
-	var/processing = 0
-	///How many times the computer can be smashed by a Xeno before it is disabled.
-	var/durability = 2
 	resistance_flags = UNACIDABLE
-	///they don't provide good cover
-	coverage = 15
+	coverage = 15 //they don't provide good cover
 	light_range = 1
 	light_power = 0.5
 	light_color = LIGHT_COLOR_BLUE
@@ -21,6 +17,9 @@
 	var/screen_overlay
 	///The destroyed computer sprite. Defaults based on the icon_state if not specified
 	var/broken_icon
+	var/processing = 0
+	///How many times the computer can be smashed by a Xeno before it is disabled.
+	var/durability = 2
 
 /obj/machinery/computer/Initialize(mapload)
 	. = ..()
@@ -54,36 +53,19 @@
 	return 1
 
 /obj/machinery/computer/emp_act(severity)
-	. = ..()
-	if(prob(20/severity))
-		set_broken()
+	if(prob(20/severity)) set_broken()
+	..()
 
 /obj/machinery/computer/ex_act(severity)
 	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
 		return FALSE
-	switch(severity)
-		if(EXPLODE_DEVASTATE)
-			qdel(src)
-			return
-		if(EXPLODE_HEAVY)
-			if (prob(25))
-				qdel(src)
-				return
-			if (prob(50))
-				for(var/x in verbs)
-					verbs -= x
-				set_broken()
-		if(EXPLODE_LIGHT)
-			if (prob(25))
-				for(var/x in verbs)
-					verbs -= x
-				set_broken()
-		if(EXPLODE_WEAK)
-			if (prob(15))
-				for(var/x in verbs)
-					verbs -= x
-				set_broken()
-
+	if(severity >= EXPLODE_MEDIUM && prob(severity / 3))
+		qdel(src)
+		return
+	if(prob(severity / 3))
+		for(var/x in verbs)
+			verbs -= x
+		set_broken()
 
 /obj/machinery/computer/bullet_act(obj/projectile/Proj)
 	if(CHECK_BITFIELD(resistance_flags, INDESTRUCTIBLE))
@@ -123,12 +105,6 @@
 	density = FALSE
 	update_icon()
 
-/obj/machinery/computer/proc/repair()
-	machine_stat &= ~BROKEN
-	density = TRUE
-	durability = initial(durability)
-	update_icon()
-
 /obj/machinery/computer/proc/decode(text)
 	// Adds line breaks
 	text = replacetext(text, "\n", "<BR>")
@@ -147,10 +123,10 @@
 	if(!welder.tool_use_check(user, 2))
 		return FALSE
 
-	if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_EXPERT)
+	if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_MASTER)
 		user.visible_message(span_notice("[user] fumbles around figuring out how to deconstruct [src]."),
 		span_notice("You fumble around figuring out how to deconstruct [src]."))
-		var/fumbling_time = 5 SECONDS * (SKILL_ENGINEER_EXPERT - user.skills.getRating(SKILL_ENGINEER))
+		var/fumbling_time = 5 SECONDS * (SKILL_ENGINEER_MASTER - user.skills.getRating(SKILL_ENGINEER))
 		if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 			return
 
@@ -174,14 +150,12 @@
 
 /obj/machinery/computer/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(isscrewdriver(I) && circuit)
-		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_EXPERT)
+		if(user.skills.getRating(SKILL_ENGINEER) < SKILL_ENGINEER_MASTER)
 			user.visible_message(span_notice("[user] fumbles around figuring out how to deconstruct [src]."),
 			span_notice("You fumble around figuring out how to deconstruct [src]."))
-			var/fumbling_time = 50 * ( SKILL_ENGINEER_EXPERT - user.skills.getRating(SKILL_ENGINEER) )
+			var/fumbling_time = 50 * ( SKILL_ENGINEER_MASTER - user.skills.getRating(SKILL_ENGINEER) )
 			if(!do_after(user, fumbling_time, NONE, src, BUSY_ICON_UNSKILLED))
 				return
 
@@ -217,7 +191,6 @@
 	else
 		return attack_hand(user)
 
-
 /obj/machinery/computer/attack_hand(mob/living/user)
 	. = ..()
 	if(.)
@@ -226,7 +199,7 @@
 		pick(playsound(src, 'sound/machines/computer_typing1.ogg', 5, 1), playsound(src, 'sound/machines/computer_typing2.ogg', 5, 1), playsound(src, 'sound/machines/computer_typing3.ogg', 5, 1))
 
 ///So Xenos can smash computers out of the way without actually breaking them
-/obj/machinery/computer/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/machinery/computer/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(xeno_attacker.status_flags & INCORPOREAL)
 		return FALSE
 
@@ -245,6 +218,6 @@
 		durability--
 		to_chat(xeno_attacker, span_xenowarning("We smash the annoying device!"))
 
-	xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_DISARM2) //SFxeno_attacker
-	playsound(loc, pick('sound/effects/bang.ogg','sound/effects/metal_crash.ogg','sound/effects/meteorimpact.ogg'), 25, 1) //SFxeno_attacker
+	xeno_attacker.do_attack_animation(src, ATTACK_EFFECT_DISARM2) //SFX
+	playsound(loc, pick('sound/effects/bang.ogg','sound/effects/metal_crash.ogg','sound/effects/meteorimpact.ogg'), 25, 1) //SFX
 	Shake(duration = 0.5 SECONDS)

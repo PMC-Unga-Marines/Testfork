@@ -1,6 +1,3 @@
-///////////////////////////////////
-////////  Mecha wreckage   ////////
-///////////////////////////////////
 /obj/structure/mecha_wreckage
 	name = "exosuit wreckage"
 	desc = "Remains of some unfortunate mecha. Completely irreparable, but perhaps something can be salvaged."
@@ -221,7 +218,3 @@
 		/obj/item/mecha_parts/part/odysseus_left_leg,
 		/obj/item/mecha_parts/part/odysseus_right_leg,
 	)
-
-/obj/structure/mecha_wreckage/hoverpod
-	name = "Hover pod wreckage"
-	icon_state = "engineering_pod-broken"

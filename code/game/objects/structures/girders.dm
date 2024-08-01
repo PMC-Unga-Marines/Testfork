@@ -14,9 +14,15 @@
 	var/reinforcement = null
 	var/icon_prefix = "girder"
 	smoothing_flags = SMOOTH_BITMASK
-	canSmoothWith = list(SMOOTH_GROUP_GIRDER,SMOOTH_GROUP_SURVIVAL_TITANIUM_WALLS)
+	canSmoothWith = list(SMOOTH_GROUP_GIRDER,SMOOTH_GROUP_SURVIVAL_TITANIUM_WALLS,)
 	smoothing_groups = list(SMOOTH_GROUP_GIRDER)
 	base_icon_state = "girder"
+
+/obj/structure/girder/ex_act(severity, direction)
+	take_damage(severity, BRUTE, BOMB, attack_dir = direction)
+
+/obj/structure/girder/on_explosion_destruction(severity, direction)
+	create_shrapnel(get_turf(src), rand(2, 5), direction, 45, /datum/ammo/bullet/shrapnel/light)
 
 /obj/structure/girder/add_debris_element()
 	AddElement(/datum/element/debris, DEBRIS_SPARKS, -15, 8, 1)
@@ -53,8 +59,6 @@
 
 /obj/structure/girder/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 	if(istype(I, GIRDER_REINF_METAL) || istype(I, GIRDER_REINF_PLASTEEL))
 		if(user.do_actions)
 			return TRUE //no afterattack
@@ -155,7 +159,7 @@
 			var/turf/T = get_turf(src)
 			if(anchored)
 				return FALSE
-			if(!isfloorturf(T) && !isbasalt(T) && !isopengroundturf(T))
+			if(!isfloorturf(T) && !isbasalt(T) && !islavacatwalk(T) && !isopengroundturf(T))
 				to_chat(usr, span_warning("The girder must be secured on the floor!"))
 				return FALSE
 			playsound(loc, 'sound/items/ratchet.ogg', 25, 1)

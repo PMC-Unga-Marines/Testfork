@@ -1,5 +1,5 @@
 import { useBackend } from '../backend';
-import { Button, LabeledList, ProgressBar, Section } from '../components';
+import { Button, LabeledList, Section, ProgressBar } from '../components';
 import { Window } from '../layouts';
 
 type SentryData = {
@@ -14,8 +14,8 @@ type SentryData = {
   alerts_on: boolean;
   radial_mode: boolean;
 };
-export const Sentry = (props) => {
-  const { act, data } = useBackend<SentryData>();
+export const Sentry = (props, context) => {
+  const { act, data } = useBackend<SentryData>(context);
   const {
     name,
     rounds,
@@ -59,21 +59,18 @@ export const Sentry = (props) => {
                 <Button
                   selected={safety_toggle}
                   onClick={() => act('safety')}
-                  icon={safety_toggle ? 'check' : 'times'}
-                >
+                  icon={safety_toggle ? 'check' : 'times'}>
                   Safety
                 </Button>
               }
-              label="Weapon Safety"
-            >
+              label="Weapon Safety">
               {safety_toggle ? 'Only Xenos' : 'Everything'}
             </LabeledList.Item>
             <LabeledList.Item
               buttons={
                 <Button onClick={() => act('firemode')}>Fire Mode</Button>
               }
-              label="Fire Mode"
-            >
+              label="Fire Mode">
               {fire_mode}
             </LabeledList.Item>
             <LabeledList.Item
@@ -81,8 +78,7 @@ export const Sentry = (props) => {
                 <Button
                   selected={manual_override}
                   onClick={() => act('manual')}
-                  icon={manual_override ? 'check' : 'times'}
-                >
+                  icon={manual_override ? 'check' : 'times'}>
                   Manual Override
                 </Button>
               }
@@ -93,8 +89,7 @@ export const Sentry = (props) => {
                 <Button
                   selected={radial_mode}
                   onClick={() => act('toggle_radial')}
-                  icon={radial_mode ? 'check' : 'times'}
-                >
+                  icon={radial_mode ? 'check' : 'times'}>
                   Radial Mode
                 </Button>
               }
@@ -105,8 +100,7 @@ export const Sentry = (props) => {
                 <Button
                   selected={alerts_on}
                   onClick={() => act('toggle_alert')}
-                  icon={alerts_on ? 'check' : 'times'}
-                >
+                  icon={alerts_on ? 'check' : 'times'}>
                   Alert Mode
                 </Button>
               }

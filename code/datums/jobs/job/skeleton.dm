@@ -26,7 +26,7 @@
 	w_uniform = /obj/item/clothing/under/gladiator
 	shoes = /obj/item/clothing/shoes/sandal
 	head = /obj/item/clothing/head/helmet/gladiator
-	belt = /obj/item/weapon/sword
+	belt = /obj/item/weapon/claymore
 	back = /obj/item/weapon/twohanded/spear
 	ears = /obj/item/radio/headset/survivor
 	r_store = /obj/item/flashlight
@@ -50,7 +50,7 @@
 	w_uniform = /obj/item/clothing/under/gladiator
 	shoes = /obj/item/clothing/shoes/sandal
 	head = /obj/item/clothing/head/helmet/gladiator
-	belt = /obj/item/weapon/sword
+	belt = /obj/item/weapon/claymore
 	back = /obj/item/weapon/twohanded/glaive
 	ears = /obj/item/radio/headset/survivor
 	r_store = /obj/item/flashlight

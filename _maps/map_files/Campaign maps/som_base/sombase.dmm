@@ -38,6 +38,10 @@
 "adq" = (
 /turf/closed/wall/mainship/gray,
 /area/rocinante_base/ground/underground/caveN)
+"adr" = (
+/obj/effect/landmark/patrol_point/tgmc_24,
+/turf/open/ground/grass/weedable/patch,
+/area/rocinante_base/ground/base_nw)
 "adz" = (
 /obj/structure/closet/radiation,
 /obj/machinery/light{
@@ -274,7 +278,7 @@
 /turf/open/floor/mainship/white/full,
 /area/rocinante_base/surface/building/lz_control)
 "atk" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /obj/machinery/light,
 /turf/open/floor/mainship/black,
 /area/rocinante_base/surface/building/cargo/vehicle_garage)
@@ -328,6 +332,10 @@
 	dir = 6
 	},
 /area/rocinante_base/surface/building/security/medical_sec)
+"azv" = (
+/obj/effect/landmark/patrol_point/tgmc_22,
+/turf/open/ground/grass/weedable/patch,
+/area/rocinante_base/ground/base_nw)
 "azC" = (
 /obj/structure/cable,
 /turf/open/floor/plating/ground/concrete,
@@ -369,6 +377,10 @@
 	dir = 4
 	},
 /area/rocinante_base/surface/building/security/medical_sec)
+"aCK" = (
+/obj/effect/landmark/patrol_point/tgmc_21,
+/turf/open/ground/grass/weedable/patch,
+/area/rocinante_base/ground/base_nw)
 "aDG" = (
 /turf/open/floor/plating/icefloor/warnplate{
 	dir = 6
@@ -509,6 +521,10 @@
 /obj/vehicle/train/cargo/trolley,
 /turf/open/floor/plating/ground/concrete,
 /area/rocinante_base/ground/southern_containers)
+"aLr" = (
+/obj/effect/landmark/patrol_point/som/som_12,
+/turf/open/floor/plating/ground/mars/random/cave/darker,
+/area/rocinante_base/ground/underground/caveS)
 "aLJ" = (
 /obj/structure/prop/brokenvendor/engivend,
 /obj/machinery/light{
@@ -794,6 +810,10 @@
 /obj/structure/filingcabinet,
 /turf/open/floor/mainship/sterile/dark,
 /area/rocinante_base/surface/building/science/research_lab)
+"bbz" = (
+/obj/effect/landmark/patrol_point/tgmc_23,
+/turf/open/ground/grass/weedable/patch,
+/area/rocinante_base/ground/base_nw)
 "bbI" = (
 /obj/structure/table/black,
 /turf/open/floor/mainship/red{
@@ -2277,6 +2297,10 @@
 	dir = 8
 	},
 /area/rocinante_base/ground/base_se)
+"dfF" = (
+/obj/effect/attach_point/weapon/dropship1,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/surface/landing/landing_pad_one)
 "dfT" = (
 /turf/open/floor/plating,
 /area/rocinante_base/surface/building/mining_construction)
@@ -2551,7 +2575,7 @@
 /turf/open/floor/plating/ground/desertdam/asphalt,
 /area/rocinante_base/ground/base_w)
 "dBX" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/blue{
 	dir = 10
 	},
@@ -2590,7 +2614,7 @@
 /turf/open/ground/grass/weedable/patch,
 /area/rocinante_base/surface/building/administration/south_com)
 "dGQ" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /obj/structure/cable,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/living/barracks)
@@ -2645,6 +2669,14 @@
 	},
 /turf/open/floor/mainship/sterile/dark,
 /area/rocinante_base/surface/building/medical)
+"dJI" = (
+/obj/effect/attach_point/weapon/dropship1{
+	dir = 8
+	},
+/turf/open/floor/plating/icefloor/warnplate{
+	dir = 8
+	},
+/area/rocinante_base/surface/landing/landing_pad_two)
 "dJQ" = (
 /obj/structure/barricade/wooden{
 	dir = 8
@@ -2701,6 +2733,13 @@
 /obj/structure/cable,
 /turf/open/floor/mainship/red,
 /area/rocinante_base/surface/building/administration)
+"dPW" = (
+/obj/effect/landmark/patrol_point/som/som_23,
+/obj/machinery/light,
+/turf/open/floor/mainship/red{
+	dir = 6
+	},
+/area/rocinante_base/surface/building/tramstation/tramstation_e)
 "dQc" = (
 /obj/structure/table/reinforced,
 /obj/structure/xenoautopsy,
@@ -2863,11 +2902,6 @@
 	dir = 4
 	},
 /area/rocinante_base/ground/base_cent)
-"ebX" = (
-/obj/structure/monorail,
-/obj/effect/landmark/patrol_point/som/som_21,
-/turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/surface/building/tram_line)
 "ecp" = (
 /obj/structure/barricade/concrete{
 	dir = 8
@@ -3327,14 +3361,6 @@
 	},
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/tramstation/tramstation_nw)
-"eGW" = (
-/obj/structure/prop/vehicle/truck{
-	dir = 8
-	},
-/turf/open/floor/plating/ground/concrete/lines{
-	dir = 1
-	},
-/area/rocinante_base/ground/base_se)
 "eHe" = (
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/southern_construction)
@@ -6269,7 +6295,7 @@
 /turf/open/floor/mainship/sterile/dark,
 /area/rocinante_base/surface/building/science/research_lab)
 "iHE" = (
-/obj/structure/prop/vehicle/crane/cranecargo,
+/obj/structure/prop/vehicle/crane/cranecargo/destructible,
 /turf/open/floor/plating/ground/concrete,
 /area/rocinante_base/ground/underground/caveN)
 "iIa" = (
@@ -7203,11 +7229,6 @@
 /obj/structure/flora/tree/pine,
 /turf/open/ground/grass/weedable/patch,
 /area/rocinante_base/ground/base_s)
-"keJ" = (
-/turf/open/floor/mainship/cargo/arrow{
-	dir = 4
-	},
-/area/rocinante_base/surface/building/tramstation/tramstation_e)
 "keM" = (
 /obj/structure/cable,
 /turf/open/floor/mainship/sterile/purple/side{
@@ -7260,7 +7281,7 @@
 	},
 /area/rocinante_base/surface/building/administration)
 "kjN" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/administration/command)
 "kjO" = (
@@ -7892,12 +7913,10 @@
 /obj/machinery/atmospherics/components/unary/cryo_cell,
 /turf/open/floor/mainship/sterile/corner,
 /area/rocinante_base/surface/building/medical)
-"lfl" = (
-/obj/structure/prop/vehicle/van{
-	dir = 8
-	},
+"lfy" = (
+/obj/structure/prop/vehicle/truck,
 /turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/surface/landing/landing_pad_one_external)
+/area/rocinante_base/ground/underground/caveN)
 "lgo" = (
 /obj/structure/window/framed/mainship/gray,
 /turf/open/floor/mainship/mono,
@@ -8266,7 +8285,7 @@
 	},
 /area/rocinante_base/surface/building/administration)
 "lDZ" = (
-/obj/structure/prop/vehicle/crawler,
+/obj/structure/prop/vehicle/crawler/destructible,
 /turf/open/floor/plating/ground/concrete,
 /area/rocinante_base/surface/building/train_station)
 "lEz" = (
@@ -8290,12 +8309,6 @@
 /obj/structure/window/reinforced,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/office_n)
-"lFt" = (
-/obj/structure/prop/vehicle/truck{
-	dir = 8
-	},
-/turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/ground/underground/caveN)
 "lFS" = (
 /obj/structure/cargo_container/horizontal{
 	dir = 8
@@ -8325,6 +8338,12 @@
 "lHU" = (
 /obj/structure/cable,
 /turf/open/floor/plating/plating_catwalk,
+/area/rocinante_base/surface/building/tramstation/tramstation_e)
+"lIS" = (
+/obj/effect/landmark/patrol_point/som/som_21,
+/turf/open/floor/mainship/red{
+	dir = 4
+	},
 /area/rocinante_base/surface/building/tramstation/tramstation_e)
 "lJp" = (
 /obj/structure/prop/brokenvendor/surplusclothes,
@@ -8474,6 +8493,10 @@
 /obj/structure/flora/ausbushes/sparsegrass,
 /turf/open/floor/plating/ground/dirt_alt,
 /area/rocinante_base/ground/base_n)
+"lUj" = (
+/obj/effect/landmark/patrol_point/tgmc_12,
+/turf/open/ground/grass/weedable/patch,
+/area/rocinante_base/ground/base_sw)
 "lUF" = (
 /obj/structure/prop/brokenvendor/surplusclothes,
 /turf/open/floor/mainship/black{
@@ -8922,6 +8945,12 @@
 	},
 /turf/closed/wall/mainship/gray,
 /area/rocinante_base/surface/building/living/barracks)
+"mDz" = (
+/obj/effect/landmark/patrol_point/som/som_22,
+/turf/open/floor/mainship/red{
+	dir = 10
+	},
+/area/rocinante_base/surface/building/tramstation/tramstation_e)
 "mDN" = (
 /obj/machinery/door/airlock/multi_tile/mainship/secdoor/glass{
 	dir = 2
@@ -9146,6 +9175,10 @@
 /obj/machinery/light,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/security/brig)
+"mYm" = (
+/obj/structure/prop/vehicle/van,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/surface/landing/landing_pad_one_external)
 "mYO" = (
 /obj/structure/prop/mainship/mission_planning_system,
 /turf/open/floor/mainship/blue{
@@ -9614,12 +9647,6 @@
 /obj/structure/barricade/concrete,
 /turf/open/floor/plating/ground/mars/random/cave/darker,
 /area/rocinante_base/ground/underground/caveN)
-"nCc" = (
-/obj/machinery/light,
-/turf/open/floor/mainship/red{
-	dir = 6
-	},
-/area/rocinante_base/surface/building/tramstation/tramstation_e)
 "nDM" = (
 /obj/structure/flora/ausbushes/fullgrass,
 /turf/open/floor/plating/ground/dirt_alt,
@@ -10212,7 +10239,7 @@
 /turf/open/floor/plating/ground/concrete,
 /area/rocinante_base/ground/southern_containers)
 "orZ" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/blue{
 	dir = 1
 	},
@@ -10645,7 +10672,7 @@
 /turf/open/floor/mainship/sterile/white,
 /area/rocinante_base/surface/building/living/barracks)
 "oUS" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/ground/base_cent)
 "oVs" = (
@@ -10734,6 +10761,10 @@
 	dir = 8
 	},
 /area/rocinante_base/surface/building/security/command_sec)
+"pcb" = (
+/obj/effect/landmark/patrol_point/tgmc_13,
+/turf/open/ground/grass/weedable/patch,
+/area/rocinante_base/ground/base_sw)
 "pci" = (
 /obj/effect/turf_decal/warning_stripes/linethick{
 	dir = 4
@@ -10966,6 +10997,10 @@
 	dir = 8
 	},
 /area/rocinante_base/surface/building/security/command_sec)
+"ptA" = (
+/obj/structure/prop/vehicle/truck,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/ground/base_cent)
 "puB" = (
 /obj/structure/girder,
 /turf/open/floor/plating,
@@ -11040,6 +11075,10 @@
 /obj/effect/landmark/corpsespawner/som,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/ground/base_cent)
+"pBb" = (
+/obj/effect/attach_point/electronics/dropship1,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/surface/landing/landing_pad_two)
 "pBj" = (
 /obj/structure/cable,
 /turf/open/floor/mainship/red/corner{
@@ -11995,6 +12034,10 @@
 "qTi" = (
 /turf/open/floor/mainship/sterile/dark,
 /area/rocinante_base/surface/building/medical)
+"qTk" = (
+/obj/effect/landmark/patrol_point/som/som_14,
+/turf/open/floor/plating/ground/mars/random/cave/darker,
+/area/rocinante_base/ground/underground/caveS)
 "qTm" = (
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/security/command_sec)
@@ -12104,6 +12147,10 @@
 /obj/structure/flora/ausbushes/grassybush,
 /turf/open/floor/plating/ground/snow,
 /area/rocinante_base/ground/base_e)
+"raL" = (
+/obj/effect/landmark/patrol_point/som/som_13,
+/turf/open/floor/plating/ground/mars/random/cave/darker,
+/area/rocinante_base/ground/underground/caveS)
 "rbV" = (
 /obj/structure/desertdam/decals/road/line,
 /turf/open/floor/plating/ground/concrete,
@@ -12450,7 +12497,7 @@
 /turf/open/floor/mainship/red,
 /area/rocinante_base/surface/building/science/complex_hall_e)
 "rBc" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/administration/north_com)
 "rBO" = (
@@ -12901,11 +12948,15 @@
 	},
 /area/rocinante_base/surface/building/cargo/vehicle_garage)
 "slV" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/blue{
 	dir = 4
 	},
 /area/rocinante_base/surface/building/security/command_sec)
+"sma" = (
+/obj/effect/attach_point/electronics/dropship1,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/surface/landing/landing_pad_one)
 "smb" = (
 /obj/structure/cable,
 /turf/open/floor/scorched,
@@ -13382,7 +13433,7 @@
 	},
 /area/rocinante_base/surface/building/command_hall)
 "sRP" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/administration/air_com)
 "sRU" = (
@@ -13449,6 +13500,12 @@
 	dir = 4
 	},
 /area/rocinante_base/surface/building/cargo/vehicle_garage)
+"sUK" = (
+/obj/structure/prop/vehicle/truck,
+/turf/open/floor/plating/ground/concrete/lines{
+	dir = 1
+	},
+/area/rocinante_base/ground/base_se)
 "sUQ" = (
 /obj/structure/cargo_container/green{
 	dir = 1
@@ -13479,6 +13536,10 @@
 /obj/structure/cable,
 /turf/open/floor/plating/ground/concrete/lines,
 /area/rocinante_base/ground/base_se)
+"sWJ" = (
+/obj/effect/attach_point/weapon/dropship1,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/surface/landing/landing_pad_two)
 "sWR" = (
 /turf/closed/shuttle/dropship_regular/interior_wall{
 	dir = 1
@@ -13541,12 +13602,6 @@
 "taE" = (
 /turf/closed/wall/mainship/gray,
 /area/rocinante_base/ground/base_n)
-"taG" = (
-/obj/structure/prop/vehicle/truck{
-	dir = 8
-	},
-/turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/surface/building/cargo/southern_aux)
 "tbl" = (
 /obj/structure/prop/vehicle/apc,
 /obj/structure/prop/vehicle/apc/dualcannonzero,
@@ -14073,6 +14128,10 @@
 	},
 /turf/open/floor/mainship/sterile/dark,
 /area/rocinante_base/surface/building/science/bio_lab)
+"tNW" = (
+/obj/structure/prop/vehicle/van,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/ground/base_w)
 "tOl" = (
 /obj/structure/stairs/seamless,
 /turf/open/floor/mainship/mono,
@@ -14421,10 +14480,6 @@
 	dir = 9
 	},
 /area/rocinante_base/surface/building/living/barracks)
-"uls" = (
-/obj/effect/landmark/patrol_point/tgmc_21,
-/turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/ground/base_nw)
 "ulu" = (
 /obj/structure/cable,
 /turf/open/floor/mainship/red{
@@ -14629,6 +14684,14 @@
 /obj/structure/cable,
 /turf/open/floor/mainship/red,
 /area/rocinante_base/surface/building/living/laundromat)
+"uya" = (
+/obj/effect/attach_point/weapon/dropship1{
+	dir = 8
+	},
+/turf/open/floor/plating/icefloor/warnplate{
+	dir = 8
+	},
+/area/rocinante_base/surface/landing/landing_pad_one)
 "uyb" = (
 /obj/structure/window/framed/mainship/gray,
 /turf/open/floor/plating/ground/concrete,
@@ -14638,7 +14701,7 @@
 /turf/open/ground/grass/weedable/patch,
 /area/rocinante_base/ground/base_se)
 "uyr" = (
-/obj/machinery/cic_maptable/no_flags,
+/obj/machinery/cic_maptable,
 /turf/open/floor/mainship/blue{
 	dir = 5
 	},
@@ -14831,6 +14894,12 @@
 	dir = 9
 	},
 /area/rocinante_base/surface/building/security/hub)
+"uJB" = (
+/obj/effect/landmark/patrol_point/som/som_24,
+/turf/open/floor/mainship/cargo/arrow{
+	dir = 4
+	},
+/area/rocinante_base/surface/building/tramstation/tramstation_e)
 "uJI" = (
 /obj/structure/desertdam/decals/road/line{
 	dir = 8
@@ -15154,12 +15223,6 @@
 	dir = 8
 	},
 /area/rocinante_base/surface/building/science/break_room)
-"vfp" = (
-/obj/structure/prop/vehicle/truck{
-	dir = 8
-	},
-/turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/ground/base_cent)
 "vfy" = (
 /obj/structure/prop/mainship/sensor_computer1,
 /turf/open/floor/mainship/sterile/purple/side{
@@ -15392,6 +15455,10 @@
 	dir = 1
 	},
 /area/rocinante_base/surface/building/living/prep)
+"vvE" = (
+/obj/structure/prop/vehicle/truck,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/surface/building/cargo/southern_aux)
 "vwm" = (
 /obj/structure/cargo_container/horizontal{
 	dir = 8
@@ -15653,6 +15720,11 @@
 /obj/machinery/power/apc,
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/living/janitor)
+"vOw" = (
+/obj/structure/table/black,
+/obj/item/hardpoint/treads,
+/turf/open/floor/mainship/mono,
+/area/rocinante_base/surface/building/cargo/southern_aux)
 "vPC" = (
 /obj/structure/flora/grass/tallgrass/tallgrasscorner{
 	color = "#5b7857";
@@ -15810,6 +15882,10 @@
 	},
 /turf/open/floor/mainship/som/sw,
 /area/rocinante_base/surface/building/administration)
+"vYI" = (
+/obj/structure/prop/vehicle/truck/truckcargo,
+/turf/open/floor/plating/ground/concrete,
+/area/rocinante_base/surface/landing/landing_pad_two_external)
 "vYY" = (
 /obj/structure/bed/bunkbed,
 /turf/open/floor/mainship/mono,
@@ -16145,12 +16221,6 @@
 "wuv" = (
 /turf/closed/wall/mainship/gray,
 /area/rocinante_base/surface/building/west_aux)
-"wuF" = (
-/obj/structure/prop/vehicle/van{
-	dir = 8
-	},
-/turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/ground/base_w)
 "wuW" = (
 /obj/structure/prop/mainship/turretprop,
 /turf/open/floor/mainship/mono,
@@ -16519,6 +16589,10 @@
 /obj/machinery/newscaster,
 /turf/open/floor/mainship/sterile/dark,
 /area/rocinante_base/surface/building/science/research_lab)
+"wRP" = (
+/obj/effect/landmark/patrol_point/tgmc_14,
+/turf/open/ground/grass/weedable/patch,
+/area/rocinante_base/ground/base_sw)
 "wRU" = (
 /obj/structure/cable,
 /turf/open/floor/mainship/black{
@@ -16701,12 +16775,6 @@
 	dir = 10
 	},
 /area/rocinante_base/surface/building/cargo/vehicle_garage)
-"xeS" = (
-/obj/structure/prop/vehicle/truck/truckcargo{
-	dir = 8
-	},
-/turf/open/floor/plating/ground/concrete,
-/area/rocinante_base/surface/landing/landing_pad_two_external)
 "xfz" = (
 /turf/open/floor/plating/ground/concrete/edge{
 	dir = 8
@@ -17185,7 +17253,7 @@
 /turf/open/floor/mainship/mono,
 /area/rocinante_base/surface/building/living/chapel_ne)
 "xJE" = (
-/obj/structure/table/reinforced,
+/obj/machinery/computer/nuke_disk_generator/green,
 /turf/open/floor/mainship/sterile/side,
 /area/rocinante_base/surface/building/medical)
 "xKs" = (
@@ -17729,11 +17797,11 @@ fIa
 pjR
 pjR
 pjR
+aCK
 vpt
 vpt
 vpt
-vpt
-vpt
+bbz
 pjR
 pjR
 pjR
@@ -18148,7 +18216,7 @@ oWD
 oWD
 wme
 wme
-wme
+lUj
 oWD
 oWD
 oWD
@@ -18422,7 +18490,7 @@ gtL
 gtL
 gtL
 gtL
-gtL
+dJI
 gtL
 gtL
 qkG
@@ -18456,7 +18524,7 @@ wme
 wme
 wme
 wme
-wme
+rYn
 oWD
 oWD
 nZQ
@@ -18487,7 +18555,7 @@ pjR
 pjR
 pjR
 pjR
-vpt
+azv
 vpt
 vpt
 vpt
@@ -18570,7 +18638,7 @@ rfF
 xTt
 erF
 amw
-erF
+sWJ
 erF
 erF
 erF
@@ -18722,7 +18790,7 @@ rfF
 xTt
 erF
 erF
-erF
+pBb
 erF
 erF
 erF
@@ -18907,7 +18975,7 @@ wme
 wme
 wme
 wme
-rYn
+wme
 wme
 wme
 wme
@@ -19093,7 +19161,7 @@ dSy
 tbH
 pjR
 pjR
-vpt
+adr
 vpt
 vpt
 vpt
@@ -19200,7 +19268,7 @@ rfF
 rfF
 tqA
 rfF
-xeS
+vYI
 rfF
 iuP
 hkO
@@ -19212,11 +19280,11 @@ wme
 wme
 wme
 wme
-wme
+pcb
 oWD
 oWD
 oWD
-wme
+wRP
 wme
 oWD
 nZQ
@@ -19403,7 +19471,7 @@ vpt
 vpt
 vpt
 juk
-uls
+bwq
 eIN
 vpt
 vpt
@@ -19634,7 +19702,7 @@ rfF
 xTt
 erF
 erF
-erF
+pBb
 erF
 erF
 erF
@@ -19786,7 +19854,7 @@ rfF
 xTt
 erF
 amw
-erF
+sWJ
 erF
 erF
 erF
@@ -22008,7 +22076,7 @@ rzM
 rzM
 jns
 vJY
-lfl
+mYm
 vJY
 qkw
 eRg
@@ -22294,7 +22362,7 @@ edx
 edx
 edx
 edx
-edx
+uya
 edx
 edx
 vAH
@@ -22442,7 +22510,7 @@ vJY
 aJl
 bjX
 iEn
-bjX
+dfF
 bjX
 bjX
 bjX
@@ -22594,7 +22662,7 @@ vJY
 aJl
 bjX
 bjX
-bjX
+sma
 bjX
 bjX
 bjX
@@ -23506,7 +23574,7 @@ vJY
 aJl
 bjX
 bjX
-bjX
+sma
 bjX
 bjX
 bjX
@@ -23658,7 +23726,7 @@ vJY
 aJl
 bjX
 iEn
-bjX
+dfF
 bjX
 bjX
 bjX
@@ -25548,7 +25616,7 @@ qib
 xBu
 xBu
 pCj
-wuF
+tNW
 lSv
 jMK
 huK
@@ -33270,7 +33338,7 @@ vdT
 cCy
 fhd
 jfD
-vfp
+ptA
 goE
 ltW
 lAd
@@ -33954,9 +34022,9 @@ oVs
 lJq
 fQa
 jDc
-taG
+vvE
 aOd
-taG
+vvE
 mnG
 lPU
 oVs
@@ -34413,7 +34481,7 @@ gnj
 jaw
 jaw
 jaw
-lJq
+vOw
 tao
 oVs
 pEm
@@ -34565,7 +34633,7 @@ gnj
 aSY
 gOG
 cQP
-lJq
+vOw
 oVs
 oVs
 pEm
@@ -35438,7 +35506,7 @@ cYi
 fFq
 uDY
 uDY
-eGW
+sUK
 sZo
 fDp
 uDY
@@ -39985,8 +40053,8 @@ mTx
 iQI
 iHE
 iQI
-lFt
-lFt
+lfy
+lfy
 fVx
 iQI
 fsx
@@ -46337,11 +46405,11 @@ lpA
 dXo
 phV
 mDb
-keJ
+uJB
 mDb
 exR
 ylA
-lrv
+mDz
 dXo
 hJi
 hJi
@@ -46576,7 +46644,7 @@ tit
 tit
 tit
 tit
-tit
+cCg
 tit
 mAb
 lJV
@@ -46724,7 +46792,7 @@ tit
 tit
 tit
 tit
-cCg
+tit
 tit
 tit
 tit
@@ -46768,7 +46836,7 @@ kTN
 eWK
 dAb
 lCR
-ebX
+evt
 evt
 evt
 evt
@@ -47176,13 +47244,13 @@ tit
 tit
 tit
 tit
+raL
 tit
 tit
 tit
 tit
 tit
-tit
-tit
+qTk
 tit
 mAb
 mAb
@@ -47250,10 +47318,10 @@ lWF
 oCm
 mDb
 gUI
+lIS
 lWF
 lWF
-lWF
-nCc
+dPW
 dXo
 aJu
 aJu
@@ -47331,7 +47399,7 @@ tit
 tit
 tit
 tit
-tit
+aLr
 tit
 tit
 tit

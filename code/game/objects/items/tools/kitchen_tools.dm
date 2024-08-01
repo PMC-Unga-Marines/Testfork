@@ -1,18 +1,6 @@
-/* Kitchen tools
-* Contains:
-*		Utensils
-*		Spoons
-*		Forks
-*		Knives
-*		Kitchen knives
-*		Butcher's cleaver
-*		Rolling Pins
-*		Trays
-*/
-
 /obj/item/tool/kitchen
 	icon = 'icons/obj/items/kitchen_tools.dmi'
-	worn_icon_list = list(
+	item_icons = list(
 		slot_l_hand_str = 'icons/mob/inhands/equipment/kitchen_left.dmi',
 		slot_r_hand_str = 'icons/mob/inhands/equipment/kitchen_right.dmi',
 	)
@@ -26,7 +14,7 @@
 	throwforce = 5
 	throw_speed = 3
 	throw_range = 5
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	attack_verb = list("attacked", "stabbed", "poked")
 	sharp = 0
 	var/loaded      //Descriptive string for currently loaded food object.
@@ -60,7 +48,7 @@
 	else
 		..()
 
-/obj/item/tool/kitchen/utensil/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, armor_type = MELEE, effects = TRUE, armor_penetration = xeno_attacker.xeno_caste.melee_ap, isrightclick = FALSE)
+/obj/item/tool/kitchen/utensil/attack_alien(mob/living/carbon/xenomorph/xeno_attacker, damage_amount = xeno_attacker.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
 	if(!CONFIG_GET(flag/fun_allowed))
 		return FALSE
 	attack_hand(xeno_attacker)
@@ -123,7 +111,7 @@
 	name = "kitchen knife"
 	icon_state = "knife"
 	desc = "A general purpose Chef's Knife made by SpaceCook Incorporated. Guaranteed to stay sharp for years to come."
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	sharp = IS_SHARP_ITEM_ACCURATE
 	edge = 1
 	force = 10
@@ -152,7 +140,7 @@
 	name = "butcher's cleaver"
 	icon_state = "butch"
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	force = 15
 	w_class = WEIGHT_CLASS_SMALL
 	throwforce = 8
@@ -195,7 +183,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = WEIGHT_CLASS_NORMAL
-	atom_flags = CONDUCT
+	flags_atom = CONDUCT
 	/* // NOPE
 	var/food_total= 0
 	var/burger_amt = 0
@@ -232,14 +220,12 @@
 
 	var/mob/living/carbon/human/H = M      ///////////////////////////////////// /Let's have this ready for later.
 
-
 	if(!(user.zone_selected == ("eyes" || "head"))) //////////////hitting anything else other than the eyes
 		if(prob(33))
 			src.add_mob_blood(H)
 			var/turf/location = H.loc
 			if (istype(location, /turf))
 				location.add_mob_blood(H)     ///Plik plik, the sound of blood
-
 
 		log_combat(user, M, "attacked", src)
 
@@ -257,10 +243,7 @@
 			visible_message(span_danger("[user] slams [M] with the tray!"))
 			return
 
-
-
-
-	if(ishuman(M) && ((H.head && (H.head.inventory_flags & COVEREYES) ) || (H.wear_mask && (H.wear_mask.inventory_flags & COVEREYES) ) || (H.glasses && (H.glasses.inventory_flags & COVEREYES) )))
+	if(ishuman(M) && ((H.head && (H.head.flags_inventory & COVEREYES) ) || (H.wear_mask && (H.wear_mask.flags_inventory & COVEREYES) ) || (H.glasses && (H.glasses.flags_inventory & COVEREYES) )))
 		to_chat(M, span_warning("You get slammed in the face with the tray, against your mask!"))
 		if(prob(33))
 			src.add_mob_blood(H)
@@ -317,8 +300,6 @@
 
 /obj/item/tool/kitchen/tray/attackby(obj/item/I, mob/user, params)
 	. = ..()
-	if(.)
-		return
 
 	if(istype(I, /obj/item/tool/kitchen/rollingpin))
 		if(cooldown < world.time - 25)
@@ -333,6 +314,7 @@
 =																			=
 ===============~~~~~================================~~~~~====================
 */
+
 /obj/item/tool/kitchen/tray/proc/calc_carry()
 	// calculate the weight of the items on the tray
 	var/val = 0 // value to return

@@ -23,8 +23,8 @@
 //NORTH default dir
 /obj/docking_port
 	invisibility = INVISIBILITY_ABSTRACT
-	icon = 'icons/obj/items/pinpointer.dmi'
-	icon_state = "pinpointer_far"
+	icon = 'icons/Marine/marine-navigation.dmi'
+	icon_state = "pinonfar"
 
 	resistance_flags = RESIST_ALL
 	anchored = TRUE
@@ -315,7 +315,7 @@
 /obj/docking_port/stationary/proc/on_crash()
 	return
 
-///returns first-found touching shuttleport
+//returns first-found touching shuttleport
 /obj/docking_port/stationary/get_docked()
 	. = locate(/obj/docking_port/mobile) in loc
 
@@ -349,26 +349,20 @@
 
 /obj/docking_port/mobile
 	name = "shuttle"
-	icon_state = "pinpointer_close"
+	icon_state = "pinonclose"
 
 	area_type = SHUTTLE_DEFAULT_SHUTTLE_AREA_TYPE
 
 	var/list/shuttle_areas
 
-	///used as a timer (if you want time left to complete move, use timeLeft proc)
-	var/timer
+	var/timer						//used as a timer (if you want time left to complete move, use timeLeft proc)
 	var/last_timer_length
 
-	///current shuttle mode
-	var/mode = SHUTTLE_IDLE
-	///time spent in transit (deciseconds). Should not be lower then 10 seconds without editing the animation of the hyperspace ripples.
-	var/callTime = 100
-	/// time spent "starting the engines". Also rate limits how often we try to reserve transit space if its ever full of transiting shuttles.
-	var/ignitionTime = 55
-	///time spent after arrival before being able to launch again
-	var/rechargeTime = 0
-	///delay after call time finishes for sound effects, explosions, etc.
-	var/prearrivalTime = 0
+	var/mode = SHUTTLE_IDLE			//current shuttle mode
+	var/callTime = 100				//time spent in transit (deciseconds). Should not be lower then 10 seconds without editing the animation of the hyperspace ripples.
+	var/ignitionTime = 55			// time spent "starting the engines". Also rate limits how often we try to reserve transit space if its ever full of transiting shuttles.
+	var/rechargeTime = 0			//time spent after arrival before being able to launch again
+	var/prearrivalTime = 0			//delay after call time finishes for sound effects, explosions, etc.
 
 	var/landing_sound = 'sound/effects/engine_landing.ogg'
 	var/ignition_sound = 'sound/effects/engine_startup.ogg'
@@ -499,9 +493,11 @@
 			return SHUTTLE_ALREADY_DOCKED
 
 	if(S?.reservedId != id) // Checks so two shuttles don't get the same dock and conflict.
+	/* //RUTGMC REMOVAL
 		var/obj/docking_port/mobile/M = SSshuttle.getShuttle(S.reservedId)
 		if(M?.destination == S)
 			return SHUTTLE_RESERVED
+	*/
 		S.reservedId = null //Assigned shuttle does not exist or doesn't have the port as it's destination.
 
 	return SHUTTLE_CAN_DOCK

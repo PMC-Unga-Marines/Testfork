@@ -34,6 +34,10 @@
 
 //turf/closed/wall/mainship/update_icon()
 
+
+/turf/closed/wall/mainship/alt
+	icon = 'icons/turf/walls/talos.dmi'
+
 /turf/closed/wall/mainship/outer
 	name = "outer hull"
 	desc = "A huge chunk of metal used to seperate space from the ship"
@@ -42,6 +46,11 @@
 	resistance_flags = RESIST_ALL //Impossible to destroy or even damage. Used for outer walls that would breach into space, potentially some special walls
 	icon_state = "wall-invincible"
 	decorated_wall = FALSE
+
+/turf/closed/wall/mainship/outer/alt
+	icon = 'icons/turf/walls/talos.dmi'
+	icon_state = "testwall-0"
+	walltype = "testwall"
 
 /turf/closed/wall/mainship/outer/reinforced
 	name = "reinforced hull"
@@ -159,11 +168,6 @@
 	resistance_flags = RESIST_ALL
 	icon_state = "wall-invincible"
 
-/turf/closed/wall/kutjevo
-	icon = 'icons/turf/walls/kutjevo_wall.dmi'
-	icon_state = "kutjevo_wall-0"
-	base_icon_state = "kutjevo_wall"
-
 //tyson
 /turf/closed/wall/tyson
 	name = "outer wall"
@@ -199,6 +203,7 @@
 	walltype = "sulaco" //Changes all the sprites and icons.
 
 
+/* RUTGMC DELETION
 /turf/closed/wall/sulaco/ex_act(severity)
 	switch(severity)
 		if(EXPLODE_DEVASTATE)
@@ -210,6 +215,7 @@
 				dismantle_wall(1, 1)
 		if(EXPLODE_LIGHT)
 			take_damage(rand(0, 250), BRUTE, BOMB)
+*/
 
 
 /turf/closed/wall/sulaco/hull
@@ -226,7 +232,7 @@
 /turf/closed/wall/sulaco/unmeltable/ex_act(severity) //Should make it indestructable
 	return
 
-/turf/closed/wall/sulaco/unmeltable/fire_act(burn_level)
+/turf/closed/wall/sulaco/unmeltable/fire_act(exposed_temperature, exposed_volume)
 	return
 
 /turf/closed/wall/sulaco/unmeltable/attackby(obj/item/I, mob/user, params) //This should fix everything else. No cables, etc
@@ -243,11 +249,11 @@
 /turf/closed/wall/indestructible/ex_act(severity)
 	return
 
-/turf/closed/wall/indestructible/fire_act(burn_level)
+/turf/closed/wall/indestructible/fire_act(exposed_temperature, exposed_volume)
 	return
 
 /turf/closed/wall/indestructible/attackby(obj/item/I, mob/user, params)
-	if(isplasmacutter(I)) //needed for user feedback, if not included the user will not receive a message when trying plasma cutter wall/indestructible turfs
+	if(istype(I, /obj/item/tool/pickaxe/plasmacutter)) //needed for user feedback, if not included the user will not receive a message when trying plasma cutter wall/indestructible turfs
 		var/obj/item/tool/pickaxe/plasmacutter/P = I
 		to_chat(user, span_warning("[P] can't cut through this!"))
 	return
@@ -277,7 +283,7 @@
 /turf/closed/wall/indestructible/splashscreen/New()
 	..()
 	if(icon_state == "title_painting1")
-		icon_state = "title_painting[rand(0,35)]"
+		icon_state = "title_painting[rand(0,40)]"
 
 /turf/closed/wall/indestructible/other
 	icon_state = "r_wall"
@@ -412,10 +418,6 @@
 	max_integrity = 3000
 	explosion_block = 4
 
-/turf/closed/wall/dark_colony
-	icon = 'icons/turf/walls/dark_col_wall.dmi'
-	icon_state = "dark_col_wall-0"
-
 /turf/closed/wall/brick
 	name = "brick wall"
 	desc = "A wall made out of weathered brick."
@@ -470,34 +472,34 @@
 		'icons/turf/walls/siding_red_3.dmi',
 	)
 
-/turf/closed/wall/urban
-	name = "bare metal walls"
-	desc = "A thick and chunky metal wall. The surface is barren and imposing."
-	icon = 'icons/turf/walls/urban_wall_regular.dmi'
-	icon_state = "urban_wall_regular-0"
-	walltype = "wall"
-	base_icon_state = "urban_wall_regular"
+/turf/closed/wall/mineral/sandstone/runed
+	name = "sandstone temple wall"
+	desc = "A heavy wall of sandstone."
+	icon = 'icons/turf/walls/cult.dmi'
+	icon_state = "cult-0"
+	base_icon_state = "cult"
+	walltype = "cult"
+	mineral = "runed sandstone"
+	color = "#DDB5A4"
+	smoothing_behavior = DIAGONAL_SMOOTHING
+	smoothing_groups = SMOOTH_GROUP_GENERAL_STRUCTURES
+	max_integrity = 9000//Strong, but only available to Hunters, can can still be blown up or melted by boilers.
 
-/turf/closed/wall/urban/colony/ribbed
-	name = "bare metal walls"
-	desc = "A thick and chunky metal wall. The surface is barren and imposing."
-	icon = 'icons/turf/walls/hybrisa_colony_walls.dmi'
-	icon_state = "wall-reinforced"
-	walltype = "wall"
-	base_icon_state = "hybrisa_colony_walls"
+/turf/closed/wall/mineral/sandstone/runed/attack_alien(mob/living/carbon/xenomorph/user, damage_amount = user.xeno_caste.melee_damage, damage_type = BRUTE, damage_flag = MELEE, effects = TRUE, armor_penetration = 0, isrightclick = FALSE)
+	visible_message("[user] scrapes uselessly against [src] with their claws.")
+	return
 
-/turf/closed/wall/urban/colony/engineering/ribbed
-	name = "bare metal walls"
-	desc = "A thick and chunky metal wall. The surface is barren and imposing."
-	icon = 'icons/turf/walls/hybrisa_colony_walls.dmi'
-	icon_state = "wall-reinforced"
-	walltype = "wall"
-	base_icon_state = "hybrisa_colony_walls"
+/turf/closed/wall/huntership
+	name = "hunter wall"
+	desc = "Nigh indestructible walls that make up the hull of a hunter ship."
+	icon = 'icons/turf/walls/hunter.dmi'
+	icon_state = "hunter-0"//DMI specific name
+	walltype = "hunter"
+	base_icon_state = "hunter"
+	resistance_flags = RESIST_ALL
 
-/turf/closed/wall/hangar
-	name = "strange metal wall"
-	desc = "Nigh indestructible walls that make up the hull of an unknown ancient ship."
-	icon = 'icons/turf/walls/engineer_walls.dmi'
-	icon_state = "engineer_walls-0"
-	walltype = "wall"
-	base_icon_state = "engineer_walls"
+/turf/closed/wall/huntership/destructible
+	name = "degraded hunter wall"
+	color = "#c5beb4"
+	desc = "Ancient beyond measure, these walls make up the hull of a vessel of non human origin. Despite this, they can be felled with plastic explosives like any other opaque blocker."
+	resistance_flags = NONE
