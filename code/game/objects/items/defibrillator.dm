@@ -1,5 +1,5 @@
 /obj/item/defibrillator
-	name = "emergency defibrillator"
+	name = "defibrillator"
 	desc = "A device that delivers powerful shocks to resuscitate incapacitated patients."
 	icon = 'icons/obj/items/defibrillator.dmi'
 	icon_state = "defib"
